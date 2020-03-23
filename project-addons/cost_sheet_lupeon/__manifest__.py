@@ -9,6 +9,7 @@
     'license': 'AGPL-3',
     'depends': [
         'sale',
+        'stock_picking_report_valued'
     ],
     'contributors': [
         "Comunitea ",

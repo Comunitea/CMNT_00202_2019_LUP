@@ -12,13 +12,12 @@ SHEET_TYPES = [
     ('oppi', 'OPPI'),
 ]
 
-class CostSheet(models.Model):
+class GroupCostSheet(models.Model):
 
-    _name = 'cost.sheet'
+    _name = 'product.cost.sheet'
 
     name = fields.Char('Name')
-
-    sheet_type = fields.Selection(SHEET_TYPES, 'Sheet Type')
+    product_id = fields.Many2one('product.product', 'Product')
 
     init_cost = fields.Float('Init Cost')
     admin_fact = fields.Float('Administrative factor')
@@ -28,8 +27,29 @@ class CostSheet(models.Model):
     inspection_type = fields.Selection(
         [('visual', 'Visual'), ('tech', 'Technical')])
 
+    sheet_ids = fields.One2many(
+        'cost.sheet', 'group_id', string='Cost Sheets')
+
+    @api.model
+    def default_get(self, default_fields):
+        res = super(GroupCostSheet, self).default_get(default_fields)
+
+        if self._context.get('product_id'):
+            res['product_id'] = self._context.get('product_id')
+        return res
+
+    
+
+class CostSheet(models.Model):
+
+    _name = 'cost.sheet'
+
+    name = fields.Char('Name')
+
+    sheet_type = fields.Selection(SHEET_TYPES, 'Sheet Type')
+
     # COMUN
-    product_id = fields.Many2one('product.product', 'Design Reference')
+    group_id = fields.Many2one('product.cost.sheet', 'Group Cost Sheets')
 
     # DISEÑO
     flat_ref = fields.Char('Flat ref')

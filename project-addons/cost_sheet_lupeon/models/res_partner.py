@@ -4,8 +4,8 @@
 from odoo import models, fields, api, _
 
 
-class SaleOrderLine(models.Model):
+class ResPartner(models.Model):
 
-    _inherit = "sale.order.line"
+    _inherit = "res.partner"
 
-    group_sheet_id = fields.Many2one('product.cost.sheet', 'Cost Sheets')
+    cost_sheet_id = fields.Many2one('cost.sheet', 'Cost Sheet')
