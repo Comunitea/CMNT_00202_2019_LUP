@@ -1,3 +1,11 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_cost_sheet,acess_cost_sheet,model_cost_sheet,base.group_user,1,1,1,1
 access_design_time_line,acess_design_time_line,model_design_time_line,base.group_user,1,1,1,1
+access_applicable_legislation,acess_applicable_legislation,model_applicable_legislation,base.group_user,1,1,1,1
+access_design_software,acess_design_software,model_design_software,base.group_user,1,1,1,1
+access_printer_machine,acess_printer_machine,model_printer_machine,base.group_user,1,1,1,1
+access_material,acess_material,model_material,base.group_user,1,1,1,1
+access_material_cost_line,acess_material_cost_line,model_material_cost_line,base.group_user,1,1,1,1
+access_workforce_cost_line,acess_workforce_cost_line,model_workforce_cost_line,base.group_user,1,1,1,1
+access_outsorcing_cost_line,acess_outsorcing_cost_line,model_outsorcing_cost_line,base.group_user,1,1,1,1
+access_part_feature,acess_part_feature,model_part_feature,base.group_user,1,1,1,1

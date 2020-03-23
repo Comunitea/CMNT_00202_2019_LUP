@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <record id="leg_automotive" model="applicable.legislation">
+            <field name="name">Automotive</field>
+        </record>
+
+         <record id="leg_feeding" model="applicable.legislation">
+            <field name="name">Feeding</field>
+        </record>
+
+        <record id="leg_sanitary" model="applicable.legislation">
+            <field name="name">Sanitary</field>
+        </record>
+
+        <record id="leg_aeronautical" model="applicable.legislation">
+            <field name="name">Aeronautical</field>
+        </record>
+
+        <record id="leg_others" model="applicable.legislation">
+            <field name="name">Others</field>
+        </record>
+
+
+        <record id="feat_quality" model="part.feature">
+            <field name="name">Quality sup.</field>
+        </record>
+         <record id="feat_mechanic" model="part.feature">
+            <field name="name">R. mechanic</field>
+        </record>
+         <record id="feat_dimension" model="part.feature">
+            <field name="name">E. dimension</field>
+        </record>
+         <record id="feat_quick" model="part.feature">
+            <field name="name">Quick manofacture</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,16 +1,25 @@
 <?xml version="1.0"?>
 <odoo>
 
-    <record id="cost_sheet_view" model="ir.ui.view" >
+    <!-- MAIN MENU -->
+    <menuitem id="menu_costs_root" name="Cost Sheets" sequence="30"/>
+
+    <record id="cost_sheet_view_form" model="ir.ui.view">
         <field name="name">cost.sheet.view</field>
         <field name="model">cost.sheet</field>
         <field name="arch" type="xml">
             <form>
                 <sheet>
-                    <group>
-                        <field name="name"/>
-                    </group>
-                    <group string="General">
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                         <h2>
+                            <field name="product_id"/>
+                        </h2>
+                    </div>
+                    <group colespan="2" col="6" string="General">
+                        <field name="sheet_type"/>
                         <field name="init_cost"/>
                         <field name="admin_fact"/>
                         <field name="disc_qty"/>
@@ -18,17 +27,387 @@
                         <field name="increment"/>
                         <field name="inspection_type"/>
                     </group>
-                    <group string="Design">
-                        <field name="design_ref"/>
-                        <field name="flat_ref"/>
-                        <field name="legislation"/>
-                        <field name="description"/>
-                        <field name="customer_note"/>
-                        <field name="time_line_ids"/>
+                    <group>
+                        <field name="customer_note" class="oe_inline" placeholder="Customer Note"/>
                     </group>
+                       
+                    <notebook>
+                        <!-- <page string="Design Sheet" attrs="{'invisible': [('sheet_type', '!=', 'design')]}"> -->
+                        <page string="Design Sheet">
+                            <group>
+                                <group string="Design">
+                                    <field name="flat_ref"/>
+                                    <field name="description"/>
+                                </group>
+                                <group string="Legislation">
+                                    <field name="legislation_ids" nolabel="1" widget="many2many_checkboxes"/>
+                                </group>
+                            </group>
+                            <group string="Software times">
+                                <field name="time_line_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="software_id"/>
+                                        <field name="hours"/>
+                                        <field name="price_hour"/>
+                                        <field name="discount"/>
+                                        <field name="total"/>
+                                    </tree>
+                                </field>
+                            </group>
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="design_total">
+                                <field name="hours_total" widget='time'/>
+                                <field name="amount_total" widget='monetary'/>
+                            </group>
+                        </page>
+
+                        <!-- <page string="FDM" attrs="{'invisible': [('sheet_type', '!=', 'fdm')]}"> -->
+                        <page string="FDM">
+                            <group>
+                                <group string="Reference data">
+                                    <field name="fdm_units"/>
+                                    <field name="cc_und"/>
+                                    <field name="stat_data"/>
+                                    <field name="euros_cc"/>
+                                </group>
+                                <group string="Printing parameters">
+                                    <field name="printer_id"/>
+                                    <field name="tray_units"/>
+                                    <field name="infill"/>
+                                    <field name="loops"/>
+                                    <field name="layer_height"/>
+                                    <field name="tray_hours"/>
+                                    <field name="euro_machine"/>
+                                    <field name="perfil"/>
+                                </group>
+                            </group>
+                            <group colspan="4" string="Material Cost">
+                                <field name="material_cost_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="name"/>
+                                        <field name="diameter"/>
+                                        <field name="material_id"/>
+                                        <field name="color"/>
+                                        <field name="tray_meters"/>
+                                        <field name="gr_cc_tray"/>
+                                        <field name="gr_cc_total"/>
+                                        <field name="euro_material"/>
+                                    </tree>
+                                </field>
+                                <group class="oe_subtotal_footer oe_right" colspan="2" name="design_total">
+                                    <field name="total_euro_ud" widget='monetary'/>
+                                    <field name="total_material_cost" widget='monetary'/>
+                                </group>
+                            </group>
+                            <group colspan="2" col="6" string="Machine Cost">
+                                <field name="machine_hours"/>
+                                <field name="euro_machine_ud"/>
+                                <field name="euro_machine_total"/>
+                            </group>
+                            <group colspan="4" string="Workforce Cost">
+                                <field name="workforce_cost_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="name"/>
+                                        <field name="minutes"/>
+                                        <field name="euro_unit"/>
+                                        <field name="total"/>
+                                    </tree>
+                                </field>
+                            </group>
+                             <group colspan="4" string="Outsorcing costs">
+                                <field name="outsorcing_cost_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="name"/>
+                                        <field name="cost"/>
+                                        <field name="margin"/>
+                                        <field name="pvp"/>
+                                    </tree>
+                                </field>
+                            </group>
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="design_total">
+                                    <field name="outsorcing_total_ud" widget='monetary'/>
+                                    <field name="outsorcing_total" widget='monetary'/>
+                            </group>
+                            <group string="Part Features">
+                                <field name="feature_ids" nolabel="1" widget="many2many_checkboxes"/>
+                            </group>
+                        </page>
+
+                        <!-- SLA -->
+                        <page string="SLS">
+                            <group colspan="2" col="8" string="Part Data">
+                                <field name="units_sls"/>
+                                <field name="cc_und_sls"/>
+                                <field name="cm2_sls"/>
+                                <field name="static_data_sls"/>
+                                <field name="x_mm_sls"/>
+                                <field name="y_mm_sls"/>
+                                <field name="z_mm_sls"/>
+                                <field name="e_cc_sls"/>
+                            </group>
+                            <group colspan="2" col="8" string="Printing parameters">
+                                <field name="sls_printer_id"/>
+                                <field name="tray_units_sls"/>
+                                <field name="increment_sls"/>
+                                <field name="tray_hours_sls"/>
+                                <field name="euro_machine_sls"/>
+                            </group>
+                             <group colspan="2" col="8" string="Offer configuration">
+                                <field name="offer_type"/>
+                                <field name="solid_per_sls"/>
+                                <field name="bucket_height_sls"/>
+                                <field name="simulation_time_sls"/>
+                            </group>
+                            <group colspan="4" string="Material Cost">
+                                <field name="sls_material_cost_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="name"/>
+                                        <field name="gr_tray"/>
+                                        <field name="gr_total"/>
+                                        <field name="euro_material"/>
+                                        <field name="total"/>
+                                    </tree>
+                                </field>
+                            </group>
+                             <group colspan="2" col="6" string="Machine Cost">
+                                <field name="machine_hours_sls"/>
+                                <field name="euro_machine_ud_sls"/>
+                                <field name="euro_machine_total_sls"/>
+                            </group>
+                            <group colspan="4" string="Workforce Cost">
+                                <field name="sls_workforce_cost_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="name"/>
+                                        <field name="minutes"/>
+                                        <field name="euro_unit"/>
+                                        <field name="total"/>
+                                    </tree>
+                                </field>
+                            </group>
+                             <group colspan="4" string="Outsorcing costs">
+                                <field name="sls_outsorcing_cost_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="name"/>
+                                        <field name="cost"/>
+                                        <field name="margin"/>
+                                        <field name="pvp"/>
+                                    </tree>
+                                </field>
+                                <field name="tinted_sls"/>
+                            </group>
+                             <group class="oe_subtotal_footer oe_right" colspan="2" name="design_total">
+                                    <field name="outsorcing_total_ud_sls" widget='monetary'/>
+                                    <field name="outsorcing_total_sls" widget='monetary'/>
+                            </group>
+                        </page>
+                    
+
+                        <!-- POLY -->
+                        <page string="Poly">
+                            <group colspan="2" col="8" string="Part Data">
+                                <field name="units_pol"/>
+                                <field name="cc_und_pol"/>
+                                <field name="stat_data_pol"/>
+                                <field name="euros_cc_pol"/>
+                            </group>
+                            <group colspan="2" col="8" string="Printing parameters">
+                                <field name="pol_printer_id"/>
+                                <field name="tray_units_pol"/>
+                                <field name="finish_pol"/>
+                                <field name="tray_hours_pol"/>
+                                <field name="euro_machine_pol"/>
+                            </group>
+                            <group colspan="4" string="Material Cost">
+                                <field name="pol_material_cost_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="name"/>
+                                        <field name="gr_tray"/>
+                                        <field name="gr_total"/>
+                                        <field name="euro_material"/>
+                                        <field name="total"/>
+                                    </tree>
+                                </field>
+                            </group>
+                             <group colspan="2" col="6" string="Machine Cost">
+                                <field name="machine_hours_pol"/>
+                                <field name="euro_machine_ud_pol"/>
+                                <field name="euro_machine_total_pol"/>
+                            </group>
+                            <group colspan="4" string="Workforce Cost">
+                                <field name="pol_workforce_cost_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="name"/>
+                                        <field name="minutes"/>
+                                        <field name="euro_unit"/>
+                                        <field name="total"/>
+                                    </tree>
+                                </field>
+                            </group>
+                            <group colspan="4" string="Outsorcing costs">
+                                <field name="pol_outsorcing_cost_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="name"/>
+                                        <field name="cost"/>
+                                        <field name="margin"/>
+                                        <field name="pvp"/>
+                                    </tree>
+                                </field>
+                            </group>
+                             <group class="oe_subtotal_footer oe_right" colspan="2" name="design_total">
+                                    <field name="outsorcing_total_ud_pol" widget='monetary'/>
+                                    <field name="outsorcing_total_pol" widget='monetary'/>
+                            </group>
+                        </page>
+
+                         <!-- SLA -->
+                        <page string="SLA">
+                            <group colspan="2" col="8" string="Part Data">
+                                <field name="units_sla"/>
+                                <field name="cc_und_sla"/>
+                                <field name="stat_data_sla"/>
+                                <field name="euros_cc_sla"/>
+                            </group>
+                            <group colspan="2" col="8" string="Printing parameters">
+                                <field name="sla_printer_id"/>
+                                <field name="tray_units_sla"/>
+                                <field name="tray_hours_sla"/>
+                                <field name="euro_machine_sla"/>
+                            </group>
+                            <group colspan="4" string="Material Cost">
+                                <field name="sla_material_cost_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="name"/>
+                                        <field name="material_id"/>
+                                        <field name="gr_tray"/>
+                                        <field name="desviation"/>
+                                        <field name="cc_total"/>
+                                        <field name="euro_material"/>
+                                    </tree>
+                                </field>
+                            </group>
+                             <group colspan="2" col="6" string="Machine Cost">
+                                <field name="machine_hours_sla"/>
+                                <field name="euro_machine_ud_sla"/>
+                                <field name="euro_machine_total_sla"/>
+                            </group>
+                            <group colspan="4" string="Workforce Cost">
+                                <field name="sla_workforce_cost_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="name"/>
+                                        <field name="minutes"/>
+                                        <field name="euro_unit"/>
+                                        <field name="total"/>
+                                    </tree>
+                                </field>
+                            </group>
+                            <group colspan="4" string="Outsorcing costs">
+                                <field name="sla_outsorcing_cost_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="name"/>
+                                        <field name="cost"/>
+                                        <field name="margin"/>
+                                        <field name="pvp"/>
+                                    </tree>
+                                </field>
+                            </group>
+                             <group class="oe_subtotal_footer oe_right" colspan="2" name="design_total">
+                                    <field name="outsorcing_total_ud_sla" widget='monetary'/>
+                                    <field name="outsorcing_total_sla" widget='monetary'/>
+                            </group>
+                        </page>
+
+                         <!-- SLA -->
+                        <page string="DMLS">
+                            <group colspan="2" col="8" string="Part Data">
+                                <field name="units_sla"/>
+                                <field name="cc_und_sla"/>
+                                <field name="cc_soport"/>
+                                <field name="stat_data_dmls"/>
+                                <field name="euros_cc_dmls"/>
+                            </group>
+                            <group colspan="2" col="8" string="Printing parameters">
+                                <field name="dmls_printer_id"/>
+                                <field name="tray_units_dmls"/>
+                                <field name="tray_hours_dmls"/>
+                                <field name="euro_machine_dmls"/>
+                            </group>
+                            <group colspan="4" string="Material Cost">
+                                <field name="dmls_material_cost_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="name"/>
+                                        <field name="material_id"/>
+                                        <field name="gr_tray"/>
+                                        <field name="desviation"/>
+                                        <field name="gr_total"/>
+                                        <field name="euro_material"/>
+                                    </tree>
+                                </field>
+                            </group>
+                             <group colspan="2" col="6" string="Machine Cost">
+                                <field name="machine_hours_dmls"/>
+                                <field name="euro_machine_ud_dmls"/>
+                                <field name="euro_machine_total_dmls"/>
+                            </group>
+                            <group colspan="4" string="Workforce Cost">
+                                <field name="dmls_workforce_cost_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="name"/>
+                                        <field name="minutes"/>
+                                        <field name="euro_unit"/>
+                                        <field name="total"/>
+                                    </tree>
+                                </field>
+                            </group>
+                            <group colspan="4" string="Outsorcing costs">
+                                <field name="dmls_outsorcing_cost_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="name"/>
+                                        <field name="cost"/>
+                                        <field name="margin"/>
+                                        <field name="pvp"/>
+                                    </tree>
+                                </field>
+                            </group>
+                             <group class="oe_subtotal_footer oe_right" colspan="2" name="design_total">
+                                    <field name="outsorcing_total_ud_dmls" widget='monetary'/>
+                                    <field name="outsorcing_total_dmls" widget='monetary'/>
+                            </group>
+                        </page>
+
+
+                    </notebook>
+                   
+                   
                 </sheet>
             </form>
         </field>
     </record>
+
+    <record id="cost_sheet_view_tree" model="ir.ui.view">
+        <field name="name">cost.sheet.view</field>
+        <field name="model">cost.sheet</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="init_cost"/>
+                <field name="admin_fact"/>
+                <field name="disc_qty"/>
+                <field name="disc2"/>
+                <field name="increment"/>
+                <field name="inspection_type"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_cost_sheets" model="ir.actions.act_window">
+        <field name="name">Cost Sheets</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">cost.sheet</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_cost_sheets" name="Cost Sheets" parent="menu_costs_root" sequence="10"/>
+
+    <menuitem id="menu_action_cost_sheets" action="action_cost_sheets"  name="Cost Sheets" parent="menu_cost_sheets" sequence="10"/>
 
 </odoo>

@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<odoo>
+
+   
+    <record id="design_software_view_form" model="ir.ui.view">
+        <field name="name">design.software.view</field>
+        <field name="model">design.software</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="price_hour"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="design_software_view_tree" model="ir.ui.view">
+        <field name="name">design.software.view</field>
+        <field name="model">design.software</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="price_hour"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_design_software" model="ir.actions.act_window">
+        <field name="name">Design Software</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">design.software</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <menuitem id="menu_action_design_softwares" action="action_design_software"  name="Design Software" parent="menu_cost_cfg" sequence="10"/>
+
+</odoo>

@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<odoo>
+
+   
+    <record id="part_feature_view_form" model="ir.ui.view">
+        <field name="name">part.feature.view</field>
+        <field name="model">part.feature</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="part_feature_view_tree" model="ir.ui.view">
+        <field name="name">part.feature.view</field>
+        <field name="model">part.feature</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_part_features" model="ir.actions.act_window">
+        <field name="name">Part Features</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">part.feature</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_action_part_features" action="action_part_features"  name="Part Features" parent="menu_cost_cfg" sequence="10"/>
+
+</odoo>
