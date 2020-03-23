@@ -34,6 +34,10 @@ class GroupCostSheet(models.Model):
     def default_get(self, default_fields):
         res = super(GroupCostSheet, self).default_get(default_fields)
 
+        name = '/'
+        if self._context.get('so_name'):
+            name = self._context.get('so_name')
+            res['name'] = name
         if self._context.get('product_id'):
             res['product_id'] = self._context.get('product_id')
         return res

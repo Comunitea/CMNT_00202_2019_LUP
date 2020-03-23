@@ -394,7 +394,7 @@
     <menuitem id="menu_action_cost_sheets" action="action_cost_sheets"  name="Cost Sheets" parent="menu_cost_sheets" sequence="20"/>
 
 
-    <record id="group_cost_sheet_view_tree" model="ir.ui.view">
+    <record id="product_cost_sheet_view_tree" model="ir.ui.view">
         <field name="name">product.cost.sheet.view</field>
         <field name="model">product.cost.sheet</field>
         <field name="arch" type="xml">
@@ -404,7 +404,7 @@
         </field>
     </record>
 
-    <record id="group_cost_sheet_view_tree" model="ir.ui.view">
+    <record id="product_cost_sheet_view_form" model="ir.ui.view">
         <field name="name">product.cost.sheet.view</field>
         <field name="model">product.cost.sheet</field>
         <field name="arch" type="xml">
@@ -426,19 +426,22 @@
                         <field name="increment"/>
                         <field name="inspection_type"/>
                     </group>
+
+                    <group colespan="4" string="Cost sheets">
+                        <field name="sheet_ids" nolabel="True"/>
+                    </group>
                 </sheet>
             </form>
         </field>
     </record>
 
-    <record id="action_group_cost_sheets" model="ir.actions.act_window">
-        <field name="name">Cost Sheets</field>
+    <record id="action_product_cost_sheets" model="ir.actions.act_window">
+        <field name="name">Product Cost Sheets</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">product.cost.sheet</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
     </record>
 
-        <menuitem id="menu_action_group_cost_sheets" action="action_group_cost_sheets"  name="Group Cost Sheets" parent="menu_cost_sheets" sequence="10"/>
-
+    <menuitem id="menu_product_cost_sheets" action="action_product_cost_sheets"  name="Product Cost Sheets" parent="menu_cost_sheets" sequence="20"/>
 </odoo>

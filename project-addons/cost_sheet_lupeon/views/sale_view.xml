@@ -8,11 +8,11 @@
         <field name="arch" type="xml">
 
             <xpath expr="//field[@name='order_line']/form//field[@name='product_id']" position="after">
-                <field name="group_sheet_id" context="{'product_id': product_id}" required="True"/>
+                <field name="group_sheet_id" context="{'product_id': product_id, 'so_name': parent.name}" required="True"/>
             </xpath>
 
             <xpath expr="//field[@name='order_line']/tree//field[@name='product_id']" position="after">
-                <field name="group_sheet_id" context="{'product_id': product_id}" required="True"/>
+                <field name="group_sheet_id" context="{'product_id': product_id, 'so_name': parent.name}" required="True"/>
             </xpath>
         </field>
     </record>
