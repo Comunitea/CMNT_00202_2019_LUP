@@ -15,13 +15,10 @@
                             <field name="name"/>
                         </h1>
                     </div>
-                    <group colespan="2" col="6" string="General">
+                    <group col="6" string="General">
                         <field name="sheet_type"/>
-                    </group>
-                    <group>
                         <field name="customer_note" class="oe_inline" placeholder="Customer Note"/>
                     </group>
-                       
                     <notebook>
                         <page string="Design Sheet" attrs="{'invisible': [('sheet_type', '!=', 'design')]}">
                             <group>
@@ -399,7 +396,13 @@
         <field name="model">product.cost.sheet</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="name"/>
+                <field name="sale_line_id"/>
+                <field name="init_cost"/>
+                <field name="admin_fact"/>
+                <field name="disc_qty"/>
+                <field name="disc2"/>
+                <field name="increment"/>
+                <field name="inspection_type"/>
             </tree>
         </field>
     </record>
@@ -412,7 +415,7 @@
                 <sheet>
                     <div class="oe_title">
                         <h1>
-                            <field name="name"/>
+                            <field name="sale_line_id"/>
                         </h1>
                         <h2>
                             <field name="product_id"/>
@@ -428,10 +431,26 @@
                     </group>
 
                     <group colespan="4" string="Cost sheets">
-                        <field name="sheet_ids" nolabel="True"/>
+                        <field name="sheet_ids" nolabel="1"/>
                     </group>
                 </sheet>
             </form>
+        </field>
+    </record>
+
+    <record id="product_cost_sheet_view_search" model="ir.ui.view">
+        <field name="name">product.cost.sheet.view.search</field>
+        <field name="model">product.cost.sheet</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="sale_line_id"/>
+                <field name="product_id"/>
+                
+                <group expand="0" string="Group By">
+                    <filter string="Sale Line" name="group_line" domain="[]" context="{'group_by':'sale_line_id'}"/>
+                    <filter name="group_prouct" string="group_product" domain="[]" context="{'group_by':'product_id'}"/>
+                </group>
+            </search>
         </field>
     </record>
 
@@ -443,5 +462,5 @@
         <field name="view_mode">tree,form</field>
     </record>
 
-    <menuitem id="menu_product_cost_sheets" action="action_product_cost_sheets"  name="Product Cost Sheets" parent="menu_cost_sheets" sequence="20"/>
+    <menuitem id="menu_product_cost_sheets" action="action_product_cost_sheets"  name="Product Cost Sheets" parent="menu_cost_sheets" sequence="0"/>
 </odoo>

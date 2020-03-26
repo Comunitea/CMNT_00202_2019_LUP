@@ -8,4 +8,5 @@ class ResPartner(models.Model):
 
     _inherit = "res.partner"
 
-    cost_sheet_id = fields.Many2one('cost.sheet', 'Cost Sheet')
+    admin_fact = fields.Float('Administrative factor')
+    require_num_order = fields.Boolean('Requires num order')

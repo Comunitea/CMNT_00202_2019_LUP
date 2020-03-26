@@ -15,9 +15,13 @@ SHEET_TYPES = [
 class GroupCostSheet(models.Model):
 
     _name = 'product.cost.sheet'
+    _rec_name = 'sale_line_id'
 
-    name = fields.Char('Name')
-    product_id = fields.Many2one('product.product', 'Product')
+    # display_name = fields.Char('Name', readonly="True")
+    sale_line_id = fields.Many2one('sale.order.line', 'Sale Line', 
+                                   readonly=False)
+    product_id = fields.Many2one('product.product', 'Product', 
+        related='sale_line_id.product_id')
 
     init_cost = fields.Float('Init Cost')
     admin_fact = fields.Float('Administrative factor')
@@ -29,18 +33,30 @@ class GroupCostSheet(models.Model):
 
     sheet_ids = fields.One2many(
         'cost.sheet', 'group_id', string='Cost Sheets')
-
-    @api.model
-    def default_get(self, default_fields):
-        res = super(GroupCostSheet, self).default_get(default_fields)
-
-        name = '/'
-        if self._context.get('so_name'):
-            name = self._context.get('so_name')
-            res['name'] = name
-        if self._context.get('product_id'):
-            res['product_id'] = self._context.get('product_id')
+    
+    def name_get(self):
+        res = []
+        for sheet in self:
+            res.append((sheet.id, ("[%s] %s") % \
+                (sheet.sale_line_id.order_id.name, 
+                 sheet.sale_line_id.name)))
         return res
+
+    # @api.model
+    # def default_get(self, default_fields):
+    #     res = super(GroupCostSheet, self).default_get(default_fields)
+
+    #     name = '/'
+    #     if self._context.get('so_name'):
+    #         name = self._context.get('so_name')
+    #         res['name'] = name
+    #     if self._context.get('product_id'):
+    #         res['product_id'] = self._context.get('product_id')
+    #     if self._context.get('partner_id'):
+    #         partner = self.env['res.partner'].browse(
+    #             self._context['partner_id'])
+    #         res['admin_fact'] = partner.admin_fact
+    #     return res
 
     
 
@@ -49,6 +65,12 @@ class CostSheet(models.Model):
     _name = 'cost.sheet'
 
     name = fields.Char('Name')
+    task_id = fields.Many2one(
+        'project.task', 'Manufacture Task', index=True, copy=False,
+        readonly=True)
+    production_id = fields.Many2one(
+        'project.task', 'Production', index=True, copy=False,
+        readonly=True)
 
     sheet_type = fields.Selection(SHEET_TYPES, 'Sheet Type')
 
