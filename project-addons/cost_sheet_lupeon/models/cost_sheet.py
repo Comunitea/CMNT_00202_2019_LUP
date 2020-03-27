@@ -14,7 +14,7 @@ SHEET_TYPES = [
 
 class GroupCostSheet(models.Model):
 
-    _name = 'product.cost.sheet'
+    _name = 'group.cost.sheet'
     _rec_name = 'sale_line_id'
 
     # display_name = fields.Char('Name', readonly="True")
@@ -75,7 +75,12 @@ class CostSheet(models.Model):
     sheet_type = fields.Selection(SHEET_TYPES, 'Sheet Type')
 
     # COMUN
-    group_id = fields.Many2one('product.cost.sheet', 'Group Cost Sheets')
+    group_id = fields.Many2one('group.cost.sheet', 'Group Cost Sheets',
+                               required=True)
+    sale_line_id = fields.Many2one('sale.order.line', 'Sale Line',
+        related='group_id.sale_line_id', store=True)
+    sale_id = fields.Many2one('sale.order', 'Sale Line',
+        related='group_id.sale_line_id.order_id', store=True)
 
     # DISEÑO
     flat_ref = fields.Char('Flat ref')
@@ -323,6 +328,31 @@ class CostSheet(models.Model):
         for sh in self:
             sh.outsorcing_total_ud_sls = sum([x.pvp for x in sh.sls_outsorcing_cost_ids])
             sh.outsorcing_total_sls =sh.outsorcing_total_ud_sls * sh.fdm_units
+    
+
+    # LÓGICA
+    @api.multi
+    def create_task_or_production(self):
+        """
+        Create a task if sheet type is design,
+        or a production for each sheet.
+        """
+        design_sheets = self.filtered(lambda s: s.sheet_type == 'design')
+        production_sheets = self - design_sheets
+
+        if design_sheets:
+            design_sheets.create_tasks()
+
+        if production_sheets:
+            production_sheets.create_productions()
+
+        return
+    
+    def create_tasks(self):
+        return
+
+    def create_productions(self):
+        return
 
 
 class DesignTimeLine(models.Model):

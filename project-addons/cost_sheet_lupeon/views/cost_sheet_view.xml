@@ -378,6 +378,22 @@
         </field>
     </record>
 
+    <record id="cost_sheet_view_search" model="ir.ui.view">
+        <field name="name">cost.sheet.view.search</field>
+        <field name="model">cost.sheet</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="sale_line_id"/>
+                <field name="sale_id"/>
+                
+                <group expand="0" string="Group By">
+                    <filter name="group_line"  string="Sale Line"  domain="[]" context="{'group_by':'sale_line_id'}"/>
+                    <filter name="group_sale" string="Sale Order" domain="[]" context="{'group_by':'sale_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
     <record id="action_cost_sheets" model="ir.actions.act_window">
         <field name="name">Cost Sheets</field>
         <field name="type">ir.actions.act_window</field>
@@ -392,8 +408,8 @@
 
 
     <record id="product_cost_sheet_view_tree" model="ir.ui.view">
-        <field name="name">product.cost.sheet.view</field>
-        <field name="model">product.cost.sheet</field>
+        <field name="name">group.cost.sheet.view</field>
+        <field name="model">group.cost.sheet</field>
         <field name="arch" type="xml">
             <tree>
                 <field name="sale_line_id"/>
@@ -408,8 +424,8 @@
     </record>
 
     <record id="product_cost_sheet_view_form" model="ir.ui.view">
-        <field name="name">product.cost.sheet.view</field>
-        <field name="model">product.cost.sheet</field>
+        <field name="name">group.cost.sheet.view</field>
+        <field name="model">group.cost.sheet</field>
         <field name="arch" type="xml">
             <form>
                 <sheet>
@@ -439,8 +455,8 @@
     </record>
 
     <record id="product_cost_sheet_view_search" model="ir.ui.view">
-        <field name="name">product.cost.sheet.view.search</field>
-        <field name="model">product.cost.sheet</field>
+        <field name="name">group.cost.sheet.view.search</field>
+        <field name="model">group.cost.sheet</field>
         <field name="arch" type="xml">
             <search>
                 <field name="sale_line_id"/>
@@ -455,12 +471,12 @@
     </record>
 
     <record id="action_product_cost_sheets" model="ir.actions.act_window">
-        <field name="name">Product Cost Sheets</field>
+        <field name="name">Group Cost Sheets</field>
         <field name="type">ir.actions.act_window</field>
-        <field name="res_model">product.cost.sheet</field>
+        <field name="res_model">group.cost.sheet</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
     </record>
 
-    <menuitem id="menu_product_cost_sheets" action="action_product_cost_sheets"  name="Product Cost Sheets" parent="menu_cost_sheets" sequence="0"/>
+    <menuitem id="menu_product_cost_sheets" action="action_product_cost_sheets"  name="Group Cost Sheets" parent="menu_cost_sheets" sequence="0"/>
 </odoo>

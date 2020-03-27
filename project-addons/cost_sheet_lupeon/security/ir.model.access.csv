@@ -1,5 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_product_cost_sheet,acess_product_cost_sheet,model_product_cost_sheet,base.group_user,1,1,1,1
+access_group_cost_sheet,acess_group_cost_sheet,model_group_cost_sheet,base.group_user,1,1,1,1
 access_cost_sheet,acess_cost_sheet,model_cost_sheet,base.group_user,1,1,1,1
 access_design_time_line,acess_design_time_line,model_design_time_line,base.group_user,1,1,1,1
 access_applicable_legislation,acess_applicable_legislation,model_applicable_legislation,base.group_user,1,1,1,1
