@@ -12,6 +12,7 @@ class SaleOrder(models.Model):
                                   compute='_count_sheets')
     sheets_count = fields.Integer('Sheet Costs',
                                   compute='_count_sheets')
+    project_id = fields.Many2one('project.project', 'Project', readonly=True)
     
     def get_group_sheets(self):
         self.ensure_one()
@@ -78,31 +79,34 @@ class SaleOrder(models.Model):
             if (order.partner_id.require_num_order):
                 order.client_order_ref = 'PENDIENTE'
 
-            import ipdb; ipdb.set_trace()
             sheet_lines = order.get_sheet_lines()
             sheet_lines.create_task_or_production()
         
         res = super().action_confirm()
         return res
 
-
+    def action_cancel(self):
+        res = super().action_cancel()
+        self.mapped('project_id.task_ids').unlink()
+        self.mapped('project_id').unlink()
+        return res
 
 class SaleOrderLine(models.Model):
 
     _inherit = "sale.order.line"
 
     group_sheet_id = fields.Many2one(
-        'group.cost.sheet', 'Cost Sheets')
+        'group.cost.sheet', 'Cost Sheets', readonly=True)
     
     @api.model
     def create(self, vals):
         res = super().create(vals)
         res.create_product_cost_sheet()
         return res
-    
-    def unlink(self, vals):
-        res = super().unlink(vals)
-        line.mapped('group_sheet_id').unlink()
+
+    def unlink(self):
+        self.mapped('group_sheet_id').unlink()
+        res = super().unlink()
         return res
 
     def create_product_cost_sheet(self):

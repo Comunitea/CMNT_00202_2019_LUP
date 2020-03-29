@@ -28,6 +28,7 @@
         'views/printer_machine.xml',
         'views/material_view.xml',
         'views/design_software_view.xml',
+        'views/project_view.xml',
     ],
     "installable": True,
     'application': False,

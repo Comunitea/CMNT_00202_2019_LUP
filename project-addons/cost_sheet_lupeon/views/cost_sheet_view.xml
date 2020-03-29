@@ -15,9 +15,14 @@
                             <field name="name"/>
                         </h1>
                     </div>
-                    <group col="6" string="General">
+                    <group col="2" string="General">
                         <field name="sheet_type"/>
                         <field name="customer_note" class="oe_inline" placeholder="Customer Note"/>
+                    </group>
+                    <group string="Linked models">
+                        <field name="group_id" class="oe_inline" placeholder="Customer Note"/>
+                        <field name="sale_line_id"/>
+                        <field name="sale_id"/>
                     </group>
                     <notebook>
                         <page string="Design Sheet" attrs="{'invisible': [('sheet_type', '!=', 'design')]}">
@@ -374,6 +379,10 @@
             <tree>
                 <field name="name"/>
                 <field name="sheet_type"/>
+                <field name="sale_line_id"/>
+                <field name="sale_id"/>
+                <field name="task_id"/>
+                <field name="production_id"/>
             </tree>
         </field>
     </record>
@@ -385,10 +394,12 @@
             <search>
                 <field name="sale_line_id"/>
                 <field name="sale_id"/>
+                <field name="group_id"/>
                 
                 <group expand="0" string="Group By">
                     <filter name="group_line"  string="Sale Line"  domain="[]" context="{'group_by':'sale_line_id'}"/>
                     <filter name="group_sale" string="Sale Order" domain="[]" context="{'group_by':'sale_id'}"/>
+                    <filter name="group_group" string="Cost Group" domain="[]" context="{'group_by':'group_id'}"/>
                 </group>
             </search>
         </field>

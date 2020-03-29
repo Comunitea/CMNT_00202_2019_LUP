@@ -76,11 +76,12 @@ class CostSheet(models.Model):
 
     # COMUN
     group_id = fields.Many2one('group.cost.sheet', 'Group Cost Sheets',
-                               required=True)
+                               required=True, ondelete="cascade", 
+                               readonly=True)
     sale_line_id = fields.Many2one('sale.order.line', 'Sale Line',
-        related='group_id.sale_line_id', store=True)
+        related='group_id.sale_line_id', store=True, readonly=True)
     sale_id = fields.Many2one('sale.order', 'Sale Line',
-        related='group_id.sale_line_id.order_id', store=True)
+        related='group_id.sale_line_id.order_id', store=True, readonly=True)
 
     # DISEÑO
     flat_ref = fields.Char('Flat ref')
@@ -349,6 +350,26 @@ class CostSheet(models.Model):
         return
     
     def create_tasks(self):
+        order = self[0].sale_id
+        vals = {
+            'name': 'OD - ' + order.name,
+            'partner_id': order.partner_id.id,
+            'allow_timesheets': True,  # To create analytic account id
+            'company_id': order.company_id.id,
+            'sale_id': order.id
+        }
+        # CREATE PROJECT AND LNK WITH SALE
+        project = self.env['project.project'].create(vals)
+        # LINK SALE WITH PROJECT
+        order.write({'project_id': project.id})
+        for sheet in self:
+            vals = {
+                'name': "[" + project.name + '] ' + 'OD - ' + sheet.sale_line_id.name,
+                'project_id': project.id,
+                'sheet_id': sheet.id
+            }
+            task = self.env['project.task'].create(vals)
+            sheet.write({'task_id': task.id})
         return
 
     def create_productions(self):

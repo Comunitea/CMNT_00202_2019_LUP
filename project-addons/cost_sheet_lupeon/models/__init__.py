@@ -8,3 +8,4 @@ from . import printer_machine
 from . import material
 from . import design_software
 from . import cost_sheet
+from . import project
