@@ -12,6 +12,10 @@ class SaleOrder(models.Model):
                                   compute='_count_sheets')
     sheets_count = fields.Integer('Sheet Costs',
                                   compute='_count_sheets')
+    production_count = fields.Integer('Productions',
+                                compute='_count_production_and_task')
+    count_task = fields.Integer('Productions',
+                                compute='_count_production_and_task')
     project_id = fields.Many2one('project.project', 'Project', readonly=True)
     
     def get_group_sheets(self):
@@ -28,6 +32,14 @@ class SaleOrder(models.Model):
             order.sheets_count = len(order.get_sheet_lines())
     
     @api.multi
+    def _count_production_and_task(self):
+        for order in self:
+            order.production_count = len(
+                order.get_sheet_lines().mapped('production_id'))
+            order.count_task = len(
+                order.get_sheet_lines().mapped('task_id'))
+    
+    @api.multi
     def view_product_cost_sheets(self):
         self.ensure_one()
         sheets = self.get_group_sheets()
@@ -42,10 +54,6 @@ class SaleOrder(models.Model):
             action['res_id'] = sheets.ids[0]
         else:
             action = {'type': 'ir.actions.act_window_close'}
-        
-        # action['context'] = {
-        #     'search_default_group_line': self.id,
-        # }
         return action
     
     @api.multi
@@ -66,6 +74,46 @@ class SaleOrder(models.Model):
         
         action['context'] = {
             'search_default_group_line': self.id,
+        }
+        return action
+    
+    @api.multi
+    def view_tasks(self):
+        self.ensure_one()
+        action = self.env.ref(
+            'project.act_project_project_2_project_task_all').read()[0]
+        if self.project_id and self.project_id.task_ids:
+            tasks = self.project_id.task_ids
+            action['domain'] = [('id', 'in', tasks.ids)]
+        else:
+            action = {'type': 'ir.actions.act_window_close'}
+        return action        # return {
+        #     "name": _("Tasks"),
+        #     "view_mode": "kanban,tree,form,calendar,pivot,graph,activity",
+        #     "res_model": "project.task",
+        #     "type": "ir.actions.act_window",
+        #     "context": {
+        #         'default_sale_id': self.id,
+        #     }
+        # }
+    
+    @api.multi
+    def view_productions(self):
+        self.ensure_one()
+        sheets = self.get_sheet_lines().filtered(
+            lambda s: s.sheet_type == 'design'
+        )
+        if sheets:
+            action = self.env.ref(
+                'mrp.act_product_mrp_production').read()[0]
+        
+            action['domain'] = [('id', 'in', sheets.ids)]
+            
+        else:
+            action = {'type': 'ir.actions.act_window_close'}
+        
+        action['context'] = {
+            'search_default_sale': self.id,
         }
         return action
 
@@ -89,6 +137,8 @@ class SaleOrder(models.Model):
         res = super().action_cancel()
         self.mapped('project_id.task_ids').unlink()
         self.mapped('project_id').unlink()
+        for order in self:
+            order.get_sheet_lines().mapped('production_id').unlink()
         return res
 
 class SaleOrderLine(models.Model):

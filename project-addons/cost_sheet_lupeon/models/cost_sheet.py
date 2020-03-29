@@ -373,6 +373,18 @@ class CostSheet(models.Model):
         return
 
     def create_productions(self):
+        # import ipdb; ipdb.set_trace()
+        # for sheet in self:
+        #     line = sheet.sale_line_id
+        #     vals = {
+        #         'name': "[" + line.order_id.name + '] ' + line.name,
+        #         'sheet_id': sheet.id,
+        #         'product_id':line.product_id.id,
+        #         'product_uom_id':line.product_id.uom_id.id,
+        #         'product_qty': 1
+        #     }
+        #     prod = self.env['mrp.production'].create(vals)
+        #     sheet.write({'production_id': prod.id})
         return
 
 
