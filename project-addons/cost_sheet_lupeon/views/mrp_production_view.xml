@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <!-- ADD cost sheet and sale to project -->
+    <record id="mrp_production_form_cost_sheet" model="ir.ui.view">
+        <field name="name">mrp_production.form.cost.sheet</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+            <field name="product_id" position="after">
+                <field name="sheet_id"/>
+                <field name="sale_id"/>
+            </field>
+            
+        </field>
+    </record>
+
+    <record id="mrp_production_tree_cost_sheet" model="ir.ui.view">
+        <field name="name">mrp_production.tree.cost.sheet</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_tree_view"/>
+        <field name="arch" type="xml">
+            <field name="product_id" position="after">
+                <field name="sheet_id"/>
+                <field name="sale_id"/>
+                <field name="sale_line_id"/>
+            </field>
+            
+        </field>
+    </record>
+
+    <!-- solo si lo hago store -->
+    <record id="mrp_production_search_cost_sheet" model="ir.ui.view">
+        <field name="name">mrp_production.search.cost.sheet</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.view_mrp_production_filter"/>
+        <field name="arch" type="xml">
+            <field name="name" position="before">
+                <field name="sheet_id"/>
+                <field name="sale_id"/>
+                <field name="sale_line_id"/>
+            </field>
+            <filter name="product" position="after">
+                <filter name="sheet" string="Cost Sheet" context="{'group_by': 'sheet_id'}"/>
+                <filter name="sale" string="Sale order" context="{'group_by' :'sale_id'}"/>
+                <filter name="sale_line" string="Sale order line" context="{'group_by' :'sale_line_id'}"/>
+            </filter>
+        </field>
+    </record>
+
+
+</odoo>
+

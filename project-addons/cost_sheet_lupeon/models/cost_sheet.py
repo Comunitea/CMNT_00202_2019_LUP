@@ -42,23 +42,6 @@ class GroupCostSheet(models.Model):
                  sheet.sale_line_id.name)))
         return res
 
-    # @api.model
-    # def default_get(self, default_fields):
-    #     res = super(GroupCostSheet, self).default_get(default_fields)
-
-    #     name = '/'
-    #     if self._context.get('so_name'):
-    #         name = self._context.get('so_name')
-    #         res['name'] = name
-    #     if self._context.get('product_id'):
-    #         res['product_id'] = self._context.get('product_id')
-    #     if self._context.get('partner_id'):
-    #         partner = self.env['res.partner'].browse(
-    #             self._context['partner_id'])
-    #         res['admin_fact'] = partner.admin_fact
-    #     return res
-
-    
 
 class CostSheet(models.Model):
 
@@ -69,7 +52,7 @@ class CostSheet(models.Model):
         'project.task', 'Manufacture Task', index=True, copy=False,
         readonly=True)
     production_id = fields.Many2one(
-        'project.task', 'Production', index=True, copy=False,
+        'mrp.production', 'Production', index=True, copy=False,
         readonly=True)
 
     sheet_type = fields.Selection(SHEET_TYPES, 'Sheet Type')
@@ -373,18 +356,20 @@ class CostSheet(models.Model):
         return
 
     def create_productions(self):
-        # import ipdb; ipdb.set_trace()
-        # for sheet in self:
-        #     line = sheet.sale_line_id
-        #     vals = {
-        #         'name': "[" + line.order_id.name + '] ' + line.name,
-        #         'sheet_id': sheet.id,
-        #         'product_id':line.product_id.id,
-        #         'product_uom_id':line.product_id.uom_id.id,
-        #         'product_qty': 1
-        #     }
-        #     prod = self.env['mrp.production'].create(vals)
-        #     sheet.write({'production_id': prod.id})
+        for sheet in self:
+            line = sheet.sale_line_id
+            bom = self.env['mrp.bom']._bom_find(product=line.product_id)
+            vals = {
+                # 'name': "[" + line.order_id.name + '] ' + line.name,
+                'sheet_id': sheet.id,
+                'product_id':line.product_id.id,
+                'product_uom_id':line.product_id.uom_id.id,
+                'product_qty': 1,
+                'bom_id': bom.id
+            }
+            prod = self.env['mrp.production'].create(vals)
+            prod.onchange_product_id()
+            sheet.write({'production_id': prod.id})
         return
 
 

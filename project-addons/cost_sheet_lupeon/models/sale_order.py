@@ -87,34 +87,22 @@ class SaleOrder(models.Model):
             action['domain'] = [('id', 'in', tasks.ids)]
         else:
             action = {'type': 'ir.actions.act_window_close'}
-        return action        # return {
-        #     "name": _("Tasks"),
-        #     "view_mode": "kanban,tree,form,calendar,pivot,graph,activity",
-        #     "res_model": "project.task",
-        #     "type": "ir.actions.act_window",
-        #     "context": {
-        #         'default_sale_id': self.id,
-        #     }
-        # }
+        return action
     
     @api.multi
     def view_productions(self):
         self.ensure_one()
-        sheets = self.get_sheet_lines().filtered(
-            lambda s: s.sheet_type == 'design'
-        )
-        if sheets:
+        productions = self.get_sheet_lines().filtered(
+            lambda s: s.sheet_type != 'design'
+        ).mapped('production_id')
+        if productions:
             action = self.env.ref(
-                'mrp.act_product_mrp_production').read()[0]
+                'mrp.mrp_production_action').read()[0]
         
-            action['domain'] = [('id', 'in', sheets.ids)]
+            action['domain'] = [('id', 'in', productions.ids)]
             
         else:
             action = {'type': 'ir.actions.act_window_close'}
-        
-        action['context'] = {
-            'search_default_sale': self.id,
-        }
         return action
 
     @api.multi
@@ -138,7 +126,9 @@ class SaleOrder(models.Model):
         self.mapped('project_id.task_ids').unlink()
         self.mapped('project_id').unlink()
         for order in self:
-            order.get_sheet_lines().mapped('production_id').unlink()
+            prods = order.get_sheet_lines().mapped('production_id')
+            prods.action_cancel()
+            prods.unlink()
         return res
 
 class SaleOrderLine(models.Model):
