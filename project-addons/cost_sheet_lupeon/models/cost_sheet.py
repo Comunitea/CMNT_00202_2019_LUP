@@ -22,15 +22,7 @@ class GroupCostSheet(models.Model):
                                    readonly=False)
     product_id = fields.Many2one('product.product', 'Product', 
         related='sale_line_id.product_id')
-
-    init_cost = fields.Float('Init Cost')
     admin_fact = fields.Float('Administrative factor')
-    disc_qty = fields.Float('Discount quantity')
-    disc2 = fields.Float('Additional discount')
-    increment = fields.Float('Increment')
-    inspection_type = fields.Selection(
-        [('visual', 'Visual'), ('tech', 'Technical')])
-
     sheet_ids = fields.One2many(
         'cost.sheet', 'group_id', string='Cost Sheets')
     
@@ -41,15 +33,24 @@ class GroupCostSheet(models.Model):
                 (sheet.sale_line_id.order_id.name, 
                  sheet.sale_line_id.name)))
         return res
+    
+    def update_sale_line_price(self):
+        for group in self:
+            pvp = sum(group.sheet_ids.mapped('price_total'))
+            group.sale_line_id.write({'price_unit': pvp})
 
 
 class CostSheet(models.Model):
 
     _name = 'cost.sheet'
 
-    name = fields.Char('Name')
+    # COMUN
+    name = fields.Char('Reference')
+    group_id = fields.Many2one('group.cost.sheet', 'Group Cost Sheets',
+                               required=True, ondelete="cascade", 
+                               readonly=True)
     task_id = fields.Many2one(
-        'project.task', 'Manufacture Task', index=True, copy=False,
+        'project.task', 'Design order', index=True, copy=False,
         readonly=True)
     production_id = fields.Many2one(
         'mrp.production', 'Production', index=True, copy=False,
@@ -57,16 +58,47 @@ class CostSheet(models.Model):
 
     sheet_type = fields.Selection(SHEET_TYPES, 'Sheet Type')
 
-    # COMUN
-    group_id = fields.Many2one('group.cost.sheet', 'Group Cost Sheets',
-                               required=True, ondelete="cascade", 
-                               readonly=True)
     sale_line_id = fields.Many2one('sale.order.line', 'Sale Line',
         related='group_id.sale_line_id', store=True, readonly=True)
-    sale_id = fields.Many2one('sale.order', 'Sale Line',
+    sale_id = fields.Many2one('sale.order', 'Sale Order',
         related='group_id.sale_line_id.order_id', store=True, readonly=True)
+    
+    init_cost = fields.Float('Init Cost', compue="_get_cost_prices")
+    admin_fact = fields.Float('Administrative factor', 
+        related='group_id.admin_fact')
+    disc_qty = fields.Float('Discount quantity')
+    disc2 = fields.Float('Additional discount')
+    increment = fields.Float('Increment')
+    inspection_type = fields.Selection(
+        [('visual', 'Visual'), ('tech', 'Technical')])
+    price_total = fields.Float('PVP', compute='_get_cost_prices')
 
-    # DISEÑO
+    # @api.depends()
+    def _get_cost_prices(self):
+        for sh in self:
+            cost = 2
+            pvp = 1.0
+            if sh.sheet_type == 'design':
+                cost = sh.amount_total
+                
+                dq = sh.disc_qty / 100.0
+                da = sh.disc2 / 100.0
+                fa = sh.admin_fact / 100.0
+                pvp = cost * (1 - dq - da + fa)
+            elif sh.sheet_type == 'fdm':
+                pvp = 0
+            elif sh.sheet_type == 'sls':
+                pvp = 0
+            elif sh.sheet_type == 'sla':
+                pvp = 0
+            elif sh.sheet_type == 'dmls':
+                pvp = 0
+            elif sh.sheet_type == 'opi':
+                pvp = 0
+            sh.init_cost = cost
+            sh.price_total = pvp
+
+    #PROPIOS DE DISEÑO
     flat_ref = fields.Char('Flat ref')
     legislation_ids = fields.Many2many(
         'applicable.legislation',
@@ -76,8 +108,14 @@ class CostSheet(models.Model):
     time_line_ids = fields.One2many('design.time.line', 'sheet_id', string='Times')
     description = fields.Text('Technical Requisist')
     customer_note = fields.Text('Customer Coments')
-    hours_total = fields.Float('Hours total', compute="_get_totals")
-    amount_total = fields.Float('Amount total', compute="_get_totals")
+    hours_total = fields.Float('Hours total', compute="_get_totals_design")
+    amount_total = fields.Float('Amount total', compute="_get_totals_design")
+
+    @api.depends('time_line_ids')
+    def _get_totals_design(self):
+        for sh in self:
+            sh.hours_total = sum([x.hours for x in sh.time_line_ids])
+            sh.amount_total = sum([x.total for x in sh.time_line_ids])
 
     # ------------------------------------------------------------------------
 
@@ -294,12 +332,18 @@ class CostSheet(models.Model):
     # SLA COSTE MANO DE OBRA
     dmls_workforce_cost_ids = fields.One2many(
         'workforce.cost.line', 'sla_sheet_id', string='Cost Material')
-
-    @api.depends('time_line_ids')
-    def _get_totals(self):
-        for sh in self:
-            sh.hours_total = sum([x.hours for x in sh.time_line_ids])
-            sh.amount_total = sum([x.total for x in sh.time_line_ids])
+    
+   
+    @api.model
+    def create(self, vals):
+       res = super().create(vals)
+       res.group_id.update_sale_line_price()
+       return res
+    
+    def write(self, vals):
+       res = super().write(vals)
+       self.mapped('group_id').update_sale_line_price()
+       return res
 
     @api.depends('outsorcing_cost_ids')
     def _get_totals_outsorcing(self):
@@ -313,7 +357,7 @@ class CostSheet(models.Model):
             sh.outsorcing_total_ud_sls = sum([x.pvp for x in sh.sls_outsorcing_cost_ids])
             sh.outsorcing_total_sls =sh.outsorcing_total_ud_sls * sh.fdm_units
     
-
+    
     # LÓGICA
     @api.multi
     def create_task_or_production(self):
@@ -329,7 +373,6 @@ class CostSheet(models.Model):
 
         if production_sheets:
             production_sheets.create_productions()
-
         return
     
     def create_tasks(self):
@@ -391,7 +434,7 @@ class DesignTimeLine(models.Model):
                 line.hours * line.price_hour * (1 - line.discount / 100.0)
     
     @api.onchange('software_id')
-    def _compute_total(self):
+    def onchange_doftware_id(self):
         for line in self:
             line.price_hour = line.software_id.price_hour
 

@@ -15,14 +15,25 @@
                             <field name="name"/>
                         </h1>
                     </div>
-                    <group col="2" string="General">
-                        <field name="sheet_type"/>
-                        <field name="customer_note" class="oe_inline" placeholder="Customer Note"/>
+                    <group>
+                        <group string="General">
+                            <field name="sheet_type"/>
+                            <field name="increment"/>
+                            <field name="inspection_type"/>
+                            <field name="customer_note" class="oe_inline" placeholder="Customer Note"/>
+                        </group>
+                        <group string="Linked models">
+                            <field name="group_id" class="oe_inline" placeholder="Customer Note"/>
+                            <field name="sale_line_id"/>
+                            <field name="sale_id"/>
+                        </group>
                     </group>
-                    <group string="Linked models">
-                        <field name="group_id" class="oe_inline" placeholder="Customer Note"/>
-                        <field name="sale_line_id"/>
-                        <field name="sale_id"/>
+                    <group string="Prices" col="6">
+                            <field name="init_cost"/>
+                            <field name="admin_fact"/>
+                            <field name="price_total"/>
+                            <field name="disc_qty"/>
+                            <field name="disc2"/>
                     </group>
                     <notebook>
                         <page string="Design Sheet" attrs="{'invisible': [('sheet_type', '!=', 'design')]}">
@@ -383,6 +394,7 @@
                 <field name="sale_id"/>
                 <field name="task_id"/>
                 <field name="production_id"/>
+                <field name="price_total"/>
             </tree>
         </field>
     </record>
@@ -424,12 +436,7 @@
         <field name="arch" type="xml">
             <tree>
                 <field name="sale_line_id"/>
-                <field name="init_cost"/>
                 <field name="admin_fact"/>
-                <field name="disc_qty"/>
-                <field name="disc2"/>
-                <field name="increment"/>
-                <field name="inspection_type"/>
             </tree>
         </field>
     </record>
@@ -448,13 +455,8 @@
                             <field name="product_id"/>
                         </h2>
                     </div>
-                    <group colespan="2" col="6" string="General">
-                        <field name="init_cost"/>
+                    <group>
                         <field name="admin_fact"/>
-                        <field name="disc_qty"/>
-                        <field name="disc2"/>
-                        <field name="increment"/>
-                        <field name="inspection_type"/>
                     </group>
 
                     <group colespan="4" string="Cost sheets">
