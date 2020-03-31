@@ -111,7 +111,7 @@ class CostSheet(models.Model):
                 dqc = disc_qty / 100.0
                 pu = round(cost * (1 - dqc + da + fa), 2)
                 pu = round(cost * (1 - dqc)* (1 + da) * (1+ fa), 2)
-                pvp = round(pu * sh.fdm_units, 2)
+                pvp = round(pu * sh.cus_units, 2)
             elif sh.sheet_type == 'sls':
                 pvp = 0
             elif sh.sheet_type == 'sla':
@@ -149,7 +149,7 @@ class CostSheet(models.Model):
     # ------------------------------------------------------------------------
 
     # FDM DATOS PIEZA
-    fdm_units = fields.Integer('Uds. Cliente')
+    cus_units = fields.Integer('Uds. Cliente')
     cc_ud_fdm = fields.Integer('cc ud')
     stat_data = fields.Char('Dato estadístico')
     euros_cc = fields.Float('€/cc', compute='get_euros_cc_fdm')
@@ -190,10 +190,15 @@ class CostSheet(models.Model):
         out_options =  ['Insertos', 'Tornillos', 'Pintado', 'Accesorios', 'Otros']
         wf_lines = []
         out_lines = []
-        sls_out_lines = []
+        # sls_out_lines = []
         for sh in self:
+            # CREATE OUTSORCING LINES FOR ALL TYPES
+            out_lines = [(5, 0, 0)]
+            for name in out_options:
+                vals = {'name': name, 'margin': 20.0}
+                out_lines.append((0, 0, vals))
             if sh.sheet_type == 'fdm':
-                # CREATE WORKFORCE LINES
+                # FDM REATE WORKFORCE LINES
                 wf_lines = [(5, 0, 0)]
 
                 for name in options:
@@ -206,24 +211,11 @@ class CostSheet(models.Model):
                         'hours': hours,
                     }
                     wf_lines.append((0, 0, vals))
-                
-                # CREATE OUTSORCING LINES
-                out_lines = [(5, 0, 0)]
-                for name in out_options:
-                    vals = {'name': name, 'margin': 20.0}
-                    out_lines.append((0, 0, vals))
-                    
-            elif sh.sheet_type == 'sls':
-                # CREATE SLS OUTSORCING LINES
-                sls_out_lines = [(5, 0, 0)]
-                for name in out_options:
-                    vals = {'name': name, 'margin': 20.0}
-                    sls_out_lines.append((0, 0, vals))
             
             sh.update({
                 'workforce_cost_ids': wf_lines,
                 'outsorcing_cost_ids': out_lines,
-                'sls_outsorcing_cost_ids': sls_out_lines,
+                # 'sls_outsorcing_cost_ids': sls_out_lines,
             })
 
 
@@ -252,7 +244,7 @@ class CostSheet(models.Model):
         for sh in self:
             sh.total_euro_ud = round(sum(
                 [x.euro_material for x in sh.material_cost_ids]),2)
-            sh.total_material_cost = sh.total_euro_ud * sh.fdm_units
+            sh.total_material_cost = sh.total_euro_ud * sh.cus_units
     
     # FDM COSTE MÁQUINA
     machine_hours = fields.Float('Horas Maq total', 
@@ -262,14 +254,14 @@ class CostSheet(models.Model):
     euro_machine_total = fields.Float('Euros Maq total', 
         compute='_get_fdm_machine_cost')
 
-    @api.depends('tray_units', 'tray_hours', 'fdm_units', 'euro_machine')
+    @api.depends('tray_units', 'tray_hours', 'cus_units', 'euro_machine')
     def _get_fdm_machine_cost(self):
         for sh in self:
-            if sh.fdm_units:
-                sh.machine_hours = sh.tray_hours / sh.tray_units * sh.fdm_units
+            if sh.cus_units:
+                sh.machine_hours = sh.tray_hours / sh.tray_units * sh.cus_units
                 sh.euro_machine_ud = 0.0
-                sh.euro_machine_ud = sh.machine_hours * sh.euro_machine / sh.fdm_units
-                sh.euro_machine_total = sh.euro_machine_ud * sh.fdm_units
+                sh.euro_machine_ud = sh.machine_hours * sh.euro_machine / sh.cus_units
+                sh.euro_machine_total = sh.euro_machine_ud * sh.cus_units
 
     # FDM COSTE MANO DE OBRA
     workforce_cost_ids = fields.One2many(
@@ -283,21 +275,21 @@ class CostSheet(models.Model):
     def _get_totals_workforce(self):
         for sh in self:
             sh.workforce_total_euro_ud = sum([x.euro_unit for x in sh.workforce_cost_ids])
-            sh.workforce_total =sh.total_euro_ud * sh.fdm_units
+            sh.workforce_total =sh.total_euro_ud * sh.cus_units
     
     # FDM COSTE EXTERNALIZACION POR PIEZA
     outsorcing_cost_ids = fields.One2many(
         'outsorcing.cost.line', 'fdm_sheet_id', string='Coste externalizacion por pieza')
     outsorcing_total_ud = fields.Float(
-        'Total ud.l', compute="_get_totals_outsorcing")
+        'Total ud', compute="_get_totals_outsorcing")
     outsorcing_total = fields.Float(
-    'Total ud.l', compute="_get_totals_outsorcing")
+    'Total', compute="_get_totals_outsorcing")
 
     @api.depends('outsorcing_cost_ids')
     def _get_totals_outsorcing(self):
         for sh in self:
             sh.outsorcing_total_ud = sum([x.pvp for x in sh.outsorcing_cost_ids])
-            sh.outsorcing_total =sh.outsorcing_total_ud * sh.fdm_units
+            sh.outsorcing_total =sh.outsorcing_total_ud * sh.cus_units
 
 
     # FDM PART FEATURES
@@ -310,7 +302,7 @@ class CostSheet(models.Model):
     # ------------------------------------------------------------------------
     
     # SLS DATOS PIEZA
-    sls_units = fields.Integer('Uds. Cliente')
+    cus_units = fields.Integer('Uds. Cliente')
     cc_und_sls = fields.Integer('cc ud')
     cm2_sls = fields.Float('cm^2 ud')
     x_mm_sls = fields.Float('X (mm)')
@@ -319,10 +311,10 @@ class CostSheet(models.Model):
     static_data_sls = fields.Char('Dato estadístico')
     e_cc_sls = fields.Float('€/cc', compute="_get_e_cc_sls")
 
-    @api.onchange('sls_units')
+    @api.onchange('cus_units')
     def onchange_units_sls(self):
         for sh in self:
-            sh.tray_units_sls = sh.sls_units
+            sh.tray_units = sh.cus_units
 
     @api.depends('price_unit', 'cc_und_sls')
     def _get_e_cc_sls(self):
@@ -362,7 +354,6 @@ class CostSheet(models.Model):
     # SLS PARÁMETROS IMPRESIÓN
     sls_printer_id = fields.Many2one(
         'printer.machine', 'Impresora', domain=[('type', '=', 'sls')])
-    tray_units_sls = fields.Integer('Uds. Bandeja')
     increment_sls = fields.Float('Incremento (mm)', default=18.0)
     tray_hours_sls = fields.Float('h Maq. Bandeja', compute='_get_sls_print_totals', digits=(16, 4))
     euro_machine_sls = fields.Float('€/h maq', compute='_get_sls_print_totals')
@@ -392,13 +383,13 @@ class CostSheet(models.Model):
     euro_machine_ud_sls = fields.Float('Euros Maq ud', compute="_get_sls_machine_cost")  
     euro_machine_total_sls = fields.Float('Euros Maq total', compute="_get_sls_machine_cost")
 
-    @api.depends('tray_units_sls', 'tray_hours_sls', 'sls_units', 'euro_machine_sls')
+    @api.depends('tray_units', 'tray_hours_sls', 'cus_units', 'euro_machine_sls')
     def _get_sls_machine_cost(self):
         for sh in self:
-            if sh.sls_units:
-                sh.machine_hours_sls = sh.tray_hours_sls / sh.tray_units_sls * sh.sls_units
-                sh.euro_machine_ud_sls = sh.machine_hours_sls * sh.euro_machine_sls / sh.sls_units
-                sh.euro_machine_total_sls = sh.euro_machine_ud_sls * sh.sls_units
+            if sh.cus_units:
+                sh.machine_hours_sls = sh.tray_hours_sls / sh.tray_units * sh.cus_units
+                sh.euro_machine_ud_sls = sh.machine_hours_sls * sh.euro_machine_sls / sh.cus_units
+                sh.euro_machine_total_sls = sh.euro_machine_ud_sls * sh.cus_units
 
     # SLS COSTE MANO DE OBRA
     sls_workforce_cost_ids = fields.One2many(
@@ -546,7 +537,7 @@ class CostSheet(models.Model):
     def _get_totals_outsorcing_sls(self):
         for sh in self:
             sh.outsorcing_total_ud_sls = sum([x.pvp for x in sh.sls_outsorcing_cost_ids])
-            sh.outsorcing_total_sls =sh.outsorcing_total_ud_sls * sh.fdm_units
+            sh.outsorcing_total_sls =sh.outsorcing_total_ud_sls * sh.cus_units
     
     
     # LÓGICA
@@ -658,9 +649,9 @@ class MaterialCostLine(models.Model):
             mat = mcl.material_id
             sh = mcl.fdm_sheet_id
             mcl.gr_cc_tray = round(mat.gr_cc * math.pi * ((mcl.diameter / 2.0) ** 2) * mcl.tray_meters)
-            if sh.fdm_units:
-                mcl.gr_cc_total = round(mcl.gr_cc_tray / sh.fdm_units * sh.tray_units)
-                mcl.euro_material = mat.euro_kg * (mcl.gr_cc_total / 1000.0) / sh.fdm_units
+            if sh.cus_units:
+                mcl.gr_cc_total = round(mcl.gr_cc_tray / sh.cus_units * sh.tray_units)
+                mcl.euro_material = mat.euro_kg * (mcl.gr_cc_total / 1000.0) / sh.cus_units
     
     # SLS
     sls_sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
@@ -677,11 +668,11 @@ class MaterialCostLine(models.Model):
             sh = mcl.sls_sheet_id
             mat = mcl.material_id
             mcl.sls_gr_tray = 25 # TODO
-            if sh.tray_units_sls:
-                mcl.sls_gr_total = (mcl.sls_gr_tray * sh.sls_units) / sh.tray_units_sls
-            if sh.tray_units_sls:
-                mcl.sls_euro_material = (mcl.sls_gr_tray * (mat.euro_kg_bucket / 1000.0)) / sh.tray_units_sls
-            mcl.sls_total = sh.sls_units * mcl.sls_euro_material
+            if sh.tray_units:
+                mcl.sls_gr_total = (mcl.sls_gr_tray * sh.cus_units) / sh.tray_units
+            if sh.tray_units:
+                mcl.sls_euro_material = (mcl.sls_gr_tray * (mat.euro_kg_bucket / 1000.0)) / sh.tray_units
+            mcl.sls_total = sh.cus_units * mcl.sls_euro_material
     # POLY
     pol_sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
 
@@ -718,10 +709,10 @@ class WorkforceCostLine(models.Model):
             sh = wcl.fdm_sheet_id or wcl.sls_sheet_id or wcl.pol_sheet_id or \
                     wcl.sla_sheet_id or wcl.dmls_sheet_id
             hours_tech = sh.group_id.tech_hours
-            if sh.fdm_units:
-                wcl.euro_unit = wcl.hours * hours_tech / sh.fdm_units
-            wcl.minutes = wcl.euro_unit * sh.fdm_units
-            wcl.total = wcl.euro_unit * sh.fdm_units
+            if sh.cus_units:
+                wcl.euro_unit = wcl.hours * hours_tech / sh.cus_units
+            wcl.minutes = wcl.euro_unit * sh.cus_units
+            wcl.total = wcl.euro_unit * sh.cus_units
 
 
 
