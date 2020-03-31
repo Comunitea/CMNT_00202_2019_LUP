@@ -20,7 +20,7 @@ class PrinterMachine(models.Model):
     type = fields.Selection(PRINT_TYPES, 'Print Type')
 
     diameter = fields.Float('Diameter')
-    machine_hour = fields.Float('H hombre / H machine')
+    machine_hour = fields.Float('H hombre / H maquina')
     euro_hour = fields.Float('Euro hour')
     discount = fields.Float('Max disacount')
     discount2 = fields.Float('Discount 2º unit')

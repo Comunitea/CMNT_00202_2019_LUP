@@ -29,7 +29,7 @@
     </record>
 
     <record id="action_applicable_legislations" model="ir.actions.act_window">
-        <field name="name">Applicable legisalation</field>
+        <field name="name">Legislación aplicable</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">applicable.legislation</field>
         <field name="view_type">form</field>

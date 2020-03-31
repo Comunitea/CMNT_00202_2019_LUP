@@ -8,5 +8,5 @@ class ResPartner(models.Model):
 
     _inherit = "res.partner"
 
-    admin_fact = fields.Float('Administrative factor')
+    admin_fact = fields.Float('Factor administrativo')
     require_num_order = fields.Boolean('Requires num order')

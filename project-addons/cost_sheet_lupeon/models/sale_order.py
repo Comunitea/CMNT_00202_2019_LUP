@@ -8,9 +8,9 @@ class SaleOrder(models.Model):
 
     _inherit = "sale.order"
 
-    group_sheets_count = fields.Integer('Product Costs',
+    group_sheets_count = fields.Integer('Grupo de costes',
                                   compute='_count_sheets')
-    sheets_count = fields.Integer('Sheet Costs',
+    sheets_count = fields.Integer('Hojas de coste',
                                   compute='_count_sheets')
     production_count = fields.Integer('Productions',
                                 compute='_count_production_and_task')
@@ -136,7 +136,7 @@ class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
     group_sheet_id = fields.Many2one(
-        'group.cost.sheet', 'Cost Sheets', readonly=True)
+        'group.cost.sheet', 'Hojas de coste', readonly=True)
     
     @api.model
     def create(self, vals):
