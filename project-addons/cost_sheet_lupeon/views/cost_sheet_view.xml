@@ -89,7 +89,7 @@
                                     <tree editable="bottom">
                                         <field name="name"/>
                                         <field name="diameter"/>
-                                        <field name="material_id"/>
+                                        <field name="material_id" domain="[('type', '=', 'fdm')]"/>
                                         <field name="color"/>
                                         <field name="tray_meters"/>
                                         <field name="gr_cc_tray"/>
@@ -144,7 +144,7 @@
                         <!-- SLS -->
                         <page string="SLS" attrs="{'invisible': [('sheet_type', '!=', 'sls')]}">
                             <group colspan="2" col="8" string="Datos pieza">
-                                <field name="units_sls"/>
+                                <field name="sls_units"/>
                                 <field name="cc_und_sls"/>
                                 <field name="cm2_sls"/>
                                 <field name="static_data_sls"/>
@@ -170,10 +170,11 @@
                                 <field name="sls_material_cost_ids" nolabel="1">
                                     <tree editable="bottom">
                                         <field name="name"/>
-                                        <field name="gr_tray"/>
-                                        <field name="gr_total"/>
-                                        <field name="euro_material"/>
-                                        <field name="total"/>
+                                        <field name="material_id" domain="[('type', '=', 'sls')]"/>
+                                        <field name="sls_gr_tray"/>
+                                        <field name="sls_gr_total"/>
+                                        <field name="sls_euro_material"/>
+                                        <field name="sls_total"/>
                                     </tree>
                                 </field>
                             </group>

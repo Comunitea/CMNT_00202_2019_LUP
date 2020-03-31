@@ -30,7 +30,7 @@ class GroupCostSheet(models.Model):
     tech_hours = fields.Integer('Horas técnico', default=35)
     help_hours = fields.Integer('Horas ayudante', default=35)
     sheet_ids = fields.One2many(
-        'cost.sheet', 'group_id', string='Hojas de coste')
+        'cost.sheet', 'group_id', string='Cost Sheets')
     line_pvp = fields.Float('PVP Línea', compute='_get_line_pvp')
     
     def name_get(self):
@@ -310,7 +310,7 @@ class CostSheet(models.Model):
     # ------------------------------------------------------------------------
     
     # SLS DATOS PIEZA
-    units_sls = fields.Integer('Uds. Cliente')
+    sls_units = fields.Integer('Uds. Cliente')
     cc_und_sls = fields.Integer('cc ud')
     cm2_sls = fields.Float('cm^2 ud')
     x_mm_sls = fields.Float('X (mm)')
@@ -318,6 +318,11 @@ class CostSheet(models.Model):
     z_mm_sls = fields.Float('Z (mm)')
     static_data_sls = fields.Char('Dato estadístico')
     e_cc_sls = fields.Float('€/cc', compute="_get_e_cc_sls")
+
+    @api.onchange('sls_units')
+    def onchange_units_sls(self):
+        for sh in self:
+            sh.tray_units_sls = sh.sls_units
 
     @api.depends('price_unit', 'cc_und_sls')
     def _get_e_cc_sls(self):
@@ -328,11 +333,13 @@ class CostSheet(models.Model):
     @api.onchange('cc_und_sls')
     def onchange_cc_und_sls(self):
         options = ['PA2200']
+        material = self.env['material'].search([('name', '=', options[0])])
         for sh in self:
             cost_lines = [(5, 0, 0)]
             for name in options:
                 vals = {
                     'name': name,
+                    'material_id': material.id if material else False
                 }
                 cost_lines.append((0, 0, vals))
             sh.sls_material_cost_ids = cost_lines
@@ -354,30 +361,44 @@ class CostSheet(models.Model):
 
     # SLS PARÁMETROS IMPRESIÓN
     sls_printer_id = fields.Many2one(
-        'printer.machine', 'Impresora', domain=[('type', '=', 'slS')])
+        'printer.machine', 'Impresora', domain=[('type', '=', 'sls')])
     tray_units_sls = fields.Integer('Uds. Bandeja')
-    increment_sls = fields.Float('Incremento (mm)', default=18.0)  # Model or selection?
-  
-    tray_hours_sls = fields.Float('h Maq. Bandeja')
-    euro_machine_sls = fields.Float('€/h maq')
+    increment_sls = fields.Float('Incremento (mm)', default=18.0)
+    tray_hours_sls = fields.Float('h Maq. Bandeja', compute='_get_sls_print_totals', digits=(16, 4))
+    euro_machine_sls = fields.Float('€/h maq', compute='_get_sls_print_totals')
+    
+    @api.depends('sls_printer_id')
+    def _get_sls_print_totals(self):
+        for sh in self:
+            sh.tray_hours_sls = 0.052 # TODO
+            sh.euro_machine_sls = sh.sls_printer_id and sh.sls_printer_id.euro_hour
+
 
     # SLS OFERT CONFIGURATION
     offer_type = fields.Selection(
         [('standard', 'Standard'),
          ('xyz', 'XYZ'),
-         ('cubeta', 'Cubeta')], 'Tipo oferta')
-    solid_per_sls = fields.Float('% solido')
+         ('cubeta', 'Cubeta')], 'Tipo oferta', default='standard')
+    solid_per_sls = fields.Float('% Solido', default=80.0)
     bucket_height_sls = fields.Float('Altura cubeta')
-    simulation_time_sls = fields.Float('Simulation time')
+    simulation_time_sls = fields.Float('Tiempo impresión simulacion')
 
     # SLS MATERIAL COST
     sls_material_cost_ids = fields.One2many(
         'material.cost.line', 'sls_sheet_id', string='Coste material')
 
     # SLS COSTE MÁQUINA
-    machine_hours_sls = fields.Float('Horas Maq total')
-    euro_machine_ud_sls = fields.Float('Euros Maq ud')  
-    euro_machine_total_sls = fields.Float('Euros Maq total')
+    machine_hours_sls = fields.Float('Horas Maq total', compute="_get_sls_machine_cost")
+    euro_machine_ud_sls = fields.Float('Euros Maq ud', compute="_get_sls_machine_cost")  
+    euro_machine_total_sls = fields.Float('Euros Maq total', compute="_get_sls_machine_cost")
+
+    @api.depends('tray_units_sls', 'tray_hours_sls', 'sls_units', 'euro_machine_sls')
+    def _get_sls_machine_cost(self):
+        for sh in self:
+            if sh.sls_units:
+                sh.machine_hours_sls = sh.tray_hours_sls / sh.tray_units_sls * sh.sls_units
+                sh.euro_machine_ud_sls = sh.machine_hours_sls * sh.euro_machine_sls / sh.sls_units
+                sh.euro_machine_total_sls = sh.euro_machine_ud_sls * sh.sls_units
 
     # SLS COSTE MANO DE OBRA
     sls_workforce_cost_ids = fields.One2many(
@@ -632,7 +653,7 @@ class MaterialCostLine(models.Model):
     @api.depends('material_id', 'tray_meters')
     def _compute_cost_fdm(self):
         for mcl in self:
-            if not mcl.material_id:
+            if not mcl.material_id or not mcl.fdm_sheet_id:
                 continue
             mat = mcl.material_id
             sh = mcl.fdm_sheet_id
@@ -643,7 +664,24 @@ class MaterialCostLine(models.Model):
     
     # SLS
     sls_sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
-
+    sls_gr_tray = fields.Float('Gr bandeja', compute='_compute_cost_sls')
+    sls_gr_total = fields.Float('Gr total', compute='_compute_cost_sls')
+    sls_euro_material = fields.Float('Euros Mat ud', compute='_compute_cost_sls')
+    sls_total = fields.Float('Total', compute='_compute_cost_sls')
+    
+    # @api.depends('material_id')
+    def _compute_cost_sls(self):
+        for mcl in self:
+            if not mcl.material_id or not mcl.sls_sheet_id:
+                continue
+            sh = mcl.sls_sheet_id
+            mat = mcl.material_id
+            mcl.sls_gr_tray = 25 # TODO
+            if sh.tray_units_sls:
+                mcl.sls_gr_total = (mcl.sls_gr_tray * sh.sls_units) / sh.tray_units_sls
+            if sh.tray_units_sls:
+                mcl.sls_euro_material = (mcl.sls_gr_tray * (mat.euro_kg_bucket / 1000.0)) / sh.tray_units_sls
+            mcl.sls_total = sh.sls_units * mcl.sls_euro_material
     # POLY
     pol_sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
 

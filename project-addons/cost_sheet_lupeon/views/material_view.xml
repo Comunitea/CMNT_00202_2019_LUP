@@ -10,9 +10,20 @@
                 <sheet>
                     <group>
                         <field name="name"/>
+                        <field name="type"/>
+                    </group>
+                    <group attrs="{'invisible': [('type', '!=', 'fdm')]}">
                         <field name="gr_cc"/>
                         <field name="euro_kg"/>
                         <field name="factor_hour"/>
+                    </group>
+                    <group attrs="{'invisible': [('type', '!=', 'sls')]}">
+                        <field name="dens_cc"/>
+                        <field name="dens_bulk"/>
+                        <field name="vel_cc"/>
+                        <field name="vel_z"/>
+                        <field name="euro_kg_bucket"/>
+                        <field name="euro_hour_maq"/>
                     </group>
                 </sheet>
             </form>
@@ -25,6 +36,7 @@
         <field name="arch" type="xml">
             <tree>
                 <field name="name"/>
+                <field name="type"/>
                 <field name="gr_cc"/>
                 <field name="euro_kg"/>
                 <field name="factor_hour"/>
