@@ -8,3 +8,6 @@ class Material(models.Model):
     _name = 'material'
 
     name = fields.Char('Name')
+    gr_cc = fields.Float('Gr/cc')
+    euro_kg = fields.Float('€/kg')
+    factor_hour = fields.Float('Factor hour')

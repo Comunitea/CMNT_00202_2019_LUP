@@ -31,9 +31,11 @@
                     <group string="Prices" col="6">
                             <field name="init_cost"/>
                             <field name="admin_fact"/>
-                            <field name="price_total"/>
-                            <field name="disc_qty"/>
+                            <field name="disc_qty" attrs="{'invisible': [('sheet_type', '==', 'fdm')]}"/>
+                            <field name="disc_qty_computed" attrs="{'invisible': [('sheet_type', '!=', 'fdm')]}"/>
                             <field name="disc2"/>
+                            <field name="price_unit"  attrs="{'invisible': [('sheet_type', '==', 'design')]}"/>
+                            <field name="price_total"/>
                     </group>
                     <notebook>
                         <page string="Design Sheet" attrs="{'invisible': [('sheet_type', '!=', 'design')]}">
@@ -64,14 +66,14 @@
                         </page>
 
                         <page string="FDM" attrs="{'invisible': [('sheet_type', '!=', 'fdm')]}">
-                            <group>
-                                <group string="Reference data">
+               
+                                <group cospan="4" col="8" string="Reference data">
                                     <field name="fdm_units"/>
-                                    <field name="cc_und"/>
+                                    <field name="cc_ud_fdm"/>
                                     <field name="stat_data"/>
                                     <field name="euros_cc"/>
                                 </group>
-                                <group string="Printing parameters">
+                                <group cospan="2" col="8" string="Printing parameters">
                                     <field name="printer_id"/>
                                     <field name="tray_units"/>
                                     <field name="infill"/>
@@ -81,7 +83,7 @@
                                     <field name="euro_machine"/>
                                     <field name="perfil"/>
                                 </group>
-                            </group>
+                 
                             <group colspan="4" string="Material Cost">
                                 <field name="material_cost_ids" nolabel="1">
                                     <tree editable="bottom">
@@ -109,11 +111,16 @@
                                 <field name="workforce_cost_ids" nolabel="1">
                                     <tree editable="bottom">
                                         <field name="name"/>
+                                        <field name="hours"/>
                                         <field name="minutes"/>
                                         <field name="euro_unit"/>
                                         <field name="total"/>
                                     </tree>
                                 </field>
+                            </group>
+                             <group class="oe_subtotal_footer oe_right" colspan="2" name="wf_total">
+                                    <field name="workforce_total_euro_ud" widget='monetary'/>
+                                    <field name="workforce_total" widget='monetary'/>
                             </group>
                              <group colspan="4" string="Outsorcing costs">
                                 <field name="outsorcing_cost_ids" nolabel="1">
@@ -457,10 +464,16 @@
                     </div>
                     <group>
                         <field name="admin_fact"/>
+                        <field name="ing_hours"/>
+                        <field name="tech_hours"/>
+                        <field name="help_hours"/>
                     </group>
 
                     <group colespan="4" string="Cost sheets">
                         <field name="sheet_ids" nolabel="1"/>
+                    </group>
+                    <group class="oe_subtotal_footer oe_right" colspan="2" name="pvp_total">
+                        <field name="line_pvp" widget='monetary'/>
                     </group>
                 </sheet>
             </form>
