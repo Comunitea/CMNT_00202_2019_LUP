@@ -184,7 +184,7 @@ class CostSheet(models.Model):
                 cost_lines.append((0, 0, vals))
             sh.material_cost_ids = cost_lines
     
-    @api.onchange('sheet_type', 'material_cost_ids')
+    @api.onchange('sheet_type', 'material_cost_ids', 'sls_material_cost_ids')
     def onchange_sheet_type(self):
         options =  ['Horas Técnico', 'Horas Diseño', 'Horas Posprocesado']
         out_options =  ['Insertos', 'Tornillos', 'Pintado', 'Accesorios', 'Otros']
@@ -197,20 +197,29 @@ class CostSheet(models.Model):
             for name in out_options:
                 vals = {'name': name, 'margin': 20.0}
                 out_lines.append((0, 0, vals))
-            if sh.sheet_type == 'fdm':
-                # FDM REATE WORKFORCE LINES
-                wf_lines = [(5, 0, 0)]
+            # if sh.sheet_type == 'fdm':
+            # FDM CREATE WORKFORCE LINES
+            wf_lines = [(5, 0, 0)]
 
-                for name in options:
-                    hours = 0
-                    if name == 'Horas Técnico' and sh.material_cost_ids and sh.material_cost_ids[0].material_id:
-                        mat = sh.material_cost_ids[0].material_id
-                        hours = 5/60 + sh.machine_hours * sh.printer_id.machine_hour * mat.factor_hour
-                    vals = {
-                        'name': name,
-                        'hours': hours,
-                    }
-                    wf_lines.append((0, 0, vals))
+            for name in options:
+                hours = 0
+
+                material = False
+                maq_hours = False
+                if sh.material_cost_ids:
+                    material = sh.material_cost_ids[0].material_id
+                    maq_hours = sh.machine_hours
+                elif sh.sls_material_cost_ids:
+                    material = sh.sls_material_cost_ids[0].material_id
+                    maq_hours = sh.machine_hours_sls
+
+                if name == 'Horas Técnico' and material:
+                    hours = 5/60 + maq_hours * sh.printer_id.machine_hour * material.factor_hour
+                vals = {
+                    'name': name,
+                    'hours': hours,
+                }
+                wf_lines.append((0, 0, vals))
             
             sh.update({
                 'workforce_cost_ids': wf_lines,
@@ -234,7 +243,7 @@ class CostSheet(models.Model):
 
     # FDM COSTE MATERIAL
     material_cost_ids = fields.One2many(
-        'material.cost.line', 'fdm_sheet_id', string='Coste material')
+        'material.cost.line', 'sheet_id', string='Coste material')
     total_euro_ud = fields.Float('Total € ud', compute='_get_totals_material_cost')
     total_material_cost = fields.Float('Total', compute='_get_totals_material_cost')
 
@@ -262,9 +271,9 @@ class CostSheet(models.Model):
                 sh.euro_machine_ud = sh.machine_hours * sh.euro_machine / sh.cus_units
                 sh.euro_machine_total = sh.euro_machine_ud * sh.cus_units
 
-    # FDM COSTE MANO DE OBRA
+    # [ALL] COSTE MANO DE OBRA
     workforce_cost_ids = fields.One2many(
-        'workforce.cost.line', 'fdm_sheet_id', string='Coste Mano de obra')
+        'workforce.cost.line', 'sheet_id', string='Coste Mano de obra')
     workforce_total_euro_ud = fields.Float(
         'Total € ud', compute="_get_totals_workforce")
     workforce_total = fields.Float(
@@ -278,7 +287,7 @@ class CostSheet(models.Model):
     
     # FDM COSTE EXTERNALIZACION POR PIEZA
     outsorcing_cost_ids = fields.One2many(
-        'outsorcing.cost.line', 'fdm_sheet_id', string='Coste externalizacion por pieza')
+        'outsorcing.cost.line', 'sheet_id', string='Coste externalizacion por pieza')
     outsorcing_total_ud = fields.Float(
         'Total ud', compute="_get_totals_outsorcing")
     outsorcing_total = fields.Float(
@@ -348,7 +357,7 @@ class CostSheet(models.Model):
                     'hours': hours,
                 }
                 sls_wf_lines.append((0, 0, vals))
-                sh.sls_workforce_cost_ids = sls_wf_lines
+                sh.workforce_cost_ids = sls_wf_lines
 
     # SLS PARÁMETROS IMPRESIÓN
     increment_sls = fields.Float('Incremento (mm)', default=18.0)
@@ -389,8 +398,6 @@ class CostSheet(models.Model):
                 sh.euro_machine_total_sls = sh.euro_machine_ud_sls * sh.cus_units
 
     # SLS COSTE MANO DE OBRA
-    sls_workforce_cost_ids = fields.One2many(
-        'workforce.cost.line', 'sls_sheet_id', string='Coste material')
     
     # SLS COSTE EXTERNALIZACION POR PIEZA
     tinted_sls = fields.Selection(
@@ -425,8 +432,6 @@ class CostSheet(models.Model):
     euro_machine_total_pol = fields.Float('Euros Maq total')
 
     # POLY COSTE MANO DE OBRA
-    pol_workforce_cost_ids = fields.One2many(
-        'workforce.cost.line', 'pol_sheet_id', string='Coste material')
 
     # POLY COSTE EXTERNALIZACION POR PIEZA
 
@@ -455,8 +460,6 @@ class CostSheet(models.Model):
     # SLA COSTE EXTERNALIZACION POR PIEZA
 
     # SLA COSTE MANO DE OBRA
-    sla_workforce_cost_ids = fields.One2many(
-        'workforce.cost.line', 'sla_sheet_id', string='Coste material')
     
     # ------------------------------------------------------------------------- 
 
@@ -484,8 +487,6 @@ class CostSheet(models.Model):
     # dmls COSTE EXTERNALIZACION POR PIEZA
  
     # dmls COSTE MANO DE OBRA
-    dmls_workforce_cost_ids = fields.One2many(
-        'workforce.cost.line', 'sla_sheet_id', string='Coste mano de obra')
     
    
     @api.model
@@ -593,7 +594,7 @@ class MaterialCostLine(models.Model):
     total = fields.Float('Total')
 
     # FDM
-    fdm_sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
+    sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
     diameter = fields.Float('Diámetro')
     color = fields.Char('Color')
     tray_meters = fields.Float('Metros Bandeja')
@@ -604,10 +605,10 @@ class MaterialCostLine(models.Model):
     @api.depends('material_id', 'tray_meters')
     def _compute_cost_fdm(self):
         for mcl in self:
-            if not mcl.material_id or not mcl.fdm_sheet_id:
+            if not mcl.material_id or not mcl.sheet_id:
                 continue
             mat = mcl.material_id
-            sh = mcl.fdm_sheet_id
+            sh = mcl.sheet_id
             mcl.gr_cc_tray = round(mat.gr_cc * math.pi * ((mcl.diameter / 2.0) ** 2) * mcl.tray_meters)
             if sh.cus_units:
                 mcl.gr_cc_total = round(mcl.gr_cc_tray / sh.cus_units * sh.tray_units)
@@ -651,27 +652,21 @@ class WorkforceCostLine(models.Model):
 
     _name = 'workforce.cost.line'
 
-    fdm_sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
-    sls_sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
-    pol_sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
-    sla_sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
-    dmls_sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
+    sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
     name = fields.Char('Nombre')
     hours = fields.Float('Horas')
     minutes = fields.Float('Minutos', compute="compute_workforce_totals")
     euro_unit = fields.Float('€ ud', compute="compute_workforce_totals")
     total = fields.Float('€ Total', compute="compute_workforce_totals")
 
-
-    @api.onchange('printer_id')
+    @api.depends('hours')
     def compute_workforce_totals(self):
         for wcl in self:
-            sh = wcl.fdm_sheet_id or wcl.sls_sheet_id or wcl.pol_sheet_id or \
-                    wcl.sla_sheet_id or wcl.dmls_sheet_id
+            sh = wcl.sheet_id
             hours_tech = sh.group_id.tech_hours
             if sh.cus_units:
                 wcl.euro_unit = wcl.hours * hours_tech / sh.cus_units
-            wcl.minutes = wcl.euro_unit * sh.cus_units
+            wcl.minutes = wcl.hours * 60.0  
             wcl.total = wcl.euro_unit * sh.cus_units
 
 
@@ -681,11 +676,7 @@ class OutsorcingCostLine(models.Model):
 
     _name = 'outsorcing.cost.line'
 
-    fdm_sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
-    sls_sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
-    pol_sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
-    sla_sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
-    dmls_sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
+    sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
 
     name = fields.Char('Tarea')
     cost = fields.Float('Coste')

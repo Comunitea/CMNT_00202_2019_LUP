@@ -184,9 +184,10 @@
                                 <field name="euro_machine_total_sls"/>
                             </group>
                             <group colspan="4" string="Coste mano de obra">
-                                <field name="sls_workforce_cost_ids" nolabel="1">
+                                <field name="workforce_cost_ids" nolabel="1">
                                     <tree editable="bottom">
                                         <field name="name"/>
+                                        <field name="hours"/>
                                         <field name="minutes"/>
                                         <field name="euro_unit"/>
                                         <field name="total"/>
@@ -242,9 +243,10 @@
                                 <field name="euro_machine_total_pol"/>
                             </group>
                             <group colspan="4" string="Coste mano de obra">
-                                <field name="pol_workforce_cost_ids" nolabel="1">
+                                <field name="workforce_cost_ids" nolabel="1">
                                     <tree editable="bottom">
                                         <field name="name"/>
+                                        <field name="hours"/>
                                         <field name="minutes"/>
                                         <field name="euro_unit"/>
                                         <field name="total"/>
@@ -299,9 +301,10 @@
                                 <field name="euro_machine_total_sla"/>
                             </group>
                             <group colspan="4" string="Coste mano de obra">
-                                <field name="sla_workforce_cost_ids" nolabel="1">
+                                <field name="workforce_cost_ids" nolabel="1">
                                     <tree editable="bottom">
                                         <field name="name"/>
+                                        <field name="hours"/>
                                         <field name="minutes"/>
                                         <field name="euro_unit"/>
                                         <field name="total"/>
@@ -356,9 +359,10 @@
                                 <field name="euro_machine_total_dmls"/>
                             </group>
                             <group colspan="4" string="Coste mano de obra">
-                                <field name="dmls_workforce_cost_ids" nolabel="1">
+                                <field name="workforce_cost_ids" nolabel="1">
                                     <tree editable="bottom">
                                         <field name="name"/>
+                                        <field name="hours"/>
                                         <field name="minutes"/>
                                         <field name="euro_unit"/>
                                         <field name="total"/>
