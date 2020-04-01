@@ -74,7 +74,7 @@
                                     <field name="euros_cc"/>
                                 </group>
                                 <group cospan="2" col="8" string="Parámetros impresión">
-                                    <field name="printer_id"/>
+                                    <field name="printer_id" domain="[('type', '=', 'fdm')]"/>
                                     <field name="tray_units"/>
                                     <field name="infill"/>
                                     <field name="loops"/>
@@ -154,7 +154,7 @@
                                 <field name="e_cc_sls"/>
                             </group>
                             <group colspan="2" col="8" string="Parámetros impresión">
-                                <field name="sls_printer_id"/>
+                                <field name="printer_id" domain="[('type', '=', 'sls')]"/>
                                 <field name="tray_units"/>
                                 <field name="increment_sls"/>
                                 <field name="tray_hours_sls"/>
@@ -219,7 +219,7 @@
                                 <field name="euros_cc_pol"/>
                             </group>
                             <group colspan="2" col="8" string="Parámetros impresión">
-                                <field name="pol_printer_id"/>
+                                <field name="printer_id" domain="[('type', '=', 'poly')]"/>
                                 <field name="tray_units_pol"/>
                                 <field name="finish_pol"/>
                                 <field name="tray_hours_pol"/>
@@ -276,7 +276,7 @@
                                 <field name="euros_cc_sla"/>
                             </group>
                             <group colspan="2" col="8" string="Parámetros impresión">
-                                <field name="sla_printer_id"/>
+                                <field name="printer_id" domain="[('type', '=', 'sla')]"/>
                                 <field name="tray_units_sla"/>
                                 <field name="tray_hours_sla"/>
                                 <field name="euro_machine_sla"/>
@@ -333,7 +333,7 @@
                                 <field name="euros_cc_dmls"/>
                             </group>
                             <group colspan="2" col="8" string="Parámetros impresión">
-                                <field name="dmls_printer_id"/>
+                                <field name="printer_id" domain="[('type', '=', 'dmls')]"/>
                                 <field name="tray_units_dmls"/>
                                 <field name="tray_hours_dmls"/>
                                 <field name="euro_machine_dmls"/>

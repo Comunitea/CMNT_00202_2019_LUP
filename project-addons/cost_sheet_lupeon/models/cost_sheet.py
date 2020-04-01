@@ -215,7 +215,6 @@ class CostSheet(models.Model):
             sh.update({
                 'workforce_cost_ids': wf_lines,
                 'outsorcing_cost_ids': out_lines,
-                # 'sls_outsorcing_cost_ids': sls_out_lines,
             })
 
 
@@ -352,17 +351,15 @@ class CostSheet(models.Model):
                 sh.sls_workforce_cost_ids = sls_wf_lines
 
     # SLS PARÁMETROS IMPRESIÓN
-    sls_printer_id = fields.Many2one(
-        'printer.machine', 'Impresora', domain=[('type', '=', 'sls')])
     increment_sls = fields.Float('Incremento (mm)', default=18.0)
     tray_hours_sls = fields.Float('h Maq. Bandeja', compute='_get_sls_print_totals', digits=(16, 4))
     euro_machine_sls = fields.Float('€/h maq', compute='_get_sls_print_totals')
     
-    @api.depends('sls_printer_id')
+    @api.depends('printer_id')
     def _get_sls_print_totals(self):
         for sh in self:
             sh.tray_hours_sls = 0.052 # TODO
-            sh.euro_machine_sls = sh.sls_printer_id and sh.sls_printer_id.euro_hour
+            sh.euro_machine_sls = sh.printer_id and sh.printer_id.euro_hour
 
 
     # SLS OFERT CONFIGURATION
@@ -396,12 +393,6 @@ class CostSheet(models.Model):
         'workforce.cost.line', 'sls_sheet_id', string='Coste material')
     
     # SLS COSTE EXTERNALIZACION POR PIEZA
-    sls_outsorcing_cost_ids = fields.One2many(
-        'outsorcing.cost.line', 'sls_sheet_id', string='Coste externalizacion por pieza')
-    outsorcing_total_ud_sls = fields.Float(
-        'Total ud.l', compute="_get_totals_outsorcing_sls")
-    outsorcing_total_sls = fields.Float(
-    'Total ud.l', compute="_get_totals_outsorcing_sls")
     tinted_sls = fields.Selection(
         [('blue', 'Blue'),
          ('black', 'XYZ'),
@@ -417,8 +408,6 @@ class CostSheet(models.Model):
     euros_cc_pol = fields.Float('€/cc')
 
     # POLY PARÁMETROS IMPRESIÓN
-    pol_printer_id = fields.Many2one(
-        'printer.machine', 'Impresora', domain=[('type', '=', 'poly')])
     tray_units_pol = fields.Integer('Uds. Bandeja')
     finish_pol = fields.Selection([
         ('glossy', 'Glossy'),
@@ -440,12 +429,6 @@ class CostSheet(models.Model):
         'workforce.cost.line', 'pol_sheet_id', string='Coste material')
 
     # POLY COSTE EXTERNALIZACION POR PIEZA
-    pol_outsorcing_cost_ids = fields.One2many(
-        'outsorcing.cost.line', 'pol_sheet_id', string='Coste externalizacion por pieza')
-    outsorcing_total_ud_pol = fields.Float(
-        'Total ud', compute="_get_totals_outsorcing_sls")
-    outsorcing_total_pol = fields.Float(
-    'Total', compute="_get_totals_outsorcing_sls")
 
     # ------------------------------------------------------------------------- 
 
@@ -456,8 +439,6 @@ class CostSheet(models.Model):
     euros_cc_sla = fields.Float('€/cc')
 
     # SLA PARÁMETROS IMPRESIÓN
-    sla_printer_id = fields.Many2one(
-        'printer.machine', 'Impresora', domain=[('type', '=', 'sla')])
     tray_units_sla = fields.Integer('Uds. Bandeja')
     tray_hours_sla = fields.Float('h Maq. Bandeja')
     euro_machine_sla = fields.Float('€/h maq')
@@ -472,12 +453,6 @@ class CostSheet(models.Model):
     euro_machine_total_sla = fields.Float('Euros Maq total')
 
     # SLA COSTE EXTERNALIZACION POR PIEZA
-    sla_outsorcing_cost_ids = fields.One2many(
-        'outsorcing.cost.line', 'sla_sheet_id', string='Coste externalizacion por pieza')
-    outsorcing_total_ud_sla = fields.Float(
-        'Total ud.', compute="_get_totals_outsorcing_sls")
-    outsorcing_total_sla = fields.Float(
-    'Total', compute="_get_totals_outsorcing_sls")
 
     # SLA COSTE MANO DE OBRA
     sla_workforce_cost_ids = fields.One2many(
@@ -493,8 +468,6 @@ class CostSheet(models.Model):
     euros_cc_dmls = fields.Float('€/cc')
 
     # dmls PARÁMETROS IMPRESIÓN
-    dmls_printer_id = fields.Many2one(
-        'printer.machine', 'Impresora', domain=[('type', '=', 'dmls')])
     tray_units_dmls = fields.Integer('Uds. Bandeja')
     tray_hours_dmls = fields.Float('h Maq. Bandeja')
     euro_machine_dmls = fields.Float('€/h maq')
@@ -509,13 +482,7 @@ class CostSheet(models.Model):
     euro_machine_total_dmls = fields.Float('Euros Maq total')
 
     # dmls COSTE EXTERNALIZACION POR PIEZA
-    dmls_outsorcing_cost_ids = fields.One2many(
-        'outsorcing.cost.line', 'sla_sheet_id', string='Coste externalizacion por pieza')
-    outsorcing_total_ud_dmls = fields.Float(
-        'Total ud.l', compute="_get_totals_outsorcing_sls")
-    outsorcing_total_dmls = fields.Float(
-    'Total ud.l', compute="_get_totals_outsorcing_sls")
-
+ 
     # dmls COSTE MANO DE OBRA
     dmls_workforce_cost_ids = fields.One2many(
         'workforce.cost.line', 'sla_sheet_id', string='Coste mano de obra')
@@ -531,13 +498,6 @@ class CostSheet(models.Model):
        res = super().write(vals)
        self.mapped('group_id').update_sale_line_price()
        return res
-
-   
-    @api.depends('sls_outsorcing_cost_ids')
-    def _get_totals_outsorcing_sls(self):
-        for sh in self:
-            sh.outsorcing_total_ud_sls = sum([x.pvp for x in sh.sls_outsorcing_cost_ids])
-            sh.outsorcing_total_sls =sh.outsorcing_total_ud_sls * sh.cus_units
     
     
     # LÓGICA
