@@ -167,7 +167,7 @@ class CostSheet(models.Model):
     
     # FDM PARÁMETROS IMPRESIÓN
     printer_id = fields.Many2one(
-        'printer.machine', 'Impresora', domain=[('type', '=', 'fdm')])
+        'printer.machine', 'Impresora')
     tray_units = fields.Integer('Uds. Bandeja')
     infill = fields.Float('Infill')  # Model or selection?
     loops = fields.Integer('Loops') # Model or selection?
@@ -189,7 +189,7 @@ class CostSheet(models.Model):
                 cost_lines.append((0, 0, vals))
             sh.material_cost_ids = cost_lines
     
-    @api.onchange('sheet_type', 'material_cost_ids', 'sls_material_cost_ids')
+    @api.onchange('sheet_type', 'material_cost_ids')
     def onchange_sheet_type(self):
         options =  ['Horas Técnico', 'Horas Diseño', 'Horas Posprocesado']
         out_options =  ['Insertos', 'Tornillos', 'Pintado', 'Accesorios', 'Otros']
@@ -214,9 +214,6 @@ class CostSheet(models.Model):
                 if sh.material_cost_ids:
                     material = sh.material_cost_ids[0].material_id
                     maq_hours = sh.machine_hours
-                elif sh.sls_material_cost_ids:
-                    material = sh.sls_material_cost_ids[0].material_id
-                    maq_hours = sh.machine_hours_sls
 
                 if name == 'Horas Técnico' and material:
                     hours = 5/60 + maq_hours * sh.printer_id.machine_hour * material.factor_hour
@@ -345,29 +342,31 @@ class CostSheet(models.Model):
         options = ['PA2200']
         material = self.env['material'].search([('name', '=', options[0])])
         for sh in self:
-            cost_lines = [(5, 0, 0)]
-            for name in options:
-                vals = {
-                    'name': name,
-                    'material_id': material.id if material else False
-                }
-                cost_lines.append((0, 0, vals))
-            sh.sls_material_cost_ids = cost_lines
+            # CREATE MATERIAL COST LINES
+            if sh.sheet_type == 'sls':
+                cost_lines = [(5, 0, 0)]
+                for name in options:
+                    vals = {
+                        'name': name,
+                        'material_id': material.id if material else False
+                    }
+                    cost_lines.append((0, 0, vals))
+                sh.material_cost_ids = cost_lines
 
             # CREATE WORKFORCE LINES
-            sls_wf_lines = [(5, 0, 0)]
+            # sls_wf_lines = [(5, 0, 0)]
 
-            for name in options:
-                hours = 0
-                if name == 'Horas Técnico' and sh.material_cost_ids and sh.material_cost_ids[0].material_id:
-                    mat = sh.material_cost_ids[0].material_id
-                    hours = 5/60 + sh.machine_hours * sh.printer_id.machine_hour * mat.factor_hour
-                vals = {
-                    'name': name,
-                    'hours': hours,
-                }
-                sls_wf_lines.append((0, 0, vals))
-                sh.workforce_cost_ids = sls_wf_lines
+            # for name in options:
+            #     hours = 0
+            #     if name == 'Horas Técnico' and sh.material_cost_ids and sh.material_cost_ids[0].material_id:
+            #         mat = sh.material_cost_ids[0].material_id
+            #         hours = 5/60 + sh.machine_hours * sh.printer_id.machine_hour * mat.factor_hour
+            #     vals = {
+            #         'name': name,
+            #         'hours': hours,
+            #     }
+            #     sls_wf_lines.append((0, 0, vals))
+            #     sh.workforce_cost_ids = sls_wf_lines
 
     # SLS PARÁMETROS IMPRESIÓN
     increment_sls = fields.Float('Incremento (mm)', default=18.0)
@@ -389,8 +388,6 @@ class CostSheet(models.Model):
     simulation_time_sls = fields.Float('Tiempo impresión simulacion')
 
     # SLS MATERIAL COST
-    sls_material_cost_ids = fields.One2many(
-        'material.cost.line', 'sls_sheet_id', string='Coste material')
 
 
 
@@ -595,42 +592,16 @@ class MaterialCostLine(models.Model):
     diameter = fields.Float('Diámetro')
     color = fields.Char('Color')
     tray_meters = fields.Float('Metros Bandeja')
-    gr_cc_tray = fields.Float('gr o cc bandeja', compute='_compute_cost_fdm')
-    gr_cc_total = fields.Float('gr o cc total', compute='_compute_cost_fdm')
-    euro_material = fields.Float('Euros Mat ud', compute='_compute_cost_fdm')
+    gr_cc_tray = fields.Float('gr o cc bandeja', compute='_compute_cost')
+    gr_cc_total = fields.Float('gr o cc total', compute='_compute_cost')
+    euro_material = fields.Float('Euros Mat ud', compute='_compute_cost')
+    total = fields.Float('Total', compute='_compute_cost')
 
-    @api.depends('material_id', 'tray_meters')
-    def _compute_cost_fdm(self):
-        for mcl in self:
-            if not mcl.material_id or not mcl.sheet_id:
-                continue
-            mat = mcl.material_id
-            sh = mcl.sheet_id
-            mcl.gr_cc_tray = round(mat.gr_cc * math.pi * ((mcl.diameter / 2.0) ** 2) * mcl.tray_meters)
-            if sh.cus_units:
-                mcl.gr_cc_total = round(mcl.gr_cc_tray / sh.cus_units * sh.tray_units)
-                mcl.euro_material = mat.euro_kg * (mcl.gr_cc_total / 1000.0) / sh.cus_units
-    
     # SLS
-    sls_sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
-    sls_gr_tray = fields.Float('Gr bandeja', compute='_compute_cost_sls')
-    sls_gr_total = fields.Float('Gr total', compute='_compute_cost_sls')
-    sls_euro_material = fields.Float('Euros Mat ud', compute='_compute_cost_sls')
-    sls_total = fields.Float('Total', compute='_compute_cost_sls')
+    sls_gr_tray = fields.Float('Gr bandeja', compute='_compute_cost')
+    sls_gr_total = fields.Float('Gr total', compute='_compute_cost')
     
-    # @api.depends('material_id')
-    def _compute_cost_sls(self):
-        for mcl in self:
-            if not mcl.material_id or not mcl.sls_sheet_id:
-                continue
-            sh = mcl.sls_sheet_id
-            mat = mcl.material_id
-            mcl.sls_gr_tray = 25 # TODO
-            if sh.tray_units:
-                mcl.sls_gr_total = (mcl.sls_gr_tray * sh.cus_units) / sh.tray_units
-            if sh.tray_units:
-                mcl.sls_euro_material = (mcl.sls_gr_tray * (mat.euro_kg_bucket / 1000.0)) / sh.tray_units
-            mcl.sls_total = sh.cus_units * mcl.sls_euro_material
+
     # POLY
     pol_sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
 
@@ -642,6 +613,25 @@ class MaterialCostLine(models.Model):
 
     # DMLS
     dmls_sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
+
+    def _compute_cost(self):
+        for mcl in self:
+            if not mcl.material_id or not mcl.sheet_id:
+                continue
+            mat = mcl.material_id
+            sh = mcl.sheet_id
+            if sh.sheet_type == 'fdm':
+                mcl.gr_cc_tray = round(mat.gr_cc * math.pi * ((mcl.diameter / 2.0) ** 2) * mcl.tray_meters)
+                if sh.cus_units:
+                    mcl.gr_cc_total = round(mcl.gr_cc_tray / sh.cus_units * sh.tray_units)
+                    mcl.euro_material = mat.euro_kg * (mcl.gr_cc_total / 1000.0) / sh.cus_units
+            elif sh.sheet_type == 'sls':
+                mcl.sls_gr_tray = 25 # TODO
+                if sh.tray_units:
+                    mcl.sls_gr_total = (mcl.sls_gr_tray * sh.cus_units) / sh.tray_units
+                if sh.tray_units:
+                    mcl.euro_material = (mcl.sls_gr_tray * (mat.euro_kg_bucket / 1000.0)) / sh.tray_units
+                    mcl.total = sh.cus_units * mcl.euro_material
 
 
 # FDM COSTE MANO DE OBRA

@@ -75,7 +75,8 @@
                                     <field name="euros_cc"/>
                                 </group>
                                 <group cospan="2" col="8" string="Parámetros impresión">
-                                    <field name="printer_id" domain="[('type', '=', 'fdm')]"/>
+                                    <!-- <field name="printer_id" domain="[('type', '=', 'fdm')]"/> -->
+                                    <field name="printer_id"/>
                                     <field name="tray_units"/>
                                     <field name="infill"/>
                                     <field name="loops"/>
@@ -155,7 +156,8 @@
                                 <field name="e_cc_sls"/>
                             </group>
                             <group colspan="2" col="8" string="Parámetros impresión">
-                                <field name="printer_id" domain="[('type', '=', 'sls')]"/>
+                                <!-- <field name="printer_id" domain="[('type', '=', 'sls')]"/> -->
+                                <field name="printer_id"/>
                                 <field name="tray_units"/>
                                 <field name="increment_sls"/>
                                 <field name="tray_hours_sls"/>
@@ -168,16 +170,20 @@
                                 <field name="simulation_time_sls"/>
                             </group>
                             <group colspan="4" string="Material Cost">
-                                <field name="sls_material_cost_ids" nolabel="1">
+                                <field name="material_cost_ids" nolabel="1">
                                     <tree editable="bottom">
                                         <field name="name"/>
                                         <field name="material_id" domain="[('type', '=', 'sls')]"/>
                                         <field name="sls_gr_tray"/>
                                         <field name="sls_gr_total"/>
-                                        <field name="sls_euro_material"/>
-                                        <field name="sls_total"/>
+                                        <field name="euro_material"/>
+                                        <field name="total"/>
                                     </tree>
                                 </field>
+                            </group>
+                             <group class="oe_subtotal_footer oe_right" colspan="2" name="design_total">
+                                    <field name="total_euro_ud" widget='monetary'/>
+                                    <field name="total_material_cost" widget='monetary'/>
                             </group>
                              <group colspan="2" col="6" string="Coste Máquina">
                                 <field name="machine_hours"/>
@@ -225,7 +231,8 @@
                                 <field name="euros_cc_pol"/>
                             </group>
                             <group colspan="2" col="8" string="Parámetros impresión">
-                                <field name="printer_id" domain="[('type', '=', 'poly')]"/>
+                                <!-- <field name="printer_id" domain="[('type', '=', 'poly')]"/> -->
+                                <field name="printer_id"/>
                                 <field name="tray_units_pol"/>
                                 <field name="finish_pol"/>
                                 <field name="tray_hours_pol"/>
@@ -287,7 +294,7 @@
                                 <field name="euros_cc_sla"/>
                             </group>
                             <group colspan="2" col="8" string="Parámetros impresión">
-                                <field name="printer_id" domain="[('type', '=', 'sla')]"/>
+                                <field name="printer_id"/>
                                 <field name="tray_units_sla"/>
                                 <field name="tray_hours_sla"/>
                                 <field name="euro_machine_sla"/>
@@ -341,7 +348,8 @@
                         </page>
 
                          <!-- DMLS -->
-                            <page string="DMLS" attrs="{'invisible': [('sheet_type', '!=', 'dmls')]}">                            <group colspan="2" col="8" string="Datos pieza">
+                        <!-- <page string="DMLS" attrs="{'invisible': [('sheet_type', '!=', 'dmls')]}">                            <group colspan="2" col="8" string="Datos pieza">
+                            <group colspan="2" col="8" string="Datos pieza">
                                 <field name="units_sla"/>
                                 <field name="cc_und_sla"/>
                                 <field name="cc_soport"/>
@@ -366,7 +374,7 @@
                                     </tree>
                                 </field>
                             </group>
-                             <group colspan="2" col="6" string="Coste Máquina">
+                            <group colspan="2" col="6" string="Coste Máquina">
                                 <field name="machine_hours_dmls"/>
                                 <field name="euro_machine_ud_dmls"/>
                                 <field name="euro_machine_total_dmls"/>
@@ -382,7 +390,7 @@
                                     </tree>
                                 </field>
                             </group>
-                             <group class="oe_subtotal_footer oe_right" colspan="2" name="wf_total">
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="wf_total">
                                     <field name="workforce_total_euro_ud" widget='monetary'/>
                                     <field name="workforce_total" widget='monetary'/>
                             </group>
@@ -400,7 +408,7 @@
                                     <field name="outsorcing_total_ud" widget='monetary'/>
                                     <field name="outsorcing_total" widget='monetary'/>
                             </group>
-                        </page>
+                        </page> -->
 
 
                     </notebook>
