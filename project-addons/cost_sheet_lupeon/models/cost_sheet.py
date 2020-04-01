@@ -9,9 +9,9 @@ SHEET_TYPES = [
     ('design', 'Design'),
     ('fdm', 'FDM'),
     ('sls', 'SLS'),
+    ('poly', 'Poly'),
     ('sla', 'SLA'),
     ('dmls', 'DMLS'),
-    ('oppi', 'OPPI'),
 ]
 
 class GroupCostSheet(models.Model):
@@ -76,7 +76,8 @@ class CostSheet(models.Model):
     sale_id = fields.Many2one('sale.order', 'Pedido de venta',
         related='group_id.sale_line_id.order_id', store=True, readonly=True)
     
-    init_cost = fields.Float('Coste', compute="_get_cost_prices")
+    cost_init = fields.Float('Coste inicial')
+    cost_ud = fields.Float('Coste', compute="_get_cost_prices")
     admin_fact = fields.Float('Factor administrativo', 
         related='group_id.admin_fact')
     disc_qty = fields.Float('Descuento cantidad')
@@ -99,30 +100,34 @@ class CostSheet(models.Model):
             dq = sh.disc_qty / 100.0
             da = sh.disc2 / 100.0
             fa = sh.admin_fact / 100.0
+
+            #Init cost
+            sum_wf_costs = sh.workforce_total_euro_ud
+            cost = round(sh.total_euro_ud + sh.euro_machine_ud + sum_wf_costs + sh.outsorcing_total_ud, 2)
             if sh.sheet_type == 'design':
                 cost = round(sh.amount_total, 2)
-                
-                # pvp = cost * (1 - dq - da + fa)
-                pvp = round(cost * (1 - dq)* (1 - da) * (1+ fa), 2)
+                pvp = cost * (1 - dq - da + fa)
+                # pvp = round(cost * (1 - dq) * (1 - da) * (1+ fa), 2)
             elif sh.sheet_type == 'fdm':
-                sum_wf_costs = sh.workforce_total_euro_ud
-                cost = round(sh.total_euro_ud + sh.euro_machine_ud + sum_wf_costs + sh.outsorcing_total_ud, 2)
+                
                 disc_qty = 3.75  # TODO calculo complejo en funcion de campo boolean
                 dqc = disc_qty / 100.0
-                pu = round(cost * (1 - dqc + da + fa), 2)
-                pu = round(cost * (1 - dqc)* (1 + da) * (1+ fa), 2)
-                pvp = round(pu * sh.cus_units, 2)
+                # pu = round(cost * (1 - dqc + da + fa), 2)
+                pu = round(cost * (1 - dqc) * (1 + da) * (1+ fa), 2)
             elif sh.sheet_type == 'sls':
-                pvp = 0
+                disc_qty = 11.88  # TODO calculo complejo
+                dqc = disc_qty / 100.0
+                pu = round(cost * (1 - dqc) * (1 + da) * (1+ fa), 2)
+            elif sh.sheet_type == 'poly':
+                pu = 0
             elif sh.sheet_type == 'sla':
-                pvp = 0
+                pu = 0
             elif sh.sheet_type == 'dmls':
-                pvp = 0
-            elif sh.sheet_type == 'opi':
-                pvp = 0
+                pu = 0
             
+            pvp = round(pu * sh.cus_units, 2)
             sh.update({
-                'init_cost': cost,
+                'cost_ud': cost,
                 'disc_qty_computed': disc_qty,
                 'price_unit': pu,
                 'price_total': pvp})
@@ -150,15 +155,15 @@ class CostSheet(models.Model):
 
     # FDM DATOS PIEZA
     cus_units = fields.Integer('Uds. Cliente')
-    cc_ud_fdm = fields.Integer('cc ud')
+    cc_ud = fields.Integer('cc ud')
     stat_data = fields.Char('Dato estadístico')
     euros_cc = fields.Float('€/cc', compute='get_euros_cc_fdm')
 
-    @api.depends('price_total', 'cc_ud_fdm')
+    @api.depends('price_total', 'cc_ud')
     def get_euros_cc_fdm(self):
         for sh in self:
-            if sh.cc_ud_fdm:
-                sh.euros_cc = sh.price_total / sh.cc_ud_fdm
+            if sh.cc_ud:
+                sh.euros_cc = sh.price_total / sh.cc_ud
     
     # FDM PARÁMETROS IMPRESIÓN
     printer_id = fields.Many2one(
@@ -168,7 +173,7 @@ class CostSheet(models.Model):
     loops = fields.Integer('Loops') # Model or selection?
     layer_height = fields.Float('Altura de Capa') # Model or selection?
     tray_hours = fields.Float('h Maq. Bandeja')
-    euro_machine = fields.Float('€/h maq',  compute='get_euro_machine_fdm')
+    euro_machine = fields.Float('€/h maq',  compute='get_euro_machine')
     perfil = fields.Char('Perfil')
 
     @api.onchange('printer_id')
@@ -228,18 +233,21 @@ class CostSheet(models.Model):
 
 
 
-    @api.depends('price_total', 'cc_ud_fdm')
+    @api.depends('price_total', 'cc_ud')
     def get_euros_cc_fdm(self):
         for sh in self:
-            if sh.cc_ud_fdm:
-                sh.euros_cc = sh.price_total / sh.cc_ud_fdm
+            if sh.cc_ud:
+                sh.euros_cc = sh.price_total / sh.cc_ud
     
     # @api.depends()
-    def get_euro_machine_fdm(self):
+    def get_euro_machine(self):
         for sh in self:
-            if sh.material_cost_ids and sh.printer_id and sh.material_cost_ids[0].material_id:
-                mat = sh.material_cost_ids[0].material_id
-                sh.euro_machine = sh.printer_id.euro_hour * mat.factor_hour
+            if sh.sheet_type == 'fdm':
+                if sh.material_cost_ids and sh.printer_id and sh.material_cost_ids[0].material_id:
+                    mat = sh.material_cost_ids[0].material_id
+                    sh.euro_machine = sh.printer_id.euro_hour * mat.factor_hour
+            elif sh.sheet_type == 'sls':
+                sh.euro_machine = sh.printer_id and sh.printer_id.euro_hour
 
     # FDM COSTE MATERIAL
     material_cost_ids = fields.One2many(
@@ -262,12 +270,14 @@ class CostSheet(models.Model):
     euro_machine_total = fields.Float('Euros Maq total', 
         compute='_get_fdm_machine_cost')
 
-    @api.depends('tray_units', 'tray_hours', 'cus_units', 'euro_machine')
+    @api.depends('tray_units', 'tray_hours', 'tray_hours_sls', 'cus_units', 'euro_machine')
     def _get_fdm_machine_cost(self):
         for sh in self:
+            tray_hours = sh.tray_hours
+            if sh.sheet_type == 'sls':
+                tray_hours = sh.tray_hours_sls
             if sh.cus_units:
-                sh.machine_hours = sh.tray_hours / sh.tray_units * sh.cus_units
-                sh.euro_machine_ud = 0.0
+                sh.machine_hours = tray_hours / sh.tray_units * sh.cus_units
                 sh.euro_machine_ud = sh.machine_hours * sh.euro_machine / sh.cus_units
                 sh.euro_machine_total = sh.euro_machine_ud * sh.cus_units
 
@@ -311,7 +321,7 @@ class CostSheet(models.Model):
     
     # SLS DATOS PIEZA
     cus_units = fields.Integer('Uds. Cliente')
-    cc_und_sls = fields.Integer('cc ud')
+
     cm2_sls = fields.Float('cm^2 ud')
     x_mm_sls = fields.Float('X (mm)')
     y_mm_sls = fields.Float('Y (mm)')
@@ -324,14 +334,14 @@ class CostSheet(models.Model):
         for sh in self:
             sh.tray_units = sh.cus_units
 
-    @api.depends('price_unit', 'cc_und_sls')
+    @api.depends('price_unit', 'cc_ud')
     def _get_e_cc_sls(self):
         for sh in self:
-            if sh.cc_und_sls:
-                sh.e_cc_sls = sh.price_unit / sh.cc_und_sls
+            if sh.cc_ud:
+                sh.e_cc_sls = sh.price_unit / sh.cc_ud
     
-    @api.onchange('cc_und_sls')
-    def onchange_cc_und_sls(self):
+    @api.onchange('cc_ud')
+    def onchange_cc_ud(self):
         options = ['PA2200']
         material = self.env['material'].search([('name', '=', options[0])])
         for sh in self:
@@ -362,13 +372,11 @@ class CostSheet(models.Model):
     # SLS PARÁMETROS IMPRESIÓN
     increment_sls = fields.Float('Incremento (mm)', default=18.0)
     tray_hours_sls = fields.Float('h Maq. Bandeja', compute='_get_sls_print_totals', digits=(16, 4))
-    euro_machine_sls = fields.Float('€/h maq', compute='_get_sls_print_totals')
     
     @api.depends('printer_id')
     def _get_sls_print_totals(self):
         for sh in self:
             sh.tray_hours_sls = 0.052 # TODO
-            sh.euro_machine_sls = sh.printer_id and sh.printer_id.euro_hour
 
 
     # SLS OFERT CONFIGURATION
@@ -384,18 +392,7 @@ class CostSheet(models.Model):
     sls_material_cost_ids = fields.One2many(
         'material.cost.line', 'sls_sheet_id', string='Coste material')
 
-    # SLS COSTE MÁQUINA
-    machine_hours_sls = fields.Float('Horas Maq total', compute="_get_sls_machine_cost")
-    euro_machine_ud_sls = fields.Float('Euros Maq ud', compute="_get_sls_machine_cost")  
-    euro_machine_total_sls = fields.Float('Euros Maq total', compute="_get_sls_machine_cost")
 
-    @api.depends('tray_units', 'tray_hours_sls', 'cus_units', 'euro_machine_sls')
-    def _get_sls_machine_cost(self):
-        for sh in self:
-            if sh.cus_units:
-                sh.machine_hours_sls = sh.tray_hours_sls / sh.tray_units * sh.cus_units
-                sh.euro_machine_ud_sls = sh.machine_hours_sls * sh.euro_machine_sls / sh.cus_units
-                sh.euro_machine_total_sls = sh.euro_machine_ud_sls * sh.cus_units
 
     # SLS COSTE MANO DE OBRA
     

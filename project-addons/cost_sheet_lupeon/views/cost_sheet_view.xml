@@ -29,7 +29,8 @@
                         </group>
                     </group>
                     <group string="Precios" col="6">
-                            <field name="init_cost"/>
+                            <field name="cost_init"/>
+                            <field name="cost_ud"/>
                             <field name="admin_fact"/>
                             <field name="disc_qty" attrs="{'invisible': [('sheet_type', '==', 'fdm')]}"/>
                             <field name="disc_qty_computed" attrs="{'invisible': [('sheet_type', '!=', 'fdm')]}"/>
@@ -69,7 +70,7 @@
                
                                 <group cospan="4" col="8" string="Datos pieza">
                                     <field name="cus_units"/>
-                                    <field name="cc_ud_fdm"/>
+                                    <field name="cc_ud"/>
                                     <field name="stat_data"/>
                                     <field name="euros_cc"/>
                                 </group>
@@ -145,7 +146,7 @@
                         <page string="SLS" attrs="{'invisible': [('sheet_type', '!=', 'sls')]}">
                             <group colspan="2" col="8" string="Datos pieza">
                                 <field name="cus_units"/>
-                                <field name="cc_und_sls"/>
+                                <field name="cc_ud"/>
                                 <field name="cm2_sls"/>
                                 <field name="static_data_sls"/>
                                 <field name="x_mm_sls"/>
@@ -158,7 +159,7 @@
                                 <field name="tray_units"/>
                                 <field name="increment_sls"/>
                                 <field name="tray_hours_sls"/>
-                                <field name="euro_machine_sls"/>
+                                <field name="euro_machine"/>
                             </group>
                              <group colspan="2" col="8" string="Configuración oferta">
                                 <field name="offer_type"/>
@@ -179,9 +180,9 @@
                                 </field>
                             </group>
                              <group colspan="2" col="6" string="Coste Máquina">
-                                <field name="machine_hours_sls"/>
-                                <field name="euro_machine_ud_sls"/>
-                                <field name="euro_machine_total_sls"/>
+                                <field name="machine_hours"/>
+                                <field name="euro_machine_ud"/>
+                                <field name="euro_machine_total"/>
                             </group>
                             <group colspan="4" string="Coste mano de obra">
                                 <field name="workforce_cost_ids" nolabel="1">
@@ -193,6 +194,10 @@
                                         <field name="total"/>
                                     </tree>
                                 </field>
+                            </group>
+                             <group class="oe_subtotal_footer oe_right" colspan="2" name="wf_total">
+                                    <field name="workforce_total_euro_ud" widget='monetary'/>
+                                    <field name="workforce_total" widget='monetary'/>
                             </group>
                             <group colspan="4" string="Coste externalizacion por pieza">
                                 <field name="outsorcing_cost_ids" nolabel="1">
@@ -253,6 +258,10 @@
                                     </tree>
                                 </field>
                             </group>
+                             <group class="oe_subtotal_footer oe_right" colspan="2" name="wf_total">
+                                    <field name="workforce_total_euro_ud" widget='monetary'/>
+                                    <field name="workforce_total" widget='monetary'/>
+                            </group>
                             <group colspan="4" string="Coste externalizacion por pieza">
                                 <field name="outsorcing_cost_ids" nolabel="1">
                                     <tree editable="bottom">
@@ -311,6 +320,10 @@
                                     </tree>
                                 </field>
                             </group>
+                             <group class="oe_subtotal_footer oe_right" colspan="2" name="wf_total">
+                                    <field name="workforce_total_euro_ud" widget='monetary'/>
+                                    <field name="workforce_total" widget='monetary'/>
+                            </group>
                             <group colspan="4" string="Coste externalizacion por pieza">
                                 <field name="outsorcing_cost_ids" nolabel="1">
                                     <tree editable="bottom">
@@ -368,6 +381,10 @@
                                         <field name="total"/>
                                     </tree>
                                 </field>
+                            </group>
+                             <group class="oe_subtotal_footer oe_right" colspan="2" name="wf_total">
+                                    <field name="workforce_total_euro_ud" widget='monetary'/>
+                                    <field name="workforce_total" widget='monetary'/>
                             </group>
                             <group colspan="4" string="Coste externalizacion por pieza">
                                 <field name="outsorcing_cost_ids" nolabel="1">
