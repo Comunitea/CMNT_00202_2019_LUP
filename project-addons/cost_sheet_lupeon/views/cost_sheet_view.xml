@@ -23,7 +23,7 @@
                             <field name="customer_note" class="oe_inline" placeholder="Customer Note"/>
                         </group>
                         <group string="Modelos asociados">
-                            <field name="group_id" class="oe_inline" placeholder="Customer Note"/>
+                            <!-- <field name="group_id" class="oe_inline" placeholder="Customer Note"/> -->
                             <field name="sale_line_id"/>
                             <field name="sale_id"/>
                         </group>

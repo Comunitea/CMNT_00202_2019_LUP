@@ -60,7 +60,7 @@ class CostSheet(models.Model):
     # COMUN
     name = fields.Char('Referencia')
     group_id = fields.Many2one('group.cost.sheet', 'Hojas de coste',
-                               required=True, ondelete="cascade", 
+                            ondelete="cascade", 
                                readonly=True)
     task_id = fields.Many2one(
         'project.task', 'Orden de diseño', index=True, copy=False,
@@ -643,7 +643,7 @@ class MaterialCostLine(models.Model):
                 if sh.tray_units:
                     mcl.dmls_cc_total = ((1 + dis) * mcl.dmls_cc_tray * sh.cus_units) / sh.tray_units
                     if sh.cus_units:
-                        mcl.euro_material = ( mcl.dmls_cc_totall * mat.euro_kg) / (sh.cus_units * 1000)
+                        mcl.euro_material = ( mcl.dmls_cc_total * mat.euro_kg) / (sh.cus_units * 1000)
                         mcl.total = sh.cus_units * mcl.euro_material
 
 
