@@ -129,7 +129,7 @@ class CostSheet(models.Model):
             elif sh.sheet_type == 'sla':
                 if sh.cus_units:
                     cost = cost + (sh.cost_init / sh.cus_units)
-                disc_qty = 3.75  # TODO calculo complejo en funcion de campo boolean
+                disc_qty = 6  # TODO calculo complejo en funcion de campo boolean
                 dqc = disc_qty / 100.0
                 pu = round(cost * (1 - dqc) * (1 + da) * (1+ fa), 2)
                 pvp = round(pu * sh.cus_units, 2)
@@ -266,7 +266,7 @@ class CostSheet(models.Model):
                 if sh.material_cost_ids and sh.printer_id and sh.material_cost_ids[0].material_id:
                     mat = sh.material_cost_ids[0].material_id
                     sh.euro_machine = sh.printer_id.euro_hour * mat.factor_hour
-            elif sh.sheet_type in ['sls', 'poly']:
+            elif sh.sheet_type in ['sls', 'poly', 'sla', 'dmls']:
                 sh.euro_machine = sh.printer_id and sh.printer_id.euro_hour
 
     # FDM COSTE MATERIAL
@@ -364,6 +364,7 @@ class CostSheet(models.Model):
     def onchange_cc_ud(self):
         options = []
         material = False
+        desviation = 0.0
         if self.sheet_type == 'fdm':
             return # Está en el onchange print id
         elif self.sheet_type == 'sls':
@@ -375,6 +376,8 @@ class CostSheet(models.Model):
         elif self.sheet_type == 'sla':
             options = ['Construccion']
             material = False
+            desviation = 50.0
+            
         elif self.sheet_type == 'dmls':
             options = [' ']
             material = False
@@ -384,7 +387,8 @@ class CostSheet(models.Model):
         for name in options:
             vals = {
                 'name': name,
-                'material_id': material.id if material else False
+                'material_id': material.id if material else False,
+                'desviation': desviation,
             }
             cost_lines.append((0, 0, vals))
         self.material_cost_ids = cost_lines
@@ -443,16 +447,11 @@ class CostSheet(models.Model):
     # SLA DATOS PIEZA
 
     # SLA PARÁMETROS IMPRESIÓN
-    tray_units_sla = fields.Integer('Uds. Bandeja')
-    tray_hours_sla = fields.Float('h Maq. Bandeja')
-    euro_machine_sla = fields.Float('€/h maq')
 
     # SLA MATERIAL COST
 
     # SLA COSTE MÁQUINA
-    machine_hours_sla = fields.Float('Horas Maq total')
-    euro_machine_ud_sla = fields.Float('Euros Maq ud')  
-    euro_machine_total_sla = fields.Float('Euros Maq total')
+
 
     # SLA COSTE EXTERNALIZACION POR PIEZA
 
@@ -462,22 +461,15 @@ class CostSheet(models.Model):
 
     # DMLS DATOS PIEZA
     units_dmls = fields.Integer('Uds. Cliente')
-    cc_und_dmls = fields.Integer('cc ud')
-    cc_soport = fields.Integer('cc soporte')
-    stat_data_dmls = fields.Char('Dato estadístico')
-    euros_cc_dmls = fields.Float('€/cc')
+    
+    cc_soport_dmls = fields.Integer('cc soporte')
 
     # dmls PARÁMETROS IMPRESIÓN
-    tray_units_dmls = fields.Integer('Uds. Bandeja')
-    tray_hours_dmls = fields.Float('h Maq. Bandeja')
-    euro_machine_dmls = fields.Float('€/h maq')
 
     # dmls MATERIAL COST
 
     # dmls COSTE MÁQUINA
-    machine_hours_dmls = fields.Float('Horas Maq total')
-    euro_machine_ud_dmls = fields.Float('Euros Maq ud')  
-    euro_machine_total_dmls = fields.Float('Euros Maq total')
+
 
     # dmls COSTE EXTERNALIZACION POR PIEZA
  

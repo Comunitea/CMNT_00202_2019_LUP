@@ -34,7 +34,7 @@
                             <field name="cost_ud"/>
                             <field name="admin_fact"/>
                             <field name="disc_qty" attrs="{'invisible': [('sheet_type', '!=', 'fdm')]}"/>
-                            <field name="disc_qty_computed" attrs="{'invisible': [('sheet_type', 'not in', ['sls', 'poly'])]}"/>
+                            <field name="disc_qty_computed" attrs="{'invisible': [('sheet_type', 'not in', ['sls', 'poly', 'sla'])]}"/>
                             <field name="disc2"/>
                             <field name="price_unit"  attrs="{'invisible': [('sheet_type', '==', 'design')]}"/>
                             <field name="price_total"/>
@@ -90,9 +90,9 @@
                              <group colspan="4" string="Material Cost">
                                  <field name="material_cost_ids" nolabel="1"/>
                             </group>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="design_total">
-                                <field name="total_euro_ud" widget='monetary'/>
-                                <field name="total_material_cost" widget='monetary'/>
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="material_total">
+                                    <field name="total_euro_ud" widget='monetary'/>
+                                    <field name="total_material_cost" widget='monetary'/>
                             </group>
                             <group colspan="2" col="6" string="Coste Máquina">
                                 <field name="machine_hours"/>
@@ -162,7 +162,7 @@
                              <group colspan="4" string="Material Cost">
                                  <field name="material_cost_ids" nolabel="1"/>
                             </group>
-                             <group class="oe_subtotal_footer oe_right" colspan="2" name="design_total">
+                             <group class="oe_subtotal_footer oe_right" colspan="2" name="material_total">
                                     <field name="total_euro_ud" widget='monetary'/>
                                     <field name="total_material_cost" widget='monetary'/>
                             </group>
@@ -222,7 +222,7 @@
                             <group colspan="4" string="Material Cost">
                                  <field name="material_cost_ids" nolabel="1"/>
                             </group>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="design_total">
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="material_total">
                                     <field name="total_euro_ud" widget='monetary'/>
                                     <field name="total_material_cost" widget='monetary'/>
                             </group>
@@ -279,10 +279,14 @@
                              <group colspan="4" string="Material Cost">
                                  <field name="material_cost_ids" nolabel="1"/>
                             </group>
+                             <group class="oe_subtotal_footer oe_right" colspan="2" name="material_total">
+                                    <field name="total_euro_ud" widget='monetary'/>
+                                    <field name="total_material_cost" widget='monetary'/>
+                            </group>
                              <group colspan="2" col="6" string="Coste Máquina">
-                                <field name="machine_hours_sla"/>
-                                <field name="euro_machine_ud_sla"/>
-                                <field name="euro_machine_total_sla"/>
+                                <field name="machine_hours"/>
+                                <field name="euro_machine_ud"/>
+                                <field name="euro_machine_total"/>
                             </group>
                             <group colspan="4" string="Coste mano de obra">
                                 <field name="workforce_cost_ids" nolabel="1">
@@ -319,24 +323,28 @@
                         <page string="DMLS" attrs="{'invisible': [('sheet_type', '!=', 'dmls')]}">
                             <group colspan="2" col="8" string="Datos pieza">
                                 <field name="cus_units"/>
-                                <field name="cc_und_dmls"/>
-                                <field name="cc_soport"/>
-                                <field name="stat_data_dmls"/>
-                                <field name="euros_cc_dmls"/>
+                                <field name="cc_ud"/>
+                                <field name="cc_soport_dmls"/>
+                                <field name="stat_data"/>
+                                <field name="euros_cc"/>
                             </group>
                             <group colspan="2" col="8" string="Parámetros impresión">
                                 <field name="printer_id"/>
-                                <field name="tray_units_dmls"/>
-                                <field name="tray_hours_dmls"/>
-                                <field name="euro_machine_dmls"/>
+                                <field name="tray_units"/>
+                                <field name="tray_hours"/>
+                                <field name="euro_machine"/>
                             </group>
                             <group colspan="4" string="Material Cost">
                                  <field name="material_cost_ids" nolabel="1"/>
                             </group>
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="material_total">
+                                    <field name="total_euro_ud" widget='monetary'/>
+                                    <field name="total_material_cost" widget='monetary'/>
+                            </group>
                             <group colspan="2" col="6" string="Coste Máquina">
-                                <field name="machine_hours_dmls"/>
-                                <field name="euro_machine_ud_dmls"/>
-                                <field name="euro_machine_total_dmls"/>
+                                <field name="machine_hours"/>
+                                <field name="euro_machine_ud"/>
+                                <field name="euro_machine_total"/>
                             </group>
                             <group colspan="4" string="Coste mano de obra">
                                 <field name="workforce_cost_ids" nolabel="1">
@@ -518,17 +526,17 @@
 
                 <!--Poly fields -->
                 <field name="pol_gr_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'poly')]}"/>
-                <field name="desviation" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'poly')]}"/>
-                <field name="pol_gr_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'poly')]}"/>
-                
                 <!--SLA fields -->
                 <field name="sla_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sla')]}"/>
-                <field name="desviation" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sla')]}"/>
-                <field name="sla_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sla')]}"/>
-
                 <!--DMLS fields -->
                 <field name="dmls_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'dmls')]}"/>
-                <field name="desviation" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'dmls')]}"/>
+                
+                <field name="desviation" attrs="{'column_invisible': [('parent.sheet_type', 'not in', ['poly', 'sla', 'dmls'])]}"/>
+                <!--Poly fields -->
+                <field name="pol_gr_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'poly')]}"/>
+                <!--SLA fields -->
+                <field name="sla_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sla')]}"/>
+                <!--DMLS fields -->
                 <field name="dmls_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'dmls')]}"/>
 
                 <field name="euro_material"/>
