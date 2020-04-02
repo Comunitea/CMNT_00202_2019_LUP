@@ -100,7 +100,6 @@ class CostSheet(models.Model):
             dq = sh.disc_qty / 100.0
             da = sh.disc2 / 100.0
             fa = sh.admin_fact / 100.0
-
             #Init cost
             sum_wf_costs = sh.workforce_total_euro_ud
             cost = round(sh.total_euro_ud + sh.euro_machine_ud + sum_wf_costs + sh.outsorcing_total_ud, 2)
@@ -114,10 +113,12 @@ class CostSheet(models.Model):
                 dqc = disc_qty / 100.0
                 # pu = round(cost * (1 - dqc + da + fa), 2)
                 pu = round(cost * (1 - dqc) * (1 + da) * (1+ fa), 2)
+                pvp = round(pu * sh.cus_units, 2)
             elif sh.sheet_type == 'sls':
                 disc_qty = 11.88  # TODO calculo complejo
                 dqc = disc_qty / 100.0
                 pu = round(cost * (1 - dqc) * (1 + da) * (1+ fa), 2)
+                pvp = round(pu * sh.cus_units, 2)
             elif sh.sheet_type == 'poly':
                 pu = 0
             elif sh.sheet_type == 'sla':
@@ -125,7 +126,6 @@ class CostSheet(models.Model):
             elif sh.sheet_type == 'dmls':
                 pu = 0
             
-            pvp = round(pu * sh.cus_units, 2)
             sh.update({
                 'cost_ud': cost,
                 'disc_qty_computed': disc_qty,
@@ -178,16 +178,18 @@ class CostSheet(models.Model):
 
     @api.onchange('printer_id')
     def onchange_printer_id(self):
+        res = {}
         options =  ['Extrusor 1', 'Extrusor 2', 'Extrusor 3']
-        for sh in self:
+        if self.sheet_type == 'fdm':
             cost_lines = [(5, 0, 0)]
             for name in options:
                 vals = {
                     'name': name,
-                    'diameter': sh.printer_id.diameter,
+                    'diameter': self.printer_id.diameter,
                 }
                 cost_lines.append((0, 0, vals))
-            sh.material_cost_ids = cost_lines
+            self.material_cost_ids = cost_lines
+        return res
     
     @api.onchange('sheet_type', 'material_cost_ids')
     def onchange_sheet_type(self):
@@ -196,37 +198,38 @@ class CostSheet(models.Model):
         wf_lines = []
         out_lines = []
         # sls_out_lines = []
-        for sh in self:
-            # CREATE OUTSORCING LINES FOR ALL TYPES
-            out_lines = [(5, 0, 0)]
-            for name in out_options:
-                vals = {'name': name, 'margin': 20.0}
-                out_lines.append((0, 0, vals))
-            # if sh.sheet_type == 'fdm':
-            # FDM CREATE WORKFORCE LINES
-            wf_lines = [(5, 0, 0)]
+        # for sh in self:
+        # CREATE OUTSORCING LINES FOR ALL TYPES
+        out_lines = [(5, 0, 0)]
+        for name in out_options:
+            vals = {'name': name, 'margin': 20.0}
+            out_lines.append((0, 0, vals))
+        # if self.sheet_type == 'fdm':
+        # FDM CREATE WORKFORCE LINES
+        wf_lines = [(5, 0, 0)]
 
-            for name in options:
-                hours = 0
+        for name in options:
+            hours = 0
 
-                material = False
-                maq_hours = False
-                if sh.material_cost_ids:
-                    material = sh.material_cost_ids[0].material_id
-                    maq_hours = sh.machine_hours
+            material = False
+            maq_hours = False
+            if self.material_cost_ids:
+                material = self.material_cost_ids[0].material_id
+                maq_hours = self.machine_hours
 
-                if name == 'Horas Técnico' and material:
-                    hours = 5/60 + maq_hours * sh.printer_id.machine_hour * material.factor_hour
-                vals = {
-                    'name': name,
-                    'hours': hours,
-                }
-                wf_lines.append((0, 0, vals))
-            
-            sh.update({
-                'workforce_cost_ids': wf_lines,
-                'outsorcing_cost_ids': out_lines,
-            })
+            if name == 'Horas Técnico' and material:
+                hours = 5/60 + maq_hours * self.printer_id.machine_hour * material.factor_hour
+            vals = {
+                'name': name,
+                'hours': hours,
+            }
+            wf_lines.append((0, 0, vals))
+        
+        self.update({
+            'workforce_cost_ids': wf_lines,
+            'outsorcing_cost_ids': out_lines,
+        })
+        return  {'domain': {'printer_id': [('type', '=', self.sheet_type)]}}
 
 
 
@@ -417,8 +420,6 @@ class CostSheet(models.Model):
     euro_machine_pol = fields.Float('€/h maq')
 
     # POLY MATERIAL COST
-    pol_material_cost_ids = fields.One2many(
-        'material.cost.line', 'pol_sheet_id', string='Coste material')
 
     # POLY COSTE MÁQUINA
     machine_hours_pol = fields.Float('Horas Maq total')
@@ -443,8 +444,6 @@ class CostSheet(models.Model):
     euro_machine_sla = fields.Float('€/h maq')
 
     # SLA MATERIAL COST
-    sla_material_cost_ids = fields.One2many(
-        'material.cost.line', 'sla_sheet_id', string='Coste material')
 
     # SLA COSTE MÁQUINA
     machine_hours_sla = fields.Float('Horas Maq total')
@@ -470,8 +469,6 @@ class CostSheet(models.Model):
     euro_machine_dmls = fields.Float('€/h maq')
 
     # dmls MATERIAL COST
-    dmls_material_cost_ids = fields.One2many(
-        'material.cost.line', 'sla_sheet_id', string='Coste material')
 
     # dmls COSTE MÁQUINA
     machine_hours_dmls = fields.Float('Horas Maq total')
@@ -603,16 +600,13 @@ class MaterialCostLine(models.Model):
     
 
     # POLY
-    pol_sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
 
     # SLA
-    sla_sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
     desviation = fields.Float('Desviation material')
     cc_tray = fields.Float('cc bandeja')
     cc_total = fields.Float('cc Total')
 
     # DMLS
-    dmls_sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
 
     def _compute_cost(self):
         for mcl in self:
