@@ -77,6 +77,7 @@ class CostSheet(models.Model):
         related='group_id.sale_line_id.order_id', store=True, readonly=True)
     
     cost_init = fields.Float('Coste inicial')
+    cost_init_computed = fields.Float('Coste inicial', compute='_get_cost_prices')
     cost_ud = fields.Float('Coste', compute="_get_cost_prices")
     admin_fact = fields.Float('Factor administrativo', 
         related='group_id.admin_fact')
@@ -106,13 +107,11 @@ class CostSheet(models.Model):
             if sh.sheet_type == 'design':
                 cost = round(sh.amount_total, 2)
                 pvp = cost * (1 - dq - da + fa)
-                # pvp = round(cost * (1 - dq) * (1 - da) * (1+ fa), 2)
             elif sh.sheet_type == 'fdm':
                 if sh.cus_units:
                     cost = cost + (sh.cost_init / sh.cus_units)
                 disc_qty = 3.75  # TODO calculo complejo en funcion de campo boolean
                 dqc = disc_qty / 100.0
-                # pu = round(cost * (1 - dqc + da + fa), 2)
                 pu = round(cost * (1 - dqc) * (1 + da) * (1+ fa), 2)
                 pvp = round(pu * sh.cus_units, 2)
             elif sh.sheet_type == 'sls':
@@ -128,9 +127,24 @@ class CostSheet(models.Model):
                 pu = round(cost * (1 - dqc) * (1 + da) * (1+ fa), 2)
                 pvp = round(pu * sh.cus_units, 2)
             elif sh.sheet_type == 'sla':
-                pu = 0
+                if sh.cus_units:
+                    cost = cost + (sh.cost_init / sh.cus_units)
+                disc_qty = 3.75  # TODO calculo complejo en funcion de campo boolean
+                dqc = disc_qty / 100.0
+                pu = round(cost * (1 - dqc) * (1 + da) * (1+ fa), 2)
+                pvp = round(pu * sh.cus_units, 2)
             elif sh.sheet_type == 'dmls':
-                pu = 0
+                cost_init_computed = 0
+                if sh.material_cost_ids and sh.material_cost_ids[0].material_id:
+                    cost_init_computed = sh.material_cost_ids[0].material_id.init_cost
+                    sh.cost_init_computed = cost_init_computed
+                if sh.cus_units:
+                    cost = cost + (sh.cost_init_computed / sh.cus_units)
+                    disc_qty = 11.78  # TODO calculo complejo en funcion de campo boolean
+                    dqc = disc_qty / 100.0
+                    pu = round(cost * (1 - dqc) * (1 + da) * (1+ fa), 2)
+                    pvp = round(pu * sh.cus_units, 2)
+
             
             sh.update({
                 'cost_ud': cost,
@@ -348,21 +362,32 @@ class CostSheet(models.Model):
     
     @api.onchange('cc_ud')
     def onchange_cc_ud(self):
-        options = ['PA2200']
-        material = self.env['material'].search([('name', '=', options[0])])
-        if self.sheet_type == 'poly':
+        options = []
+        material = False
+        if self.sheet_type == 'fdm':
+            return # Está en el onchange print id
+        elif self.sheet_type == 'sls':
+            options = ['PA2200']
+            material = self.env['material'].search([('name', '=', options[0])])
+        elif self.sheet_type == 'poly':
             options = ['Construccion', 'Soporte']
+            material = False
+        elif self.sheet_type == 'sla':
+            options = ['Construccion']
+            material = False
+        elif self.sheet_type == 'dmls':
+            options = [' ']
             material = False
 
         # CREATE MATERIAL COST LINES
-            cost_lines = [(5, 0, 0)]
-            for name in options:
-                vals = {
-                    'name': name,
-                    'material_id': material.id if material else False
-                }
-                cost_lines.append((0, 0, vals))
-            self.material_cost_ids = cost_lines
+        cost_lines = [(5, 0, 0)]
+        for name in options:
+            vals = {
+                'name': name,
+                'material_id': material.id if material else False
+            }
+            cost_lines.append((0, 0, vals))
+        self.material_cost_ids = cost_lines
 
     # SLS PARÁMETROS IMPRESIÓN
     print_increment = fields.Float('Incremento (mm)', default=18.0)
@@ -584,10 +609,12 @@ class MaterialCostLine(models.Model):
     desviation = fields.Float('Desviation material', default=15.0)
 
     # SLA
-    cc_tray = fields.Float('cc bandeja')
-    cc_total = fields.Float('cc Total')
+    sla_cc_tray = fields.Float('cc bandeja')
+    sla_cc_total = fields.Float('cc Total', compute='_compute_cost')
 
     # DMLS
+    dmls_cc_tray = fields.Float('gr bandeja')
+    dmls_cc_total = fields.Float('gr Total', compute='_compute_cost')
 
     def _compute_cost(self):
         for mcl in self:
@@ -612,6 +639,20 @@ class MaterialCostLine(models.Model):
                     mcl.pol_gr_total = ((1 + dis) * mcl.pol_gr_tray * sh.cus_units) / sh.tray_units
                     mcl.euro_material = (mcl.pol_gr_total * mat.euro_kg) / sh.tray_units
                     mcl.total = sh.cus_units * mcl.euro_material
+            elif sh.sheet_type == 'sla':
+                dis = mcl.desviation / 100
+                if sh.tray_units:
+                    mcl.sla_cc_total = ((1 + dis) * mcl.sla_cc_tray * sh.cus_units) / sh.tray_units
+                    mcl.euro_material = (mcl.sla_cc_total * mat.euro_kg) / sh.tray_units
+                    mcl.total = sh.cus_units * mcl.euro_material
+
+            elif sh.sheet_type == 'dmls':
+                dis = mcl.desviation / 100
+                if sh.tray_units:
+                    mcl.dmls_cc_total = ((1 + dis) * mcl.dmls_cc_tray * sh.cus_units) / sh.tray_units
+                    if sh.cus_units:
+                        mcl.euro_material = ( mcl.dmls_cc_totall * mat.euro_kg) / (sh.cus_units * 1000)
+                        mcl.total = sh.cus_units * mcl.euro_material
 
 
 # FDM COSTE MANO DE OBRA

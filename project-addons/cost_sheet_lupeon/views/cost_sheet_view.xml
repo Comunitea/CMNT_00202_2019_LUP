@@ -29,7 +29,8 @@
                         </group>
                     </group>
                     <group string="Precios" col="6">
-                            <field name="cost_init"/>
+                            <field name="cost_init" attrs="{'invisible': [('sheet_type', 'in', ['dmls'])]}"/>
+                            <field name="cost_init_computed"  attrs="{'invisible': [('sheet_type', 'not in', ['smls'])]}"/>
                             <field name="cost_ud"/>
                             <field name="admin_fact"/>
                             <field name="disc_qty" attrs="{'invisible': [('sheet_type', '!=', 'fdm')]}"/>
@@ -265,15 +266,15 @@
                          <page string="SLA" attrs="{'invisible': [('sheet_type', '!=', 'sla')]}">
                             <group colspan="2" col="8" string="Datos pieza">
                                 <field name="cus_units"/>
-                                <field name="cc_und"/>
+                                <field name="cc_ud"/>
                                 <field name="stat_data"/>
                                 <field name="euros_cc"/>
                             </group>
                             <group colspan="2" col="8" string="Parámetros impresión">
                                 <field name="printer_id"/>
-                                <field name="tray_units_sla"/>
-                                <field name="tray_hours_sla"/>
-                                <field name="euro_machine_sla"/>
+                                <field name="tray_units"/>
+                                <field name="tray_hours"/>
+                                <field name="euro_machine"/>
                             </group>
                              <group colspan="4" string="Material Cost">
                                  <field name="material_cost_ids" nolabel="1"/>
@@ -317,8 +318,8 @@
                          <!-- DMLS -->
                         <page string="DMLS" attrs="{'invisible': [('sheet_type', '!=', 'dmls')]}">
                             <group colspan="2" col="8" string="Datos pieza">
-                                <field name="units_sla"/>
-                                <field name="cc_und_sla"/>
+                                <field name="cus_units"/>
+                                <field name="cc_und_dmls"/>
                                 <field name="cc_soport"/>
                                 <field name="stat_data_dmls"/>
                                 <field name="euros_cc_dmls"/>
@@ -515,11 +516,20 @@
                 <field name="sls_gr_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls')]}"/>
                 <field name="sls_gr_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls')]}"/>
 
-                <!-- SLS fields -->
+                <!--Poly fields -->
                 <field name="pol_gr_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'poly')]}"/>
                 <field name="desviation" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'poly')]}"/>
                 <field name="pol_gr_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'poly')]}"/>
+                
+                <!--SLA fields -->
+                <field name="sla_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sla')]}"/>
+                <field name="desviation" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sla')]}"/>
+                <field name="sla_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sla')]}"/>
 
+                <!--DMLS fields -->
+                <field name="dmls_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'dmls')]}"/>
+                <field name="desviation" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'dmls')]}"/>
+                <field name="dmls_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'dmls')]}"/>
 
                 <field name="euro_material"/>
                 <field name="total"/>

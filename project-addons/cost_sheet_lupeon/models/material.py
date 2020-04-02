@@ -30,3 +30,17 @@ class Material(models.Model):
     vel_z = fields.Float('Velocidad en Z (cm/h) no exposur')
     euro_kg_bucket = fields.Float('€/kg cubeta')
     euro_hour_maq = fields.Float('€/H Maquina')
+
+    # POLY
+    # De momento uso el euro Kg
+    
+    # SLA
+    euro_cc = fields.Float('€/cc')
+    printer_id = fields.Many2one('printer.machine', 'Impresora')
+    washing_time = fields.Float('Tiempo Lavado')
+    cured_time = fields.Float('Tiempo curado')  # De momento uso el euro Kg
+
+    # DMLS
+    init_cost = fields.Float('Coste Inicial')
+    # dens_cc = fields.Float('Densidad impreso gr/cc')
+    # euro_kg = fields.Float('€/kg')

@@ -26,7 +26,20 @@
                         <field name="euro_hour_maq"/>
                     </group>
                     <group attrs="{'invisible': [('type', '!=', 'poly')]}">
+                        <field name="euro_kg" string="€/gr"/>
+                    </group>
+
+                    <group attrs="{'invisible': [('type', '!=', 'sla')]}">
+                        <field name="euro_kg" string="€/gr"/>
+                        <field name="printer_id" domain="[('type', '=', 'sla')]"/>
+                        <field name="washing_time"/>
+                        <field name="cured_time"/>
+                    </group>
+
+                    <group attrs="{'invisible': [('type', '!=', 'dmls')]}">
+                        <field name="dens_cc"/>
                         <field name="euro_kg"/>
+                        <field name="init_cost"/>
                     </group>
                 </sheet>
             </form>
