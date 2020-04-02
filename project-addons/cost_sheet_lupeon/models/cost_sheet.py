@@ -108,7 +108,8 @@ class CostSheet(models.Model):
                 pvp = cost * (1 - dq - da + fa)
                 # pvp = round(cost * (1 - dq) * (1 - da) * (1+ fa), 2)
             elif sh.sheet_type == 'fdm':
-                
+                if sh.cus_units:
+                    cost = cost + (sh.cost_init / sh.cus_units)
                 disc_qty = 3.75  # TODO calculo complejo en funcion de campo boolean
                 dqc = disc_qty / 100.0
                 # pu = round(cost * (1 - dqc + da + fa), 2)
@@ -120,7 +121,12 @@ class CostSheet(models.Model):
                 pu = round(cost * (1 - dqc) * (1 + da) * (1+ fa), 2)
                 pvp = round(pu * sh.cus_units, 2)
             elif sh.sheet_type == 'poly':
-                pu = 0
+                if sh.cus_units:
+                    cost = cost + (sh.cost_init / sh.cus_units)
+                disc_qty = 11.78  # TODO calculo complejo en funcion de campo boolean
+                dqc = disc_qty / 100.0
+                pu = round(cost * (1 - dqc) * (1 + da) * (1+ fa), 2)
+                pvp = round(pu * sh.cus_units, 2)
             elif sh.sheet_type == 'sla':
                 pu = 0
             elif sh.sheet_type == 'dmls':
@@ -246,7 +252,7 @@ class CostSheet(models.Model):
                 if sh.material_cost_ids and sh.printer_id and sh.material_cost_ids[0].material_id:
                     mat = sh.material_cost_ids[0].material_id
                     sh.euro_machine = sh.printer_id.euro_hour * mat.factor_hour
-            elif sh.sheet_type == 'sls':
+            elif sh.sheet_type in ['sls', 'poly']:
                 sh.euro_machine = sh.printer_id and sh.printer_id.euro_hour
 
     # FDM COSTE MATERIAL
@@ -344,35 +350,22 @@ class CostSheet(models.Model):
     def onchange_cc_ud(self):
         options = ['PA2200']
         material = self.env['material'].search([('name', '=', options[0])])
-        for sh in self:
-            # CREATE MATERIAL COST LINES
-            if sh.sheet_type == 'sls':
-                cost_lines = [(5, 0, 0)]
-                for name in options:
-                    vals = {
-                        'name': name,
-                        'material_id': material.id if material else False
-                    }
-                    cost_lines.append((0, 0, vals))
-                sh.material_cost_ids = cost_lines
+        if self.sheet_type == 'poly':
+            options = ['Construccion', 'Soporte']
+            material = False
 
-            # CREATE WORKFORCE LINES
-            # sls_wf_lines = [(5, 0, 0)]
-
-            # for name in options:
-            #     hours = 0
-            #     if name == 'Horas Técnico' and sh.material_cost_ids and sh.material_cost_ids[0].material_id:
-            #         mat = sh.material_cost_ids[0].material_id
-            #         hours = 5/60 + sh.machine_hours * sh.printer_id.machine_hour * mat.factor_hour
-            #     vals = {
-            #         'name': name,
-            #         'hours': hours,
-            #     }
-            #     sls_wf_lines.append((0, 0, vals))
-            #     sh.workforce_cost_ids = sls_wf_lines
+        # CREATE MATERIAL COST LINES
+            cost_lines = [(5, 0, 0)]
+            for name in options:
+                vals = {
+                    'name': name,
+                    'material_id': material.id if material else False
+                }
+                cost_lines.append((0, 0, vals))
+            self.material_cost_ids = cost_lines
 
     # SLS PARÁMETROS IMPRESIÓN
-    increment_sls = fields.Float('Incremento (mm)', default=18.0)
+    print_increment = fields.Float('Incremento (mm)', default=18.0)
     tray_hours_sls = fields.Float('h Maq. Bandeja', compute='_get_sls_print_totals', digits=(16, 4))
     
     @api.depends('printer_id')
@@ -406,25 +399,15 @@ class CostSheet(models.Model):
     # ------------------------------------------------------------------------ 
 
     # POLY DATOS PIEZA
-    units_pol = fields.Integer('Uds. Cliente')
-    cc_und_pol = fields.Integer('cc ud')
-    stat_data_pol = fields.Char('Dato estadístico')
-    euros_cc_pol = fields.Float('€/cc')
 
     # POLY PARÁMETROS IMPRESIÓN
-    tray_units_pol = fields.Integer('Uds. Bandeja')
     finish_pol = fields.Selection([
         ('glossy', 'Glossy'),
         ('mate', 'Mate')], 'Acabado')
-    tray_hours_pol = fields.Float('h Maq. Bandeja')
-    euro_machine_pol = fields.Float('€/h maq')
 
     # POLY MATERIAL COST
 
     # POLY COSTE MÁQUINA
-    machine_hours_pol = fields.Float('Horas Maq total')
-    euro_machine_ud_pol = fields.Float('Euros Maq ud')  
-    euro_machine_total_pol = fields.Float('Euros Maq total')
 
     # POLY COSTE MANO DE OBRA
 
@@ -433,10 +416,6 @@ class CostSheet(models.Model):
     # ------------------------------------------------------------------------- 
 
     # SLA DATOS PIEZA
-    units_sla = fields.Integer('Uds. Cliente')
-    cc_und_sla = fields.Integer('cc ud')
-    stat_data_sla = fields.Char('Dato estadístico')
-    euros_cc_sla = fields.Float('€/cc')
 
     # SLA PARÁMETROS IMPRESIÓN
     tray_units_sla = fields.Integer('Uds. Bandeja')
@@ -580,9 +559,11 @@ class MaterialCostLine(models.Model):
     # COMUN
     name = fields.Char('Nombre')
     material_id = fields.Many2one('material', 'Material')
-    gr_tray = fields.Float('Gr bandeja')
-    gr_total = fields.Float('Gr total')
-    total = fields.Float('Total')
+    # gr_tray = fields.Float('Gr bandeja')
+    # gr_total = fields.Float('Gr total')
+
+    euro_material = fields.Float('Euros Mat ud', compute='_compute_cost')
+    total = fields.Float('Total', compute='_compute_cost')
 
     # FDM
     sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
@@ -591,8 +572,6 @@ class MaterialCostLine(models.Model):
     tray_meters = fields.Float('Metros Bandeja')
     gr_cc_tray = fields.Float('gr o cc bandeja', compute='_compute_cost')
     gr_cc_total = fields.Float('gr o cc total', compute='_compute_cost')
-    euro_material = fields.Float('Euros Mat ud', compute='_compute_cost')
-    total = fields.Float('Total', compute='_compute_cost')
 
     # SLS
     sls_gr_tray = fields.Float('Gr bandeja', compute='_compute_cost')
@@ -600,9 +579,11 @@ class MaterialCostLine(models.Model):
     
 
     # POLY
+    pol_gr_tray = fields.Float('Gr bandeja')
+    pol_gr_total = fields.Float('Gr total', compute='_compute_cost')
+    desviation = fields.Float('Desviation material', default=15.0)
 
     # SLA
-    desviation = fields.Float('Desviation material')
     cc_tray = fields.Float('cc bandeja')
     cc_total = fields.Float('cc Total')
 
@@ -623,8 +604,13 @@ class MaterialCostLine(models.Model):
                 mcl.sls_gr_tray = 25 # TODO
                 if sh.tray_units:
                     mcl.sls_gr_total = (mcl.sls_gr_tray * sh.cus_units) / sh.tray_units
-                if sh.tray_units:
                     mcl.euro_material = (mcl.sls_gr_tray * (mat.euro_kg_bucket / 1000.0)) / sh.tray_units
+                    mcl.total = sh.cus_units * mcl.euro_material
+            elif sh.sheet_type == 'poly':
+                dis = mcl.desviation / 100
+                if sh.tray_units:
+                    mcl.pol_gr_total = ((1 + dis) * mcl.pol_gr_tray * sh.cus_units) / sh.tray_units
+                    mcl.euro_material = (mcl.pol_gr_total * mat.euro_kg) / sh.tray_units
                     mcl.total = sh.cus_units * mcl.euro_material
 
 

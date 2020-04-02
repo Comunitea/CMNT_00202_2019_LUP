@@ -25,6 +25,9 @@
                         <field name="euro_kg_bucket"/>
                         <field name="euro_hour_maq"/>
                     </group>
+                    <group attrs="{'invisible': [('type', '!=', 'poly')]}">
+                        <field name="euro_kg"/>
+                    </group>
                 </sheet>
             </form>
         </field>

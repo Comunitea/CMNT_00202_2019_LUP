@@ -457,7 +457,7 @@ msgid "Impresora"
 msgstr ""
 
 #. module: cost_sheet_lupeon
-#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__increment_sls
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__print_increment
 msgid "Increment (mm)"
 msgstr ""
 
@@ -983,7 +983,7 @@ msgstr ""
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__cc_ud
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__cc_und_dmls
-#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__cc_und_pol
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__cc_ud
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__cc_und_sla
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__cc_ud
 msgid "cc ud"

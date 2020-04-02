@@ -32,8 +32,8 @@
                             <field name="cost_init"/>
                             <field name="cost_ud"/>
                             <field name="admin_fact"/>
-                            <field name="disc_qty" attrs="{'invisible': [('sheet_type', '==', 'sls')]}"/>
-                            <field name="disc_qty_computed" attrs="{'invisible': [('sheet_type', '!=', 'fdm')]}"/>
+                            <field name="disc_qty" attrs="{'invisible': [('sheet_type', '!=', 'fdm')]}"/>
+                            <field name="disc_qty_computed" attrs="{'invisible': [('sheet_type', 'not in', ['sls', 'poly'])]}"/>
                             <field name="disc2"/>
                             <field name="price_unit"  attrs="{'invisible': [('sheet_type', '==', 'design')]}"/>
                             <field name="price_total"/>
@@ -148,7 +148,7 @@
                                 <!-- <field name="printer_id" domain="[('type', '=', 'sls')]"/> -->
                                 <field name="printer_id"/>
                                 <field name="tray_units"/>
-                                <field name="increment_sls"/>
+                                <field name="print_increment"/>
                                 <field name="tray_hours_sls"/>
                                 <field name="euro_machine"/>
                             </group>
@@ -205,25 +205,30 @@
                         <!-- POLY -->
                          <page string="POLY" attrs="{'invisible': [('sheet_type', '!=', 'poly')]}">
                             <group colspan="2" col="8" string="Datos pieza">
-                                <field name="units_pol"/>
-                                <field name="cc_und_pol"/>
-                                <field name="stat_data_pol"/>
-                                <field name="euros_cc_pol"/>
+                                <field name="cus_units"/>
+                                <field name="cc_ud"/>
+                                <field name="stat_data"/>
+                                <field name="euros_cc"/>
                             </group>
                             <group colspan="2" col="8" string="Parámetros impresión">
                                 <field name="printer_id"/>
-                                <field name="tray_units_pol"/>
+                                <field name="tray_units"/>
+                                <field name="print_increment"/>
                                 <field name="finish_pol"/>
-                                <field name="tray_hours_pol"/>
-                                <field name="euro_machine_pol"/>
+                                <field name="tray_hours"/>
+                                <field name="euro_machine"/>
                             </group>
                             <group colspan="4" string="Material Cost">
                                  <field name="material_cost_ids" nolabel="1"/>
                             </group>
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="design_total">
+                                    <field name="total_euro_ud" widget='monetary'/>
+                                    <field name="total_material_cost" widget='monetary'/>
+                            </group>
                              <group colspan="2" col="6" string="Coste Máquina">
-                                <field name="machine_hours_pol"/>
-                                <field name="euro_machine_ud_pol"/>
-                                <field name="euro_machine_total_pol"/>
+                                <field name="machine_hours"/>
+                                <field name="euro_machine_ud"/>
+                                <field name="euro_machine_total"/>
                             </group>
                             <group colspan="4" string="Coste mano de obra">
                                 <field name="workforce_cost_ids" nolabel="1">
@@ -259,10 +264,10 @@
                          <!-- SLA -->
                          <page string="SLA" attrs="{'invisible': [('sheet_type', '!=', 'sla')]}">
                             <group colspan="2" col="8" string="Datos pieza">
-                                <field name="units_sla"/>
-                                <field name="cc_und_sla"/>
-                                <field name="stat_data_sla"/>
-                                <field name="euros_cc_sla"/>
+                                <field name="cus_units"/>
+                                <field name="cc_und"/>
+                                <field name="stat_data"/>
+                                <field name="euros_cc"/>
                             </group>
                             <group colspan="2" col="8" string="Parámetros impresión">
                                 <field name="printer_id"/>
@@ -496,6 +501,9 @@
             <tree editable="bottom">
                 <field name="name"/>
                 <field name="material_id"/>
+                <!-- <field name="material_id"  domain="[('type', '=', 'fdm')]" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
+                <field name="material_id"  domain="[('type', '=', 'sls')]" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls')]}"/>
+                <field name="material_id"  domain="[('type', '=', 'poly')]" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'poly')]}"/> -->
                 <!-- FDM FIELDS -->
                 <field name="diameter" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
                 <field name="color" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
@@ -506,6 +514,11 @@
                 <!-- SLS fields -->
                 <field name="sls_gr_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls')]}"/>
                 <field name="sls_gr_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls')]}"/>
+
+                <!-- SLS fields -->
+                <field name="pol_gr_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'poly')]}"/>
+                <field name="desviation" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'poly')]}"/>
+                <field name="pol_gr_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'poly')]}"/>
 
 
                 <field name="euro_material"/>

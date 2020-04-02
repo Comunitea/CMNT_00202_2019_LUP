@@ -6,7 +6,7 @@ from odoo import models, fields, api, _
 MATERIAL_TYPES = [
     ('fdm', 'FDM'),
     ('sls', 'SLS'),
-    ('Poly', 'Poly'),
+    ('poly', 'Poly'),
     ('sla', 'SLA'),
     ('dmls', 'DMLS'),
 ]
@@ -16,7 +16,7 @@ class Material(models.Model):
     _name = 'material'
 
     name = fields.Char('Name')
-    type = fields.Selection(MATERIAL_TYPES, 'tipo material')
+    type = fields.Selection(MATERIAL_TYPES, 'Tipo material')
 
     # FDM
     gr_cc = fields.Float('Gr/cc')
