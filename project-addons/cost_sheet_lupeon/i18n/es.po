@@ -775,7 +775,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.cost_sheet_view_search
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.product_cost_sheet_view_search
 msgid "Sale Line"
-msgstr ""
+msgstr "Línea de venta"
 
 #. module: cost_sheet_lupeon
 #: model:ir.model,name:cost_sheet_lupeon.model_sale_order
@@ -795,13 +795,13 @@ msgstr "Línea pedido de venta"
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.mrp_production_search_cost_sheet
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.project_task_search_cost_sheet
 msgid "Sale order"
-msgstr ""
+msgstr "Pedido de venta"
 
 #. module: cost_sheet_lupeon
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.mrp_production_search_cost_sheet
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.project_task_search_cost_sheet
 msgid "Sale order line"
-msgstr ""
+msgstr "Línea de venta"
 
 #. module: cost_sheet_lupeon
 #: model:ir.model,name:cost_sheet_lupeon.model_sale_order_line

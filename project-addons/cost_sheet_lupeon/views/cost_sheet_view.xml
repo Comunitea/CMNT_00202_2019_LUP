@@ -8,7 +8,7 @@
         <field name="name">cost.sheet.view</field>
         <field name="model">cost.sheet</field>
         <field name="arch" type="xml">
-            <form>
+            <form create="false">
                 <sheet>
                     <div class="oe_title">
                         <h1>
@@ -28,16 +28,20 @@
                             <field name="sale_id"/>
                         </group>
                     </group>
-                    <group string="Precios" col="6">
-                            <field name="cost_init" attrs="{'invisible': [('sheet_type', 'in', ['dmls'])]}"/>
-                            <field name="cost_init_computed"  attrs="{'invisible': [('sheet_type', 'not in', ['smls'])]}"/>
-                            <field name="cost_ud"/>
-                            <field name="admin_fact"/>
-                            <field name="disc_qty" attrs="{'invisible': [('sheet_type', '!=', 'fdm')]}"/>
-                            <field name="disc_qty_computed" attrs="{'invisible': [('sheet_type', 'not in', ['sls', 'poly', 'sla'])]}"/>
-                            <field name="disc2"/>
-                            <field name="price_unit"  attrs="{'invisible': [('sheet_type', '==', 'design')]}"/>
-                            <field name="price_total"/>
+                    <group string="Precios">
+                        <group>
+                                <field name="cost_init" attrs="{'invisible': [('sheet_type', 'in', ['dmls'])]}"/>
+                                <field name="cost_init_computed"  attrs="{'invisible': [('sheet_type', 'not in', ['smls'])]}"/>
+                                <field name="cost_ud"/>
+                                <field name="admin_fact"/>
+                        </group>
+                        <group>
+                                <field name="disc_qty" attrs="{'invisible': [('sheet_type', '!=', 'fdm')]}"/>
+                                <field name="disc_qty_computed" attrs="{'invisible': [('sheet_type', 'not in', ['sls', 'poly', 'sla'])]}"/>
+                                <field name="disc2"/>
+                                <field name="price_unit"  attrs="{'invisible': [('sheet_type', '==', 'design')]}"/>
+                                <field name="price_total"/>
+                        </group>
                     </group>
                     <notebook>
                         <page string="Diseño" attrs="{'invisible': [('sheet_type', '!=', 'design')]}">
@@ -390,6 +394,7 @@
         <field name="name">cost.sheet.view</field>
         <field name="model">cost.sheet</field>
         <field name="arch" type="xml">
+            <!-- <tree create="false"> -->
             <tree>
                 <field name="name"/>
                 <field name="sheet_type"/>
@@ -437,8 +442,9 @@
         <field name="name">group.cost.sheet.view</field>
         <field name="model">group.cost.sheet</field>
         <field name="arch" type="xml">
-            <tree>
+            <tree create="false">
                 <field name="sale_line_id"/>
+                <field name="sale_id"/>
                 <field name="admin_fact"/>
             </tree>
         </field>
@@ -448,7 +454,7 @@
         <field name="name">group.cost.sheet.view</field>
         <field name="model">group.cost.sheet</field>
         <field name="arch" type="xml">
-            <form>
+            <form create="false">
                 <sheet>
                     <div class="oe_title">
                         <h1>
@@ -457,6 +463,9 @@
                         <h2>
                             <field name="product_id"/>
                         </h2>
+                        <h3>
+                            <field name="sale_id"/>
+                        </h3>
                     </div>
                     <group>
                         <field name="admin_fact"/>
@@ -483,10 +492,11 @@
             <search>
                 <field name="sale_line_id"/>
                 <field name="product_id"/>
+                <field name="product_id"/>
                 
                 <group expand="0" string="Group By">
                     <filter string="Sale Line" name="group_line" domain="[]" context="{'group_by':'sale_line_id'}"/>
-                    <filter name="group_prouct" string="group_product" domain="[]" context="{'group_by':'product_id'}"/>
+                    <filter name="group_prouct" string="Pedido de venta" domain="[]" context="{'group_by':'sale_id'}"/>
                 </group>
             </search>
         </field>

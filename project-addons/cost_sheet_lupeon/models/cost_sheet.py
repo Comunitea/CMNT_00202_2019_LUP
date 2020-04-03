@@ -22,6 +22,8 @@ class GroupCostSheet(models.Model):
     # display_name = fields.Char('Name', readonly="True")
     sale_line_id = fields.Many2one('sale.order.line', 'Línea de venta', 
                                    readonly=False)
+    sale_id = fields.Many2one('sale.order', 'Pedido de venta',
+        related='sale_line_id.order_id', store=True, readonly=True)
     product_id = fields.Many2one('product.product', 'Producto', 
         related='sale_line_id.product_id')
     admin_fact = fields.Float('Factor administrativo')
@@ -619,6 +621,7 @@ class MaterialCostLine(models.Model):
                 if sh.cus_units:
                     mcl.gr_cc_total = round(mcl.gr_cc_tray / sh.cus_units * sh.tray_units)
                     mcl.euro_material = mat.euro_kg * (mcl.gr_cc_total / 1000.0) / sh.cus_units
+                    mcl.total = sh.cus_units * mcl.euro_material
             elif sh.sheet_type == 'sls':
                 mcl.sls_gr_tray = 25 # TODO
                 if sh.tray_units:

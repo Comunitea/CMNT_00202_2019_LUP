@@ -7,7 +7,7 @@ PRINT_TYPES = [
     ('design', 'Design'),
     ('fdm', 'FDM'),
     ('sls', 'SLS'),
-    ('Poly', 'Poly'),
+    ('poly', 'Poly'),
     ('sla', 'SLA'),
     ('dmls', 'DMLS'),
 ]

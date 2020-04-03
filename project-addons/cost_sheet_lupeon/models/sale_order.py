@@ -84,7 +84,11 @@ class SaleOrder(models.Model):
             'project.act_project_project_2_project_task_all').read()[0]
         if self.project_id and self.project_id.task_ids:
             tasks = self.project_id.task_ids
-            action['domain'] = [('id', 'in', tasks.ids)]
+            # action['domain'] = [('id', 'in', tasks.ids)]
+            action['context'] = {
+                'search_default_project_id': [self.project_id.id],
+                'default_project_id': self.project_id.id,
+            }
         else:
             action = {'type': 'ir.actions.act_window_close'}
         return action
