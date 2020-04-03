@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<odoo>
+
+
+
+    <!--****************************************************************** -->
+    <!--************************TASKS************************************* -->
+    <!--****************************************************************** -->
+
+    <!-- ADD cost sheet and sale to project -->
+    <record id="project_task_form_cost_sheet" model="ir.ui.view">
+        <field name="name">project.task.form.cost.sheet</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <field name="tag_ids" position="after">
+                <field name="sheet_id"/>
+                <field name="sale_id"/>
+                <field name="sale_line_id"/>
+            </field>
+            
+        </field>
+    </record>
+
+    <record id="project_task_tree_cost_sheet" model="ir.ui.view">
+        <field name="name">project.task.tree.cost.sheet</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_tree2"/>
+        <field name="arch" type="xml">
+            <field name="stage_id" position="after">
+                <field name="sheet_id"/>
+                <field name="sale_id"/>
+                <field name="sale_line_id"/>
+            </field>
+            
+        </field>
+    </record>
+
+    <!-- solo si lo hago store -->
+    <record id="project_task_search_cost_sheet" model="ir.ui.view">
+        <field name="name">project.task.search.cost.sheet</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_search_form"/>
+        <field name="arch" type="xml">
+            <field name="tag_ids" position="before">
+                <field name="sheet_id"/>
+                <field name="sale_id"/>
+                <field name="sale_line_id"/>
+            </field>
+            <filter name="stage" position="after">
+                <filter name="sheet" string="Cost Sheet" context="{'group_by': 'sheet_id'}"/>
+                <filter name="sale" string="Sale order" context="{'group_by' :'sale_id'}"/>
+                <filter name="sale_line" string="Sale order line" context="{'group_by' :'sale_line_id'}"/>
+            </filter>
+        </field>
+    </record>
+
+
+</odoo>
+

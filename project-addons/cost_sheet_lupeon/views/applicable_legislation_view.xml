@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<odoo>
+
+   
+    <record id="applicable_legislation_view_form" model="ir.ui.view">
+        <field name="name">applicable.legislation.view</field>
+        <field name="model">applicable.legislation</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="norma"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="applicable_legislation_view_tree" model="ir.ui.view">
+        <field name="name">applicable.legislation.view</field>
+        <field name="model">applicable.legislation</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="norma"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_applicable_legislations" model="ir.actions.act_window">
+        <field name="name">Legislación aplicable</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">applicable.legislation</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_cost_cfg" name="Cost Configuration" parent="menu_costs_root" sequence="90"/>
+
+    <menuitem id="menu_action_applicable_legislations" action="action_applicable_legislations"  name="Cost Configuration" parent="menu_cost_cfg" sequence="10"/>
+
+</odoo>
