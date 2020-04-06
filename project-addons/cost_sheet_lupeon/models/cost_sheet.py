@@ -420,8 +420,21 @@ class CostSheet(models.Model):
     
     @api.depends('printer_id')
     def _get_sls_print_totals(self):
+        # TODO
         for sh in self:
-            sh.tray_hours_sls = 0.012 # TODO
+            res = 0.0
+            c7 = sh.tray_units
+            d4 = sh.cc_ud
+            # dens_cc = self.material_id.dens_cc
+            f4 = sh.x_mm_sls
+            d7 = sh.print_increment
+            g4 = sh.y_mm_sls
+            h4 = sh.z_mm_sls
+            # dens_bulk = self.material_id.dens_bulk
+            f10 = sh.bucket_height_sls
+            d10 = sh.solid_per_sls / 100
+
+            sh.tray_hours_sls = 0.010
 
 
     # SLS OFERT CONFIGURATION
@@ -652,7 +665,7 @@ class MaterialCostLine(models.Model):
             res = c7*((f4*g4*h4*d10/1000)*dens_cc+(((f4+d7)*(g4+d7)*(h4+d7)/1000) - (f4*g4*h4*d10/1000))*dens_bulk)
         elif sh.offer_type == 'cubeta':
             res = (d4/d4)*((c7*d4*dens_cc)+((35.5*35.5*(1+f10)-(c7*d4))*dens_bulk))
-        return round(res)
+        return res
     
 
     def _compute_cost(self):
@@ -667,25 +680,30 @@ class MaterialCostLine(models.Model):
                 if sh.cus_units:
                     gr_cc_total = (gr_cc_tray / sh.cus_units) * sh.tray_units
                     mcl.gr_cc_total = round(gr_cc_total)
-                    mcl.euro_material = (mat.euro_kg * (gr_cc_total / 1000.0)) / sh.cus_units
+                    euro_material = (mat.euro_kg * (gr_cc_total / 1000.0)) / sh.cus_units
+                    mcl.euro_material = euro_material
             elif sh.sheet_type == 'sls':
-                mcl.sls_gr_tray = mcl.get_sls_gr_tray()
+                sls_gr_tray = mcl.get_sls_gr_tray()
+                mcl.sls_gr_tray = round(sls_gr_tray)
                 if sh.tray_units:
-                    mcl.sls_gr_total = (mcl.sls_gr_tray * sh.cus_units) / sh.tray_units
-                    mcl.euro_material = (mcl.sls_gr_tray * (mat.euro_kg_bucket / 1000.0)) / sh.tray_units
-                    mcl.total = sh.cus_units * mcl.euro_material
+                    mcl.sls_gr_total = (sls_gr_tray * sh.cus_units) / sh.tray_units
+                    euro_material = (sls_gr_tray * (mat.euro_kg_bucket / 1000.0)) / sh.tray_units
+                    mcl.euro_material = euro_material
+                    mcl.total = sh.cus_units * euro_material
             elif sh.sheet_type == 'poly':
                 dis = mcl.desviation / 100
                 if sh.tray_units:
                     mcl.pol_gr_total = ((1 + dis) * mcl.pol_gr_tray * sh.cus_units) / sh.tray_units
-                    mcl.euro_material = (mcl.pol_gr_total * mat.euro_kg) / sh.tray_units
-                    mcl.total = sh.cus_units * mcl.euro_material
+                    euro_material = (mcl.pol_gr_total * mat.euro_kg) / sh.tray_units
+                    mcl.euro_material = euro_material
+                    mcl.total = sh.cus_units * euro_material
             elif sh.sheet_type == 'sla':
                 dis = mcl.desviation / 100
                 if sh.tray_units:
                     mcl.sla_cc_total = ((1 + dis) * mcl.sla_cc_tray * sh.cus_units) / sh.tray_units
-                    mcl.euro_material = (mcl.sla_cc_total * mat.euro_kg) / sh.tray_units
-                    mcl.total = sh.cus_units * mcl.euro_material
+                    euro_material = (mcl.sla_cc_total * mat.euro_kg) / sh.tray_units
+                    mcl.euro_material = euro_material
+                    mcl.total = sh.cus_units * euro_material
 
             elif sh.sheet_type == 'dmls':
                 dis = mcl.desviation / 100
