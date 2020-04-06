@@ -30,14 +30,16 @@
                     </group>
                     <group string="Precios">
                         <group>
-                                <field name="cost_init" attrs="{'invisible': [('sheet_type', 'in', ['dmls'])]}"/>
-                                <field name="cost_init_computed"  attrs="{'invisible': [('sheet_type', 'not in', ['smls'])]}"/>
+                                <field name="cost_init" attrs="{'invisible': [('sheet_type', 'in', ['fdm', 'dmls'])]}"/>
+                                <field name="cost_init_computed"  attrs="{'invisible': [('sheet_type', 'not in', ['dmls'])]}"/>
                                 <field name="cost_ud"/>
                                 <field name="admin_fact"/>
+                                <field name="use_disc_qty"  attrs="{'invisible': [('sheet_type', 'not in', ['fdm', 'sls', 'poly', 'sla', 'dmls'])]}"/> 
+
                         </group>
                         <group>
-                                <field name="disc_qty" attrs="{'invisible': [('sheet_type', '!=', 'fdm')]}"/>
-                                <field name="disc_qty_computed" attrs="{'invisible': [('sheet_type', 'not in', ['sls', 'poly', 'sla'])]}"/>
+                                <field name="disc_qty" attrs="{'invisible': [('sheet_type', 'not in', ['design'])]}"/> 
+                                <field name="disc_qty_computed" attrs="{'invisible': [('sheet_type', 'not in', ['fdm', 'sls', 'poly', 'sla', 'dmls'])]}"/>
                                 <field name="disc2"/>
                                 <field name="price_unit"  attrs="{'invisible': [('sheet_type', '==', 'design')]}"/>
                                 <field name="price_total"/>
@@ -49,6 +51,9 @@
                                 <group string="Datos pieza">
                                     <field name="flat_ref"/>
                                     <field name="description"/>
+                                </group>
+                                <group string="Carcterísticas pieza">
+                                    <field name="feature_ids" nolabel="1" widget="many2many_checkboxes"/>
                                 </group>
                                 <group string="Legislación aplicable">
                                     <field name="legislation_ids" nolabel="1" widget="many2many_checkboxes"/>
@@ -78,6 +83,9 @@
                                     <field name="cc_ud"/>
                                     <field name="stat_data"/>
                                     <field name="euros_cc"/>
+                                </group>
+                                <group string="Carcterísticas pieza">
+                                    <field name="feature_ids" nolabel="1" widget="many2many_checkboxes"/>
                                 </group>
                                 <group cospan="2" col="8" string="Parámetros impresión">
                                     <!-- <field name="printer_id" domain="[('type', '=', 'fdm')]"/> -->
@@ -132,9 +140,7 @@
                                     <field name="outsorcing_total_ud" widget='monetary'/>
                                     <field name="outsorcing_total" widget='monetary'/>
                             </group>
-                            <group string="Carcterísticas pieza">
-                                <field name="feature_ids" nolabel="1" widget="many2many_checkboxes"/>
-                            </group>
+                            
                         </page>
 
                         <!-- SLS -->
@@ -550,7 +556,7 @@
                 <field name="dmls_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'dmls')]}"/>
 
                 <field name="euro_material"/>
-                <field name="total"/>
+                <field name="total" attrs="{'column_invisible': [('parent.sheet_type', '=', 'fdm')]}"/>
             </tree>
         </field>
     </record>

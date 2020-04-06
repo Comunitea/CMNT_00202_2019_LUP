@@ -85,6 +85,7 @@ class CostSheet(models.Model):
         related='group_id.admin_fact')
     disc_qty = fields.Float('Descuento cantidad')
     disc_qty_computed = fields.Float('Descuento cantidad', compute='_get_cost_prices')
+    use_disc_qty = fields.Boolean('Usar descuento cantidad')
     disc2 = fields.Float('Descuento adicional')
     increment = fields.Float('Incremento no estándar')
     inspection_type = fields.Selection(
@@ -92,49 +93,63 @@ class CostSheet(models.Model):
     price_unit = fields.Float('PVP unidad', compute='_get_cost_prices')
     price_total = fields.Float('PVP TOTAL', compute='_get_cost_prices')
 
+    printer_id = fields.Many2one('printer.machine', 'Impresora')
+
+    @api.multi
+    def get_discount_qty(self):
+        self.ensure_one
+        if not self.use_disc_qty or not self.printer_id:
+            return 0.0
+        res = 0.0
+        units = self.cus_units
+        dmc = self.printer_id.max_disc_qty  # desc. max. qty
+        dm = self.printer_id.discount  # max discount
+        d2 = self.printer_id.discount2  # max discount
+        if units < 2:
+            res = 0.0
+        elif units >= 2:
+            if units < dmc:
+                ( (dm - d2) / (dmc - 2) ) * (units - 2) + d2
+            elif units >= dmc:
+                res = dm
+        return res
+
+
     # @api.depends()
     def _get_cost_prices(self):
         for sh in self:
             cost = 0.0
             pvp = 0.0
             pu = 0.0
-            disc_qty = 0.0
+            disc_qty = sh.get_discount_qty()
 
             dq = sh.disc_qty / 100.0
+            dqc = disc_qty / 100.0
             da = sh.disc2 / 100.0
             fa = sh.admin_fact / 100.0
+
             #Init cost
             sum_wf_costs = sh.workforce_total_euro_ud
-            cost = round(sh.total_euro_ud + sh.euro_machine_ud + sum_wf_costs + sh.outsorcing_total_ud, 2)
+            cost = sh.total_euro_ud + sh.euro_machine_ud + sum_wf_costs + sh.outsorcing_total_ud
             if sh.sheet_type == 'design':
-                cost = round(sh.amount_total, 2)
+                cost = sh.amount_total
                 pvp = cost * (1 - dq - da + fa)
             elif sh.sheet_type == 'fdm':
-                if sh.cus_units:
-                    cost = cost + (sh.cost_init / sh.cus_units)
-                disc_qty = 3.75  # TODO calculo complejo en funcion de campo boolean
-                dqc = disc_qty / 100.0
-                pu = round(cost * (1 - dqc) * (1 + da) * (1+ fa), 2)
-                pvp = round(pu * sh.cus_units, 2)
+                pu = cost * (1 - dqc) * (1 + da) * (1 + fa)
+                pvp = pu * sh.cus_units
             elif sh.sheet_type == 'sls':
-                disc_qty = 11.88  # TODO calculo complejo
-                dqc = disc_qty / 100.0
-                pu = round(cost * (1 - dqc) * (1 + da) * (1+ fa), 2)
-                pvp = round(pu * sh.cus_units, 2)
+                pu = cost * (1 - dqc) * (1 + da) * (1+ fa)
+                pvp = pu * sh.cus_units
             elif sh.sheet_type == 'poly':
                 if sh.cus_units:
                     cost = cost + (sh.cost_init / sh.cus_units)
-                disc_qty = 11.78  # TODO calculo complejo en funcion de campo boolean
-                dqc = disc_qty / 100.0
-                pu = round(cost * (1 - dqc) * (1 + da) * (1+ fa), 2)
-                pvp = round(pu * sh.cus_units, 2)
+                pu = cost * (1 - dqc) * (1 + da) * (1+ fa)
+                pvp = pu * sh.cus_units
             elif sh.sheet_type == 'sla':
                 if sh.cus_units:
                     cost = cost + (sh.cost_init / sh.cus_units)
-                disc_qty = 6  # TODO calculo complejo en funcion de campo boolean
-                dqc = disc_qty / 100.0
-                pu = round(cost * (1 - dqc) * (1 + da) * (1+ fa), 2)
-                pvp = round(pu * sh.cus_units, 2)
+                pu = cost * (1 - dqc) * (1 + da) * (1+ fa)
+                pvp = pu * sh.cus_units
             elif sh.sheet_type == 'dmls':
                 cost_init_computed = 0
                 if sh.material_cost_ids and sh.material_cost_ids[0].material_id:
@@ -142,10 +157,8 @@ class CostSheet(models.Model):
                     sh.cost_init_computed = cost_init_computed
                 if sh.cus_units:
                     cost = cost + (sh.cost_init_computed / sh.cus_units)
-                    disc_qty = 11.78  # TODO calculo complejo en funcion de campo boolean
-                    dqc = disc_qty / 100.0
-                    pu = round(cost * (1 - dqc) * (1 + da) * (1+ fa), 2)
-                    pvp = round(pu * sh.cus_units, 2)
+                    pu = cost * (1 - dqc) * (1 + da) * (1+ fa)
+                    pvp =pu * sh.cus_units
 
             
             sh.update({
@@ -153,6 +166,49 @@ class CostSheet(models.Model):
                 'disc_qty_computed': disc_qty,
                 'price_unit': pu,
                 'price_total': pvp})
+    
+    @api.onchange('sheet_type', 'material_cost_ids')
+    def onchange_sheet_type(self):
+        options =  ['Horas Técnico', 'Horas Diseño', 'Horas Posprocesado']
+        out_options =  ['Insertos', 'Tornillos', 'Pintado', 'Accesorios', 'Otros']
+        wf_lines = []
+        out_lines = []
+        # sls_out_lines = []
+        # for sh in self:
+        # CREATE OUTSORCING LINES FOR ALL TYPES
+        out_lines = [(5, 0, 0)]
+        for name in out_options:
+            vals = {'name': name, 'margin': 20.0}
+            out_lines.append((0, 0, vals))
+        # if self.sheet_type == 'fdm':
+        # FDM CREATE WORKFORCE LINES
+        wf_lines = [(5, 0, 0)]
+
+        for name in options:
+            hours = 0
+
+            material = False
+            maq_hours = False
+            if self.material_cost_ids:
+                material = self.material_cost_ids[0].material_id
+                maq_hours = self.machine_hours
+
+            if name == 'Horas Técnico' and material:
+                hours = (5/60) + (maq_hours * self.printer_id.machine_hour * material.factor_hour)
+            vals = {
+                'name': name,
+                'hours': hours,
+            }
+            wf_lines.append((0, 0, vals))
+        if not self.workforce_cost_ids:
+            self.update({
+                'workforce_cost_ids': wf_lines,
+            })
+        if not self.outsorcing_cost_ids:
+            self.update({
+                'outsorcing_cost_ids': out_lines,
+            })
+        return  {'domain': {'printer_id': [('type', '=', self.sheet_type)]}}
 
     #PROPIOS DE DISEÑO
     flat_ref = fields.Char('Plano')
@@ -188,8 +244,7 @@ class CostSheet(models.Model):
                 sh.euros_cc = sh.price_total / sh.cc_ud
     
     # FDM PARÁMETROS IMPRESIÓN
-    printer_id = fields.Many2one(
-        'printer.machine', 'Impresora')
+    
     tray_units = fields.Integer('Uds. Bandeja')
     infill = fields.Float('Infill')  # Model or selection?
     loops = fields.Integer('Loops') # Model or selection?
@@ -213,48 +268,6 @@ class CostSheet(models.Model):
             self.material_cost_ids = cost_lines
         return res
     
-    @api.onchange('sheet_type', 'material_cost_ids')
-    def onchange_sheet_type(self):
-        options =  ['Horas Técnico', 'Horas Diseño', 'Horas Posprocesado']
-        out_options =  ['Insertos', 'Tornillos', 'Pintado', 'Accesorios', 'Otros']
-        wf_lines = []
-        out_lines = []
-        # sls_out_lines = []
-        # for sh in self:
-        # CREATE OUTSORCING LINES FOR ALL TYPES
-        out_lines = [(5, 0, 0)]
-        for name in out_options:
-            vals = {'name': name, 'margin': 20.0}
-            out_lines.append((0, 0, vals))
-        # if self.sheet_type == 'fdm':
-        # FDM CREATE WORKFORCE LINES
-        wf_lines = [(5, 0, 0)]
-
-        for name in options:
-            hours = 0
-
-            material = False
-            maq_hours = False
-            if self.material_cost_ids:
-                material = self.material_cost_ids[0].material_id
-                maq_hours = self.machine_hours
-
-            if name == 'Horas Técnico' and material:
-                hours = 5/60 + maq_hours * self.printer_id.machine_hour * material.factor_hour
-            vals = {
-                'name': name,
-                'hours': hours,
-            }
-            wf_lines.append((0, 0, vals))
-        
-        self.update({
-            'workforce_cost_ids': wf_lines,
-            'outsorcing_cost_ids': out_lines,
-        })
-        return  {'domain': {'printer_id': [('type', '=', self.sheet_type)]}}
-
-
-
     @api.depends('price_total', 'cc_ud')
     def get_euros_cc_fdm(self):
         for sh in self:
@@ -280,8 +293,8 @@ class CostSheet(models.Model):
     @api.depends('material_cost_ids')
     def _get_totals_material_cost(self):
         for sh in self:
-            sh.total_euro_ud = round(sum(
-                [x.euro_material for x in sh.material_cost_ids]),2)
+            sh.total_euro_ud = sum(
+                [x.euro_material for x in sh.material_cost_ids])
             sh.total_material_cost = sh.total_euro_ud * sh.cus_units
     
     # FDM COSTE MÁQUINA
@@ -299,7 +312,7 @@ class CostSheet(models.Model):
             if sh.sheet_type == 'sls':
                 tray_hours = sh.tray_hours_sls
             if sh.cus_units:
-                sh.machine_hours = tray_hours / sh.tray_units * sh.cus_units
+                sh.machine_hours = (tray_hours / sh.tray_units) * sh.cus_units
                 sh.euro_machine_ud = sh.machine_hours * sh.euro_machine / sh.cus_units
                 sh.euro_machine_total = sh.euro_machine_ud * sh.cus_units
 
@@ -617,11 +630,12 @@ class MaterialCostLine(models.Model):
             mat = mcl.material_id
             sh = mcl.sheet_id
             if sh.sheet_type == 'fdm':
-                mcl.gr_cc_tray = round(mat.gr_cc * math.pi * ((mcl.diameter / 2.0) ** 2) * mcl.tray_meters)
+                gr_cc_tray = mat.gr_cc * math.pi * ((mcl.diameter / 2.0) ** 2) * mcl.tray_meters
+                mcl.gr_cc_tray = round(gr_cc_tray)
                 if sh.cus_units:
-                    mcl.gr_cc_total = round(mcl.gr_cc_tray / sh.cus_units * sh.tray_units)
-                    mcl.euro_material = mat.euro_kg * (mcl.gr_cc_total / 1000.0) / sh.cus_units
-                    mcl.total = sh.cus_units * mcl.euro_material
+                    gr_cc_total = (gr_cc_tray / sh.cus_units) * sh.tray_units
+                    mcl.gr_cc_total = round(gr_cc_total)
+                    mcl.euro_material = (mat.euro_kg * (gr_cc_total / 1000.0)) / sh.cus_units
             elif sh.sheet_type == 'sls':
                 mcl.sls_gr_tray = 25 # TODO
                 if sh.tray_units:
