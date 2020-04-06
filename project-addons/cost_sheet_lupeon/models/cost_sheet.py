@@ -93,7 +93,36 @@ class CostSheet(models.Model):
     price_unit = fields.Float('PVP unidad', compute='_get_cost_prices')
     price_total = fields.Float('PVP TOTAL', compute='_get_cost_prices')
 
+
+    # DATOS PIEZA
+    cus_units = fields.Integer('Uds. Cliente')
+    cc_ud = fields.Integer('cc ud')
+    stat_data = fields.Char('Dato estadístico')
+    euros_cc = fields.Float('€/cc', compute='get_euros_cc_fdm')
+
+    @api.depends('price_total', 'cc_ud')
+    def get_euros_cc_fdm(self):
+        for sh in self:
+            if sh.cc_ud:
+                sh.euros_cc = sh.price_total / sh.cc_ud
+
     printer_id = fields.Many2one('printer.machine', 'Impresora')
+
+    # [ALL] COSTE MANO DE OBRA
+    workforce_cost_ids = fields.One2many(
+        'workforce.cost.line', 'sheet_id', string='Coste Mano de obra')
+    workforce_total_euro_ud = fields.Float(
+        'Total € ud', compute="_get_totals_workforce")
+    workforce_total = fields.Float(
+    'Total', compute="_get_totals_workforce")
+
+    # [ALL] COSTE EXTERNALIZACION POR PIEZA
+    outsorcing_cost_ids = fields.One2many(
+        'outsorcing.cost.line', 'sheet_id', string='Coste externalizacion por pieza')
+    outsorcing_total_ud = fields.Float(
+        'Total ud', compute="_get_totals_outsorcing")
+    outsorcing_total = fields.Float(
+    'Total', compute="_get_totals_outsorcing")
 
     @api.multi
     def get_discount_qty(self):
@@ -231,17 +260,7 @@ class CostSheet(models.Model):
 
     # ------------------------------------------------------------------------
 
-    # FDM DATOS PIEZA
-    cus_units = fields.Integer('Uds. Cliente')
-    cc_ud = fields.Integer('cc ud')
-    stat_data = fields.Char('Dato estadístico')
-    euros_cc = fields.Float('€/cc', compute='get_euros_cc_fdm')
 
-    @api.depends('price_total', 'cc_ud')
-    def get_euros_cc_fdm(self):
-        for sh in self:
-            if sh.cc_ud:
-                sh.euros_cc = sh.price_total / sh.cc_ud
     
     # FDM PARÁMETROS IMPRESIÓN
     
@@ -297,7 +316,7 @@ class CostSheet(models.Model):
                 [x.euro_material for x in sh.material_cost_ids])
             sh.total_material_cost = sh.total_euro_ud * sh.cus_units
     
-    # FDM COSTE MÁQUINA
+    # COSTE MÁQUINA
     machine_hours = fields.Float('Horas Maq total', 
         compute='_get_fdm_machine_cost')
     euro_machine_ud = fields.Float('Euros Maq ud', 
@@ -316,27 +335,12 @@ class CostSheet(models.Model):
                 sh.euro_machine_ud = sh.machine_hours * sh.euro_machine / sh.cus_units
                 sh.euro_machine_total = sh.euro_machine_ud * sh.cus_units
 
-    # [ALL] COSTE MANO DE OBRA
-    workforce_cost_ids = fields.One2many(
-        'workforce.cost.line', 'sheet_id', string='Coste Mano de obra')
-    workforce_total_euro_ud = fields.Float(
-        'Total € ud', compute="_get_totals_workforce")
-    workforce_total = fields.Float(
-    'Total', compute="_get_totals_workforce")
-
     @api.depends('outsorcing_cost_ids')
     def _get_totals_workforce(self):
         for sh in self:
             sh.workforce_total_euro_ud = sum([x.euro_unit for x in sh.workforce_cost_ids])
             sh.workforce_total =sh.total_euro_ud * sh.cus_units
     
-    # FDM COSTE EXTERNALIZACION POR PIEZA
-    outsorcing_cost_ids = fields.One2many(
-        'outsorcing.cost.line', 'sheet_id', string='Coste externalizacion por pieza')
-    outsorcing_total_ud = fields.Float(
-        'Total ud', compute="_get_totals_outsorcing")
-    outsorcing_total = fields.Float(
-    'Total', compute="_get_totals_outsorcing")
 
     @api.depends('outsorcing_cost_ids')
     def _get_totals_outsorcing(self):
@@ -406,7 +410,9 @@ class CostSheet(models.Model):
                 'desviation': desviation,
             }
             cost_lines.append((0, 0, vals))
-        self.material_cost_ids = cost_lines
+        
+        if not self.material_cost_ids:
+            self.material_cost_ids = cost_lines
 
     # SLS PARÁMETROS IMPRESIÓN
     print_increment = fields.Float('Incremento (mm)', default=18.0)
@@ -415,7 +421,7 @@ class CostSheet(models.Model):
     @api.depends('printer_id')
     def _get_sls_print_totals(self):
         for sh in self:
-            sh.tray_hours_sls = 0.052 # TODO
+            sh.tray_hours_sls = 0.012 # TODO
 
 
     # SLS OFERT CONFIGURATION
@@ -623,6 +629,32 @@ class MaterialCostLine(models.Model):
     dmls_cc_tray = fields.Float('gr bandeja')
     dmls_cc_total = fields.Float('gr Total', compute='_compute_cost')
 
+    def get_sls_gr_tray(self):
+        self.ensure_one()
+        res = 0.0
+        sh = self.sheet_id
+        if not self.material_id:
+            return 0.0
+        c7 = sh.tray_units
+        d4 = sh.cc_ud
+        dens_cc = self.material_id.dens_cc
+        f4 = sh.x_mm_sls
+        d7 = sh.print_increment
+        g4 = sh.y_mm_sls
+        h4 = sh.z_mm_sls
+        dens_bulk = self.material_id.dens_bulk
+        f10 = sh.bucket_height_sls
+        d10 = sh.solid_per_sls / 100
+        if sh.offer_type == 'standard':
+            res = (c7*(d4/d4))*(d4*dens_cc+(((f4+d7)*(g4+d7)*(h4+d7)/1000)-d4)\
+                * dens_bulk) 
+        elif sh.offer_type == 'xyz':
+            res = c7*((f4*g4*h4*d10/1000)*dens_cc+(((f4+d7)*(g4+d7)*(h4+d7)/1000) - (f4*g4*h4*d10/1000))*dens_bulk)
+        elif sh.offer_type == 'cubeta':
+            res = (d4/d4)*((c7*d4*dens_cc)+((35.5*35.5*(1+f10)-(c7*d4))*dens_bulk))
+        return round(res)
+    
+
     def _compute_cost(self):
         for mcl in self:
             if not mcl.material_id or not mcl.sheet_id:
@@ -637,7 +669,7 @@ class MaterialCostLine(models.Model):
                     mcl.gr_cc_total = round(gr_cc_total)
                     mcl.euro_material = (mat.euro_kg * (gr_cc_total / 1000.0)) / sh.cus_units
             elif sh.sheet_type == 'sls':
-                mcl.sls_gr_tray = 25 # TODO
+                mcl.sls_gr_tray = mcl.get_sls_gr_tray()
                 if sh.tray_units:
                     mcl.sls_gr_total = (mcl.sls_gr_tray * sh.cus_units) / sh.tray_units
                     mcl.euro_material = (mcl.sls_gr_tray * (mat.euro_kg_bucket / 1000.0)) / sh.tray_units
