@@ -160,7 +160,7 @@
                                 <!-- <field name="printer_id" domain="[('type', '=', 'sls')]"/> -->
                                 <field name="printer_id"/>
                                 <field name="tray_units"/>
-                                <field name="print_increment"/>
+                                <field name="print_increment" attrs="{'invisible': [('sheet_type', 'in', ['poly'])]}"/>
                                 <field name="tray_hours_sls"/>
                                 <field name="euro_machine"/>
                             </group>

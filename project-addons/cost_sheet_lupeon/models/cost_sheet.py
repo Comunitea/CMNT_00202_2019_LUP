@@ -405,10 +405,10 @@ class CostSheet(models.Model):
             options = ['Construccion']
             material = False
             desviation = 50.0
-            
         elif self.sheet_type == 'dmls':
             options = [' ']
             material = False
+            self.cc_soport_dmls = self.cc_ud * 0.3
 
         # CREATE MATERIAL COST LINES
         cost_lines = [(5, 0, 0)]
@@ -505,7 +505,7 @@ class CostSheet(models.Model):
     # DMLS DATOS PIEZA
     units_dmls = fields.Integer('Uds. Cliente')
     
-    cc_soport_dmls = fields.Integer('cc soporte')
+    cc_soport_dmls = fields.Float('cc soporte')
 
     # dmls PARÁMETROS IMPRESIÓN
 
@@ -648,7 +648,7 @@ class MaterialCostLine(models.Model):
     sla_cc_total = fields.Float('cc Total', compute='_compute_cost')
 
     # DMLS
-    dmls_cc_tray = fields.Float('gr bandeja')
+    dmls_cc_tray = fields.Float('gr bandeja', compute='_compute_cost')
     dmls_cc_total = fields.Float('gr Total', compute='_compute_cost')
 
     def get_sls_gr_tray(self):
@@ -717,7 +717,11 @@ class MaterialCostLine(models.Model):
             elif sh.sheet_type == 'dmls':
                 dis = mcl.desviation / 100
                 if sh.tray_units:
-                    mcl.dmls_cc_total = ((1 + dis) * mcl.dmls_cc_tray * sh.cus_units) / sh.tray_units
+                    e10 = mcl.desviation / 100.0
+                    dmls_cc_tray = (sh.cc_ud+sh.cc_soport_dmls)*(1+e10)*sh.tray_units*mcl.material_id.dens_cc
+                    mcl.dmls_cc_tray = round(dmls_cc_tray)
+                    dmls_cc_total = ((1 + dis) * dmls_cc_tray * sh.cus_units) / sh.tray_units
+                    mcl.dmls_cc_total = round(dmls_cc_total)
                     if sh.cus_units:
                         mcl.euro_material = ( mcl.dmls_cc_total * mat.euro_kg) / (sh.cus_units * 1000)
                         mcl.total = sh.cus_units * mcl.euro_material
@@ -737,12 +741,13 @@ class WorkforceCostLine(models.Model):
 
     @api.depends('hours')
     def compute_workforce_totals(self):
+        # import ipdb; ipdb.set_trace()
         for wcl in self:
             sh = wcl.sheet_id
             hours2 = sh.group_id.tech_hours
             hours = wcl.hours
-            if wcl.name == 'Horas Técnico':
-                maq_hours = sh.machine_hours
+            maq_hours = sh.machine_hours
+            if wcl.name == 'Horas Técnico' and sh.sheet_type in ['sls', 'poly', 'sla']:
                 hours = (5/60) + (maq_hours * sh.printer_id.machine_hour)
             if wcl.name == 'Horas Diseño':
                  hours2 = sh.group_id.ing_hours
