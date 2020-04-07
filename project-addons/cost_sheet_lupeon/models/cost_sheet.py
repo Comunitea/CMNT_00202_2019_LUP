@@ -100,12 +100,6 @@ class CostSheet(models.Model):
     stat_data = fields.Char('Dato estadístico')
     euros_cc = fields.Float('€/cc', compute='get_euros_cc_fdm')
 
-    @api.depends('price_total', 'cc_ud')
-    def get_euros_cc_fdm(self):
-        for sh in self:
-            if sh.cc_ud:
-                sh.euros_cc = sh.price_total / sh.cc_ud
-
     printer_id = fields.Many2one('printer.machine', 'Impresora')
 
     # [ALL] COSTE MANO DE OBRA
@@ -123,6 +117,112 @@ class CostSheet(models.Model):
         'Total ud', compute="_get_totals_outsorcing")
     outsorcing_total = fields.Float(
     'Total', compute="_get_totals_outsorcing")
+
+    #PROPIOS DE DISEÑO
+    flat_ref = fields.Char('Plano')
+    legislation_ids = fields.Many2many(
+        'applicable.legislation',
+        'cost_sheet_applicable_legislation_rel',
+        'sheet_id', 'legislation_id',
+        string='Legislación aplicable')
+    time_line_ids = fields.One2many('design.time.line', 'sheet_id', string='Tiempos')
+    description = fields.Text('Requisitos técnicos')
+    customer_note = fields.Text('Comentarios Cliente')
+    hours_total = fields.Float('Horas totales', compute="_get_totals_design")
+    amount_total = fields.Float('Importe TOTAL', compute="_get_totals_design")
+
+    # FDM PARÁMETROS IMPRESIÓN
+    
+    tray_units = fields.Integer('Uds. Bandeja')
+    infill = fields.Float('Infill')  # Model or selection?
+    loops = fields.Integer('Loops') # Model or selection?
+    layer_height = fields.Float('Altura de Capa') # Model or selection?
+    tray_hours = fields.Float('h Maq. Bandeja')
+    euro_machine = fields.Float('€/h maq',  compute='get_euro_machine')
+    perfil = fields.Char('Perfil')
+
+        # FDM COSTE MATERIAL
+    material_cost_ids = fields.One2many(
+        'material.cost.line', 'sheet_id', string='Coste material')
+    total_euro_ud = fields.Float('Total € ud', compute='_get_totals_material_cost')
+    total_material_cost = fields.Float('Total', compute='_get_totals_material_cost')
+    # COSTE MÁQUINA
+    machine_hours = fields.Float('Horas Maq total', 
+        compute='_get_fdm_machine_cost')
+    euro_machine_ud = fields.Float('Euros Maq ud', 
+        compute='_get_fdm_machine_cost')  
+    euro_machine_total = fields.Float('Euros Maq total', 
+        compute='_get_fdm_machine_cost')
+    # FDM PART FEATURES
+    feature_ids = fields.Many2many(
+        'part.feature',
+        'cost_sheet_paer_features_rel',
+        'sheet_id', 'feature_id',
+        string='Características pieza')
+    
+    # ------------------------------------------------------------------------
+    
+    # SLS DATOS PIEZA
+    cus_units = fields.Integer('Uds. Cliente')
+
+    cm2_sls = fields.Float('cm^2 ud')
+    x_mm_sls = fields.Float('X (mm)')
+    y_mm_sls = fields.Float('Y (mm)')
+    z_mm_sls = fields.Float('Z (mm)')
+    static_data_sls = fields.Char('Dato estadístico')
+    e_cc_sls = fields.Float('€/cc', compute="_get_e_cc_sls")
+
+    # SLS PARÁMETROS IMPRESIÓN
+    print_increment = fields.Float('Incremento (mm)', default=18.0)
+    tray_hours_sls = fields.Float('h Maq. Bandeja', compute='_get_sls_print_totals', digits=(16, 3))
+    
+
+    # SLS OFERT CONFIGURATION
+    offer_type = fields.Selection(
+        [('standard', 'Standard'),
+         ('xyz', 'XYZ'),
+         ('cubeta', 'Cubeta')], 'Tipo oferta', default='standard')
+    solid_per_sls = fields.Float('% Solido', default=80.0)
+    bucket_height_sls = fields.Float('Altura cubeta')
+    simulation_time_sls = fields.Float('Tiempo impresión simulacion')
+
+
+    # SLS COSTE EXTERNALIZACION POR PIEZA
+    tinted_sls = fields.Selection(
+        [('blue', 'Blue'),
+         ('black', 'XYZ'),
+         ('no_tinted', 'No tinted'),
+         ('other', 'Other colors')], 'Tintado')
+
+
+    # POLY PARÁMETROS IMPRESIÓN
+    finish_pol = fields.Selection([
+        ('glossy', 'Glossy'),
+        ('mate', 'Mate')], 'Acabado')
+
+    # DMLS DATOS PIEZA
+    units_dmls = fields.Integer('Uds. Cliente')
+    
+    cc_soport_dmls = fields.Float('cc soporte')
+
+
+    @api.model
+    def create(self, vals):
+       res = super().create(vals)
+       res.group_id.update_sale_line_price()
+       return res
+    
+    def write(self, vals):
+       res = super().write(vals)
+       self.mapped('group_id').update_sale_line_price()
+       return res
+
+
+    @api.depends('price_total', 'cc_ud')
+    def get_euros_cc_fdm(self):
+        for sh in self:
+            if sh.cc_ud:
+                sh.euros_cc = sh.price_total / sh.cc_ud
 
     @api.multi
     def get_discount_qty(self):
@@ -242,38 +342,11 @@ class CostSheet(models.Model):
             })
         return  {'domain': {'printer_id': [('type', '=', self.sheet_type)]}}
 
-    #PROPIOS DE DISEÑO
-    flat_ref = fields.Char('Plano')
-    legislation_ids = fields.Many2many(
-        'applicable.legislation',
-        'cost_sheet_applicable_legislation_rel',
-        'sheet_id', 'legislation_id',
-        string='Legislación aplicable')
-    time_line_ids = fields.One2many('design.time.line', 'sheet_id', string='Tiempos')
-    description = fields.Text('Requisitos técnicos')
-    customer_note = fields.Text('Comentarios Cliente')
-    hours_total = fields.Float('Horas totales', compute="_get_totals_design")
-    amount_total = fields.Float('Importe TOTAL', compute="_get_totals_design")
-
     @api.depends('time_line_ids')
     def _get_totals_design(self):
         for sh in self:
             sh.hours_total = sum([x.hours for x in sh.time_line_ids])
             sh.amount_total = sum([x.total for x in sh.time_line_ids])
-
-    # ------------------------------------------------------------------------
-
-
-    
-    # FDM PARÁMETROS IMPRESIÓN
-    
-    tray_units = fields.Integer('Uds. Bandeja')
-    infill = fields.Float('Infill')  # Model or selection?
-    loops = fields.Integer('Loops') # Model or selection?
-    layer_height = fields.Float('Altura de Capa') # Model or selection?
-    tray_hours = fields.Float('h Maq. Bandeja')
-    euro_machine = fields.Float('€/h maq',  compute='get_euro_machine')
-    perfil = fields.Char('Perfil')
 
     @api.onchange('printer_id')
     def onchange_printer_id(self):
@@ -306,12 +379,6 @@ class CostSheet(models.Model):
             elif sh.sheet_type in ['sls', 'poly', 'sla', 'dmls']:
                 sh.euro_machine = sh.printer_id and sh.printer_id.euro_hour
 
-    # FDM COSTE MATERIAL
-    material_cost_ids = fields.One2many(
-        'material.cost.line', 'sheet_id', string='Coste material')
-    total_euro_ud = fields.Float('Total € ud', compute='_get_totals_material_cost')
-    total_material_cost = fields.Float('Total', compute='_get_totals_material_cost')
-
     @api.depends('material_cost_ids')
     def _get_totals_material_cost(self):
         for sh in self:
@@ -319,13 +386,6 @@ class CostSheet(models.Model):
                 [x.euro_material for x in sh.material_cost_ids])
             sh.total_material_cost = sh.total_euro_ud * sh.cus_units
     
-    # COSTE MÁQUINA
-    machine_hours = fields.Float('Horas Maq total', 
-        compute='_get_fdm_machine_cost')
-    euro_machine_ud = fields.Float('Euros Maq ud', 
-        compute='_get_fdm_machine_cost')  
-    euro_machine_total = fields.Float('Euros Maq total', 
-        compute='_get_fdm_machine_cost')
 
     @api.depends('tray_units', 'tray_hours', 'tray_hours_sls', 'cus_units', 'euro_machine')
     def _get_fdm_machine_cost(self):
@@ -333,7 +393,6 @@ class CostSheet(models.Model):
             tray_hours = sh.tray_hours
             if sh.sheet_type == 'sls':
                 tray_hours = sh.tray_hours_sls
-                # tray_hours = 0.009850614743
             if sh.cus_units:
                 machine_hours = (tray_hours / sh.tray_units) * sh.cus_units
                 sh.machine_hours = machine_hours
@@ -353,26 +412,6 @@ class CostSheet(models.Model):
         for sh in self:
             sh.outsorcing_total_ud = sum([x.pvp for x in sh.outsorcing_cost_ids])
             sh.outsorcing_total =sh.outsorcing_total_ud * sh.cus_units
-
-
-    # FDM PART FEATURES
-    feature_ids = fields.Many2many(
-        'part.feature',
-        'cost_sheet_paer_features_rel',
-        'sheet_id', 'feature_id',
-        string='Características pieza')
-    
-    # ------------------------------------------------------------------------
-    
-    # SLS DATOS PIEZA
-    cus_units = fields.Integer('Uds. Cliente')
-
-    cm2_sls = fields.Float('cm^2 ud')
-    x_mm_sls = fields.Float('X (mm)')
-    y_mm_sls = fields.Float('Y (mm)')
-    z_mm_sls = fields.Float('Z (mm)')
-    static_data_sls = fields.Char('Dato estadístico')
-    e_cc_sls = fields.Float('€/cc', compute="_get_e_cc_sls")
 
     @api.onchange('cus_units')
     def onchange_units_sls(self):
@@ -420,10 +459,6 @@ class CostSheet(models.Model):
         if not self.material_cost_ids:
             self.material_cost_ids = cost_lines
 
-    # SLS PARÁMETROS IMPRESIÓN
-    print_increment = fields.Float('Incremento (mm)', default=18.0)
-    tray_hours_sls = fields.Float('h Maq. Bandeja', compute='_get_sls_print_totals', digits=(16, 3))
-    
     # @api.depends('printer_id')
     def _get_sls_print_totals(self):
         for sh in self:
@@ -454,94 +489,7 @@ class CostSheet(models.Model):
                 res = g10
             # sh.tray_hours_sls = 0.009850614743
             sh.tray_hours_sls = res
-
-
-    # SLS OFERT CONFIGURATION
-    offer_type = fields.Selection(
-        [('standard', 'Standard'),
-         ('xyz', 'XYZ'),
-         ('cubeta', 'Cubeta')], 'Tipo oferta', default='standard')
-    solid_per_sls = fields.Float('% Solido', default=80.0)
-    bucket_height_sls = fields.Float('Altura cubeta')
-    simulation_time_sls = fields.Float('Tiempo impresión simulacion')
-
-    # SLS MATERIAL COST
-
-
-
-    # SLS COSTE MANO DE OBRA
     
-    # SLS COSTE EXTERNALIZACION POR PIEZA
-    tinted_sls = fields.Selection(
-        [('blue', 'Blue'),
-         ('black', 'XYZ'),
-         ('no_tinted', 'No tinted'),
-         ('other', 'Other colors')], 'Tintado')
-
-    # ------------------------------------------------------------------------ 
-
-    # POLY DATOS PIEZA
-
-    # POLY PARÁMETROS IMPRESIÓN
-    finish_pol = fields.Selection([
-        ('glossy', 'Glossy'),
-        ('mate', 'Mate')], 'Acabado')
-
-    # POLY MATERIAL COST
-
-    # POLY COSTE MÁQUINA
-
-    # POLY COSTE MANO DE OBRA
-
-    # POLY COSTE EXTERNALIZACION POR PIEZA
-
-    # ------------------------------------------------------------------------- 
-
-    # SLA DATOS PIEZA
-
-    # SLA PARÁMETROS IMPRESIÓN
-
-    # SLA MATERIAL COST
-
-    # SLA COSTE MÁQUINA
-
-
-    # SLA COSTE EXTERNALIZACION POR PIEZA
-
-    # SLA COSTE MANO DE OBRA
-    
-    # ------------------------------------------------------------------------- 
-
-    # DMLS DATOS PIEZA
-    units_dmls = fields.Integer('Uds. Cliente')
-    
-    cc_soport_dmls = fields.Float('cc soporte')
-
-    # dmls PARÁMETROS IMPRESIÓN
-
-    # dmls MATERIAL COST
-
-    # dmls COSTE MÁQUINA
-
-
-    # dmls COSTE EXTERNALIZACION POR PIEZA
- 
-    # dmls COSTE MANO DE OBRA
-    
-   
-    @api.model
-    def create(self, vals):
-       res = super().create(vals)
-       res.group_id.update_sale_line_price()
-       return res
-    
-    def write(self, vals):
-       res = super().write(vals)
-       self.mapped('group_id').update_sale_line_price()
-       return res
-    
-    
-    # LÓGICA
     @api.multi
     def create_task_or_production(self):
         """
