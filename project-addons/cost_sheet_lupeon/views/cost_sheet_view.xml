@@ -40,7 +40,8 @@
                         <group>
                                 <field name="disc_qty" attrs="{'invisible': [('sheet_type', 'not in', ['design'])]}"/> 
                                 <field name="disc_qty_computed" attrs="{'invisible': [('sheet_type', 'not in', ['fdm', 'sls', 'poly', 'sla', 'dmls'])]}"/>
-                                <field name="disc2"/>
+                                <field name="disc2" attrs="{'invisible': [('sheet_type', 'not in', ['design', 'fdm'])]}"/>
+                                <field name="increment" attrs="{'invisible': [('sheet_type', 'not in', ['sls'])]}"/>
                                 <field name="price_unit"  attrs="{'invisible': [('sheet_type', '==', 'design')]}"/>
                                 <field name="price_total"/>
                         </group>

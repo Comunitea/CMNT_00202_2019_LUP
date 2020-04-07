@@ -138,7 +138,7 @@ class CostSheet(models.Model):
             res = 0.0
         elif units >= 2:
             if units < dmc:
-                ( (dm - d2) / (dmc - 2) ) * (units - 2) + d2
+                res = ( (dm - d2) / (dmc - 2) ) * (units - 2) + d2
             elif units >= dmc:
                 res = dm
         return res
@@ -150,12 +150,14 @@ class CostSheet(models.Model):
             cost = 0.0
             pvp = 0.0
             pu = 0.0
+            # import ipdb; ipdb.set_trace()
             disc_qty = sh.get_discount_qty()
 
             dq = sh.disc_qty / 100.0
             dqc = disc_qty / 100.0
             da = sh.disc2 / 100.0
             fa = sh.admin_fact / 100.0
+            inc = sh.increment / 100.0
 
             #Init cost
             sum_wf_costs = sh.workforce_total_euro_ud
@@ -167,7 +169,9 @@ class CostSheet(models.Model):
                 pu = cost * (1 - dqc) * (1 + da) * (1 + fa)
                 pvp = pu * sh.cus_units
             elif sh.sheet_type == 'sls':
-                pu = cost * (1 - dqc) * (1 + da) * (1+ fa)
+                cost = round(sh.total_euro_ud, 2) + round(sh.euro_machine_ud, 2) + round(sum_wf_costs, 2) + round(sh.outsorcing_total_ud, 2)
+                cost = cost + (sh.cost_init / sh.cus_units)
+                pu = cost * (1 - dqc) * (1 + inc) * (1+ fa)
                 pvp = pu * sh.cus_units
             elif sh.sheet_type == 'poly':
                 if sh.cus_units:
@@ -221,9 +225,11 @@ class CostSheet(models.Model):
             if self.material_cost_ids:
                 material = self.material_cost_ids[0].material_id
                 maq_hours = self.machine_hours
-
             if name == 'Horas Técnico' and material:
-                hours = (5/60) + (maq_hours * self.printer_id.machine_hour * material.factor_hour)
+                if self.sheet_type == 'fdm':
+                    hours = (5/60) + (maq_hours * self.printer_id.machine_hour * material.factor_hour)
+                if self.sheet_type == 'sls':
+                    hours = (5/60) + (maq_hours * self.printer_id.machine_hour)
             vals = {
                 'name': name,
                 'hours': hours,
@@ -330,16 +336,19 @@ class CostSheet(models.Model):
             tray_hours = sh.tray_hours
             if sh.sheet_type == 'sls':
                 tray_hours = sh.tray_hours_sls
+                # tray_hours = 0.009850614743
             if sh.cus_units:
-                sh.machine_hours = (tray_hours / sh.tray_units) * sh.cus_units
-                sh.euro_machine_ud = sh.machine_hours * sh.euro_machine / sh.cus_units
-                sh.euro_machine_total = sh.euro_machine_ud * sh.cus_units
+                machine_hours = (tray_hours / sh.tray_units) * sh.cus_units
+                sh.machine_hours = machine_hours
+                euro_machine_ud = machine_hours * sh.euro_machine / sh.cus_units
+                sh.euro_machine_ud = euro_machine_ud
+                sh.euro_machine_total = euro_machine_ud * sh.cus_units
 
-    @api.depends('outsorcing_cost_ids')
+    @api.depends('workforce_cost_ids')
     def _get_totals_workforce(self):
         for sh in self:
             sh.workforce_total_euro_ud = sum([x.euro_unit for x in sh.workforce_cost_ids])
-            sh.workforce_total =sh.total_euro_ud * sh.cus_units
+            sh.workforce_total = sh.workforce_total_euro_ud * sh.cus_units
     
 
     @api.depends('outsorcing_cost_ids')
@@ -416,7 +425,7 @@ class CostSheet(models.Model):
 
     # SLS PARÁMETROS IMPRESIÓN
     print_increment = fields.Float('Incremento (mm)', default=18.0)
-    tray_hours_sls = fields.Float('h Maq. Bandeja', compute='_get_sls_print_totals', digits=(16, 4))
+    tray_hours_sls = fields.Float('h Maq. Bandeja', compute='_get_sls_print_totals', digits=(16, 3))
     
     @api.depends('printer_id')
     def _get_sls_print_totals(self):
@@ -434,7 +443,7 @@ class CostSheet(models.Model):
             f10 = sh.bucket_height_sls
             d10 = sh.solid_per_sls / 100
 
-            sh.tray_hours_sls = 0.010
+            sh.tray_hours_sls = 0.009850614743
 
 
     # SLS OFERT CONFIGURATION
@@ -730,11 +739,18 @@ class WorkforceCostLine(models.Model):
     def compute_workforce_totals(self):
         for wcl in self:
             sh = wcl.sheet_id
-            hours_tech = sh.group_id.tech_hours
+            hours2 = sh.group_id.tech_hours
+            hours = wcl.hours
+            if wcl.name == 'Horas Técnico':
+                maq_hours = sh.machine_hours
+                hours = (5/60) + (maq_hours * sh.printer_id.machine_hour)
+            if wcl.name == 'Horas Diseño':
+                 hours2 = sh.group_id.ing_hours
             if sh.cus_units:
-                wcl.euro_unit = wcl.hours * hours_tech / sh.cus_units
+                euro_unit = hours * hours2 / sh.cus_units
+                wcl.euro_unit = euro_unit
+                wcl.total = euro_unit * sh.cus_units
             wcl.minutes = wcl.hours * 60.0  
-            wcl.total = wcl.euro_unit * sh.cus_units
 
 
 
