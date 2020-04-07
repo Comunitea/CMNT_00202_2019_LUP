@@ -217,6 +217,58 @@ class CostSheet(models.Model):
        self.mapped('group_id').update_sale_line_price()
        return res
 
+    @api.onchange('sheet_type', 'material_cost_ids.material_id', 'machine_hours', 'printer_id')
+    def onchange_sheet_type(self):
+        options =  ['Horas Técnico', 'Horas Diseño', 'Horas Posprocesado']
+        out_options =  ['Insertos', 'Tornillos', 'Pintado', 'Accesorios', 'Otros']
+        wf_lines = []
+        out_lines = []
+        # CREATE OUTSORCING LINES FOR ALL TYPES
+        out_lines = [(5, 0, 0)]
+        for name in out_options:
+            vals = {'name': name, 'margin': 20.0}
+            out_lines.append((0, 0, vals))
+        # FDM CREATE WORKFORCE LINES
+        wf_lines = [(5, 0, 0)]
+
+        for name in options:
+            hours = 0
+
+            material = False
+            maq_hours = 0.0
+            if self.material_cost_ids:
+                material = self.material_cost_ids[0].material_id
+                tray_hours = self.tray_hours
+                if self.sheet_type == 'sls':
+                    tray_hours = self.tray_hours_sls
+                if self.cus_units:
+                    maq_hours = self.machine_hours
+                    maq_hours = (tray_hours / self.tray_units) * self.cus_units
+            if name == 'Horas Técnico' and material:
+                if self.sheet_type == 'fdm':
+                    hours = (5/60) + (maq_hours * self.printer_id.machine_hour * material.factor_hour)
+                if self.sheet_type in ['sls', 'poly', 'sla', 'dmls']:
+                    hours = (5/60) + (maq_hours * self.printer_id.machine_hour)
+            # Mantener valores de horas diseño y postprocesado si ya existian
+            elif self.workforce_cost_ids:
+                wfl = self.workforce_cost_ids.filtered(lambda x: x.name == name)
+                if wfl:
+                    hours = wfl.hours
+            vals = {
+                'name': name,
+                'hours': hours,
+            }
+            wf_lines.append((0, 0, vals))
+        # if not self.workforce_cost_ids:
+        self.update({
+            'workforce_cost_ids': wf_lines,
+        })
+        if not self.outsorcing_cost_ids:
+            self.update({
+                'outsorcing_cost_ids': out_lines,
+            })
+        return  {'domain': {'printer_id': [('type', '=', self.sheet_type)]}}
+
 
     @api.depends('price_total', 'cc_ud')
     def get_euros_cc_fdm(self):
@@ -299,48 +351,6 @@ class CostSheet(models.Model):
                 'disc_qty_computed': disc_qty,
                 'price_unit': pu,
                 'price_total': pvp})
-    
-    @api.onchange('sheet_type', 'material_cost_ids.material_id', 'machine_hours', 'printer_id')
-    def onchange_sheet_type(self):
-        options =  ['Horas Técnico', 'Horas Diseño', 'Horas Posprocesado']
-        out_options =  ['Insertos', 'Tornillos', 'Pintado', 'Accesorios', 'Otros']
-        wf_lines = []
-        out_lines = []
-        # CREATE OUTSORCING LINES FOR ALL TYPES
-        out_lines = [(5, 0, 0)]
-        for name in out_options:
-            vals = {'name': name, 'margin': 20.0}
-            out_lines.append((0, 0, vals))
-        # FDM CREATE WORKFORCE LINES
-        wf_lines = [(5, 0, 0)]
-
-        for name in options:
-            hours = 0
-
-            material = False
-            maq_hours = False
-            if self.material_cost_ids:
-                material = self.material_cost_ids[0].material_id
-                maq_hours = self.machine_hours
-            if name == 'Horas Técnico' and material:
-                if self.sheet_type == 'fdm':
-                    hours = (5/60) + (maq_hours * self.printer_id.machine_hour * material.factor_hour)
-                if self.sheet_type in ['sls', 'poly', 'sla', 'dmls']:
-                    hours = (5/60) + (maq_hours * self.printer_id.machine_hour)
-            vals = {
-                'name': name,
-                'hours': hours,
-            }
-            wf_lines.append((0, 0, vals))
-        if not self.workforce_cost_ids:
-            self.update({
-                'workforce_cost_ids': wf_lines,
-            })
-        if not self.outsorcing_cost_ids:
-            self.update({
-                'outsorcing_cost_ids': out_lines,
-            })
-        return  {'domain': {'printer_id': [('type', '=', self.sheet_type)]}}
 
     @api.depends('time_line_ids')
     def _get_totals_design(self):
@@ -534,7 +544,6 @@ class CostSheet(models.Model):
             line = sheet.sale_line_id
             bom = self.env['mrp.bom']._bom_find(product=line.product_id)
             vals = {
-                # 'name': "[" + line.order_id.name + '] ' + line.name,
                 'sheet_id': sheet.id,
                 'product_id':line.product_id.id,
                 'product_uom_id':line.product_id.uom_id.id,
@@ -577,8 +586,6 @@ class MaterialCostLine(models.Model):
     # COMUN
     name = fields.Char('Nombre')
     material_id = fields.Many2one('material', 'Material')
-    # gr_tray = fields.Float('Gr bandeja')
-    # gr_total = fields.Float('Gr total')
 
     euro_material = fields.Float('Euros Mat ud', compute='_compute_cost')
     total = fields.Float('Total', compute='_compute_cost')
@@ -706,7 +713,7 @@ class WorkforceCostLine(models.Model):
             hours2 = sh.group_id.tech_hours
             hours = wcl.hours
             maq_hours = sh.machine_hours
-            if wcl.name == 'Horas Técnico' and sh.sheet_type in ['sls', 'poly', 'sla']:
+            if wcl.name == 'Horas Técnico' and sh.sheet_type in ['sls', 'poly', 'sla', 'dmls']:
                 hours = (5/60) + (maq_hours * sh.printer_id.machine_hour)
             if wcl.name == 'Horas Diseño':
                  hours2 = sh.group_id.ing_hours
