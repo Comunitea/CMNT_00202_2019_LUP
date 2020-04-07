@@ -300,7 +300,7 @@ class CostSheet(models.Model):
                 'price_unit': pu,
                 'price_total': pvp})
     
-    @api.onchange('sheet_type', 'material_cost_ids')
+    @api.onchange('sheet_type', 'material_cost_ids.material_id', 'machine_hours', 'printer_id')
     def onchange_sheet_type(self):
         options =  ['Horas Técnico', 'Horas Diseño', 'Horas Posprocesado']
         out_options =  ['Insertos', 'Tornillos', 'Pintado', 'Accesorios', 'Otros']
@@ -325,7 +325,7 @@ class CostSheet(models.Model):
             if name == 'Horas Técnico' and material:
                 if self.sheet_type == 'fdm':
                     hours = (5/60) + (maq_hours * self.printer_id.machine_hour * material.factor_hour)
-                if self.sheet_type == 'sls':
+                if self.sheet_type in ['sls', 'poly', 'sla', 'dmls']:
                     hours = (5/60) + (maq_hours * self.printer_id.machine_hour)
             vals = {
                 'name': name,
@@ -653,7 +653,8 @@ class MaterialCostLine(models.Model):
                 sls_gr_tray = mcl.get_sls_gr_tray()
                 mcl.sls_gr_tray = round(sls_gr_tray)
                 if sh.tray_units:
-                    mcl.sls_gr_total = (sls_gr_tray * sh.cus_units) / sh.tray_units
+                    sls_gr_total = (sls_gr_tray * sh.cus_units) / sh.tray_units
+                    mcl.sls_gr_total = round(sls_gr_total)
                     euro_material = (sls_gr_tray * (mat.euro_kg_bucket / 1000.0)) / sh.tray_units
                     mcl.euro_material = euro_material
                     mcl.total = sh.cus_units * euro_material
