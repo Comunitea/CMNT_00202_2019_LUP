@@ -206,14 +206,11 @@ class CostSheet(models.Model):
         out_options =  ['Insertos', 'Tornillos', 'Pintado', 'Accesorios', 'Otros']
         wf_lines = []
         out_lines = []
-        # sls_out_lines = []
-        # for sh in self:
         # CREATE OUTSORCING LINES FOR ALL TYPES
         out_lines = [(5, 0, 0)]
         for name in out_options:
             vals = {'name': name, 'margin': 20.0}
             out_lines.append((0, 0, vals))
-        # if self.sheet_type == 'fdm':
         # FDM CREATE WORKFORCE LINES
         wf_lines = [(5, 0, 0)]
 
@@ -427,23 +424,36 @@ class CostSheet(models.Model):
     print_increment = fields.Float('Incremento (mm)', default=18.0)
     tray_hours_sls = fields.Float('h Maq. Bandeja', compute='_get_sls_print_totals', digits=(16, 3))
     
-    @api.depends('printer_id')
+    # @api.depends('printer_id')
     def _get_sls_print_totals(self):
-        # TODO
         for sh in self:
+            if not sh.material_cost_ids:
+                continue
+            mat = sh.material_cost_ids[0].material_id
+            if not mat:
+                continue
+            vel_cc = mat.vel_cc
+            vel_z = mat.vel_z
+            if not vel_cc or not vel_z:
+                continue
             res = 0.0
             c7 = sh.tray_units
             d4 = sh.cc_ud
-            # dens_cc = self.material_id.dens_cc
             f4 = sh.x_mm_sls
             d7 = sh.print_increment
             g4 = sh.y_mm_sls
             h4 = sh.z_mm_sls
-            # dens_bulk = self.material_id.dens_bulk
             f10 = sh.bucket_height_sls
             d10 = sh.solid_per_sls / 100
-
-            sh.tray_hours_sls = 0.009850614743
+            g10 = sh.simulation_time_sls
+            if sh.offer_type == 'standard':
+                res = (c7*(d4/d4)*(d4/vel_cc+(((f4+d7)*(g4+d7)/(355*355))*((h4+d7))/10)/vel_z))
+            elif sh.offer_type == 'xyz':
+                res = (c7*((f4*g4*h4*d10/1000)/vel_cc+(((f4+d7)*(g4+d7))/(355*355))*((h4+d7)/10)/vel_z))
+            elif sh.offer_type == 'cubeta':
+                res = g10
+            # sh.tray_hours_sls = 0.009850614743
+            sh.tray_hours_sls = res
 
 
     # SLS OFERT CONFIGURATION
