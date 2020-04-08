@@ -443,7 +443,7 @@ class CostSheet(models.Model):
             return # Está en el onchange print id
         elif self.sheet_type == 'sls':
             options = ['PA2200']
-            material = self.env['material'].search([('name', '=', options[0])])
+            material = self.env['product.product'].search([('name', '=', options[0])])
         elif self.sheet_type == 'poly':
             options = ['Construccion', 'Soporte']
             material = False
@@ -585,7 +585,7 @@ class MaterialCostLine(models.Model):
 
     # COMUN
     name = fields.Char('Nombre')
-    material_id = fields.Many2one('material', 'Material')
+    material_id = fields.Many2one('product.product', 'Material')
 
     euro_material = fields.Float('Euros Mat ud', compute='_compute_cost')
     total = fields.Float('Total', compute='_compute_cost')

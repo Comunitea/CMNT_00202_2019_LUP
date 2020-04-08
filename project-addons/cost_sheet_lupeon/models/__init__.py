@@ -5,7 +5,6 @@ from . import res_partner
 from . import applicable_legislation
 from . import part_features
 from . import printer_machine
-from . import material
 from . import product
 from . import design_software
 from . import cost_sheet

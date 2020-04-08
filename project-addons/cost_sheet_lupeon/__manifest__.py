@@ -26,7 +26,6 @@
         'views/part_feature_view.xml',
         'views/partner_view.xml',
         'views/printer_machine.xml',
-        'views/material_view.xml',
         'views/product_view.xml',
         'views/design_software_view.xml',
         'views/project_view.xml',
