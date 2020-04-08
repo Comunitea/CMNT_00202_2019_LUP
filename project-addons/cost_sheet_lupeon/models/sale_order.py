@@ -141,6 +141,7 @@ class SaleOrderLine(models.Model):
 
     group_sheet_id = fields.Many2one(
         'group.cost.sheet', 'Hojas de coste', readonly=True)
+    ref = fields.Char('Referencia')
     
     @api.model
     def create(self, vals):
