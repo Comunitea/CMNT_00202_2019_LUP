@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-db_name = 'lupeon'
+db_name = 'LUPEON'
 session.open(db=db_name)
 print("******************START************************")
 materials = session.env['material'].search([])
