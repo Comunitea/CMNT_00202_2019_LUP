@@ -280,7 +280,7 @@ class CostSheet(models.Model):
                     'printer_id': printer.id,
                 })
         
-        if self.sheet_type == 'poly':
+        if self.sheet_type in ['poly', 'sla']:
             self.cost_init = 20.0
         return  {'domain': {'printer_id': [('type', '=', self.sheet_type)]}}
 
