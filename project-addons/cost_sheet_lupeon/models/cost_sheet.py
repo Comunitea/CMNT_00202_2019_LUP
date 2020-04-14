@@ -677,7 +677,7 @@ class MaterialCostLine(models.Model):
                 sls_gr_tray = mcl.get_sls_gr_tray()
                 mcl.sls_gr_tray = round(sls_gr_tray)
                 if sh.tray_units:
-                    sls_gr_total = (gr_cc_tray / sh.tray_units) * sh.cus_units
+                    sls_gr_total = (sls_gr_tray * sh.cus_units) / sh.tray_units
                     mcl.sls_gr_total = round(sls_gr_total)
                     euro_material = (sls_gr_tray * (mat.euro_kg_bucket / 1000.0)) / sh.tray_units
                     mcl.euro_material = euro_material

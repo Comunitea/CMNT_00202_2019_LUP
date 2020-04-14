@@ -32,7 +32,7 @@
                     <group string="Precios">
                         <group>
                                 <field name="cost_init" attrs="{'invisible': [('sheet_type', 'in', ['fdm', 'dmls'])]}"/>
-                                <field name="cost_init_computed"  attrs="{'invisible': [('sheet_type', 'not in', ['dmls'])]}"/>
+                                <field name="cost_init_computed"  attrs="{'invisible': [('sheet_type', 'not in', ['fdm', 'dmls'])]}"/>
                                 <field name="cost_ud"/>
                                 <field name="admin_fact"/>
                                 <field name="use_disc_qty"  attrs="{'invisible': [('sheet_type', 'not in', ['fdm', 'sls', 'poly', 'sla', 'dmls'])]}"/> 
