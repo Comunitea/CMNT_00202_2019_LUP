@@ -223,7 +223,6 @@
                             <group colspan="2" col="8" string="Parámetros impresión">
                                 <field name="printer_id"/>
                                 <field name="tray_units"/>
-                                <field name="print_increment"/>
                                 <field name="finish_pol"/>
                                 <field name="tray_hours"/>
                                 <field name="euro_machine"/>
