@@ -12,6 +12,7 @@ SHEET_TYPES = [
     ('poly', 'Poly'),
     ('sla', 'SLA'),
     ('dmls', 'DMLS'),
+    ('unplanned', 'Imprevistos'),
 ]
 
 class GroupCostSheet(models.Model):
@@ -85,11 +86,12 @@ class CostSheet(models.Model):
         related='group_id.admin_fact')
     disc_qty = fields.Float('Descuento cantidad')
     disc_qty_computed = fields.Float('Descuento cantidad', compute='_get_cost_prices')
-    use_disc_qty = fields.Boolean('Usar descuento cantidad')
+    use_disc_qty = fields.Boolean('Usar descuento cantidad', default=True)
     disc2 = fields.Float('Descuento adicional')
     increment = fields.Float('Incremento no estándar')
     inspection_type = fields.Selection(
-        [('visual', 'Visual'), ('tech', 'Technical')], string="Tipo de inspeción")
+        [('visual', 'Visual'), ('tech', 'Technical')],
+        string="Tipo de inspeción", default="visual")
     price_unit = fields.Float('PVP unidad', compute='_get_cost_prices')
     price_total = fields.Float('PVP TOTAL', compute='_get_cost_prices')
 
@@ -97,7 +99,6 @@ class CostSheet(models.Model):
     # DATOS PIEZA
     cus_units = fields.Integer('Uds. Cliente')
     cc_ud = fields.Integer('cc ud')
-    stat_data = fields.Char('Dato estadístico')
     euros_cc = fields.Float('€/cc', compute='get_euros_cc_fdm')
 
     printer_id = fields.Many2one('printer.machine', 'Impresora')
@@ -169,7 +170,6 @@ class CostSheet(models.Model):
     x_mm_sls = fields.Float('X (mm)')
     y_mm_sls = fields.Float('Y (mm)')
     z_mm_sls = fields.Float('Z (mm)')
-    static_data_sls = fields.Char('Dato estadístico')
     e_cc_sls = fields.Float('€/cc', compute="_get_e_cc_sls")
 
     # SLS PARÁMETROS IMPRESIÓN
@@ -188,11 +188,7 @@ class CostSheet(models.Model):
 
 
     # SLS COSTE EXTERNALIZACION POR PIEZA
-    tinted_sls = fields.Selection(
-        [('blue', 'Blue'),
-         ('black', 'XYZ'),
-         ('no_tinted', 'No tinted'),
-         ('other', 'Other colors')], 'Tintado')
+    tinted_id = fields.Many2one('tinted', 'Tintado')
 
 
     # POLY PARÁMETROS IMPRESIÓN
@@ -204,6 +200,9 @@ class CostSheet(models.Model):
     units_dmls = fields.Integer('Uds. Cliente')
     
     cc_soport_dmls = fields.Float('cc soporte')
+
+    # Unplaned cost
+    unplanned_cost = fields.Float('Coste Imprevisto')
 
 
     @api.model
@@ -219,6 +218,9 @@ class CostSheet(models.Model):
 
     @api.onchange('sheet_type', 'material_cost_ids.material_id', 'machine_hours', 'printer_id')
     def onchange_sheet_type(self):
+
+        if not self.sheet_type:
+            return
         options =  ['Horas Técnico', 'Horas Diseño', 'Horas Posprocesado']
         out_options =  ['Insertos', 'Tornillos', 'Pintado', 'Accesorios', 'Otros']
         wf_lines = []
@@ -267,6 +269,19 @@ class CostSheet(models.Model):
             self.update({
                 'outsorcing_cost_ids': out_lines,
             })
+        
+        # Poner impresoras por defecto
+        if self.sheet_type and self.sheet_type != 'unplanned':
+            srch_field = 'default_' + self.sheet_type
+            domain = [(srch_field, '=', True)]
+            printer = self.env['printer.machine'].search(domain)
+            if printer:
+                self.update({
+                    'printer_id': printer.id,
+                })
+        
+        if self.sheet_type == 'poly':
+            sh.cost_init = 20.0
         return  {'domain': {'printer_id': [('type', '=', self.sheet_type)]}}
 
 
@@ -318,7 +333,7 @@ class CostSheet(models.Model):
                 cost = sh.amount_total
                 pvp = cost * (1 - dq - da + fa)
             elif sh.sheet_type == 'fdm':
-                pu = cost * (1 - dqc) * (1 + da) * (1 + fa)
+                pu = cost * (1 - dqc) * (1 + inc) * (1 + fa)
                 pvp = pu * sh.cus_units
             elif sh.sheet_type == 'sls':
                 cost = round(sh.total_euro_ud, 2) + round(sh.euro_machine_ud, 2) + round(sum_wf_costs, 2) + round(sh.outsorcing_total_ud, 2)
@@ -344,6 +359,8 @@ class CostSheet(models.Model):
                     cost = cost + (sh.cost_init_computed / sh.cus_units)
                     pu = cost * (1 - dqc) * (1 + da) * (1+ fa)
                     pvp =pu * sh.cus_units
+            elif sh.sheet_type == 'unplanned':
+                    pvp = sh.unplanned_cost
 
             
             sh.update({
@@ -649,10 +666,10 @@ class MaterialCostLine(models.Model):
             mat = mcl.material_id
             sh = mcl.sheet_id
             if sh.sheet_type == 'fdm':
-                gr_cc_tray = mat.gr_cc * math.pi * ((mcl.diameter / 2.0) ** 2) * mcl.tray_meters
+                gr_cc_tray = (mat.gr_cc * math.pi * ((mcl.diameter / 2.0) ** 2)) * mcl.tray_meters
                 mcl.gr_cc_tray = round(gr_cc_tray)
                 if sh.cus_units:
-                    gr_cc_total = (gr_cc_tray / sh.cus_units) * sh.tray_units
+                    gr_cc_total = (gr_cc_tray / sh.tray_units) * sh.cus_units
                     mcl.gr_cc_total = round(gr_cc_total)
                     euro_material = (mat.euro_kg * (gr_cc_total / 1000.0)) / sh.cus_units
                     mcl.euro_material = euro_material
@@ -660,7 +677,7 @@ class MaterialCostLine(models.Model):
                 sls_gr_tray = mcl.get_sls_gr_tray()
                 mcl.sls_gr_tray = round(sls_gr_tray)
                 if sh.tray_units:
-                    sls_gr_total = (sls_gr_tray * sh.cus_units) / sh.tray_units
+                    sls_gr_total = (gr_cc_tray / sh.tray_units) * sh.cus_units
                     mcl.sls_gr_total = round(sls_gr_total)
                     euro_material = (sls_gr_tray * (mat.euro_kg_bucket / 1000.0)) / sh.tray_units
                     mcl.euro_material = euro_material

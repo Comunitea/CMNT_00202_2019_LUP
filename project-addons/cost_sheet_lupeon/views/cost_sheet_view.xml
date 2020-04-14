@@ -20,7 +20,8 @@
                             <field name="sheet_type"/>
                             <field name="increment"/>
                             <field name="inspection_type"/>
-                            <field name="customer_note" class="oe_inline" placeholder="Customer Note"/>
+                            <!-- <field name="customer_note" class="oe_inline" placeholder="Customer Note"/> -->
+                            <field name="description"/>
                         </group>
                         <group string="Modelos asociados">
                             <!-- <field name="group_id" class="oe_inline" placeholder="Customer Note"/> -->
@@ -38,11 +39,11 @@
 
                         </group>
                         <group>
-                                <field name="disc_qty" attrs="{'invisible': [('sheet_type', 'not in', ['design'])]}"/> 
+                                <!-- <field name="disc_qty" attrs="{'invisible': [('sheet_type', 'not in', ['design'])]}"/>  -->
                                 <field name="disc_qty_computed" attrs="{'invisible': [('sheet_type', 'not in', ['fdm', 'sls', 'poly', 'sla', 'dmls'])]}"/>
-                                <field name="disc2" attrs="{'invisible': [('sheet_type', 'not in', ['design', 'fdm'])]}"/>
-                                <field name="increment" attrs="{'invisible': [('sheet_type', 'not in', ['sls'])]}"/>
-                                <field name="price_unit"  attrs="{'invisible': [('sheet_type', '==', 'design')]}"/>
+                                <field name="disc2" attrs="{'invisible': [('sheet_type', 'not in', ['design'])]}"/>
+                                <field name="increment" attrs="{'invisible': [('sheet_type', 'not in', ['fdm', 'sls'])]}"/>
+                                <field name="price_unit"  attrs="{'invisible': [('sheet_type', 'in', ['design', 'unnplaned'])]}"/>
                                 <field name="price_total"/>
                         </group>
                     </group>
@@ -51,7 +52,6 @@
                             <group>
                                 <group string="Datos pieza">
                                     <field name="flat_ref"/>
-                                    <field name="description"/>
                                 </group>
                                 <group string="Carcterísticas pieza">
                                     <field name="feature_ids" nolabel="1" widget="many2many_checkboxes"/>
@@ -82,7 +82,6 @@
                                 <group cospan="4" col="8" string="Datos pieza">
                                     <field name="cus_units"/>
                                     <field name="cc_ud"/>
-                                    <field name="stat_data"/>
                                     <field name="euros_cc"/>
                                 </group>
                                 <group string="Carcterísticas pieza">
@@ -91,13 +90,13 @@
                                 <group cospan="2" col="8" string="Parámetros impresión">
                                     <!-- <field name="printer_id" domain="[('type', '=', 'fdm')]"/> -->
                                     <field name="printer_id"/>
-                                    <field name="tray_units"/>
-                                    <field name="infill"/>
-                                    <field name="loops"/>
-                                    <field name="layer_height"/>
-                                    <field name="tray_hours"/>
-                                    <field name="euro_machine"/>
                                     <field name="perfil"/>
+                                    <field name="tray_units"/>
+                                    <field name="tray_hours"/>
+                                    <field name="loops"/>
+                                    <field name="infill"/>
+                                    <field name="layer_height"/>
+                                    <field name="euro_machine"/>
                                 </group>
                  
                              <group colspan="4" string="Material Cost">
@@ -107,6 +106,7 @@
                                     <field name="total_euro_ud" widget='monetary'/>
                                     <field name="total_material_cost" widget='monetary'/>
                             </group>
+                            <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="2" col="6" string="Coste Máquina">
                                 <field name="machine_hours"/>
                                 <field name="euro_machine_ud"/>
@@ -148,16 +148,15 @@
                         <page string="SLS" attrs="{'invisible': [('sheet_type', '!=', 'sls')]}">
                             <group colspan="2" col="8" string="Datos pieza">
                                 <field name="cus_units"/>
-                                <field name="cc_ud"/>
-                                <field name="cm2_sls"/>
-                                <field name="static_data_sls"/>
                                 <field name="x_mm_sls"/>
                                 <field name="y_mm_sls"/>
                                 <field name="z_mm_sls"/>
+                                <field name="cc_ud"/>
+                                <field name="tinted_id"/>
+                                <field name="cm2_sls"/>
                                 <field name="e_cc_sls"/>
                             </group>
                             <group colspan="2" col="8" string="Parámetros impresión">
-                                <!-- <field name="printer_id" domain="[('type', '=', 'sls')]"/> -->
                                 <field name="printer_id"/>
                                 <field name="tray_units"/>
                                 <field name="print_increment" attrs="{'invisible': [('sheet_type', 'in', ['poly'])]}"/>
@@ -219,7 +218,6 @@
                             <group colspan="2" col="8" string="Datos pieza">
                                 <field name="cus_units"/>
                                 <field name="cc_ud"/>
-                                <field name="stat_data"/>
                                 <field name="euros_cc"/>
                             </group>
                             <group colspan="2" col="8" string="Parámetros impresión">
@@ -278,7 +276,6 @@
                             <group colspan="2" col="8" string="Datos pieza">
                                 <field name="cus_units"/>
                                 <field name="cc_ud"/>
-                                <field name="stat_data"/>
                                 <field name="euros_cc"/>
                             </group>
                             <group colspan="2" col="8" string="Parámetros impresión">
@@ -336,7 +333,6 @@
                                 <field name="cus_units"/>
                                 <field name="cc_ud"/>
                                 <field name="cc_soport_dmls"/>
-                                <field name="stat_data"/>
                                 <field name="euros_cc"/>
                             </group>
                             <group colspan="2" col="8" string="Parámetros impresión">
@@ -385,6 +381,12 @@
                             <group class="oe_subtotal_footer oe_right" colspan="2" name="design_total">
                                     <field name="outsorcing_total_ud" widget='monetary'/>
                                     <field name="outsorcing_total" widget='monetary'/>
+                            </group>
+                        </page>
+
+                        <page string="Imprevistos" attrs="{'invisible': [('sheet_type', '!=', 'unplanned')]}">
+                            <group>
+                                <field name="unplanned_cost"/>
                             </group>
                         </page>
 

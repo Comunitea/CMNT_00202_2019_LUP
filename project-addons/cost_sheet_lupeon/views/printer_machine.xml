@@ -20,6 +20,13 @@
                         <field name="discount2"/>
                         <field name="max_disc_qty"/>
                     </group>
+                    <group>
+                        <field name="default_fdm" attrs="{'invisible': [('type', '!=', 'fdm')]}"/>
+                        <field name="default_sls" attrs="{'invisible': [('type', '!=', 'sls')]}"/>
+                        <field name="default_poly" attrs="{'invisible': [('type', '!=', 'poly')]}"/>
+                        <field name="default_sla" attrs="{'invisible': [('type', '!=', 'sla')]}"/>
+                        <field name="default_dmls" attrs="{'invisible': [('type', '!=', 'dmls')]}"/>
+                    </group>
                 </sheet>
             </form>
         </field>

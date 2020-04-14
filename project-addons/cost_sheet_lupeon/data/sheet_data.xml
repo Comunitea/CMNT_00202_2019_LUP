@@ -36,5 +36,19 @@
             <field name="name">Quick manofacture</field>
         </record>
 
+        <record id="tinted_blue" model="tinted">
+            <field name="name">Azul</field>
+        </record>
+        <record id="tinted_black" model="tinted">
+            <field name="name">Negro</field>
+        </record>
+        <record id="tinted_no" model="tinted">
+            <field name="name">Sin tintar</field>
+        </record>
+        <record id="tinted_other" model="tinted">
+            <field name="name">Otros colores</field>
+        </record>
+        
+
     </data>
 </odoo>

@@ -9,3 +9,4 @@ access_material_cost_line,acess_material_cost_line,model_material_cost_line,base
 access_workforce_cost_line,acess_workforce_cost_line,model_workforce_cost_line,base.group_user,1,1,1,1
 access_outsorcing_cost_line,acess_outsorcing_cost_line,model_outsorcing_cost_line,base.group_user,1,1,1,1
 access_part_feature,acess_part_feature,model_part_feature,base.group_user,1,1,1,1
+access_tinted,acess_tinted,model_tinted,base.group_user,1,1,1,1
