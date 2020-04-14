@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<odoo>
+
+   
+    <record id="tinted_view_form" model="ir.ui.view">
+        <field name="name">tinted.view</field>
+        <field name="model">tinted</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="tinted_view_tree" model="ir.ui.view">
+        <field name="name">tinted.view</field>
+        <field name="model">tinted</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_tinted" model="ir.actions.act_window">
+        <field name="name">Part Features</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">tinted</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_action_tinted" action="action_tinted"  name="Tintados" parent="menu_cost_cfg" sequence="30"/>
+
+</odoo>
