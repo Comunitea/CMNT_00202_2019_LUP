@@ -343,12 +343,12 @@ class CostSheet(models.Model):
             elif sh.sheet_type == 'poly':
                 if sh.cus_units:
                     cost = cost + (sh.cost_init / sh.cus_units)
-                pu = cost * (1 - dqc) * (1 + da) * (1+ fa)
+                pu = cost * (1 - dqc) * (1 + inc) * (1+ fa)
                 pvp = pu * sh.cus_units
             elif sh.sheet_type == 'sla':
                 if sh.cus_units:
                     cost = cost + (sh.cost_init / sh.cus_units)
-                pu = cost * (1 - dqc) * (1 + da) * (1+ fa)
+                pu = cost * (1 - dqc) * (1 + inc) * (1+ fa)
                 pvp = pu * sh.cus_units
             elif sh.sheet_type == 'dmls':
                 cost_init_computed = 0
@@ -357,7 +357,7 @@ class CostSheet(models.Model):
                     sh.cost_init_computed = cost_init_computed
                 if sh.cus_units:
                     cost = cost + (sh.cost_init_computed / sh.cus_units)
-                    pu = cost * (1 - dqc) * (1 + da) * (1+ fa)
+                    pu = cost * (1 - dqc) * (1 + inc) * (1+ fa)
                     pvp =pu * sh.cus_units
             elif sh.sheet_type == 'unplanned':
                     pvp = sh.unplanned_cost
