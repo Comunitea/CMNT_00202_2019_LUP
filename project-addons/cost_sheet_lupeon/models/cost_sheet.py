@@ -145,7 +145,7 @@ class CostSheet(models.Model):
     euro_machine = fields.Float('€/h maq',  compute='get_euro_machine')
     perfil = fields.Char('Perfil')
 
-        # FDM COSTE MATERIAL
+    # FDM COSTE MATERIAL
     material_cost_ids = fields.One2many(
         'material.cost.line', 'sheet_id', string='Coste material')
     total_euro_ud = fields.Float('Total € ud', compute='_get_totals_material_cost')
@@ -244,10 +244,10 @@ class CostSheet(models.Model):
     @api.multi
     def update_workforce_cost(self):
         for sh in self:
-            if sh.workforce_line_ids:
-                wfl = sh.workforce_line_ids.filtered(lambda x: x.name == 'Horas Posprocesado')
+            if sh.workforce_cost_ids:
+                wfl = sh.workforce_cost_ids.filtered(lambda x: x.name == 'Horas Posprocesado')
                 if wfl:
-                    wfl.write({'hours': sh.oppi_total})
+                    wfl.write({'hours': sh.total_oppi})
     
     def _get_heat_treatment_cost(self):
         for sh in self:
@@ -621,16 +621,16 @@ class CostSheet(models.Model):
             task = self.env['project.task'].create(vals)
             sheet.write({'task_id': task.id})
 
-            for opil in sheet.oppi_line_ids:
-                if opil.task_id:
-                    continue
-                    vals = {
-                    'name': "[" + project.name + '] ' + 'OPPÌ - ' + sheet.sale_line_id.name,
-                    'project_id': project.id,
-                    'oppi_line_id': opil.id
-                }
-                task = self.env['project.task'].create(vals)
-                opil.write({'task_id': opil.id})
+            # for opil in sheet.oppi_line_ids:
+            #     if opil.task_id:
+            #         continue
+            #         vals = {
+            #         'name': "[" + project.name + '] ' + 'OPPÌ - ' + sheet.sale_line_id.name,
+            #         'project_id': project.id,
+            #         'oppi_line_id': opil.id
+            #     }
+            #     task = self.env['project.task'].create(vals)
+            #     opil.write({'task_id': opil.id})
         return
 
     def create_productions(self):

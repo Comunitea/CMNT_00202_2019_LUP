@@ -108,6 +108,7 @@
                                     <field name="total_euro_ud" widget='monetary'/>
                                     <field name="total_material_cost" widget='monetary'/>
                             </group>
+                            <group></group>
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="2" col="6" string="Coste Máquina">
                                 <field name="machine_hours"/>
@@ -130,6 +131,7 @@
                                     <field name="workforce_total_euro_ud" widget='monetary'/>
                                     <field name="workforce_total" widget='monetary'/>
                             </group>
+                            <group></group>
                             <div style="border-bottom: 1px solid black;"></div>
                              <group colspan="4" string="Coste externalizacion por pieza">
                                 <field name="outsorcing_cost_ids" nolabel="1">
@@ -190,6 +192,7 @@
                                     <field name="total_euro_ud" widget='monetary'/>
                                     <field name="total_material_cost" widget='monetary'/>
                             </group>
+                            <group></group>
                              <div style="border-bottom: 1px solid black;"></div>
                              <group colspan="2" col="6" string="Coste Máquina">
                                 <field name="machine_hours"/>
@@ -212,6 +215,7 @@
                                     <field name="workforce_total_euro_ud" widget='monetary'/>
                                     <field name="workforce_total" widget='monetary'/>
                             </group>
+                            <group></group>
                              <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="4" string="Coste externalizacion por pieza">
                                 <field name="outsorcing_cost_ids" nolabel="1">
@@ -227,6 +231,7 @@
                                     <field name="outsorcing_total_ud" widget='monetary'/>
                                     <field name="outsorcing_total" widget='monetary'/>
                             </group>
+                            <group></group>
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="4" string="Oppi">
                                  <field name="oppi_line_ids" nolabel="1"/>
@@ -260,6 +265,7 @@
                                     <field name="total_euro_ud" widget='monetary'/>
                                     <field name="total_material_cost" widget='monetary'/>
                             </group>
+                            <group></group>
                             <div style="border-bottom: 1px solid black;"></div>
                              <group colspan="2" col="6" string="Coste Máquina">
                                 <field name="machine_hours"/>
@@ -282,6 +288,7 @@
                                     <field name="workforce_total_euro_ud" widget='monetary'/>
                                     <field name="workforce_total" widget='monetary'/>
                             </group>
+                            <group></group>
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="4" string="Coste externalizacion por pieza">
                                 <field name="outsorcing_cost_ids" nolabel="1">
@@ -297,6 +304,7 @@
                                     <field name="outsorcing_total_ud" widget='monetary'/>
                                     <field name="outsorcing_total" widget='monetary'/>
                             </group>
+                            <group></group>
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="4" string="Oppi">
                                  <field name="oppi_line_ids" nolabel="1"/>
@@ -328,6 +336,7 @@
                                     <field name="total_euro_ud" widget='monetary'/>
                                     <field name="total_material_cost" widget='monetary'/>
                             </group>
+                            <group></group>
                             <div style="border-bottom: 1px solid black;"></div>
                              <group colspan="2" col="6" string="Coste Máquina">
                                 <field name="machine_hours"/>
@@ -350,6 +359,7 @@
                                     <field name="workforce_total_euro_ud" widget='monetary'/>
                                     <field name="workforce_total" widget='monetary'/>
                             </group>
+                            <group></group>
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="4" string="Coste externalizacion por pieza">
                                 <field name="outsorcing_cost_ids" nolabel="1">
@@ -365,6 +375,7 @@
                                     <field name="outsorcing_total_ud" widget='monetary'/>
                                     <field name="outsorcing_total" widget='monetary'/>
                             </group>
+                            <group></group>
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="4" string="Oppi">
                                  <field name="oppi_line_ids" nolabel="1"/>
@@ -397,7 +408,7 @@
                                     <field name="total_euro_ud" widget='monetary'/>
                                     <field name="total_material_cost" widget='monetary'/>
                             </group>
-                            <group colspan="4" string="Material Cost">
+                            <group colspan="4">
                                  <field name="heat_treatment_cost"/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
@@ -405,7 +416,8 @@
                                 <field name="machine_hours"/>
                                 <field name="euro_machine_ud"/>
                                 <field name="euro_machine_total"/>
-                            </group><div style="border-bottom: 1px solid black;"></div>
+                            </group>
+                            <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="4" string="Coste mano de obra">
                                 <field name="workforce_cost_ids" nolabel="1">
                                     <tree editable="bottom">
@@ -421,6 +433,7 @@
                                     <field name="workforce_total_euro_ud" widget='monetary'/>
                                     <field name="workforce_total" widget='monetary'/>
                             </group>
+                            <group></group>
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="4" string="Coste externalizacion por pieza">
                                 <field name="outsorcing_cost_ids" nolabel="1">
@@ -436,6 +449,7 @@
                                     <field name="outsorcing_total_ud" widget='monetary'/>
                                     <field name="outsorcing_total" widget='monetary'/>
                             </group>
+                            <group></group>
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="4" string="Oppi">
                                  <field name="oppi_line_ids" nolabel="1"/>
