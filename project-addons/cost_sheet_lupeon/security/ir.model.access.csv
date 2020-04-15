@@ -8,5 +8,8 @@ access_printer_machine,acess_printer_machine,model_printer_machine,base.group_us
 access_material_cost_line,acess_material_cost_line,model_material_cost_line,base.group_user,1,1,1,1
 access_workforce_cost_line,acess_workforce_cost_line,model_workforce_cost_line,base.group_user,1,1,1,1
 access_outsorcing_cost_line,acess_outsorcing_cost_line,model_outsorcing_cost_line,base.group_user,1,1,1,1
+access_meet_cost_line,acess_meet_cost_line,model_meet_cost_line,base.group_user,1,1,1,1
+access_oppi_cost_line,acess_oppi_cost_line,model_oppi_cost_line,base.group_user,1,1,1,1
+access_purchase_cost_line,acess_purchase_cost_line,model_purchase_cost_line,base.group_user,1,1,1,1
 access_part_feature,acess_part_feature,model_part_feature,base.group_user,1,1,1,1
 access_tinted,acess_tinted,model_tinted,base.group_user,1,1,1,1

@@ -13,6 +13,8 @@ SHEET_TYPES = [
     ('sla', 'SLA'),
     ('dmls', 'DMLS'),
     ('unplanned', 'Imprevistos'),
+    ('meets', 'Reuniones'),
+    ('purchase', 'Compras'),
 ]
 
 class GroupCostSheet(models.Model):
@@ -27,11 +29,12 @@ class GroupCostSheet(models.Model):
         related='sale_line_id.order_id', store=True, readonly=True)
     product_id = fields.Many2one('product.product', 'Producto', 
         related='sale_line_id.product_id')
-    admin_fact = fields.Float('Factor administrativo')
+    admin_fact = fields.Float('Factor administrativo (%)')
 
     ing_hours = fields.Integer('Horas ingenieria', default=55)
     tech_hours = fields.Integer('Horas técnico', default=35)
     help_hours = fields.Integer('Horas ayudante', default=35)
+    km_cost = fields.Float('Coste Km', default=0.30)
     sheet_ids = fields.One2many(
         'cost.sheet', 'group_id', string='Cost Sheets')
     line_pvp = fields.Float('PVP Línea', compute='_get_line_pvp')
@@ -82,13 +85,13 @@ class CostSheet(models.Model):
     cost_init = fields.Float('Coste inicial')
     cost_init_computed = fields.Float('Coste inicial', compute='_get_cost_prices')
     cost_ud = fields.Float('Coste', compute="_get_cost_prices")
-    admin_fact = fields.Float('Factor administrativo', 
+    admin_fact = fields.Float('Factor administrativo (%)', 
         related='group_id.admin_fact')
-    disc_qty = fields.Float('Descuento cantidad')
-    disc_qty_computed = fields.Float('Descuento cantidad', compute='_get_cost_prices')
+    disc_qty = fields.Float('Descuento cantidad (%)')
+    disc_qty_computed = fields.Float('Descuento cantidad (%)', compute='_get_cost_prices')
     use_disc_qty = fields.Boolean('Usar descuento cantidad', default=True)
-    disc2 = fields.Float('Descuento adicional')
-    increment = fields.Float('Incremento no estándar')
+    disc2 = fields.Float('Descuento adicional (%)')
+    increment = fields.Float('Incremento no estándar (%)')
     inspection_type = fields.Selection(
         [('visual', 'Visual'), ('tech', 'Technical')],
         string="Tipo de inspeción", default="visual")
@@ -204,6 +207,18 @@ class CostSheet(models.Model):
     # Unplaned cost
     unplanned_cost = fields.Float('Coste Imprevisto')
 
+    # REUNIONES
+    meet_line_ids = fields.One2many(
+        'meet.cost.line', 'sheet_id', string='Coste reuniones')
+    meet_hours_total = fields.Float('Horas totales', compute="_get_totals_meet")
+    meet_total = fields.Float('TOTAL', compute="_get_totals_meet")
+
+    @api.depends('meet_line_ids')
+    def _get_totals_meet(self):
+        for sh in self:
+            sh.meet_hours_total = sum([x.hours for x in sh.meet_line_ids])
+            sh.meet_total = sum([x.pvp for x in sh.meet_line_ids])
+
 
     @api.model
     def create(self, vals):
@@ -219,7 +234,7 @@ class CostSheet(models.Model):
     @api.onchange('sheet_type', 'material_cost_ids.material_id', 'machine_hours', 'printer_id')
     def onchange_sheet_type(self):
 
-        if not self.sheet_type:
+        if not self.sheet_type or self.sheet_type in ['unplanned', 'meets', 'purchase']:
             return
         options =  ['Horas Técnico', 'Horas Diseño', 'Horas Posprocesado']
         out_options =  ['Insertos', 'Tornillos', 'Pintado', 'Accesorios', 'Otros']
@@ -361,6 +376,8 @@ class CostSheet(models.Model):
                     pvp =pu * sh.cus_units
             elif sh.sheet_type == 'unplanned':
                     pvp = sh.unplanned_cost
+            elif sh.sheet_type == 'meets':
+                    pvp = sh.meet_total
 
             
             sh.update({
@@ -760,7 +777,64 @@ class OutsorcingCostLine(models.Model):
             ocl.pvp = ocl.cost * (1 + ocl.margin / 100.0)
 
 
+class MeetCostLine(models.Model):
 
+    _name = 'meet.cost.line'
+
+    sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
+    type = fields.Selection([('visit', 'Visita'), ('meets', 'Reunión'), 
+                             ('call', 'Conferencia')], 'Tipo', default='visit')
+    name = fields.Char('Nombre')
+    num_people = fields.Float('Nº personas')
+    hours = fields.Float('Tiempo')
+    kms = fields.Float('Kms', default=20.0)
+    pvp = fields.Float('PVP ud', compute="_get_pvp")
+
+    @api.depends('num_people', 'hours', 'kms')
+    def _get_pvp(self):
+        for mcl in self:
+            ing_hours = mcl.sheet_id.group_id.ing_hours
+            km_cost = mcl.sheet_id.group_id.km_cost
+            pvp = (mcl.num_people * mcl.hours * ing_hours)
+            if mcl.type == 'visit':
+                pvp +=  + (mcl.kms * km_cost)
+            mcl.pvp = pvp 
+
+
+class PurchaseCostLine(models.Model):
+
+    _name = 'purchase.cost.line'
+
+    sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
+
+    name = fields.Char('Tarea')
+    # cost = fields.Float('Coste')
+    # margin = fields.Float('Margen', default=20.0)
+    # pvp = fields.Float('PVP ud', compute="_get_pvp")
+
+    # @api.depends('cost', 'margin')
+    # def _get_pvp(self):
+    #     for ocl in self:
+    #         ocl.pvp = ocl.cost * (1 + ocl.margin / 100.0)
+    #         ocl.pvp = ocl.cost * (1 + ocl.margin / 100.0)
+
+
+
+class OppiCostLine(models.Model):
+
+    _name = 'oppi.cost.line'
+
+    sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
+
+    name = fields.Char('Tarea')
+    # cost = fields.Float('Coste')
+    # margin = fields.Float('Margen', default=20.0)
+    # pvp = fields.Float('PVP ud', compute="_get_pvp")
+
+    # @api.depends('cost', 'margin')
+    # def _get_pvp(self):
+    #     for ocl in self:
+    #         ocl.pvp = ocl.cost * (1 + ocl.margin / 100.0)
 
 
 

@@ -20,21 +20,20 @@
                             <field name="sheet_type"/>
                             <field name="increment"/>
                             <field name="inspection_type"/>
-                            <!-- <field name="customer_note" class="oe_inline" placeholder="Customer Note"/> -->
                             <field name="description"/>
                         </group>
                         <group string="Modelos asociados">
-                            <!-- <field name="group_id" class="oe_inline" placeholder="Customer Note"/> -->
                             <field name="sale_line_id"/>
                             <field name="sale_id"/>
+                            <field name="group_id"/>
                         </group>
                     </group>
                     <group string="Precios">
                         <group>
-                                <field name="cost_init" attrs="{'invisible': [('sheet_type', 'in', ['fdm', 'dmls'])]}"/>
+                                <field name="cost_init" attrs="{'invisible': [('sheet_type', 'in', ['fdm', 'dmls', 'unnplaned', 'meets'])]}"/>
                                 <field name="cost_init_computed"  attrs="{'invisible': [('sheet_type', 'not in', ['fdm', 'dmls'])]}"/>
-                                <field name="cost_ud"/>
-                                <field name="admin_fact"/>
+                                <field name="cost_ud" attrs="{'invisible': [('sheet_type', 'in', ['unnplaned', 'meets'])]}"/>
+                                <field name="admin_fact" attrs="{'invisible': [('sheet_type', 'in', ['unnplaned', 'meets'])]}"/>
                                 <field name="use_disc_qty"  attrs="{'invisible': [('sheet_type', 'not in', ['fdm', 'sls', 'poly', 'sla', 'dmls'])]}"/> 
 
                         </group>
@@ -42,8 +41,8 @@
                                 <!-- <field name="disc_qty" attrs="{'invisible': [('sheet_type', 'not in', ['design'])]}"/>  -->
                                 <field name="disc_qty_computed" attrs="{'invisible': [('sheet_type', 'not in', ['fdm', 'sls', 'poly', 'sla', 'dmls'])]}"/>
                                 <field name="disc2" attrs="{'invisible': [('sheet_type', 'not in', ['design'])]}"/>
-                                <field name="increment" attrs="{'invisible': [('sheet_type', 'in', ['design'])]}"/>
-                                <field name="price_unit"  attrs="{'invisible': [('sheet_type', 'in', ['design', 'unnplaned'])]}"/>
+                                <field name="increment" attrs="{'invisible': [('sheet_type', 'in', ['design', 'unnplaned', 'meets'])]}"/>
+                                <field name="price_unit"  attrs="{'invisible': [('sheet_type', 'in', ['design', 'unnplaned', 'meets'])]}"/>
                                 <field name="price_total"/>
                         </group>
                     </group>
@@ -389,6 +388,25 @@
                             </group>
                         </page>
 
+                        <page string="Reuniones" attrs="{'invisible': [('sheet_type', '!=', 'meets')]}">
+                            <group string="Reuniones">
+                                <field name="meet_line_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="name"/>
+                                        <field name="type"/>
+                                        <field name="num_people"/>
+                                        <field name="hours"/>
+                                        <field name="kms"/>
+                                        <field name="pvp"/>
+                                    </tree>
+                                </field>
+                            </group>
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="meet_total">
+                                <field name="meet_hours_total" widget='time'/>
+                                <field name="meet_total" widget='monetary'/>
+                            </group>
+                        </page>
+
 
                     </notebook>
                    
@@ -480,6 +498,7 @@
                         <field name="ing_hours"/>
                         <field name="tech_hours"/>
                         <field name="help_hours"/>
+                        <field name="km_cost"/>
                     </group>
 
                     <group colespan="4" string="Hojas de coste">
