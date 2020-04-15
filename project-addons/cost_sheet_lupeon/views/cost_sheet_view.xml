@@ -397,6 +397,9 @@
                                     <field name="total_euro_ud" widget='monetary'/>
                                     <field name="total_material_cost" widget='monetary'/>
                             </group>
+                            <group colspan="4" string="Material Cost">
+                                 <field name="heat_treatment_cost"/>
+                            </group>
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="2" col="6" string="Coste Máquina">
                                 <field name="machine_hours"/>

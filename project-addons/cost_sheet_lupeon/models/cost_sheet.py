@@ -93,7 +93,7 @@ class CostSheet(models.Model):
     disc2 = fields.Float('Descuento adicional (%)')
     increment = fields.Float('Incremento no estándar (%)')
     inspection_type = fields.Selection(
-        [('visual', 'Visual'), ('tech', 'Technical')],
+        [('visual', 'Visual'), ('tech', 'TechniTécnicacal')],
         string="Tipo de inspeción", default="visual")
     price_unit = fields.Float('PVP unidad', compute='_get_cost_prices')
     price_total = fields.Float('PVP TOTAL', compute='_get_cost_prices')
@@ -201,6 +201,8 @@ class CostSheet(models.Model):
 
     # DMLS DATOS PIEZA
     units_dmls = fields.Integer('Uds. Cliente')
+    heat_treatment_cost = fields.Float('Tratamiento térmico',
+        compute='_get_heat_treatment_cost') 
     
     cc_soport_dmls = fields.Float('cc soporte')
 
@@ -239,17 +241,42 @@ class CostSheet(models.Model):
         for sh in self:
             sh.purchase_total = sum([x.pvp_total for x in sh.purchase_line_ids])
 
+    @api.multi
+    def update_workforce_cost(self):
+        for sh in self:
+            if sh.workforce_line_ids:
+                wfl = sh.workforce_line_ids.filtered(lambda x: x.name == 'Horas Posprocesado')
+                if wfl:
+                    wfl.write({'hours': sh.oppi_total})
+    
+    def _get_heat_treatment_cost(self):
+        for sh in self:
+            if sh.material_cost_ids and  self.tray_units:
+                mat = sh.material_cost_ids[0].material_id
+                ciclo = self.cus_units / self.tray_units
+                sh.heat_treatment_cost = ciclo * mat.term_cost
 
     @api.model
     def create(self, vals):
        res = super().create(vals)
        res.group_id.update_sale_line_price()
+       res.update_workforce_cost()
        return res
     
     def write(self, vals):
        res = super().write(vals)
        self.mapped('group_id').update_sale_line_price()
+       self.update_workforce_cost()
        return res
+
+    @api.onchange('price_unit', 'cus_units') 
+    def change_inspection_type(self):
+        if self.price_unit > 3000:
+            self.inspection_type = 'tech'
+        elif self.cus_units > 10:
+             self.inspection_type = 'tech'
+        elif self.cus_units > 0:
+             self.inspection_type = 'visual'
 
     @api.onchange('sheet_type', 'material_cost_ids.material_id', 'machine_hours', 'printer_id')
     def onchange_sheet_type(self):
@@ -593,6 +620,17 @@ class CostSheet(models.Model):
             }
             task = self.env['project.task'].create(vals)
             sheet.write({'task_id': task.id})
+
+            for opil in sheet.oppi_line_ids:
+                if opil.task_id:
+                    continue
+                    vals = {
+                    'name': "[" + project.name + '] ' + 'OPPÌ - ' + sheet.sale_line_id.name,
+                    'project_id': project.id,
+                    'oppi_line_id': opil.id
+                }
+                task = self.env['project.task'].create(vals)
+                opil.write({'task_id': opil.id})
         return
 
     def create_productions(self):
@@ -790,7 +828,7 @@ class OutsorcingCostLine(models.Model):
 
     name = fields.Char('Tarea')
     cost = fields.Float('Coste')
-    margin = fields.Float('Margen', default=20.0)
+    margin = fields.Float('Margen (%)', default=20.0)
     pvp = fields.Float('PVP ud', compute="_get_pvp")
 
     @api.depends('cost', 'margin')
@@ -836,7 +874,7 @@ class PurchaseCostLine(models.Model):
         domain=[('supplier', '=', True)])
     cost_ud = fields.Float('Coste Ud.')
     ports = fields.Float('Portes')
-    margin = fields.Float('Margin', default=30.0)
+    margin = fields.Float('Margin (%)', default=30.0)
     pvp_ud = fields.Float('PVP Ud', compute="_get_pvp")
     pvp_total = fields.Float('PVP TOTAL', compute="_get_pvp")
 
@@ -862,7 +900,7 @@ class OppiCostLine(models.Model):
 
     name = fields.Char('Nombre')
     type = fields.Many2one('oppi.type', 'Tipo')
-    time = fields.Float('Tiempo', default=20.0)
+    time = fields.Float('Tiempo')
     time_real = fields.Float('Tiempo real', readonly=True)
     employee_id = fields.Many2one('hr.employee', 'Empleado')
     task_id = fields.Many2one('project.task', 'Task', readonly=True)

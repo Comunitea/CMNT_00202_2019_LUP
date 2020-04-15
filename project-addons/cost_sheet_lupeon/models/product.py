@@ -48,5 +48,6 @@ class ProductProduct(models.Model):
 
     # DMLS
     init_cost = fields.Float('Coste Inicial')
+    term_cost = fields.Float('Coste ciclo tratamiento térmico')
     # dens_cc = fields.Float('Densidad impreso gr/cc')
     # euro_kg = fields.Float('€/kg')

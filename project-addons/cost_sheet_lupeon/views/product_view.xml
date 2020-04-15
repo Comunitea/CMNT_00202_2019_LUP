@@ -40,6 +40,7 @@
                         <field name="dens_cc"/>
                         <field name="euro_kg"/>
                         <field name="init_cost"/>
+                        <field name="term_cost"/>
                     </group>
                 </page>
             </notebook>
