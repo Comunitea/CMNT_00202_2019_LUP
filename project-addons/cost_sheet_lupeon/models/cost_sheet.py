@@ -787,7 +787,7 @@ class MeetCostLine(models.Model):
     name = fields.Char('Nombre')
     num_people = fields.Float('Nº personas')
     hours = fields.Float('Tiempo')
-    kms = fields.Float('Kms', default=20.0)
+    kms = fields.Float('Kms', default=0.0)
     pvp = fields.Float('PVP ud', compute="_get_pvp")
 
     @api.depends('num_people', 'hours', 'kms')
