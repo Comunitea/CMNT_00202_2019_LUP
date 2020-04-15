@@ -4,6 +4,7 @@ from . import sale_order
 from . import res_partner
 from . import applicable_legislation
 from . import part_features
+from . import oppi_type
 from . import printer_machine
 from . import tinted
 from . import product

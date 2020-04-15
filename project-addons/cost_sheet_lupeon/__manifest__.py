@@ -12,6 +12,7 @@
         'stock_picking_report_valued',
         'project',
         'mrp',
+        'hr'
     ],
     'contributors': [
         "Comunitea ",
@@ -24,6 +25,7 @@
         'views/cost_sheet_view.xml',
         'views/applicable_legislation_view.xml',
         'views/part_feature_view.xml',
+        'views/oppi_type_view.xml',
         'views/partner_view.xml',
         'views/printer_machine.xml',
         'views/product_view.xml',

@@ -13,3 +13,4 @@ access_oppi_cost_line,acess_oppi_cost_line,model_oppi_cost_line,base.group_user,
 access_purchase_cost_line,acess_purchase_cost_line,model_purchase_cost_line,base.group_user,1,1,1,1
 access_part_feature,acess_part_feature,model_part_feature,base.group_user,1,1,1,1
 access_tinted,acess_tinted,model_tinted,base.group_user,1,1,1,1
+access_oppi_type,acess_oppi_type,model_oppi_type,base.group_user,1,1,1,1

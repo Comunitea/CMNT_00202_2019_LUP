@@ -78,26 +78,29 @@
 
                         <page string="FDM" attrs="{'invisible': [('sheet_type', '!=', 'fdm')]}">
                
-                                <group cospan="4" col="8" string="Datos pieza">
-                                    <field name="cus_units"/>
-                                    <field name="cc_ud"/>
-                                    <field name="euros_cc"/>
-                                </group>
-                                <group string="Carcterísticas pieza">
-                                    <field name="feature_ids" nolabel="1" widget="many2many_checkboxes"/>
-                                </group>
-                                <group cospan="2" col="8" string="Parámetros impresión">
-                                    <!-- <field name="printer_id" domain="[('type', '=', 'fdm')]"/> -->
-                                    <field name="printer_id"/>
-                                    <field name="perfil"/>
-                                    <field name="tray_units"/>
-                                    <field name="tray_hours"/>
-                                    <field name="loops"/>
-                                    <field name="infill"/>
-                                    <field name="layer_height"/>
-                                    <field name="euro_machine"/>
-                                </group>
-                 
+                            <group cospan="4" col="8" string="Datos pieza">
+                                <field name="cus_units"/>
+                                <field name="cc_ud"/>
+                                <field name="euros_cc"/>
+                            </group>
+                            <div style="border-bottom: 1px solid black;"></div>
+                            <group string="Carcterísticas pieza">
+                                <field name="feature_ids" nolabel="1" widget="many2many_checkboxes"/>
+                            </group>
+                            <div style="border-bottom: 1px solid black;"></div>
+                            <group cospan="2" col="8" string="Parámetros impresión">
+                                <!-- <field name="printer_id" domain="[('type', '=', 'fdm')]"/> -->
+                                <field name="printer_id"/>
+                                <field name="perfil"/>
+                                <field name="tray_units"/>
+                                <field name="tray_hours"/>
+                                <field name="loops"/>
+                                <field name="infill"/>
+                                <field name="layer_height"/>
+                                <field name="euro_machine"/>
+                            </group>
+                            <div style="border-bottom: 1px solid black;"></div>
+
                              <group colspan="4" string="Material Cost">
                                  <field name="material_cost_ids" nolabel="1"/>
                             </group>
@@ -111,6 +114,7 @@
                                 <field name="euro_machine_ud"/>
                                 <field name="euro_machine_total"/>
                             </group>
+                            <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="4" string="Coste mano de obra">
                                 <field name="workforce_cost_ids" nolabel="1">
                                     <tree editable="bottom">
@@ -126,6 +130,7 @@
                                     <field name="workforce_total_euro_ud" widget='monetary'/>
                                     <field name="workforce_total" widget='monetary'/>
                             </group>
+                            <div style="border-bottom: 1px solid black;"></div>
                              <group colspan="4" string="Coste externalizacion por pieza">
                                 <field name="outsorcing_cost_ids" nolabel="1">
                                     <tree editable="bottom">
@@ -139,6 +144,13 @@
                             <group class="oe_subtotal_footer oe_right" colspan="2" name="design_total">
                                     <field name="outsorcing_total_ud" widget='monetary'/>
                                     <field name="outsorcing_total" widget='monetary'/>
+                            </group>
+                            <div style="border-bottom: 1px solid black;"></div>
+                            <group colspan="4" string="Oppi">
+                                 <field name="oppi_line_ids" nolabel="1"/>
+                            </group>
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="material_total">
+                                    <field name="total_oppi" widget='time'/>
                             </group>
                             
                         </page>
@@ -155,6 +167,7 @@
                                 <field name="cm2_sls"/>
                                 <field name="e_cc_sls"/>
                             </group>
+                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="2" col="8" string="Parámetros impresión">
                                 <field name="printer_id"/>
                                 <field name="tray_units"/>
@@ -162,12 +175,14 @@
                                 <field name="tray_hours_sls"/>
                                 <field name="euro_machine"/>
                             </group>
+                             <div style="border-bottom: 1px solid black;"></div>
                              <group colspan="2" col="8" string="Configuración oferta">
                                 <field name="offer_type"/>
                                 <field name="solid_per_sls"/>
                                 <field name="bucket_height_sls"/>
                                 <field name="simulation_time_sls"/>
                             </group>
+                             <div style="border-bottom: 1px solid black;"></div>
                              <group colspan="4" string="Material Cost">
                                  <field name="material_cost_ids" nolabel="1"/>
                             </group>
@@ -175,11 +190,13 @@
                                     <field name="total_euro_ud" widget='monetary'/>
                                     <field name="total_material_cost" widget='monetary'/>
                             </group>
+                             <div style="border-bottom: 1px solid black;"></div>
                              <group colspan="2" col="6" string="Coste Máquina">
                                 <field name="machine_hours"/>
                                 <field name="euro_machine_ud"/>
                                 <field name="euro_machine_total"/>
                             </group>
+                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="4" string="Coste mano de obra">
                                 <field name="workforce_cost_ids" nolabel="1">
                                     <tree editable="bottom">
@@ -195,6 +212,7 @@
                                     <field name="workforce_total_euro_ud" widget='monetary'/>
                                     <field name="workforce_total" widget='monetary'/>
                             </group>
+                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="4" string="Coste externalizacion por pieza">
                                 <field name="outsorcing_cost_ids" nolabel="1">
                                     <tree editable="bottom">
@@ -208,6 +226,13 @@
                             <group class="oe_subtotal_footer oe_right" colspan="2" name="design_total">
                                     <field name="outsorcing_total_ud" widget='monetary'/>
                                     <field name="outsorcing_total" widget='monetary'/>
+                            </group>
+                            <div style="border-bottom: 1px solid black;"></div>
+                            <group colspan="4" string="Oppi">
+                                 <field name="oppi_line_ids" nolabel="1"/>
+                            </group>
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="material_total">
+                                    <field name="total_oppi" widget='time'/>
                             </group>
                         </page>
                     
@@ -219,6 +244,7 @@
                                 <field name="cc_ud"/>
                                 <field name="euros_cc"/>
                             </group>
+                            <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="2" col="8" string="Parámetros impresión">
                                 <field name="printer_id"/>
                                 <field name="tray_units"/>
@@ -226,6 +252,7 @@
                                 <field name="tray_hours"/>
                                 <field name="euro_machine"/>
                             </group>
+                            <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="4" string="Material Cost">
                                  <field name="material_cost_ids" nolabel="1"/>
                             </group>
@@ -233,11 +260,13 @@
                                     <field name="total_euro_ud" widget='monetary'/>
                                     <field name="total_material_cost" widget='monetary'/>
                             </group>
+                            <div style="border-bottom: 1px solid black;"></div>
                              <group colspan="2" col="6" string="Coste Máquina">
                                 <field name="machine_hours"/>
                                 <field name="euro_machine_ud"/>
                                 <field name="euro_machine_total"/>
                             </group>
+                            <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="4" string="Coste mano de obra">
                                 <field name="workforce_cost_ids" nolabel="1">
                                     <tree editable="bottom">
@@ -253,6 +282,7 @@
                                     <field name="workforce_total_euro_ud" widget='monetary'/>
                                     <field name="workforce_total" widget='monetary'/>
                             </group>
+                            <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="4" string="Coste externalizacion por pieza">
                                 <field name="outsorcing_cost_ids" nolabel="1">
                                     <tree editable="bottom">
@@ -266,6 +296,13 @@
                             <group class="oe_subtotal_footer oe_right" colspan="2" name="design_total">
                                     <field name="outsorcing_total_ud" widget='monetary'/>
                                     <field name="outsorcing_total" widget='monetary'/>
+                            </group>
+                            <div style="border-bottom: 1px solid black;"></div>
+                            <group colspan="4" string="Oppi">
+                                 <field name="oppi_line_ids" nolabel="1"/>
+                            </group>
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="material_total">
+                                    <field name="total_oppi" widget='time'/>
                             </group>
                         </page>
 
@@ -276,12 +313,14 @@
                                 <field name="cc_ud"/>
                                 <field name="euros_cc"/>
                             </group>
+                            <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="2" col="8" string="Parámetros impresión">
                                 <field name="printer_id"/>
                                 <field name="tray_units"/>
                                 <field name="tray_hours"/>
                                 <field name="euro_machine"/>
                             </group>
+                            <div style="border-bottom: 1px solid black;"></div>
                              <group colspan="4" string="Material Cost">
                                  <field name="material_cost_ids" nolabel="1"/>
                             </group>
@@ -289,11 +328,13 @@
                                     <field name="total_euro_ud" widget='monetary'/>
                                     <field name="total_material_cost" widget='monetary'/>
                             </group>
+                            <div style="border-bottom: 1px solid black;"></div>
                              <group colspan="2" col="6" string="Coste Máquina">
                                 <field name="machine_hours"/>
                                 <field name="euro_machine_ud"/>
                                 <field name="euro_machine_total"/>
                             </group>
+                            <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="4" string="Coste mano de obra">
                                 <field name="workforce_cost_ids" nolabel="1">
                                     <tree editable="bottom">
@@ -309,6 +350,7 @@
                                     <field name="workforce_total_euro_ud" widget='monetary'/>
                                     <field name="workforce_total" widget='monetary'/>
                             </group>
+                            <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="4" string="Coste externalizacion por pieza">
                                 <field name="outsorcing_cost_ids" nolabel="1">
                                     <tree editable="bottom">
@@ -322,6 +364,13 @@
                             <group class="oe_subtotal_footer oe_right" colspan="2" name="design_total">
                                     <field name="outsorcing_total_ud" widget='monetary'/>
                                     <field name="outsorcing_total" widget='monetary'/>
+                            </group>
+                            <div style="border-bottom: 1px solid black;"></div>
+                            <group colspan="4" string="Oppi">
+                                 <field name="oppi_line_ids" nolabel="1"/>
+                            </group>
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="material_total">
+                                    <field name="total_oppi" widget='time'/>
                             </group>
                         </page>
 
@@ -333,12 +382,14 @@
                                 <field name="cc_soport_dmls"/>
                                 <field name="euros_cc"/>
                             </group>
+                            <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="2" col="8" string="Parámetros impresión">
                                 <field name="printer_id"/>
                                 <field name="tray_units"/>
                                 <field name="tray_hours"/>
                                 <field name="euro_machine"/>
                             </group>
+                            <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="4" string="Material Cost">
                                  <field name="material_cost_ids" nolabel="1"/>
                             </group>
@@ -346,11 +397,12 @@
                                     <field name="total_euro_ud" widget='monetary'/>
                                     <field name="total_material_cost" widget='monetary'/>
                             </group>
+                            <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="2" col="6" string="Coste Máquina">
                                 <field name="machine_hours"/>
                                 <field name="euro_machine_ud"/>
                                 <field name="euro_machine_total"/>
-                            </group>
+                            </group><div style="border-bottom: 1px solid black;"></div>
                             <group colspan="4" string="Coste mano de obra">
                                 <field name="workforce_cost_ids" nolabel="1">
                                     <tree editable="bottom">
@@ -366,6 +418,7 @@
                                     <field name="workforce_total_euro_ud" widget='monetary'/>
                                     <field name="workforce_total" widget='monetary'/>
                             </group>
+                            <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="4" string="Coste externalizacion por pieza">
                                 <field name="outsorcing_cost_ids" nolabel="1">
                                     <tree editable="bottom">
@@ -379,6 +432,13 @@
                             <group class="oe_subtotal_footer oe_right" colspan="2" name="design_total">
                                     <field name="outsorcing_total_ud" widget='monetary'/>
                                     <field name="outsorcing_total" widget='monetary'/>
+                            </group>
+                            <div style="border-bottom: 1px solid black;"></div>
+                            <group colspan="4" string="Oppi">
+                                 <field name="oppi_line_ids" nolabel="1"/>
+                            </group>
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="material_total">
+                                    <field name="total_oppi" widget='time'/>
                             </group>
                         </page>
 
@@ -600,6 +660,22 @@
 
                 <field name="euro_material"/>
                 <field name="total" attrs="{'column_invisible': [('parent.sheet_type', '=', 'fdm')]}"/>
+            </tree>
+        </field>
+    </record>
+
+        <!-- Vistas de campos One2many -->
+    <record id="oppi_line_view_tree" model="ir.ui.view">
+        <field name="name">oppi_line_view_tree</field>
+        <field name="model">oppi.cost.line</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+                <field name="type"/>
+                <field name="time"/>
+                <field name="employee_id"/>
+                <field name="task_id"/>
+                <field name="time_real"/>
             </tree>
         </field>
     </record>

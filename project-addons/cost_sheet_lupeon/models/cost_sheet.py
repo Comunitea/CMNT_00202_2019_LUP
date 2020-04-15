@@ -218,6 +218,16 @@ class CostSheet(models.Model):
         'purchase.cost.line', 'sheet_id', string='Coste reuniones')
     purchase_total = fields.Float('TOTAL', compute="_get_totals_purchase")
 
+    # OPPI
+    oppi_line_ids = fields.One2many(
+        'oppi.cost.line', 'sheet_id', string='Oppi')
+    total_oppi = fields.Float('Time Total', compute="_get_oppi_total")
+
+    @api.depends('oppi_line_ids')
+    def _get_oppi_total(self):
+        for sh in self:
+            sh.total_oppi = sum([x.time for x in sh.oppi_line_ids])
+
     @api.depends('meet_line_ids')
     def _get_totals_meet(self):
         for sh in self:
@@ -850,15 +860,12 @@ class OppiCostLine(models.Model):
 
     sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
 
-    name = fields.Char('Tarea')
-    # cost = fields.Float('Coste')
-    # margin = fields.Float('Margen', default=20.0)
-    # pvp = fields.Float('PVP ud', compute="_get_pvp")
-
-    # @api.depends('cost', 'margin')
-    # def _get_pvp(self):
-    #     for ocl in self:
-    #         ocl.pvp = ocl.cost * (1 + ocl.margin / 100.0)
+    name = fields.Char('Nombre')
+    type = fields.Many2one('oppi.type', 'Tipo')
+    time = fields.Float('Tiempo', default=20.0)
+    time_real = fields.Float('Tiempo real', readonly=True)
+    employee_id = fields.Many2one('hr.employee', 'Empleado')
+    task_id = fields.Many2one('project.task', 'Task', readonly=True)
 
 
 

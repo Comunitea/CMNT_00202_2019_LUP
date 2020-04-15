@@ -48,6 +48,28 @@
         <record id="tinted_other" model="tinted">
             <field name="name">Otros colores</field>
         </record>
+
+        <record id="oppi_1" model="oppi.type">
+            <field name="name">Tintado</field>
+        </record>
+        <record id="oppi_2" model="oppi.type">
+            <field name="name">Pulir/Tintar</field>
+        </record>
+        <record id="oppi_3" model="oppi.type">
+            <field name="name">Colocacion Insertos</field>
+        </record>
+        <record id="oppi_4" model="oppi.type">
+            <field name="name">Ensamblaje</field>
+        </record>
+        <record id="oppi_5" model="oppi.type">
+            <field name="name">Repasado taladros</field>
+        </record>
+        <record id="oppi_6" model="oppi.type">
+            <field name="name">Tratamiento superficial</field>
+        </record>
+             <record id="oppi_7" model="oppi.type">
+            <field name="name">Otros</field>
+        </record>
         
 
     </data>
