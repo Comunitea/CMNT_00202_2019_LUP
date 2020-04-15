@@ -27,13 +27,13 @@
     </record>
 
     <record id="action_oppi_types" model="ir.actions.act_window">
-        <field name="name">Part Features</field>
+        <field name="name">Tipos Oppi</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">oppi.type</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
     </record>
 
-    <menuitem id="menu_action_oppi_types" action="action_oppi_types"  name="Part Features" parent="menu_cost_cfg" sequence="30"/>
+    <menuitem id="menu_action_oppi_types" action="action_oppi_types"  name="Tipos Oppi" parent="menu_cost_cfg" sequence="30"/>
 
 </odoo>

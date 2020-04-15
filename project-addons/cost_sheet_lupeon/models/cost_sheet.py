@@ -399,7 +399,8 @@ class CostSheet(models.Model):
                 pvp = pu * sh.cus_units
             elif sh.sheet_type == 'sls':
                 cost = round(sh.total_euro_ud, 2) + round(sh.euro_machine_ud, 2) + round(sum_wf_costs, 2) + round(sh.outsorcing_total_ud, 2)
-                cost = cost + (sh.cost_init / sh.cus_units)
+                if sh.cus_units:
+                    cost = cost + (sh.cost_init / sh.cus_units)
                 pu = cost * (1 - dqc) * (1 + inc) * (1+ fa)
                 pvp = pu * sh.cus_units
             elif sh.sheet_type == 'poly':
