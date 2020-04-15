@@ -213,11 +213,21 @@ class CostSheet(models.Model):
     meet_hours_total = fields.Float('Horas totales', compute="_get_totals_meet")
     meet_total = fields.Float('TOTAL', compute="_get_totals_meet")
 
+    # COMPRAS
+    purchase_line_ids = fields.One2many(
+        'purchase.cost.line', 'sheet_id', string='Coste reuniones')
+    purchase_total = fields.Float('TOTAL', compute="_get_totals_purchase")
+
     @api.depends('meet_line_ids')
     def _get_totals_meet(self):
         for sh in self:
             sh.meet_hours_total = sum([x.hours for x in sh.meet_line_ids])
             sh.meet_total = sum([x.pvp for x in sh.meet_line_ids])
+
+    @api.depends('purchase_line_ids')
+    def _get_totals_purchase(self):
+        for sh in self:
+            sh.purchase_total = sum([x.pvp_total for x in sh.purchase_line_ids])
 
 
     @api.model
@@ -378,6 +388,8 @@ class CostSheet(models.Model):
                     pvp = sh.unplanned_cost
             elif sh.sheet_type == 'meets':
                     pvp = sh.meet_total
+            elif sh.sheet_type == 'purchase':
+                    pvp = sh.purchase_total
 
             
             sh.update({
@@ -807,16 +819,28 @@ class PurchaseCostLine(models.Model):
 
     sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
 
-    name = fields.Char('Tarea')
-    # cost = fields.Float('Coste')
-    # margin = fields.Float('Margen', default=20.0)
-    # pvp = fields.Float('PVP ud', compute="_get_pvp")
+    product_id = fields.Many2one('product.product', 'Producto')
+    name = fields.Char('Ref. / Descripción')
+    qty = fields.Float('Unidades')
+    partner_id = fields.Many2one('res.partner', 'Proveedor', 
+        domain=[('supplier', '=', True)])
+    cost_ud = fields.Float('Coste Ud.')
+    ports = fields.Float('Portes')
+    margin = fields.Float('Margin', default=30.0)
+    pvp_ud = fields.Float('PVP Ud', compute="_get_pvp")
+    pvp_total = fields.Float('PVP TOTAL', compute="_get_pvp")
 
-    # @api.depends('cost', 'margin')
-    # def _get_pvp(self):
-    #     for ocl in self:
-    #         ocl.pvp = ocl.cost * (1 + ocl.margin / 100.0)
-    #         ocl.pvp = ocl.cost * (1 + ocl.margin / 100.0)
+    @api.depends('qty', 'cost_ud', 'ports', 'margin')
+    def _get_pvp(self):
+        for ocl in self:
+            pvp_ud = 0.0
+            pvp = 0.0
+            if self.qty:
+                pvp_ud = self.cost_ud * (1 + (self.margin/100)) + \
+                    (self.ports / self.qty)
+                pvp = pvp_ud * self.qty
+            ocl.pvp_ud = pvp_ud
+            ocl.pvp_total = pvp
 
 
 

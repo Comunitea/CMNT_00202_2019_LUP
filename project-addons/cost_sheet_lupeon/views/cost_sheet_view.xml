@@ -407,6 +407,28 @@
                             </group>
                         </page>
 
+                        <page string="Compras" attrs="{'invisible': [('sheet_type', '!=', 'purchase')]}">
+                            <group string="Costes Compras">
+                                <field name="purchase_line_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="product_id"/>
+                                        <field name="name"/>
+                                        <field name="qty"/>
+                                        <field name="partner_id"/>
+                                        <field name="cost_ud"/>
+                                        <field name="ports"/>
+                                        <field name="margin"/>
+                                        <field name="pvp_ud"/>
+                                        <field name="pvp_total"/>
+                                    </tree>
+                                </field>
+                            </group>
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="meet_total">
+                                <field name="purchase_total" widget='monetary'/>
+                            </group>
+                        </page>
+
+
 
                     </notebook>
                    
