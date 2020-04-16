@@ -17,6 +17,7 @@
                 <field name="sheet_id"/>
                 <field name="sale_id"/>
                 <field name="sale_line_id"/>
+                <field name="oppi_line_id"/>
             </field>
             
         </field>
@@ -31,6 +32,7 @@
                 <field name="sheet_id"/>
                 <field name="sale_id"/>
                 <field name="sale_line_id"/>
+                <field name="oppi_line_id"/>
             </field>
             
         </field>
@@ -46,6 +48,7 @@
                 <field name="sheet_id"/>
                 <field name="sale_id"/>
                 <field name="sale_line_id"/>
+                <field name="oppi_line_id"/>
             </field>
             <filter name="stage" position="after">
                 <filter name="sheet" string="Cost Sheet" context="{'group_by': 'sheet_id'}"/>

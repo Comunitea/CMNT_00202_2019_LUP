@@ -36,8 +36,12 @@ class SaleOrder(models.Model):
         for order in self:
             order.production_count = len(
                 order.get_sheet_lines().mapped('production_id'))
-            order.count_task = len(
-                order.get_sheet_lines().mapped('task_id'))
+            order.count_task = \
+                len(
+                order.get_sheet_lines().mapped('task_id')) + \
+                len(
+                order.get_sheet_lines().mapped('oppi_line_ids.task_id')
+                )
     
     @api.multi
     def view_product_cost_sheets(self):

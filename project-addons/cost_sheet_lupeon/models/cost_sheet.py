@@ -587,14 +587,19 @@ class CostSheet(models.Model):
     @api.multi
     def create_task_or_production(self):
         """
-        Create a task if sheet type is design,
+        Create a task if sheet type is design, or if exist oppi line
         or a production for each sheet.
         """
         design_sheets = self.filtered(lambda s: s.sheet_type == 'design')
         production_sheets = self - design_sheets
 
+        project = False
         if design_sheets:
-            design_sheets.create_tasks()
+            project = design_sheets.create_tasks()
+            if project:
+                oppi_lines = self.mapped('oppi_line_ids').filtered(
+                    lambda x: not x.task_id)
+                oppi_lines.create_oppi_tasks(project)
 
         if production_sheets:
             production_sheets.create_productions()
@@ -603,7 +608,7 @@ class CostSheet(models.Model):
     def create_tasks(self):
         order = self[0].sale_id
         vals = {
-            'name': 'OD - ' + order.name,
+            'name': order.name,
             'partner_id': order.partner_id.id,
             'allow_timesheets': True,  # To create analytic account id
             'company_id': order.company_id.id,
@@ -617,22 +622,12 @@ class CostSheet(models.Model):
             vals = {
                 'name': "[" + project.name + '] ' + 'OD - ' + sheet.sale_line_id.name,
                 'project_id': project.id,
-                'sheet_id': sheet.id
+                'sheet_id': sheet.id,
+                'planned_hours': sheet.hours_total
             }
             task = self.env['project.task'].create(vals)
             sheet.write({'task_id': task.id})
-
-            # for opil in sheet.oppi_line_ids:
-            #     if opil.task_id:
-            #         continue
-            #         vals = {
-            #         'name': "[" + project.name + '] ' + 'OPPÌ - ' + sheet.sale_line_id.name,
-            #         'project_id': project.id,
-            #         'oppi_line_id': opil.id
-            #     }
-            #     task = self.env['project.task'].create(vals)
-            #     opil.write({'task_id': opil.id})
-        return
+        return project
 
     def create_productions(self):
         for sheet in self:
@@ -902,9 +897,24 @@ class OppiCostLine(models.Model):
     name = fields.Char('Nombre')
     type = fields.Many2one('oppi.type', 'Tipo')
     time = fields.Float('Tiempo')
-    time_real = fields.Float('Tiempo real', readonly=True)
+    time_real = fields.Float('Tiempo real', related='task_id.effective_hours')
     employee_id = fields.Many2one('hr.employee', 'Empleado')
     task_id = fields.Many2one('project.task', 'Task', readonly=True)
+
+    def create_oppi_tasks(self, project):
+        for line in self:
+            if line.task_id:
+                continue
+            vals = {
+                'name': "[" + project.name + '] ' + 'OPPI - ' + line.name,
+                'project_id': project.id,
+                'sheet_id': line.sheet_id.id,
+                'oppi_line_id': line.id,
+                'planned_hours': line.time,
+                'user_id': line.employee_id.user_id.id
+            }
+            task = self.env['project.task'].create(vals)
+            line.write({'task_id': task.id})
 
 
 
