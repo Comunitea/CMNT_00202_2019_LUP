@@ -52,7 +52,7 @@ class SaleOrder(models.Model):
         if len(sheets) > 1:
             action['domain'] = [('id', 'in', sheets.ids)]
         elif len(sheets) == 1:
-            form_view_name = 'product_cost_sheet_view_form'
+            form_view_name = 'cost_sheet_lupeon.product_cost_sheet_view_form'
             action['views'] = [
                 (self.env.ref(form_view_name).id, 'form')]
             action['res_id'] = sheets.ids[0]
@@ -69,7 +69,7 @@ class SaleOrder(models.Model):
         if len(sheets) > 1:
             action['domain'] = [('id', 'in', sheets.ids)]
         elif len(sheets) == 1:
-            form_view_name = 'cost_sheet_view_form'
+            form_view_name = 'cost_sheet_lupeon.cost_sheet_view_form'
             action['views'] = [
                 (self.env.ref(form_view_name).id, 'form')]
             action['res_id'] = sheets.ids[0]
