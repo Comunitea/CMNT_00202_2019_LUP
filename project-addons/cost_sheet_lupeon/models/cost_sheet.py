@@ -724,12 +724,14 @@ class MaterialCostLine(models.Model):
         f10 = sh.bucket_height_sls
         d10 = sh.solid_per_sls / 100
         if sh.offer_type == 'standard':
-            res = (c7*(d4/d4))*(d4*dens_cc+(((f4+d7)*(g4+d7)*(h4+d7)/1000)-d4)\
-                * dens_bulk) 
+            if d4:
+                res = (c7*(d4/d4))*(d4*dens_cc+(((f4+d7)*(g4+d7)*(h4+d7)/1000)-d4)\
+                    * dens_bulk) 
         elif sh.offer_type == 'xyz':
             res = c7*((f4*g4*h4*d10/1000)*dens_cc+(((f4+d7)*(g4+d7)*(h4+d7)/1000) - (f4*g4*h4*d10/1000))*dens_bulk)
         elif sh.offer_type == 'cubeta':
-            res = (d4/d4)*((c7*d4*dens_cc)+((35.5*35.5*(1+f10)-(c7*d4))*dens_bulk))
+            if d4:
+                res = (d4/d4)*((c7*d4*dens_cc)+((35.5*35.5*(1+f10)-(c7*d4))*dens_bulk))
         return res
     
 
