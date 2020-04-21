@@ -333,7 +333,7 @@ class CostSheet(models.Model):
             })
         
         # Poner impresoras por defecto
-        if self.sheet_type and self.sheet_type != 'unplanned':
+        if self.sheet_type and self.sheet_type != 'design' and self.sheet_type != 'unplanned':
             srch_field = 'default_' + self.sheet_type
             domain = [(srch_field, '=', True)]
             printer = self.env['printer.machine'].search(domain)
