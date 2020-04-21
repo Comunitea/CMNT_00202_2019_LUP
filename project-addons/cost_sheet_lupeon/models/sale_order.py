@@ -144,7 +144,7 @@ class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
     group_sheet_id = fields.Many2one(
-        'group.cost.sheet', 'Hojas de coste', readonly=True)
+        'group.cost.sheet', 'Grupo de hojas coste', readonly=True)
     ref = fields.Char('Referencia')
     
     @api.model

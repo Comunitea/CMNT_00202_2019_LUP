@@ -576,7 +576,8 @@ class CostSheet(models.Model):
             d10 = sh.solid_per_sls / 100
             g10 = sh.simulation_time_sls
             if sh.offer_type == 'standard':
-                res = (c7*(d4/d4)*(d4/vel_cc+(((f4+d7)*(g4+d7)/(355*355))*((h4+d7))/10)/vel_z))
+                if d4:
+                    res = (c7*(d4/d4)*(d4/vel_cc+(((f4+d7)*(g4+d7)/(355*355))*((h4+d7))/10)/vel_z))
             elif sh.offer_type == 'xyz':
                 res = (c7*((f4*g4*h4*d10/1000)/vel_cc+(((f4+d7)*(g4+d7))/(355*355))*((h4+d7)/10)/vel_z))
             elif sh.offer_type == 'cubeta':
