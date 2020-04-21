@@ -601,13 +601,15 @@
 
                     <group colespan="4" string="Hojas de coste">
                         <field name="sheet_ids" nolabel="1">
-                            <field name="name"/>
-                            <field name="sheet_type"/>
-                            <field name="sale_line_id"/>
-                            <field name="sale_id"/>
-                            <field name="task_id"/>
-                            <field name="production_id"/>
-                            <field name="price_total"/>
+                            <tree create="1">
+                                <field name="name"/>
+                                <field name="sheet_type"/>
+                                <field name="sale_line_id"/>
+                                <field name="sale_id"/>
+                                <field name="task_id"/>
+                                <field name="production_id"/>
+                                <field name="price_total"/>
+                            </tree>
                         </field>
                     </group>
                     <group class="oe_subtotal_footer oe_right" colspan="2" name="pvp_total">
