@@ -629,11 +629,65 @@ class CostSheet(models.Model):
             task = self.env['project.task'].create(vals)
             sheet.write({'task_id': task.id})
         return project
+    
+    def create_product_on_fly(self):
+        self.ensure_one()
+        vals = {
+            'name': self.name,
+            'uom_id': 1,  # TODO get_unit
+            'default_code': 'OF-' + self.name,
+            'type': 'product',
+            'ldt_price': self.price_total,
+            'route_ids': [(6, 0, self.env.ref('mrp.route_warehouse0_manufacture').ids)]
+        }
+        product = self.env['product.product'].create(vals)
+        return product
+    
+    def create_components_on_fly(self):
+        self.ensure_one()
+        res = []
+        for line in self.material_cost_ids.filtered('material_id'):
+            vals = {
+                'product_id': line.material_id.id,
+                'product_qty': 1.0,  # TODO get_qty,
+                'product_uom_id': line.material_id.uom_id.id,
+                'operation_id': False,
+            }
+            res.append((0,0, vals))
+        
+        for line in self.purchase_line_ids.filtered('product_id'):
+            vals = {
+                'product_id': line.product_id.id,
+                'product_qty': line.qty,
+                'product_uom_id': line.product_id.uom_id.id,
+                'operation_id': False,
+            }
+            res.append((0,0, vals))
+        return res
+    
+    def create_boom_on_fly(self, product):
+        self.ensure_one()
+        components = self.create_components_on_fly()
+        vals = {
+            'product_id': product.id,
+            'product_tmpl_id': product.product_tmpl_id.id,
+            'product_qty': 1.0,  # TODO get_qty,
+            'product_uom_id': product.uom_id.id,
+            'routing_id': False,  # TODO use_routes,
+            'type': 'normal',
+            'bom_line_ids': components,
+        }
+        bom = self.env['mrp.bom'].create(vals)
+
+        return bom
 
     def create_productions(self):
-        for sheet in self:
+        mrp_types = ['design', 'fdm','sls', 'poly', 'sla', 'dmls']
+        for sheet in self.filtered(lambda sh: sh.sheet_type in mrp_types):
             line = sheet.sale_line_id
-            bom = self.env['mrp.bom']._bom_find(product=line.product_id)
+            # bom = self.env['mrp.bom']._bom_find(product=line.product_id)
+            product = sheet.create_product_on_fly()
+            bom = sheet.create_boom_on_fly(product)
             vals = {
                 'sheet_id': sheet.id,
                 'product_id':line.product_id.id,
@@ -882,10 +936,10 @@ class PurchaseCostLine(models.Model):
         for ocl in self:
             pvp_ud = 0.0
             pvp = 0.0
-            if self.qty:
-                pvp_ud = self.cost_ud * (1 + (self.margin/100)) + \
-                    (self.ports / self.qty)
-                pvp = pvp_ud * self.qty
+            if ocl.qty:
+                pvp_ud = ocl.cost_ud * (1 + (ocl.margin/100)) + \
+                    (ocl.ports / ocl.qty)
+                pvp = pvp_ud * ocl.qty
             ocl.pvp_ud = pvp_ud
             ocl.pvp_total = pvp
 
