@@ -26,6 +26,7 @@
                             <field name="sale_line_id"/>
                             <field name="sale_id"/>
                             <field name="group_id"/>
+                            <field name="product_id"/>
                         </group>
                     </group>
                     <group string="Precios">
@@ -693,6 +694,11 @@
                         <field name="help_hours"/>
                         <field name="km_cost"/>
                     </group>
+
+                     <group>
+                        <field name="bom_id"/>
+                    </group>
+
 
                     <group colespan="4" string="Hojas de coste">
                         <field name="sheet_ids" nolabel="1">
