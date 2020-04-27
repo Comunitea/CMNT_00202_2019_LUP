@@ -38,6 +38,7 @@ class GroupCostSheet(models.Model):
     sheet_ids = fields.One2many(
         'cost.sheet', 'group_id', string='Cost Sheets')
     line_pvp = fields.Float('PVP Línea', compute='_get_line_pvp')
+    bom_id = fields.Many2one('mrp.bom', 'LdM', readonly=True)
     
     def name_get(self):
         res = []
@@ -57,6 +58,56 @@ class GroupCostSheet(models.Model):
         for group in self:
             pvp = sum(group.sheet_ids.mapped('price_total'))
             group.line_pvp = sum([x.price_total for x in group.sheet_ids])
+    
+    def create_components_on_fly(self):
+        """
+        Obtengo los componentes de la lista de materiales que irá 
+        asociada al grupo de costes (por lo tanto a la líonea de venta)
+        """
+        self.ensure_one()
+        res = []
+        mrp_types = ['fdm','sls', 'poly', 'sla', 'dmls']
+        for sh in self.sheet_ids.filtered(lambda sh: sh.sheet_type in mrp_types):
+            if not sh.product_id:
+                print('error')
+                continue
+            vals = {
+                'product_id': sh.product_id.id,
+                'product_qty': 1.0,  # TODO get_qty,
+                'product_uom_id': sh.product_id.uom_id.id,
+                'operation_id': False,
+            }
+            res.append((0,0, vals))
+        return res
+    
+    def create_bom_on_fly(self):
+        """
+        Creo la LdM asociada y la asocio al grupo de costes para poder luego
+        pasarla en el values del método _prepare_procurement_values de la
+        línea de venta, para que se me cree la producción bajo pedido con
+        esta lísta de materiales.
+        """
+        for group in self:
+            line = group.sale_line_id
+            components = group.create_components_on_fly()
+            vals = {
+                'product_id': line.product_id.id,
+                'product_tmpl_id': line.product_id.product_tmpl_id.id,
+                'product_qty': line.product_uom_qty,
+                'product_uom_id': line.product_uom.id,
+                'routing_id': False,  # TODO use_routes,
+                'type': 'normal',
+                'bom_line_ids': components,
+            }
+            bom = self.env['mrp.bom'].create(vals)
+            group.bom_id = bom.id
+
+        return bom
+    
+    def unlink(self):
+        self.mapped('bom_id').unlink()
+        res = super().unlink()
+        return res
 
 
 class CostSheet(models.Model):
@@ -65,6 +116,8 @@ class CostSheet(models.Model):
 
     # COMUN
     name = fields.Char('Referencia')
+    product_id = fields.Many2one('product.product', 'Producto asociado',
+                                 readonly=True)
     group_id = fields.Many2one('group.cost.sheet', 'Hojas de coste',
                             ondelete="cascade", 
                                readonly=True)
@@ -641,6 +694,7 @@ class CostSheet(models.Model):
             'route_ids': [(6, 0, self.env.ref('mrp.route_warehouse0_manufacture').ids)]
         }
         product = self.env['product.product'].create(vals)
+        self.product_id = product.id
         return product
     
     def create_components_on_fly(self):
@@ -665,7 +719,7 @@ class CostSheet(models.Model):
             res.append((0,0, vals))
         return res
     
-    def create_boom_on_fly(self, product):
+    def create_bom_on_fly(self, product):
         self.ensure_one()
         components = self.create_components_on_fly()
         vals = {
@@ -682,16 +736,15 @@ class CostSheet(models.Model):
         return bom
 
     def create_productions(self):
-        mrp_types = ['design', 'fdm','sls', 'poly', 'sla', 'dmls']
+        mrp_types = ['fdm','sls', 'poly', 'sla', 'dmls']
         for sheet in self.filtered(lambda sh: sh.sheet_type in mrp_types):
             line = sheet.sale_line_id
-            # bom = self.env['mrp.bom']._bom_find(product=line.product_id)
             product = sheet.create_product_on_fly()
-            bom = sheet.create_boom_on_fly(product)
+            bom = sheet.create_bom_on_fly(product)
             vals = {
                 'sheet_id': sheet.id,
-                'product_id':line.product_id.id,
-                'product_uom_id':line.product_id.uom_id.id,
+                'product_id':sheet.product_id.id,
+                'product_uom_id':sheet.product_id.uom_id.id,
                 'product_qty': 1,
                 'bom_id': bom.id
             }

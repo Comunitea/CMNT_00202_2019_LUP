@@ -34,8 +34,11 @@ class SaleOrder(models.Model):
     @api.multi
     def _count_production_and_task(self):
         for order in self:
-            order.production_count = len(
-                order.get_sheet_lines().mapped('production_id'))
+            boms = order.get_group_sheets().mapped('bom_id')
+            domain = [('bom_id', 'in', boms.ids)]
+            productions = order.get_sheet_lines().mapped('production_id')
+            productions |= self.env['mrp.production'].search(domain)
+            order.production_count = len(productions)
             order.count_task = \
                 len(
                 order.get_sheet_lines().mapped('task_id')) + \
@@ -103,6 +106,10 @@ class SaleOrder(models.Model):
         productions = self.get_sheet_lines().filtered(
             lambda s: s.sheet_type != 'design'
         ).mapped('production_id')
+
+        boms = self.get_group_sheets().mapped('bom_id')
+        domain = [('bom_id', 'in', boms.ids)]
+        productions |= self.env['mrp.production'].search(domain)
         if productions:
             action = self.env.ref(
                 'mrp.mrp_production_action').read()[0]
@@ -123,8 +130,13 @@ class SaleOrder(models.Model):
             if (order.partner_id.require_num_order):
                 order.client_order_ref = 'PENDIENTE'
 
+            # Creo las tareas y producciones asociadas a cada hooja de costes
             sheet_lines = order.get_sheet_lines()
             sheet_lines.create_task_or_production()
+
+            # Creo la lista de materiales asociada al grupo de costes
+            group_costs = order.get_group_sheets()
+            group_costs.create_bom_on_fly()
         
         res = super().action_confirm()
         return res
@@ -167,4 +179,23 @@ class SaleOrderLine(models.Model):
             }
             line.group_sheet_id = self.env['group.cost.sheet'].create(vals)
         return
+
+
+
+class StockMove(models.Model):
+    _inherit = 'stock.move'
+
+
+    def _prepare_procurement_values(self):
+        """
+        Propagar LdM del grupo de costes a la producción.
+        En Odoo el método _prepare_mo_vals de stock_rule (módulo mrp)
+        Intenta obtener la LdM del método _get_matching_bom, el cual recibirá
+        estos values
+        """
+        values = super()._prepare_procurement_values()
+        line = self.sale_line_id
+        if line and line.group_sheet_id and line.group_sheet_id.bom_id:
+            values.update(bom_id=line.group_sheet_id.bom_id)
+        return values
     
