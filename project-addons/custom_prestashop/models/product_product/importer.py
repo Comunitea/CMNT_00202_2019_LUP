@@ -12,9 +12,10 @@ class ProductCombinationMapper(Component):
         main_template = self.get_main_template_binding(record)
         result = super().from_main_template(record)
         if (
-            main_template["type"]["value"]
-            and main_template["type"]["value"] == "virtual"
+            main_template.get("type")
+            and main_template["type"] == "virtual"
         ):
             result["type"] = "service"
-        result["type"] = "product"
+        else:
+            result["type"] = "product"
         return result
