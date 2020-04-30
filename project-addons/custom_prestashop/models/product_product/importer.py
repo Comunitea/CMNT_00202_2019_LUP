@@ -12,10 +12,17 @@ class ProductCombinationMapper(Component):
         main_template = self.get_main_template_binding(record)
         result = super().from_main_template(record)
         if (
-            main_template.get("type")
-            and main_template["type"] == "virtual"
+            main_template
+            and main_template.odoo_id["type"] == "virtual"
         ):
             result["type"] = "service"
         else:
             result["type"] = "product"
         return result
+
+    @mapping
+    def weight(self, record):
+        combination_weight = float(record.get('weight', '0.0'))
+        main_weight = self.binder_for('prestashop.product.template').to_internal(record['id_product']).weight
+        weight = main_weight + combination_weight
+        return {'weight': weight}
