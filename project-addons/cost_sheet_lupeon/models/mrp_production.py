@@ -28,3 +28,6 @@ class MrpProduction(models.Model):
     sale_line_id = fields.Many2one('sale.order.line', 'Sale Order Line',
                                    related='sheet_id.sale_line_id', readonly=True, 
                                    store=True)
+    
+    line_ref = ref = fields.Char('Referencia')
+    line_name = ref = fields.Char('Descripción')

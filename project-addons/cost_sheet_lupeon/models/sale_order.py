@@ -118,6 +118,8 @@ class SaleOrder(models.Model):
             
         else:
             action = {'type': 'ir.actions.act_window_close'}
+        
+        action['context'] = "{}"
         return action
 
     @api.multi
@@ -149,6 +151,9 @@ class SaleOrder(models.Model):
             prods = order.get_sheet_lines().mapped('production_id')
             prods.action_cancel()
             prods.unlink()
+
+            # boms = self.get_group_sheets().mapped('bom_id')
+            # boms.unlink()
         return res
 
 class SaleOrderLine(models.Model):
@@ -179,23 +184,3 @@ class SaleOrderLine(models.Model):
             }
             line.group_sheet_id = self.env['group.cost.sheet'].create(vals)
         return
-
-
-
-class StockMove(models.Model):
-    _inherit = 'stock.move'
-
-
-    def _prepare_procurement_values(self):
-        """
-        Propagar LdM del grupo de costes a la producción.
-        En Odoo el método _prepare_mo_vals de stock_rule (módulo mrp)
-        Intenta obtener la LdM del método _get_matching_bom, el cual recibirá
-        estos values
-        """
-        values = super()._prepare_procurement_values()
-        line = self.sale_line_id
-        if line and line.group_sheet_id and line.group_sheet_id.bom_id:
-            values.update(bom_id=line.group_sheet_id.bom_id)
-        return values
-    

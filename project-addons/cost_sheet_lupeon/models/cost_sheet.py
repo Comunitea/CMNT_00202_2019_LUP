@@ -73,7 +73,7 @@ class GroupCostSheet(models.Model):
                 continue
             vals = {
                 'product_id': sh.product_id.id,
-                'product_qty': 1.0,  # TODO get_qty,
+                'product_qty': sh.cus_units,  # TODO review,
                 'product_uom_id': sh.product_id.uom_id.id,
                 'operation_id': False,
             }
@@ -104,10 +104,6 @@ class GroupCostSheet(models.Model):
 
         return bom
     
-    def unlink(self):
-        self.mapped('bom_id').unlink()
-        res = super().unlink()
-        return res
 
 
 class CostSheet(models.Model):
@@ -703,7 +699,7 @@ class CostSheet(models.Model):
         for line in self.material_cost_ids.filtered('material_id'):
             vals = {
                 'product_id': line.material_id.id,
-                'product_qty': 1.0,  # TODO get_qty,
+                'product_qty': line.get_bom_qty(),  # TODO review,
                 'product_uom_id': line.material_id.uom_id.id,
                 'operation_id': False,
             }
@@ -745,7 +741,7 @@ class CostSheet(models.Model):
                 'sheet_id': sheet.id,
                 'product_id':sheet.product_id.id,
                 'product_uom_id':sheet.product_id.uom_id.id,
-                'product_qty': 1,
+                'product_qty': sheet.cus_units,  # TODO get_qty,
                 'bom_id': bom.id
             }
             prod = self.env['mrp.production'].create(vals)
@@ -891,6 +887,26 @@ class MaterialCostLine(models.Model):
                     if sh.cus_units:
                         mcl.euro_material = ( mcl.dmls_cc_total * mat.euro_kg) / (sh.cus_units * 1000)
                         mcl.total = sh.cus_units * mcl.euro_material
+    
+    def get_bom_qty(self):
+        self.ensure_one()
+        sh = self.sheet_id
+        res = 1.0
+        if sh.sheet_type == 'fdm':
+            res = self.gr_cc_tray
+        elif sh.sheet_type == 'sls':
+            res = self.sls_gr_tray
+           
+        elif sh.sheet_type == 'poly':
+            res = self.pol_gr_tray
+           
+        elif sh.sheet_type == 'sla':
+            res = self.sla_cc_tray
+           
+        elif sh.sheet_type == 'dmls':
+           res = self.dmls_cc_tray
+        return res
+
 
 
 # FDM COSTE MANO DE OBRA

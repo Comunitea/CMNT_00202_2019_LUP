@@ -9,7 +9,11 @@
         <field name="arch" type="xml">
             <field name="product_id" position="after">
                 <field name="sheet_id"/>
+                <field name="sheet_type"/>
                 <field name="sale_id"/>
+                <field name="sale_line_id"/>
+                <field name="line_ref"/>
+                <field name="line_name"/>
             </field>
             
         </field>
@@ -25,6 +29,8 @@
                 <field name="sheet_type"/>
                 <field name="sale_id"/>
                 <field name="sale_line_id"/>
+                <field name="line_ref"/>
+                <field name="line_name"/>
             </field>
             
         </field>
@@ -37,6 +43,8 @@
         <field name="inherit_id" ref="mrp.view_mrp_production_filter"/>
         <field name="arch" type="xml">
             <field name="name" position="before">
+                <field name="line_ref"/>
+                <field name="line_name"/>
                 <field name="sheet_id"/>
                 <field name="sale_id"/>
                 <field name="sale_line_id"/>
