@@ -721,7 +721,7 @@ class CostSheet(models.Model):
         vals = {
             'product_id': product.id,
             'product_tmpl_id': product.product_tmpl_id.id,
-            'product_qty': 1.0,  # TODO get_qty,
+            'product_qty': self.cus_units,  # TODO get_qty,
             'product_uom_id': product.uom_id.id,
             'routing_id': False,  # TODO use_routes,
             'type': 'normal',
