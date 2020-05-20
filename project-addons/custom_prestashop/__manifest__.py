@@ -8,6 +8,6 @@
     "maintainer": "Comunitea",
     "website": "www.comunitea.com",
     "license": "AGPL-3",
-    "depends": ["connector_prestashop"],
-    "data": ['views/sale_order.xml'],
+    "depends": ["connector_prestashop", "cmnt_prestashop_custom"],
+    "data": [],
 }

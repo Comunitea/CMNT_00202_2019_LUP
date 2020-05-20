@@ -18,18 +18,6 @@ class SaleOrderImporter(Component):
         return super()._has_to_skip()
 
 
-class SaleOrderImportMapper(Component):
-    _inherit = "prestashop.sale.order.mapper"
-
-    @mapping
-    def prestashop_state(self, record):
-        ps_state_id = record["current_state"]
-        state = self.binder_for("prestashop.sale.order.state").to_internal(
-            ps_state_id, unwrap=1
-        )
-        return {"prestashop_state": state.id}
-
-
 class SaleOrderLineMapper(Component):
     _inherit = "prestashop.sale.order.line.mapper"
 

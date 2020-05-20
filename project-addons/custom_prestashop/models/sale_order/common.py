@@ -15,8 +15,6 @@ class SaleOrde(models.Model):
 
     _inherit = "sale.order"
 
-    prestashop_state = fields.Many2one("sale.order.state")
-
     def write(self, vals):
         run = False
         if vals.get('prestashop_state') or vals.get('invoice_status'):
