@@ -1031,8 +1031,9 @@ class OppiCostLine(models.Model):
         for line in self:
             if line.task_id:
                 continue
+            line_name = line.name if line.name else ''
             vals = {
-                'name': "[" + project.name + '] ' + 'OPPI - ' + line.name,
+                'name': "[" + project.name + '] ' + 'OPPI - ' + line_name,
                 'project_id': project.id,
                 'sheet_id': line.sheet_id.id,
                 'oppi_line_id': line.id,
