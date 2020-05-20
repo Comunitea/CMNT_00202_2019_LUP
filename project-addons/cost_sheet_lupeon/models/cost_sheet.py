@@ -1040,7 +1040,9 @@ class OppiCostLine(models.Model):
                 'planned_hours': line.time,
                 'user_id': line.employee_id.user_id.id
             }
-            task = self.env['project.task'].create(vals)
+            # Lo hago con sudo , porque me falla con el employye_id admin,
+            # un posible error de seguridad
+            task = self.env['project.task'].sudo().create(vals)
             line.write({'task_id': task.id})
 
 
