@@ -1031,15 +1031,18 @@ class OppiCostLine(models.Model):
         for line in self:
             if line.task_id:
                 continue
+            line_name = line.name if line.name else ''
             vals = {
-                'name': "[" + project.name + '] ' + 'OPPI - ' + line.name,
+                'name': "[" + project.name + '] ' + 'OPPI - ' + line_name,
                 'project_id': project.id,
                 'sheet_id': line.sheet_id.id,
                 'oppi_line_id': line.id,
                 'planned_hours': line.time,
                 'user_id': line.employee_id.user_id.id
             }
-            task = self.env['project.task'].create(vals)
+            # Lo hago con sudo , porque me falla con el employye_id admin,
+            # un posible error de seguridad
+            task = self.env['project.task'].sudo().create(vals)
             line.write({'task_id': task.id})
 
 
