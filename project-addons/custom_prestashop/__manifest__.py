@@ -9,5 +9,5 @@
     "website": "www.comunitea.com",
     "license": "AGPL-3",
     "depends": ["connector_prestashop", "cmnt_prestashop_custom"],
-    "data": [],
+    "data": ['data/res_partner_category.xml'],
 }
