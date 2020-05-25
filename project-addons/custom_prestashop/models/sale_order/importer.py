@@ -16,3 +16,11 @@ class SaleOrderImporter(Component):
             )
             self._get_binding().prestashop_state = state.id
         return super()._has_to_skip()
+
+
+class SaleOrderImportMapper(Component):
+    _inherit = 'prestashop.sale.order.mapper'
+
+    @mapping
+    def company_id(self, record):
+        return {'company_id': self.backend_record.company_id.id}
