@@ -271,6 +271,14 @@ class CostSheet(models.Model):
         'oppi.cost.line', 'sheet_id', string='Oppi')
     total_oppi = fields.Float('Time Total', compute="_get_oppi_total")
 
+    can_edit = fields.Boolean(compute='_compute_can_edit')
+    
+    def _compute_can_edit(self):
+        self.can_edit_name = self.env.user.has_group(
+            'cost_sheet_lupeon.group_cs_advanced') or \
+                self.env.user.has_group('cost_sheet_lupeon.group_cs_manager')
+
+
     @api.depends('oppi_line_ids')
     def _get_oppi_total(self):
         for sh in self:
@@ -813,6 +821,8 @@ class MaterialCostLine(models.Model):
     # DMLS
     dmls_cc_tray = fields.Float('gr bandeja', compute='_compute_cost')
     dmls_cc_total = fields.Float('gr Total', compute='_compute_cost')
+
+    can_edit = fields.Boolean(related='sheet_id.can_edit')
 
     def get_sls_gr_tray(self):
         self.ensure_one()
