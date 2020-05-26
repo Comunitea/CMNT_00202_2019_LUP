@@ -68,6 +68,7 @@
                                         <field name="price_hour"/>
                                         <field name="discount"/>
                                         <field name="total"/>
+                                        <field name="task_id"/>
                                     </tree>
                                 </field>
                             </group>
@@ -620,7 +621,6 @@
                 <field name="sheet_type"/>
                 <field name="sale_line_id"/>
                 <field name="sale_id"/>
-                <field name="task_id"/>
                 <field name="production_id"/>
                 <field name="price_total"/>
             </tree>
@@ -707,7 +707,6 @@
                                 <field name="sheet_type"/>
                                 <field name="sale_line_id"/>
                                 <field name="sale_id"/>
-                                <field name="task_id"/>
                                 <field name="production_id"/>
                                 <field name="price_total"/>
                             </tree>

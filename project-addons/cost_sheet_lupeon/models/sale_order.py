@@ -41,7 +41,7 @@ class SaleOrder(models.Model):
             order.production_count = len(productions)
             order.count_task = \
                 len(
-                order.get_sheet_lines().mapped('task_id')) + \
+                order.get_sheet_lines().mapped('time_line_ids.task_id')) + \
                 len(
                 order.get_sheet_lines().mapped('oppi_line_ids.task_id')
                 )

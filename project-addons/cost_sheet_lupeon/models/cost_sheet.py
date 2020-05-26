@@ -117,9 +117,6 @@ class CostSheet(models.Model):
     group_id = fields.Many2one('group.cost.sheet', 'Hojas de coste',
                             ondelete="cascade", 
                                readonly=True)
-    task_id = fields.Many2one(
-        'project.task', 'Orden de diseño', index=True, copy=False,
-        readonly=True)
     production_id = fields.Many2one(
         'mrp.production', 'Produción', index=True, copy=False,
         readonly=True)
@@ -669,14 +666,20 @@ class CostSheet(models.Model):
         # LINK SALE WITH PROJECT
         order.write({'project_id': project.id})
         for sheet in self:
-            vals = {
-                'name': "[" + project.name + '] ' + 'OD - ' + sheet.sale_line_id.name,
-                'project_id': project.id,
-                'sheet_id': sheet.id,
-                'planned_hours': sheet.hours_total
-            }
-            task = self.env['project.task'].create(vals)
-            sheet.write({'task_id': task.id})
+            for line in sheet.time_line_ids:
+                task_name = '[' + project.name + '] ' + 'OD - ' + sheet.sale_line_id.name
+                if  line.software_id:
+                    task_name += ' -> ' + line.software_id.name
+                vals = {
+                    'name': task_name,
+                    'project_id': project.id,
+                    'sheet_id': sheet.id,
+                    'planned_hours': line.hours,
+                    'time_line_id': line.id
+                    # 'parent_id': task.id,
+                }
+                task = self.env['project.task'].create(vals)
+                line.write({'task_id': task.id})
         return project
     
     def create_product_on_fly(self):
@@ -760,6 +763,7 @@ class DesignTimeLine(models.Model):
     price_hour = fields.Float('€/h')
     discount = fields.Float('Descuento')
     total = fields.Float('Total', compute="_compute_total")
+    task_id = fields.Many2one('project.task', 'Task', readonly=True)
 
     @api.depends('hours', 'price_hour', 'discount')
     def _compute_total(self):
