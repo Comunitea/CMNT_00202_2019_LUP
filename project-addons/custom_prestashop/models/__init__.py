@@ -4,3 +4,4 @@ from . import sale_order
 from . import product_product
 from . import product_template
 from . import stock_tracking
+from . import res_partner

@@ -18,20 +18,9 @@ class SaleOrderImporter(Component):
         return super()._has_to_skip()
 
 
-class SaleOrderLineMapper(Component):
-    _inherit = "prestashop.sale.order.line.mapper"
+class SaleOrderImportMapper(Component):
+    _inherit = 'prestashop.sale.order.mapper'
 
     @mapping
-    def tax_id(self, record):
-        taxes = (
-            record.get("associations", {})
-            .get("taxes", {})
-            .get(self.backend_record.get_version_ps_key("tax"), [])
-        )
-        if not isinstance(taxes, list):
-            taxes = [taxes]
-        result = self.env["account.tax"].browse()
-        for ps_tax in taxes:
-            result |= self._find_tax(ps_tax["id"])
-        if result:
-            return {"tax_id": [(6, 0, result.ids)]}
+    def company_id(self, record):
+        return {'company_id': self.backend_record.company_id.id}
