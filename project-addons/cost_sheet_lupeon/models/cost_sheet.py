@@ -503,7 +503,8 @@ class CostSheet(models.Model):
     def onchange_printer_id(self):
         res = {}
         options =  ['Extrusor 1', 'Extrusor 2', 'Extrusor 3']
-        if self.sheet_type == 'fdm':
+        # TODO revisar
+        if self.sheet_type == 'fdm' and not self.material_cost_ids:
             cost_lines = [(5, 0, 0)]
             for name in options:
                 vals = {
@@ -940,7 +941,6 @@ class WorkforceCostLine(models.Model):
 
     @api.depends('hours')
     def compute_workforce_totals(self):
-        # import ipdb; ipdb.set_trace()
         for wcl in self:
             sh = wcl.sheet_id
             hours2 = sh.group_id.tech_hours
@@ -1029,6 +1029,11 @@ class PurchaseCostLine(models.Model):
             ocl.pvp_ud = pvp_ud
             ocl.pvp_total = pvp
 
+    @api.onchange('product_id')
+    def onchange_product_id(self):
+        if self.product_id:
+            self.cost_ud = self.product_id.standard_price
+
 
 
 class OppiCostLine(models.Model):
@@ -1037,7 +1042,7 @@ class OppiCostLine(models.Model):
 
     sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
 
-    name = fields.Char('Nombre')
+    name = fields.Char('Descripción')
     type = fields.Many2one('oppi.type', 'Tipo')
     time = fields.Float('Tiempo')
     time_real = fields.Float('Tiempo real', related='task_id.effective_hours')
