@@ -339,7 +339,8 @@ class CostSheet(models.Model):
 
         if not self.sheet_type or self.sheet_type in ['unplanned', 'meets', 'purchase']:
             return
-        options =  ['Horas Técnico', 'Horas Diseño', 'Horas Posprocesado']
+        # options =  ['Horas Técnico', 'Horas Diseño', 'Horas Posprocesado']
+        options =  ['Horas Técnico', 'Horas Posprocesado']
         out_options =  ['Insertos', 'Tornillos', 'Pintado', 'Accesorios', 'Otros']
         wf_lines = []
         out_lines = []
@@ -947,8 +948,8 @@ class WorkforceCostLine(models.Model):
             maq_hours = sh.machine_hours
             if wcl.name == 'Horas Técnico' and sh.sheet_type in ['sls', 'poly', 'sla', 'dmls']:
                 hours = (5/60) + (maq_hours * sh.printer_id.machine_hour)
-            if wcl.name == 'Horas Diseño':
-                 hours2 = sh.group_id.ing_hours
+            # if wcl.name == 'Horas Diseño':
+            #      hours2 = sh.group_id.ing_hours
             if sh.cus_units:
                 euro_unit = hours * hours2 / sh.cus_units
                 wcl.euro_unit = euro_unit
