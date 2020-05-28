@@ -247,6 +247,7 @@ class CostSheet(models.Model):
 
     # DMLS DATOS PIEZA
     units_dmls = fields.Integer('Uds. Cliente')
+    use_treatment = fields.Boolean('Usar tratamiento térmico')
     heat_treatment_cost = fields.Float('Tratamiento térmico',
         compute='_get_heat_treatment_cost') 
     
@@ -303,9 +304,10 @@ class CostSheet(models.Model):
                 if wfl:
                     wfl.write({'hours': sh.total_oppi})
     
+    @api.depends('use_treatment', 'material_cost_ids.material_id', 'tray_units')
     def _get_heat_treatment_cost(self):
         for sh in self:
-            if sh.material_cost_ids and  self.tray_units:
+            if sh.use_treatment and sh.material_cost_ids and  sh.tray_units:
                 mat = sh.material_cost_ids[0].material_id
                 ciclo = self.cus_units / self.tray_units
                 sh.heat_treatment_cost = ciclo * mat.term_cost
