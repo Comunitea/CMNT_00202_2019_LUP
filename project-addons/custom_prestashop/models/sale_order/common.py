@@ -54,5 +54,16 @@ class PrestashopSaleOrder(models.Model):
             and can_edit
         ):
             self.odoo_id.action_draft()
+            self.odoo_id.ignore_exception = True
             self.odoo_id.action_confirm()
         return res
+
+
+class PrestashopSaleOrderLine(models.Model):
+    _inherit = 'prestashop.sale.order.line'
+
+    @api.multi
+    def unlink(self):
+        if self.odoo_id:
+            self.odoo_id.unlink()
+        return super().unlink()

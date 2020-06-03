@@ -40,6 +40,8 @@ class ImportMapChild(Component):
 
         """
         res = []
+        prestashop_order_line_exists = []
+        imported_ids = []
         for values in items_values:
             if "tax_id" in values:
                 values.pop("tax_id")
@@ -48,6 +50,10 @@ class ImportMapChild(Component):
                 "prestashop.sale.order.line"
             ).to_internal(prestashop_id)
             if prestashop_binding:
+                for line_record in prestashop_binding.prestashop_order_id.prestashop_order_line_ids:
+                    if line_record.id not in prestashop_order_line_exists:
+                        prestashop_order_line_exists.append(line_record.id)
+                imported_ids.append(prestashop_binding.id)
                 values.pop("prestashop_id")
                 final_vals = {}
                 for item in values.keys():
@@ -79,6 +85,8 @@ class ImportMapChild(Component):
                     res.append((1, prestashop_binding.id, final_vals))
             else:
                 res.append((0, 0, values))
+        for remove_id in set(prestashop_order_line_exists) - set(imported_ids):
+            res.append((2, remove_id))
         return res
 
 
