@@ -17,6 +17,7 @@
                     </div>
                     <group>
                         <group string="General">
+                            <field name="can_edit" invisible="1"/>
                             <field name="sheet_type"/>
                             <field name="increment"/>
                             <field name="inspection_type"/>
@@ -34,7 +35,7 @@
                                 <field name="cost_init" attrs="{'invisible': [('sheet_type', 'in', ['fdm', 'dmls', 'unnplaned', 'meets'])]}"/>
                                 <field name="cost_init_computed"  attrs="{'invisible': [('sheet_type', 'not in', ['fdm', 'dmls'])]}"/>
                                 <field name="cost_ud" attrs="{'invisible': [('sheet_type', 'in', ['unnplaned', 'meets'])]}"/>
-                                <field name="admin_fact" attrs="{'invisible': [('sheet_type', 'in', ['unnplaned', 'meets'])]}"/>
+                                <field name="admin_fact" attrs="{'invisible': [('sheet_type', 'in', ['unnplaned', 'meets'])]}" groups="cost_sheet_lupeon.group_cs_advanced"/>
                                 <field name="use_disc_qty"  attrs="{'invisible': [('sheet_type', 'not in', ['fdm', 'sls', 'poly', 'sla', 'dmls'])]}"/> 
 
                         </group>
@@ -53,9 +54,9 @@
                                 <group string="Datos pieza">
                                     <field name="flat_ref"/>
                                 </group>
-                                <group string="Carcterísticas pieza">
+                                <!-- <group string="Carcterísticas pieza">
                                     <field name="feature_ids" nolabel="1" widget="many2many_checkboxes"/>
-                                </group>
+                                </group> -->
                                 <group string="Legislación aplicable">
                                     <field name="legislation_ids" nolabel="1" widget="many2many_checkboxes"/>
                                 </group>
@@ -65,9 +66,10 @@
                                     <tree editable="bottom">
                                         <field name="software_id"/>
                                         <field name="hours"/>
-                                        <field name="price_hour"/>
+                                        <field name="price_hour" groups="cost_sheet_lupeon.group_cs_advanced"/>
                                         <field name="discount"/>
                                         <field name="total"/>
+                                        <field name="task_id"/>
                                     </tree>
                                 </field>
                             </group>
@@ -98,14 +100,14 @@
                                 <field name="loops"/>
                                 <field name="infill"/>
                                 <field name="layer_height"/>
-                                <field name="euro_machine"/>
+                                <field name="euro_machine" groups="cost_sheet_lupeon.group_cs_advanced"/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
 
                              <group colspan="4" string="Material Cost">
                                  <field name="material_cost_ids" nolabel="1"/>
                             </group>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="material_total">
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="material_total"  groups="cost_sheet_lupeon.group_cs_advanced">
                                     <field name="total_euro_ud" widget='monetary'/>
                                     <field name="total_material_cost" widget='monetary'/>
                             </group>
@@ -113,8 +115,8 @@
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="2" col="6" string="Coste Máquina">
                                 <field name="machine_hours"/>
-                                <field name="euro_machine_ud"/>
-                                <field name="euro_machine_total"/>
+                                <field name="euro_machine_ud"  groups="cost_sheet_lupeon.group_cs_advanced"/>
+                                <field name="euro_machine_total"  groups="cost_sheet_lupeon.group_cs_advanced"/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="4" string="Coste mano de obra">
@@ -123,12 +125,12 @@
                                         <field name="name"/>
                                         <field name="hours"/>
                                         <field name="minutes"/>
-                                        <field name="euro_unit"/>
-                                        <field name="total"/>
+                                        <field name="euro_unit"  groups="cost_sheet_lupeon.group_cs_advanced"/>
+                                        <field name="total"  groups="cost_sheet_lupeon.group_cs_advanced"/>
                                     </tree>
                                 </field>
                             </group>
-                             <group class="oe_subtotal_footer oe_right" colspan="2" name="wf_total">
+                             <group class="oe_subtotal_footer oe_right" colspan="2" name="wf_total"  groups="cost_sheet_lupeon.group_cs_advanced">
                                     <field name="workforce_total_euro_ud" widget='monetary'/>
                                     <field name="workforce_total" widget='monetary'/>
                             </group>
@@ -139,12 +141,12 @@
                                     <tree editable="bottom">
                                         <field name="name"/>
                                         <field name="cost"/>
-                                        <field name="margin"/>
-                                        <field name="pvp"/>
+                                        <field name="margin"  groups="cost_sheet_lupeon.group_cs_advanced"/>
+                                        <field name="pvp"  groups="cost_sheet_lupeon.group_cs_advanced"/>
                                     </tree>
                                 </field>
                             </group>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="design_total">
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="design_total"  groups="cost_sheet_lupeon.group_cs_advanced">
                                     <field name="outsorcing_total_ud" widget='monetary'/>
                                     <field name="outsorcing_total" widget='monetary'/>
                             </group>
@@ -159,12 +161,12 @@
                                         <field name="cost_ud"/>
                                         <field name="ports"/>
                                         <field name="margin"/>
-                                        <field name="pvp_ud"/>
-                                        <field name="pvp_total"/>
+                                        <field name="pvp_ud" groups="cost_sheet_lupeon.group_cs_advanced"/>
+                                        <field name="pvp_total" groups="cost_sheet_lupeon.group_cs_advanced"/>
                                     </tree>
                                 </field>
                             </group>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="meet_total">
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="meet_total" groups="cost_sheet_lupeon.group_cs_advanced">
                                 <field name="purchase_total" widget='monetary'/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
@@ -193,9 +195,9 @@
                             <group colspan="2" col="8" string="Parámetros impresión">
                                 <field name="printer_id"/>
                                 <field name="tray_units"/>
-                                <field name="print_increment" attrs="{'invisible': [('sheet_type', 'in', ['poly'])]}"/>
+                                <field name="print_increment" attrs="{'invisible': [('sheet_type', 'in', ['poly'])], 'readonly': [('can_edit', '!=', True)]}"/>
                                 <field name="tray_hours_sls"/>
-                                <field name="euro_machine"/>
+                                <field name="euro_machine"  groups="cost_sheet_lupeon.group_cs_advanced"/>
                             </group>
                              <div style="border-bottom: 1px solid black;"></div>
                              <group colspan="2" col="8" string="Configuración oferta">
@@ -208,7 +210,7 @@
                              <group colspan="4" string="Material Cost">
                                  <field name="material_cost_ids" nolabel="1"/>
                             </group>
-                             <group class="oe_subtotal_footer oe_right" colspan="2" name="material_total">
+                             <group class="oe_subtotal_footer oe_right" colspan="2" name="material_total"  groups="cost_sheet_lupeon.group_cs_advanced">
                                     <field name="total_euro_ud" widget='monetary'/>
                                     <field name="total_material_cost" widget='monetary'/>
                             </group>
@@ -216,8 +218,8 @@
                              <div style="border-bottom: 1px solid black;"></div>
                              <group colspan="2" col="6" string="Coste Máquina">
                                 <field name="machine_hours"/>
-                                <field name="euro_machine_ud"/>
-                                <field name="euro_machine_total"/>
+                                <field name="euro_machine_ud" groups="cost_sheet_lupeon.group_cs_advanced"/>
+                                <field name="euro_machine_total" groups="cost_sheet_lupeon.group_cs_advanced"/>
                             </group>
                              <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="4" string="Coste mano de obra">
@@ -226,12 +228,12 @@
                                         <field name="name"/>
                                         <field name="hours"/>
                                         <field name="minutes"/>
-                                        <field name="euro_unit"/>
-                                        <field name="total"/>
+                                        <field name="euro_unit"  groups="cost_sheet_lupeon.group_cs_advanced"/>
+                                        <field name="total"  groups="cost_sheet_lupeon.group_cs_advanced"/>
                                     </tree>
                                 </field>
                             </group>
-                             <group class="oe_subtotal_footer oe_right" colspan="2" name="wf_total">
+                             <group class="oe_subtotal_footer oe_right" colspan="2" name="wf_total"  groups="cost_sheet_lupeon.group_cs_advanced">
                                     <field name="workforce_total_euro_ud" widget='monetary'/>
                                     <field name="workforce_total" widget='monetary'/>
                             </group>
@@ -242,12 +244,12 @@
                                     <tree editable="bottom">
                                         <field name="name"/>
                                         <field name="cost"/>
-                                        <field name="margin"/>
-                                        <field name="pvp"/>
+                                        <field name="margin"  groups="cost_sheet_lupeon.group_cs_advanced"/>
+                                        <field name="pvp"  groups="cost_sheet_lupeon.group_cs_advanced"/>
                                     </tree>
                                 </field>
                             </group>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="design_total">
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="design_total"  groups="cost_sheet_lupeon.group_cs_advanced">
                                     <field name="outsorcing_total_ud" widget='monetary'/>
                                     <field name="outsorcing_total" widget='monetary'/>
                             </group>
@@ -263,12 +265,12 @@
                                         <field name="cost_ud"/>
                                         <field name="ports"/>
                                         <field name="margin"/>
-                                        <field name="pvp_ud"/>
-                                        <field name="pvp_total"/>
+                                        <field name="pvp_ud" groups="cost_sheet_lupeon.group_cs_advanced"/>
+                                        <field name="pvp_total" groups="cost_sheet_lupeon.group_cs_advanced"/>
                                     </tree>
                                 </field>
                             </group>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="meet_total">
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="meet_total" groups="cost_sheet_lupeon.group_cs_advanced">
                                 <field name="purchase_total" widget='monetary'/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
@@ -294,13 +296,13 @@
                                 <field name="tray_units"/>
                                 <field name="finish_pol"/>
                                 <field name="tray_hours"/>
-                                <field name="euro_machine"/>
+                                <field name="euro_machine" groups="cost_sheet_lupeon.group_cs_advanced"/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="4" string="Material Cost">
                                  <field name="material_cost_ids" nolabel="1"/>
                             </group>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="material_total">
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="material_total"  groups="cost_sheet_lupeon.group_cs_advanced">
                                     <field name="total_euro_ud" widget='monetary'/>
                                     <field name="total_material_cost" widget='monetary'/>
                             </group>
@@ -308,8 +310,8 @@
                             <div style="border-bottom: 1px solid black;"></div>
                              <group colspan="2" col="6" string="Coste Máquina">
                                 <field name="machine_hours"/>
-                                <field name="euro_machine_ud"/>
-                                <field name="euro_machine_total"/>
+                                <field name="euro_machine_ud" groups="cost_sheet_lupeon.group_cs_advanced"/>
+                                <field name="euro_machine_total" groups="cost_sheet_lupeon.group_cs_advanced"/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="4" string="Coste mano de obra">
@@ -318,12 +320,12 @@
                                         <field name="name"/>
                                         <field name="hours"/>
                                         <field name="minutes"/>
-                                        <field name="euro_unit"/>
-                                        <field name="total"/>
+                                        <field name="euro_unit"  groups="cost_sheet_lupeon.group_cs_advanced"/>
+                                        <field name="total"  groups="cost_sheet_lupeon.group_cs_advanced"/>
                                     </tree>
                                 </field>
                             </group>
-                             <group class="oe_subtotal_footer oe_right" colspan="2" name="wf_total">
+                             <group class="oe_subtotal_footer oe_right" colspan="2" name="wf_total"  groups="cost_sheet_lupeon.group_cs_advanced">
                                     <field name="workforce_total_euro_ud" widget='monetary'/>
                                     <field name="workforce_total" widget='monetary'/>
                             </group>
@@ -334,12 +336,12 @@
                                     <tree editable="bottom">
                                         <field name="name"/>
                                         <field name="cost"/>
-                                        <field name="margin"/>
-                                        <field name="pvp"/>
+                                        <field name="margin"  groups="cost_sheet_lupeon.group_cs_advanced"/>
+                                        <field name="pvp"  groups="cost_sheet_lupeon.group_cs_advanced"/>
                                     </tree>
                                 </field>
                             </group>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="design_total">
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="design_total"  groups="cost_sheet_lupeon.group_cs_advanced">
                                     <field name="outsorcing_total_ud" widget='monetary'/>
                                     <field name="outsorcing_total" widget='monetary'/>
                             </group>
@@ -355,12 +357,12 @@
                                         <field name="cost_ud"/>
                                         <field name="ports"/>
                                         <field name="margin"/>
-                                        <field name="pvp_ud"/>
-                                        <field name="pvp_total"/>
+                                        <field name="pvp_ud" groups="cost_sheet_lupeon.group_cs_advanced"/>
+                                        <field name="pvp_total" groups="cost_sheet_lupeon.group_cs_advanced"/>
                                     </tree>
                                 </field>
                             </group>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="meet_total">
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="meet_total" groups="cost_sheet_lupeon.group_cs_advanced">
                                 <field name="purchase_total" widget='monetary'/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
@@ -384,13 +386,13 @@
                                 <field name="printer_id"/>
                                 <field name="tray_units"/>
                                 <field name="tray_hours"/>
-                                <field name="euro_machine"/>
+                                <field name="euro_machine" groups="cost_sheet_lupeon.group_cs_advanced"/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
                              <group colspan="4" string="Material Cost">
                                  <field name="material_cost_ids" nolabel="1"/>
                             </group>
-                             <group class="oe_subtotal_footer oe_right" colspan="2" name="material_total">
+                             <group class="oe_subtotal_footer oe_right" colspan="2" name="material_total"  groups="cost_sheet_lupeon.group_cs_advanced">
                                     <field name="total_euro_ud" widget='monetary'/>
                                     <field name="total_material_cost" widget='monetary'/>
                             </group>
@@ -398,8 +400,8 @@
                             <div style="border-bottom: 1px solid black;"></div>
                              <group colspan="2" col="6" string="Coste Máquina">
                                 <field name="machine_hours"/>
-                                <field name="euro_machine_ud"/>
-                                <field name="euro_machine_total"/>
+                                <field name="euro_machine_ud" groups="cost_sheet_lupeon.group_cs_advanced"/>
+                                <field name="euro_machine_total" groups="cost_sheet_lupeon.group_cs_advanced"/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="4" string="Coste mano de obra">
@@ -408,12 +410,12 @@
                                         <field name="name"/>
                                         <field name="hours"/>
                                         <field name="minutes"/>
-                                        <field name="euro_unit"/>
-                                        <field name="total"/>
+                                        <field name="euro_unit"  groups="cost_sheet_lupeon.group_cs_advanced"/>
+                                        <field name="total"  groups="cost_sheet_lupeon.group_cs_advanced"/>
                                     </tree>
                                 </field>
                             </group>
-                             <group class="oe_subtotal_footer oe_right" colspan="2" name="wf_total">
+                             <group class="oe_subtotal_footer oe_right" colspan="2" name="wf_total"  groups="cost_sheet_lupeon.group_cs_advanced">
                                     <field name="workforce_total_euro_ud" widget='monetary'/>
                                     <field name="workforce_total" widget='monetary'/>
                             </group>
@@ -424,18 +426,18 @@
                                     <tree editable="bottom">
                                         <field name="name"/>
                                         <field name="cost"/>
-                                        <field name="margin"/>
-                                        <field name="pvp"/>
+                                        <field name="margin"  groups="cost_sheet_lupeon.group_cs_advanced"/>
+                                        <field name="pvp"  groups="cost_sheet_lupeon.group_cs_advanced"/>
                                     </tree>
                                 </field>
                             </group>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="design_total">
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="design_total"  groups="cost_sheet_lupeon.group_cs_advanced">
                                     <field name="outsorcing_total_ud" widget='monetary'/>
                                     <field name="outsorcing_total" widget='monetary'/>
                             </group>
                             <group></group>
                             <div style="border-bottom: 1px solid black;"></div>
-                                                        <group string="Costes Compras">
+                            <group string="Costes Compras">
                                 <field name="purchase_line_ids" nolabel="1">
                                     <tree editable="bottom">
                                         <field name="product_id"/>
@@ -445,12 +447,12 @@
                                         <field name="cost_ud"/>
                                         <field name="ports"/>
                                         <field name="margin"/>
-                                        <field name="pvp_ud"/>
-                                        <field name="pvp_total"/>
+                                        <field name="pvp_ud" groups="cost_sheet_lupeon.group_cs_advanced"/>
+                                        <field name="pvp_total" groups="cost_sheet_lupeon.group_cs_advanced"/>
                                     </tree>
                                 </field>
                             </group>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="meet_total">
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="meet_total" groups="cost_sheet_lupeon.group_cs_advanced">
                                 <field name="purchase_total" widget='monetary'/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
@@ -475,24 +477,25 @@
                                 <field name="printer_id"/>
                                 <field name="tray_units"/>
                                 <field name="tray_hours"/>
-                                <field name="euro_machine"/>
+                                <field name="euro_machine" groups="cost_sheet_lupeon.group_cs_advanced"/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="4" string="Material Cost">
                                  <field name="material_cost_ids" nolabel="1"/>
                             </group>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="material_total">
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="material_total"  groups="cost_sheet_lupeon.group_cs_advanced">
                                     <field name="total_euro_ud" widget='monetary'/>
                                     <field name="total_material_cost" widget='monetary'/>
                             </group>
                             <group colspan="4">
+                                 <field name="use_treatment"/>
                                  <field name="heat_treatment_cost"/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="2" col="6" string="Coste Máquina">
                                 <field name="machine_hours"/>
-                                <field name="euro_machine_ud"/>
-                                <field name="euro_machine_total"/>
+                                <field name="euro_machine_ud" groups="cost_sheet_lupeon.group_cs_advanced"/>
+                                <field name="euro_machine_total" groups="cost_sheet_lupeon.group_cs_advanced"/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="4" string="Coste mano de obra">
@@ -501,12 +504,12 @@
                                         <field name="name"/>
                                         <field name="hours"/>
                                         <field name="minutes"/>
-                                        <field name="euro_unit"/>
-                                        <field name="total"/>
+                                        <field name="euro_unit"  groups="cost_sheet_lupeon.group_cs_advanced"/>
+                                        <field name="total"  groups="cost_sheet_lupeon.group_cs_advanced"/>
                                     </tree>
                                 </field>
                             </group>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="wf_total">
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="wf_total"  groups="cost_sheet_lupeon.group_cs_advanced">
                                     <field name="workforce_total_euro_ud" widget='monetary'/>
                                     <field name="workforce_total" widget='monetary'/>
                             </group>
@@ -517,12 +520,12 @@
                                     <tree editable="bottom">
                                         <field name="name"/>
                                         <field name="cost"/>
-                                        <field name="margin"/>
-                                        <field name="pvp"/>
+                                        <field name="margin"  groups="cost_sheet_lupeon.group_cs_advanced"/>
+                                        <field name="pvp"  groups="cost_sheet_lupeon.group_cs_advanced"/>
                                     </tree>
                                 </field>
                             </group>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="design_total">
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="out_total"  groups="cost_sheet_lupeon.group_cs_advanced">
                                     <field name="outsorcing_total_ud" widget='monetary'/>
                                     <field name="outsorcing_total" widget='monetary'/>
                             </group>
@@ -538,12 +541,12 @@
                                         <field name="cost_ud"/>
                                         <field name="ports"/>
                                         <field name="margin"/>
-                                        <field name="pvp_ud"/>
-                                        <field name="pvp_total"/>
+                                        <field name="pvp_ud" groups="cost_sheet_lupeon.group_cs_advanced"/>
+                                        <field name="pvp_total" groups="cost_sheet_lupeon.group_cs_advanced"/>
                                     </tree>
                                 </field>
                             </group>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="meet_total">
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="meet_total" groups="cost_sheet_lupeon.group_cs_advanced">
                                 <field name="purchase_total" widget='monetary'/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
@@ -570,13 +573,13 @@
                                         <field name="num_people"/>
                                         <field name="hours"/>
                                         <field name="kms"/>
-                                        <field name="pvp"/>
+                                        <field name="pvp" groups="cost_sheet_lupeon.group_cs_advanced"/>
                                     </tree>
                                 </field>
                             </group>
                             <group class="oe_subtotal_footer oe_right" colspan="2" name="meet_total">
                                 <field name="meet_hours_total" widget='time'/>
-                                <field name="meet_total" widget='monetary'/>
+                                <field name="meet_total" widget='monetary' groups="cost_sheet_lupeon.group_cs_advanced"/>
                             </group>
                         </page>
 
@@ -591,12 +594,12 @@
                                         <field name="cost_ud"/>
                                         <field name="ports"/>
                                         <field name="margin"/>
-                                        <field name="pvp_ud"/>
-                                        <field name="pvp_total"/>
+                                        <field name="pvp_ud" groups="cost_sheet_lupeon.group_cs_advanced"/>
+                                        <field name="pvp_total" groups="cost_sheet_lupeon.group_cs_advanced"/>
                                     </tree>
                                 </field>
                             </group>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="meet_total">
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="meet_total" groups="cost_sheet_lupeon.group_cs_advanced">
                                 <field name="purchase_total" widget='monetary'/>
                             </group>
                         </page>
@@ -620,7 +623,6 @@
                 <field name="sheet_type"/>
                 <field name="sale_line_id"/>
                 <field name="sale_id"/>
-                <field name="task_id"/>
                 <field name="production_id"/>
                 <field name="price_total"/>
             </tree>
@@ -707,7 +709,6 @@
                                 <field name="sheet_type"/>
                                 <field name="sale_line_id"/>
                                 <field name="sale_id"/>
-                                <field name="task_id"/>
                                 <field name="production_id"/>
                                 <field name="price_total"/>
                             </tree>
@@ -754,6 +755,8 @@
         <field name="model">material.cost.line</field>
         <field name="arch" type="xml">
             <tree editable="bottom">
+                <field name="can_edit" invisible="1"/>
+
                 <field name="name"/>
                 <field name="material_id"/>
                 <!-- FDM FIELDS -->
@@ -774,7 +777,7 @@
                 <!--DMLS fields -->
                 <field name="dmls_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'dmls')]}"/>
                 
-                <field name="desviation" attrs="{'column_invisible': [('parent.sheet_type', 'not in', ['poly', 'sla', 'dmls'])]}"/>
+                <field name="desviation" attrs="{'column_invisible': [('parent.sheet_type', 'not in', ['poly', 'sla', 'dmls'])], 'readonly': [('can_edit', '!=', True)]}"/>
                 <!--Poly fields -->
                 <field name="pol_gr_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'poly')]}"/>
                 <!--SLA fields -->
@@ -782,8 +785,8 @@
                 <!--DMLS fields -->
                 <field name="dmls_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'dmls')]}"/>
 
-                <field name="euro_material"/>
-                <field name="total" attrs="{'column_invisible': [('parent.sheet_type', '=', 'fdm')]}"/>
+                <field name="euro_material"  groups="cost_sheet_lupeon.group_cs_advanced"/>
+                <field name="total" attrs="{'column_invisible': [('parent.sheet_type', '=', 'fdm')]}"  groups="cost_sheet_lupeon.group_cs_advanced"/>
             </tree>
         </field>
     </record>

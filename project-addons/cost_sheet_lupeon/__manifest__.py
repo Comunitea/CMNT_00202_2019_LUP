@@ -20,6 +20,7 @@
     ],
     "data": [
         'security/ir.model.access.csv',
+        'security/sheet_security.xml',
         'data/sheet_data.xml',
         'views/sale_view.xml',
         'views/cost_sheet_view.xml',

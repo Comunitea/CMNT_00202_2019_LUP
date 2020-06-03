@@ -117,9 +117,6 @@ class CostSheet(models.Model):
     group_id = fields.Many2one('group.cost.sheet', 'Hojas de coste',
                             ondelete="cascade",
                                readonly=True)
-    task_id = fields.Many2one(
-        'project.task', 'Orden de diseño', index=True, copy=False,
-        readonly=True)
     production_id = fields.Many2one(
         'mrp.production', 'Produción', index=True, copy=False,
         readonly=True)
@@ -250,6 +247,7 @@ class CostSheet(models.Model):
 
     # DMLS DATOS PIEZA
     units_dmls = fields.Integer('Uds. Cliente')
+    use_treatment = fields.Boolean('Usar tratamiento térmico')
     heat_treatment_cost = fields.Float('Tratamiento térmico',
         compute='_get_heat_treatment_cost')
 
@@ -273,6 +271,14 @@ class CostSheet(models.Model):
     oppi_line_ids = fields.One2many(
         'oppi.cost.line', 'sheet_id', string='Oppi')
     total_oppi = fields.Float('Time Total', compute="_get_oppi_total")
+
+    can_edit = fields.Boolean(compute='_compute_can_edit')
+
+    def _compute_can_edit(self):
+        self.can_edit_name = self.env.user.has_group(
+            'cost_sheet_lupeon.group_cs_advanced') or \
+                self.env.user.has_group('cost_sheet_lupeon.group_cs_manager')
+
 
     @api.depends('oppi_line_ids')
     def _get_oppi_total(self):
@@ -298,9 +304,10 @@ class CostSheet(models.Model):
                 if wfl:
                     wfl.write({'hours': sh.total_oppi})
 
+    @api.depends('use_treatment', 'material_cost_ids.material_id', 'tray_units')
     def _get_heat_treatment_cost(self):
         for sh in self:
-            if sh.material_cost_ids and  self.tray_units:
+            if sh.use_treatment and sh.material_cost_ids and  sh.tray_units:
                 mat = sh.material_cost_ids[0].material_id
                 ciclo = self.cus_units / self.tray_units
                 sh.heat_treatment_cost = ciclo * mat.term_cost
@@ -332,7 +339,8 @@ class CostSheet(models.Model):
 
         if not self.sheet_type or self.sheet_type in ['unplanned', 'meets', 'purchase']:
             return
-        options =  ['Horas Técnico', 'Horas Diseño', 'Horas Posprocesado']
+        # options =  ['Horas Técnico', 'Horas Diseño', 'Horas Posprocesado']
+        options =  ['Horas Técnico', 'Horas Posprocesado']
         out_options =  ['Insertos', 'Tornillos', 'Pintado', 'Accesorios', 'Otros']
         wf_lines = []
         out_lines = []
@@ -494,7 +502,8 @@ class CostSheet(models.Model):
     def onchange_printer_id(self):
         res = {}
         options =  ['Extrusor 1', 'Extrusor 2', 'Extrusor 3']
-        if self.sheet_type == 'fdm':
+        # TODO revisar
+        if self.sheet_type == 'fdm' and not self.material_cost_ids:
             cost_lines = [(5, 0, 0)]
             for name in options:
                 vals = {
@@ -668,14 +677,20 @@ class CostSheet(models.Model):
         # LINK SALE WITH PROJECT
         order.write({'project_id': project.id})
         for sheet in self:
-            vals = {
-                'name': "[" + project.name + '] ' + 'OD - ' + sheet.sale_line_id.name,
-                'project_id': project.id,
-                'sheet_id': sheet.id,
-                'planned_hours': sheet.hours_total
-            }
-            task = self.env['project.task'].create(vals)
-            sheet.write({'task_id': task.id})
+            for line in sheet.time_line_ids:
+                task_name = '[' + project.name + '] ' + 'OD - ' + sheet.sale_line_id.name
+                if  line.software_id:
+                    task_name += ' -> ' + line.software_id.name
+                vals = {
+                    'name': task_name,
+                    'project_id': project.id,
+                    'sheet_id': sheet.id,
+                    'planned_hours': line.hours,
+                    'time_line_id': line.id
+                    # 'parent_id': task.id,
+                }
+                task = self.env['project.task'].create(vals)
+                line.write({'task_id': task.id})
         return project
 
     def create_product_on_fly(self):
@@ -759,6 +774,7 @@ class DesignTimeLine(models.Model):
     price_hour = fields.Float('€/h')
     discount = fields.Float('Descuento')
     total = fields.Float('Total', compute="_compute_total")
+    task_id = fields.Many2one('project.task', 'Task', readonly=True)
 
     @api.depends('hours', 'price_hour', 'discount')
     def _compute_total(self):
@@ -808,6 +824,8 @@ class MaterialCostLine(models.Model):
     # DMLS
     dmls_cc_tray = fields.Float('gr bandeja', compute='_compute_cost')
     dmls_cc_total = fields.Float('gr Total', compute='_compute_cost')
+
+    can_edit = fields.Boolean(related='sheet_id.can_edit')
 
     def get_sls_gr_tray(self):
         self.ensure_one()
@@ -929,8 +947,8 @@ class WorkforceCostLine(models.Model):
             maq_hours = sh.machine_hours
             if wcl.name == 'Horas Técnico' and sh.sheet_type in ['sls', 'poly', 'sla', 'dmls']:
                 hours = (5/60) + (maq_hours * sh.printer_id.machine_hour)
-            if wcl.name == 'Horas Diseño':
-                 hours2 = sh.group_id.ing_hours
+            # if wcl.name == 'Horas Diseño':
+            #      hours2 = sh.group_id.ing_hours
             if sh.cus_units:
                 euro_unit = hours * hours2 / sh.cus_units
                 wcl.euro_unit = euro_unit
@@ -1010,6 +1028,11 @@ class PurchaseCostLine(models.Model):
             ocl.pvp_ud = pvp_ud
             ocl.pvp_total = pvp
 
+    @api.onchange('product_id')
+    def onchange_product_id(self):
+        if self.product_id:
+            self.cost_ud = self.product_id.standard_price
+
 
 
 class OppiCostLine(models.Model):
@@ -1018,7 +1041,7 @@ class OppiCostLine(models.Model):
 
     sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
 
-    name = fields.Char('Nombre')
+    name = fields.Char('Descripción')
     type = fields.Many2one('oppi.type', 'Tipo')
     time = fields.Float('Tiempo')
     time_real = fields.Float('Tiempo real', related='task_id.effective_hours')
