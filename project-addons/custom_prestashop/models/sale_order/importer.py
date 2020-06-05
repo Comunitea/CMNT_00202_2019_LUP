@@ -47,7 +47,7 @@ class ImportMapChild(Component):
                 values.pop("tax_id")
             prestashop_id = values["prestashop_id"]
             prestashop_binding = self.binder_for(
-                "prestashop.sale.order.line"
+                self.env.context['model_name']
             ).to_internal(prestashop_id)
             if prestashop_binding:
                 for line_record in prestashop_binding.prestashop_order_id.prestashop_order_line_ids:
@@ -69,10 +69,8 @@ class ImportMapChild(Component):
                         and values[item]
                     ):
                         if float(values[item]) != prestashop_binding[item] and (
-                            prestashop_binding[item] - float(values[item])
-                            > 0.01
-                            or prestashop_binding[item] - float(values[item])
-                            < -0.01
+                            prestashop_binding[item] - float(values[item]) > 0.01
+                            or prestashop_binding[item] - float(values[item]) < -0.01
                         ):
                             final_vals[item] = values[item]
                     elif prestashop_binding._fields[item].type == "many2one":
@@ -110,3 +108,9 @@ class SaleOrderImportMapper(Component):
             i += 1
             name = basename + "_%d" % (i)
         return {"name": name}
+
+    def _map_child(self, map_record, from_attr, to_attr, model_name):
+        context = dict(self.env.context)
+        context['model_name'] = model_name
+        self.env.context = context
+        return super()._map_child(map_record, from_attr, to_attr, model_name)
