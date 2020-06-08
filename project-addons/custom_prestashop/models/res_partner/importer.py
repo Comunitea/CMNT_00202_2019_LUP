@@ -10,3 +10,18 @@ class PartnerImportMapper(Component):
     @mapping
     def groups(self, record):
         return {'category_id': [(6, 0, [self.env.ref('custom_prestashop.prestashop_tag').id])]}
+
+
+class ResPartnerImporter(Component):
+    _inherit = "prestashop.res.partner.importer"
+
+    def _import_dependencies(self):
+        return
+
+
+class AddressImportMapper(Component):
+    _inherit = "prestashop.address.mappper"
+
+    @mapping
+    def groups(self, record):
+        return {'category_id': [(6, 0, [self.env.ref('custom_prestashop.prestashop_tag').id])]}
