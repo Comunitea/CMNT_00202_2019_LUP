@@ -155,6 +155,25 @@ class SaleOrder(models.Model):
             # boms = self.get_group_sheets().mapped('bom_id')
             # boms.unlink()
         return res
+    
+    def duplicate_with_costs(self):
+        new = self.with_context(from_copy=True).copy()
+        view = self.env.ref(
+            'sale.view_order_form'
+        )
+        return {
+            'name': _('Agents'),
+            'type': 'ir.actions.act_window',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': new._name,
+            'views': [(view.id, 'form')],
+            'view_id': view.id,
+            'target': 'current',
+            'res_id': new.id,
+            'context': new.env.context,
+        }
+    
 
 class SaleOrderLine(models.Model):
 
@@ -167,7 +186,8 @@ class SaleOrderLine(models.Model):
     @api.model
     def create(self, vals):
         res = super().create(vals)
-        res.create_product_cost_sheet()
+        if not self._context.get('from_copy'):
+            res.create_product_cost_sheet()
         return res
 
     def unlink(self):
@@ -184,3 +204,12 @@ class SaleOrderLine(models.Model):
             }
             line.group_sheet_id = self.env['group.cost.sheet'].create(vals)
         return
+    
+    def copy_data(self, default=None):
+        if default is None:
+            default = {}
+        self.ensure_one()
+        if self.group_sheet_id:
+            new_sheet = self.group_sheet_id.copy()
+            default['group_sheet_id'] = new_sheet.id
+        return super().copy_data(default)

@@ -36,7 +36,7 @@ class GroupCostSheet(models.Model):
     help_hours = fields.Integer('Horas ayudante', default=35)
     km_cost = fields.Float('Coste Km', default=0.30)
     sheet_ids = fields.One2many(
-        'cost.sheet', 'group_id', string='Cost Sheets')
+        'cost.sheet', 'group_id', string='Cost Sheets', copy=True)
     line_pvp = fields.Float('PVP Línea', compute='_get_line_pvp')
     bom_id = fields.Many2one('mrp.bom', 'LdM', readonly=True)
     
@@ -110,6 +110,12 @@ class CostSheet(models.Model):
 
     _name = 'cost.sheet'
 
+    # def copy_data(self, default=None):
+    #     import ipdb; ipdb.set_trace()
+    #     res = super().copy_data(default)
+    #     del res[0]['group_id']
+    #     return res
+
     # COMUN
     name = fields.Char('Referencia')
     product_id = fields.Many2one('product.product', 'Producto asociado',
@@ -154,7 +160,7 @@ class CostSheet(models.Model):
 
     # [ALL] COSTE MANO DE OBRA
     workforce_cost_ids = fields.One2many(
-        'workforce.cost.line', 'sheet_id', string='Coste Mano de obra')
+        'workforce.cost.line', 'sheet_id', string='Coste Mano de obra', copy=True)
     workforce_total_euro_ud = fields.Float(
         'Total € ud', compute="_get_totals_workforce")
     workforce_total = fields.Float(
@@ -162,7 +168,7 @@ class CostSheet(models.Model):
 
     # [ALL] COSTE EXTERNALIZACION POR PIEZA
     outsorcing_cost_ids = fields.One2many(
-        'outsorcing.cost.line', 'sheet_id', string='Coste externalizacion por pieza')
+        'outsorcing.cost.line', 'sheet_id', string='Coste externalizacion por pieza', copy=True)
     outsorcing_total_ud = fields.Float(
         'Total ud', compute="_get_totals_outsorcing")
     outsorcing_total = fields.Float(
@@ -175,7 +181,7 @@ class CostSheet(models.Model):
         'cost_sheet_applicable_legislation_rel',
         'sheet_id', 'legislation_id',
         string='Legislación aplicable')
-    time_line_ids = fields.One2many('design.time.line', 'sheet_id', string='Tiempos')
+    time_line_ids = fields.One2many('design.time.line', 'sheet_id', string='Tiempos', copy=True)
     description = fields.Text('Requisitos técnicos')
     customer_note = fields.Text('Comentarios Cliente')
     hours_total = fields.Float('Horas totales', compute="_get_totals_design")
@@ -193,7 +199,7 @@ class CostSheet(models.Model):
 
     # FDM COSTE MATERIAL
     material_cost_ids = fields.One2many(
-        'material.cost.line', 'sheet_id', string='Coste material')
+        'material.cost.line', 'sheet_id', string='Coste material', copy=True)
     total_euro_ud = fields.Float('Total € ud', compute='_get_totals_material_cost')
     total_material_cost = fields.Float('Total', compute='_get_totals_material_cost')
     # COSTE MÁQUINA
@@ -258,18 +264,18 @@ class CostSheet(models.Model):
 
     # REUNIONES
     meet_line_ids = fields.One2many(
-        'meet.cost.line', 'sheet_id', string='Coste reuniones')
+        'meet.cost.line', 'sheet_id', string='Coste reuniones', copy=True)
     meet_hours_total = fields.Float('Horas totales', compute="_get_totals_meet")
     meet_total = fields.Float('TOTAL', compute="_get_totals_meet")
 
     # COMPRAS
     purchase_line_ids = fields.One2many(
-        'purchase.cost.line', 'sheet_id', string='Coste reuniones')
+        'purchase.cost.line', 'sheet_id', string='Coste reuniones', copy=True)
     purchase_total = fields.Float('TOTAL', compute="_get_totals_purchase")
 
     # OPPI
     oppi_line_ids = fields.One2many(
-        'oppi.cost.line', 'sheet_id', string='Oppi')
+        'oppi.cost.line', 'sheet_id', string='Oppi', copy=True)
     total_oppi = fields.Float('Time Total', compute="_get_oppi_total")
 
     can_edit = fields.Boolean(compute='_compute_can_edit')
