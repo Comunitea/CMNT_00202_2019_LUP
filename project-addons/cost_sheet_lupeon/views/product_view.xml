@@ -47,29 +47,18 @@
         </field>
     </record>
 
-    <!-- <record id="material_view_tree" model="ir.ui.view">
-        <field name="name">material.view</field>
-        <field name="model">material</field>
-        <field name="arch" type="xml">
-            <tree>
-                <field name="name"/>
-                <field name="type"/>
-                <field name="gr_cc"/>
-                <field name="euro_kg"/>
-                <field name="factor_hour"/>
-            </tree>
-        </field>
-    </record>
-
-    <record id="action_materials" model="ir.actions.act_window">
-        <field name="name">Materials</field>
-        <field name="type">ir.actions.act_window</field>
-        <field name="res_model">material</field>
-        <field name="view_type">form</field>
-        <field name="view_mode">tree,form</field>
-    </record>
-
-
-    <menuitem id="menu_action_materials" action="action_materials"  name="Materials" parent="menu_cost_cfg" sequence="10"/> -->
+    <record id="view_product_template_custom_lupeon" model="ir.ui.view">
+            <field name="name">product.template.custom.lupeon</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <div name="options" position="inside">
+                    <div attrs="{'invisible':[('type', 'not in', ['product', 'consu', 'service'])]}">
+                        <field name="custom_mrp_ok"/>
+                        <label for="custom_mrp_ok"/>
+                    </div>
+                </div>
+            </field>
+        </record>
 
 </odoo>

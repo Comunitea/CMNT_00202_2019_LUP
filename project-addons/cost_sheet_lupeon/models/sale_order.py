@@ -193,7 +193,7 @@ class SaleOrderLine(models.Model):
         return res
 
     def create_product_cost_sheet(self):
-        for line in self:
+        for line in self.filtered(lambda x: x.product_id.custom_mrp_ok):
             vals = {
                 'sale_line_id': line.id,
                 # 'name': line.order_id.name + ' - ' + line.name,
