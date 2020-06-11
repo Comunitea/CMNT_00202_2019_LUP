@@ -16,6 +16,7 @@ class ProductProduct(models.Model):
     _inherit = 'product.template'
 
     is_material = fields.Boolean('Es un material')
+    custom_mrp_ok = fields.Boolean('Fabricación lupeon')
 
 class ProductProduct(models.Model):
 

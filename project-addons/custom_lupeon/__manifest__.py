@@ -8,6 +8,8 @@
     "maintainer": "Comunitea",
     "website": "www.comunitea.com",
     "license": "AGPL-3",
-    "depends": ["product"],
-    "data": [],
+    "depends": ["product", "sale"],
+    "data": [
+        'views/partner_view.xml',
+    ],
 }

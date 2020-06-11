@@ -707,7 +707,8 @@ class CostSheet(models.Model):
             'default_code': 'OF-' + self.name,
             'type': 'product',
             'ldt_price': self.price_total,
-            'route_ids': [(6, 0, self.env.ref('mrp.route_warehouse0_manufacture').ids)]
+            'route_ids': [(6, 0, self.env.ref('mrp.route_warehouse0_manufacture').ids)],
+            'active': False
         }
         product = self.env['product.product'].create(vals)
         self.product_id = product.id

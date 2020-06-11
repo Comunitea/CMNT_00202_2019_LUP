@@ -129,9 +129,6 @@ class SaleOrder(models.Model):
         Creation of product sheet ids
         """
         for order in self:
-            if (order.partner_id.require_num_order):
-                order.client_order_ref = 'PENDIENTE'
-
             # Creo las tareas y producciones asociadas a cada hooja de costes
             sheet_lines = order.get_sheet_lines()
             sheet_lines.create_task_or_production()
@@ -196,7 +193,7 @@ class SaleOrderLine(models.Model):
         return res
 
     def create_product_cost_sheet(self):
-        for line in self:
+        for line in self.filtered(lambda x: x.product_id.custom_mrp_ok):
             vals = {
                 'sale_line_id': line.id,
                 # 'name': line.order_id.name + ' - ' + line.name,
