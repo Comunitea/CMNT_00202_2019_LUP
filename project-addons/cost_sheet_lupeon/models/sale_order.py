@@ -129,9 +129,6 @@ class SaleOrder(models.Model):
         Creation of product sheet ids
         """
         for order in self:
-            if (order.partner_id.require_num_order):
-                order.client_order_ref = 'PENDIENTE'
-
             # Creo las tareas y producciones asociadas a cada hooja de costes
             sheet_lines = order.get_sheet_lines()
             sheet_lines.create_task_or_production()
