@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- <template id="report_saleorder_document_custom_lupeoj" inherit_id="sale.report_saleorder_document">
+      	<xpath expr="//div[@name='payment_term']" position="after">
+        	<div class="col-3">
+          		<strong>Pruebo:</strong>
+          		<p t-field="doc.name"/>
+        	</div>
+      	</xpath>
+  	</template> -->
+
+</odoo>

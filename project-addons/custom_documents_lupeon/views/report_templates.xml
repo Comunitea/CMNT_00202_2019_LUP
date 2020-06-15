@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- <template id="external_layout_standard" inherit_id="web.external_layout_standard">
+        <xpath expr="//span[@t-field='company.report_footer']" position="attributes">
+            <attribute name="style">font-size: 12px;</attribute>
+        </xpath>
+    </template> -->
+
+</odoo>
