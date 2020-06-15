@@ -87,6 +87,7 @@ class GroupCostSheet(models.Model):
         línea de venta, para que se me cree la producción bajo pedido con
         esta lísta de materiales.
         """
+        bom = False
         for group in self:
             line = group.sale_line_id
             components = group.create_components_on_fly()
