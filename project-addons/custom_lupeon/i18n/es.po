@@ -1,0 +1,64 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* custom_lupeon
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-06-15 15:41+0000\n"
+"PO-Revision-Date: 2020-06-15 15:41+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: custom_lupeon
+#: model:ir.model,name:custom_lupeon.model_res_partner
+msgid "Contact"
+msgstr "Contacto"
+
+#. module: custom_lupeon
+#: model:ir.model.fields,field_description:custom_lupeon.field_res_partner__admin_fact
+#: model:ir.model.fields,field_description:custom_lupeon.field_res_users__admin_fact
+msgid "Factor administrativo"
+msgstr ""
+
+#. module: custom_lupeon
+#: model:ir.model,name:custom_lupeon.model_product_product
+msgid "Product"
+msgstr "Producto"
+
+#. module: custom_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_lupeon.view_move_search_custom
+msgid "Proforma reserved"
+msgstr "Reserva en proforma"
+
+#. module: custom_lupeon
+#: model:ir.model.fields,field_description:custom_lupeon.field_res_partner__require_num_order
+#: model:ir.model.fields,field_description:custom_lupeon.field_res_users__require_num_order
+msgid "Requires num order"
+msgstr "Requiere número cliente"
+
+#. module: custom_lupeon
+#: model:ir.model,name:custom_lupeon.model_sale_order
+msgid "Sale Order"
+msgstr "Pedido de venta"
+
+#. module: custom_lupeon
+#: model:ir.model,name:custom_lupeon.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Línea de pedido de venta"
+
+#. module: custom_lupeon
+#: model:ir.model.fields,field_description:custom_lupeon.field_stock_move__line_state
+msgid "State sale line"
+msgstr "Estado línea venta"
+
+#. module: custom_lupeon
+#: model:ir.model,name:custom_lupeon.model_stock_move
+msgid "Stock Move"
+msgstr "Movimiento de existencias"
+
