@@ -128,7 +128,12 @@ class SaleOrderImportMapper(Component):
             matched_fiscal_position = self.env['account.fiscal.position'].search([('prestashop_tax_ids', 'ilike', tax_id)])
             fiscal_positions += matched_fiscal_position.filtered(lambda r: tax_id in r.prestashop_tax_ids.split(','))
         if not fiscal_positions:
-            fiscal_positions = self.env['account.fiscal.position'].search([('prestashop_no_taxes', '=', True)])
+            binder = self.binder_for('prestashop.address')
+            shipping = binder.to_internal(record['id_address_delivery'], unwrap=True)
+            if shipping.country_id in self.env.ref('base.europe').country_ids:
+                fiscal_positions = self.env.ref('l10n_es.2_fp_intra')
+            else:
+                fiscal_positions = self.env['account.fiscal.position'].search([('prestashop_no_taxes', '=', True)])
         if len(fiscal_positions) > 1:
             preferred_fiscal_positions = fiscal_positions.filtered(lambda r: self.backend_record in r.preferred_for_backend_ids)
             if preferred_fiscal_positions:
