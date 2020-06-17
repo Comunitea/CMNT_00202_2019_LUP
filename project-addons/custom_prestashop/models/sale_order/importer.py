@@ -119,13 +119,16 @@ class SaleOrderImportMapper(Component):
         )
         for line in order_lines:
             line_data = sale_line_adapter.read(line['id'])
-            prestashop_tax_id = line_data.get('associations').get('taxes').get('tax').get('id')
-            if prestashop_tax_id not in line_taxes:
-                line_taxes.append(prestashop_tax_id)
+            if line_data.get('associations').get('taxes'):
+                prestashop_tax_id = line_data.get('associations').get('taxes').get('tax').get('id')
+                if prestashop_tax_id not in line_taxes:
+                    line_taxes.append(prestashop_tax_id)
         fiscal_positions = self.env['account.fiscal.position']
         for tax_id in line_taxes:
             matched_fiscal_position = self.env['account.fiscal.position'].search([('prestashop_tax_ids', 'ilike', tax_id)])
             fiscal_positions += matched_fiscal_position.filtered(lambda r: tax_id in r.prestashop_tax_ids.split(','))
+        if not fiscal_positions:
+            fiscal_positions = self.env['account.fiscal.position'].search([('prestashop_no_taxes', '=', True)])
         if len(fiscal_positions) > 1:
             preferred_fiscal_positions = fiscal_positions.filtered(lambda r: self.backend_record in r.preferred_for_backend_ids)
             if preferred_fiscal_positions:
