@@ -119,7 +119,7 @@ class SaleOrderImportMapper(Component):
         )
         for line in order_lines:
             line_data = sale_line_adapter.read(line['id'])
-            if line_data.get('associations').get('taxes'):
+            if line_data.get('associations').get('taxes') and line_data.get('associations').get('taxes').get('tax'):
                 prestashop_tax_id = line_data.get('associations').get('taxes').get('tax').get('id')
                 if prestashop_tax_id not in line_taxes:
                     line_taxes.append(prestashop_tax_id)
