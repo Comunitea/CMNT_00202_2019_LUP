@@ -10,6 +10,7 @@
                 <button name="create_procurements"
                         type="object"
                         icon="fa-truck"
+                        states="draft"
                 />
             </xpath>
 
