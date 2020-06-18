@@ -40,8 +40,6 @@ class ImportMapChild(Component):
 
         """
         res = []
-        prestashop_order_line_exists = []
-        imported_ids = []
         for values in items_values:
             if "tax_id" in values:
                 values.pop("tax_id")
@@ -50,10 +48,6 @@ class ImportMapChild(Component):
                 self.env.context['model_name']
             ).to_internal(prestashop_id)
             if prestashop_binding:
-                for line_record in prestashop_binding.prestashop_order_id.prestashop_order_line_ids:
-                    if line_record.id not in prestashop_order_line_exists:
-                        prestashop_order_line_exists.append(line_record.id)
-                imported_ids.append(prestashop_binding.id)
                 values.pop("prestashop_id")
                 final_vals = {}
                 for item in values.keys():
@@ -83,8 +77,6 @@ class ImportMapChild(Component):
                     res.append((1, prestashop_binding.id, final_vals))
             else:
                 res.append((0, 0, values))
-        for remove_id in set(prestashop_order_line_exists) - set(imported_ids):
-            res.append((2, remove_id))
         return res
 
 
@@ -114,3 +106,65 @@ class SaleOrderImportMapper(Component):
         context['model_name'] = model_name
         self.env.context = context
         return super()._map_child(map_record, from_attr, to_attr, model_name)
+
+    @mapping
+    def fiscal_position_id(self, record):
+        order_lines = record.get('associations').get('order_rows').get('order_row')
+        if isinstance(order_lines, dict):
+            order_lines = [order_lines]
+        line_taxes = []
+        sale_line_adapter = self.component(
+            usage='backend.adapter',
+            model_name='prestashop.sale.order.line'
+        )
+        for line in order_lines:
+            line_data = sale_line_adapter.read(line['id'])
+            if line_data.get('associations').get('taxes') and line_data.get('associations').get('taxes').get('tax'):
+                prestashop_tax_id = line_data.get('associations').get('taxes').get('tax').get('id')
+                if prestashop_tax_id not in line_taxes:
+                    line_taxes.append(prestashop_tax_id)
+        fiscal_positions = self.env['account.fiscal.position']
+        for tax_id in line_taxes:
+            matched_fiscal_position = self.env['account.fiscal.position'].search([('prestashop_tax_ids', 'ilike', tax_id)])
+            fiscal_positions += matched_fiscal_position.filtered(lambda r: tax_id in r.prestashop_tax_ids.split(','))
+        if not fiscal_positions:
+            binder = self.binder_for('prestashop.address')
+            shipping = binder.to_internal(record['id_address_delivery'], unwrap=True)
+            if shipping.country_id in self.env.ref('base.europe').country_ids:
+                fiscal_positions = self.env.ref('l10n_es.2_fp_intra')
+            else:
+                fiscal_positions = self.env['account.fiscal.position'].search([('prestashop_no_taxes', '=', True)])
+        if len(fiscal_positions) > 1:
+            preferred_fiscal_positions = fiscal_positions.filtered(lambda r: self.backend_record in r.preferred_for_backend_ids)
+            if preferred_fiscal_positions:
+                fiscal_positions = preferred_fiscal_positions
+        if len(fiscal_positions) != 1:
+            raise Exception('Error al importar posicion fiscal para los impuestos {}'.format(line_taxes))
+        return {'fiscal_position_id': fiscal_positions.id}
+        pass
+
+    def _map_child(self, map_record, from_attr, to_attr, model_name):
+        binder = self.binder_for('prestashop.sale.order')
+        source = map_record.source
+        if callable(from_attr):
+            child_records = from_attr(self, source)
+        else:
+            child_records = source[from_attr]
+        exists = binder.to_internal(source['id'])
+        current_lines = []
+        remove_lines = []
+        if exists:
+            incoming_lines = [int(x['id']) for x in child_records]
+            if model_name == 'prestashop.sale.order.line':
+                current_lines = [x.prestashop_id for x in exists.prestashop_order_line_ids]
+            else:
+                current_lines = [x.prestashop_id for x in exists.prestashop_discount_line_ids]
+            remove_lines = list(set(current_lines) - set(incoming_lines))
+        context = dict(self.env.context)
+        context['model_name'] = model_name
+        self.env.context = context
+        res = super()._map_child(map_record, from_attr, to_attr, model_name)
+        if remove_lines:
+            for line in remove_lines:
+                res.append((2, line))
+        return res

@@ -15,6 +15,11 @@ class SaleOrde(models.Model):
 
     _inherit = "sale.order"
 
+    @api.onchange('payment_mode_id')
+    def onchange_payment_mode_id(self):
+        if self.payment_mode_id.default_payment_term_id:
+            self.payment_term_id = self.payment_mode_id.default_payment_term_id
+
     def write(self, vals):
         run = False
         if vals.get("prestashop_state") or vals.get("invoice_status"):
