@@ -14,6 +14,34 @@
                 />
             </xpath>
 
+            <field name="partner_shipping_id" position="after">
+                <field name="ship_cost"/>
+            </field>
+
+        </field>
+    </record>
+
+    <!-- sale.order inherit search view -->
+    <record id="sale_order_filter_custom_lupeon" model="ir.ui.view">
+        <field name="name">sale_order_filter_custom_lupeon</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+        <field name="arch" type="xml">
+            <field name="user_id" position="before">
+                <field name="carrier_id"/>
+            </field>
+
+            <filter name="activities_overdue" position="before">
+                <filter string="Whithout shipping cost" name="shipping_cost" domain="[('ship_cost', '=', False)]"/>
+                <separator/>
+                <filter string="Whith Carrier" name="carrier" domain="[('carrier_id', '!=', False)]"/>
+                <separator/>
+            </filter>
+
+            <filter name="customer" position="after">
+                <filter name="carrier" string="Carrier" domain="[]" context="{'group_by':'carrier_id'}"/>
+            </filter>
+            
         </field>
     </record>
 

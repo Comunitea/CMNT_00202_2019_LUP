@@ -9,6 +9,8 @@ class SaleOrder(models.Model):
 
     _inherit = "sale.order"
 
+    ship_cost = fields.Monetary(string='Ship Cost', default=0.0)
+
     @api.multi
     def action_confirm(self):
         """
