@@ -39,6 +39,14 @@ class SaleOrderLine(models.Model):
 
     _inherit = "sale.order.line"
 
+    reserved = fields.Boolean('Reserved', compute="_is_reserve")
+
+    @api.multi
+    def _is_reserve(self):
+        for line in self:
+            if line.move_ids.filtered(lambda x: x.state == 'assigned'):
+                line.reserved = True
+
     @api.multi
     def _action_launch_stock_rule_anticiped(self):
         """
@@ -98,4 +106,5 @@ class SaleOrderLine(models.Model):
             line.order_id.confirmation_date = fields.Datetime.now()
             line._action_launch_stock_rule_anticiped()
             line.move_ids.filtered(lambda x: x.state == 'confirmed')._action_assign()
+           
         return {'type': 'ir.actions.client', 'tag': 'reload'}

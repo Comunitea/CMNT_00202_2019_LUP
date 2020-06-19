@@ -12,6 +12,7 @@
                         icon="fa-truck"
                         states="draft"
                 />
+                <field name="reserved"/>
             </xpath>
 
             <field name="partner_shipping_id" position="after">
