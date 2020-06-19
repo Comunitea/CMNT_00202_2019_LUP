@@ -92,6 +92,8 @@ class SaleOrderLine(models.Model):
     @api.multi
     def create_procurements(self):
         for line in self:
+            # Se necesita la fecha de confirmación para que no falle
             line.order_id.confirmation_date = fields.Datetime.now()
             line._action_launch_stock_rule_anticiped()
+            line.move_ids.filtered(lambda x: x.state == 'confirmed')._action_assign()
         return {'type': 'ir.actions.client', 'tag': 'reload'}
