@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-19 10:15+0000\n"
-"PO-Revision-Date: 2020-06-19 10:15+0000\n"
+"POT-Creation-Date: 2020-06-19 13:32+0000\n"
+"PO-Revision-Date: 2020-06-19 13:32+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -32,6 +32,16 @@ msgid "Factor administrativo"
 msgstr ""
 
 #. module: custom_lupeon
+#: model:ir.model.fields,field_description:custom_lupeon.field_account_payment_mode__payment_cost
+msgid "Payment Mode Cost"
+msgstr "Coste modo de pago"
+
+#. module: custom_lupeon
+#: model:ir.model,name:custom_lupeon.model_account_payment_mode
+msgid "Payment Modes"
+msgstr "Modos de pago"
+
+#. module: custom_lupeon
 #: model:ir.model,name:custom_lupeon.model_product_product
 msgid "Product"
 msgstr "Producto"
@@ -46,6 +56,11 @@ msgstr "Reserva en proforma"
 #: model:ir.model.fields,field_description:custom_lupeon.field_res_users__require_num_order
 msgid "Requires num order"
 msgstr "Requiere número cliente"
+
+#. module: custom_lupeon
+#: model:ir.model.fields,field_description:custom_lupeon.field_sale_order_line__reserved
+msgid "Reserved"
+msgstr "Reservado"
 
 #. module: custom_lupeon
 #: model:ir.model,name:custom_lupeon.model_sale_order

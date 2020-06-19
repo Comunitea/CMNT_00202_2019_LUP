@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record id="account_payment_mode_form_custom" model="ir.ui.view" >
+        <field name="name">account.payment.mode.custom</field>
+        <field name="model">account.payment.mode</field>
+        <field name="inherit_id" ref="account_payment_mode.account_payment_mode_form"/>
+        <field name="arch" type="xml">
+            <field name="variable_journal_ids" position="after">
+                <field name="payment_cost"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>
+
