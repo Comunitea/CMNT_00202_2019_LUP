@@ -90,7 +90,7 @@ msgstr "Movimiento de existencias"
 #. module: custom_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_lupeon.sale_order_filter_custom_lupeon
 msgid "Whith Carrier"
-msgstr "Con transpoortista"
+msgstr "Con transportista"
 
 #. module: custom_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_lupeon.sale_order_filter_custom_lupeon

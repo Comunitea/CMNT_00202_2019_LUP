@@ -2,6 +2,7 @@
 # License AGPL-3 - See http://www.gnu.org/licenses/agpl-3.0.html
 
 from odoo import models, fields, api, _
+from datetime import datetime, timedelta
 
 
 class SaleOrder(models.Model):
@@ -17,6 +18,15 @@ class SaleOrder(models.Model):
     count_task = fields.Integer('Productions',
                                 compute='_count_production_and_task')
     project_id = fields.Many2one('project.project', 'Project', readonly=True)
+    production_date = fields.Datetime('Fecha producción')
+
+    @api.onchange('commitment_date')
+    def _onchange_commitment_date(self):
+        res = super()._onchange_commitment_date()
+        if self.commitment_date:
+            self.production_date = self.commitment_date - timedelta(days=1)
+        return res
+
     
     def get_group_sheets(self):
         self.ensure_one()

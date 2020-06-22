@@ -40,6 +40,10 @@
             <field name="payment_term_id" position="after">
                 <field name="project_id"/>
             </field>
+
+            <field name="commitment_date" position="after">
+                <field name="production_date"/>
+            </field>
         </field>
     </record>
 

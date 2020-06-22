@@ -112,7 +112,6 @@ class CostSheet(models.Model):
     _name = 'cost.sheet'
 
     # def copy_data(self, default=None):
-    #     import ipdb; ipdb.set_trace()
     #     res = super().copy_data(default)
     #     del res[0]['group_id']
     #     return res
@@ -703,9 +702,9 @@ class CostSheet(models.Model):
     def create_product_on_fly(self):
         self.ensure_one()
         vals = {
-            'name': self.name,
+            'name': (self.name or '/'),
             'uom_id': 1,  # TODO get_unit
-            'default_code': 'OF-' + self.name,
+            'default_code': 'OF-' + (self.name or '/'),
             'type': 'product',
             'ldt_price': self.price_total,
             'route_ids': [(6, 0, self.env.ref('mrp.route_warehouse0_manufacture').ids)],
@@ -764,7 +763,9 @@ class CostSheet(models.Model):
                 'product_id':sheet.product_id.id,
                 'product_uom_id':sheet.product_id.uom_id.id,
                 'product_qty': sheet.cus_units,  # TODO get_qty,
-                'bom_id': bom.id
+                'bom_id': bom.id,
+                'date_planned_finished': 
+                sheet.sale_line_id.order_id.production_date or False,
             }
             prod = self.env['mrp.production'].create(vals)
             prod.onchange_product_id()
