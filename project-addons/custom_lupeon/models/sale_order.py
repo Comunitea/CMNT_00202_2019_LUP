@@ -34,6 +34,33 @@ class SaleOrder(models.Model):
             if invoices:
                 invoices.write({'name': vals['client_order_ref']})
         return res
+    
+    @api.multi
+    def create_procurements_all(self):   
+        for order in self:
+            order.order_line.create_procurements()
+            
+    @api.multi
+    def action_barcode_delivery(self):
+        '''
+        This function returns an action that display existing delivery orders
+        of given sales order ids. It can either be a in a list or in a form
+        view, if there is only one delivery order to show.
+        '''
+        action = self.env.ref('stock_barcode.stock_picking_kanban').read()[0]
+
+        pickings = self.mapped('picking_ids')
+        #if len(pickings) > 1:
+        action['domain'] = [('id', 'in', pickings.ids)]
+        # elif pickings:
+        #     form_view = [(self.env.ref('stock_barcode.stock_picking_barcode').id, 'form')]
+        #     if 'views' in action:
+        #         action['views'] = form_view + [(state,view) for state,view in action['views'] if view != 'form']
+        #     else:
+        #         action['views'] = form_view
+        #     action['res_id'] = pickings
+        return action
+
 
 class SaleOrderLine(models.Model):
 

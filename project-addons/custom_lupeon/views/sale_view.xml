@@ -14,11 +14,42 @@
                 />
                 <field name="reserved"/>
             </xpath>
-
+            <xpath expr="//field[@name='order_line']" position="before">
+                <button name="create_procurements_all" align="right"
+                        type="object"
+                        icon="fa-truck"
+                        states="draft"
+                />
+            </xpath>
             <field name="partner_shipping_id" position="after">
                 <field name="ship_cost"/>
             </field>
 
+        </field>
+    </record>
+
+    <record id="view_order_form_inherit_barcode" model="ir.ui.view">
+        <field name="name">sale.order.form.barcode</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_stock.view_order_form_inherit_sale_stock"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_view_delivery']" position="before">
+                <button type="object"
+                    name="action_barcode_delivery"
+                    class="oe_stat_button"
+                    icon="fa-barcode"
+                    attrs="{'invisible': [('delivery_count', '=', 0)]}" groups="base.group_user"
+                    string="Barcode"/>
+                
+            </xpath>
+            <xpath expr="//group[@name='sale_shipping']" position="attributes">
+                <attribute name="groups"></attribute> <!-- Remove the res.group on the group and set it on the field directly-->
+            </xpath>
+            <xpath expr="//field[@name='expected_date']" position="before">
+                <field name="warehouse_id" options="{'no_create': True}" groups="stock.group_stock_multi_locations"/>
+                <field name="incoterm" widget="selection" groups="sale_stock.group_display_incoterm"/>
+                <field name="picking_policy" required="True"/>
+            </xpath>
         </field>
     </record>
 
