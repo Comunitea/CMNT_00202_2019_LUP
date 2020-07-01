@@ -3,6 +3,8 @@
 
 from odoo import models, fields, api, _
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT, float_compare, float_round
+from odoo.exceptions import UserError
+
 
 
 class SaleOrder(models.Model):
@@ -47,19 +49,28 @@ class SaleOrder(models.Model):
         of given sales order ids. It can either be a in a list or in a form
         view, if there is only one delivery order to show.
         '''
-        action = self.env.ref('stock_barcode.stock_picking_kanban').read()[0]
+        pickings = self.mapped('picking_ids').filtered(lambda x: x.state == 'assigned')
+        if pickings:
+            if len(pickings) == 1:
+                return pickings[0].open_picking_client_action()
+            else:
+                pt = pickings.mapped('picking_type_id')
+                if pt:
+                    res = pt[0].get_action_picking_tree_ready_kanban()
+                    res['context'] = ('{\n'
+                        "            'form_view_initial_mode': 'edit',\n"
+                        "            'search_default_picking_type_id': [%s],\n"
+                        "            'default_picking_type_id': %s,\n"
+                        "            'contact_display': 'partner_address',\n"
+                        "            'search_default_available': 1,\n"
+                        "            'force_detailed_view': True,\n"
+                        '        }' % (pt.id, pt.id)
+                    )
+                    res['domain'] = [('id', 'in', pickings.ids)]
 
-        pickings = self.mapped('picking_ids')
-        #if len(pickings) > 1:
-        action['domain'] = [('id', 'in', pickings.ids)]
-        # elif pickings:
-        #     form_view = [(self.env.ref('stock_barcode.stock_picking_barcode').id, 'form')]
-        #     if 'views' in action:
-        #         action['views'] = form_view + [(state,view) for state,view in action['views'] if view != 'form']
-        #     else:
-        #         action['views'] = form_view
-        #     action['res_id'] = pickings
-        return action
+                return res
+        raise UserError(_('No pickings in assigned state to open'))
+        return
 
 
 class SaleOrderLine(models.Model):
