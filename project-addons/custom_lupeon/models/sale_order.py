@@ -12,6 +12,14 @@ class SaleOrder(models.Model):
     _inherit = "sale.order"
 
     ship_cost = fields.Monetary(string='Ship Cost', default=0.0)
+    num_line = fields.Char(string='Nº Line')
+
+    @api.multi
+    def _prepare_invoice(self):
+        vals = super()._prepare_invoice()
+        if self.num_line:
+            vals['num_line'] = self.num_line
+        return vals
 
     @api.multi
     def action_confirm(self):

@@ -16,7 +16,7 @@
                 <t t-set="sa" t-value="doc.partner_shipping_id"/>
 
                 <div class="col-6">
-                    <strong>Dirección Facturación:</strong>
+                    <strong>Invoice Address:</strong>
                     <div>
                         <span itemprop="name" t-esc="ia.name"/>
                     </div>
@@ -35,7 +35,7 @@
                     </div>
                 </div>
                 <div class="col-6">
-                    <strong>Dirección de entrega:</strong>
+                    <strong>Shipping Adress:</strong>
                     <div>
                         <span itemprop="name" t-esc="sa.name"/>
                     </div>
@@ -62,24 +62,28 @@
       	<xpath expr="//div[@id='informations']" position="replace">
             <div class="row mt32 mb32" id="informations">
                 <div t-if="doc.name" class="col-auto mw-100 mb-2">
-                    <strong>Número:</strong>
+                    <strong>Number:</strong>
                     <p class="m-0" t-field="doc.name"/>
                 </div>
                 <div t-if="doc.confirmation_date and doc.state not in ['draft','sent']" class="col-auto mw-100 mb-2">
-                    <strong>Fecha pedido:</strong>
+                    <strong>Order Date:</strong>
                     <p class="m-0" t-field="doc.confirmation_date"/>
                 </div>
                 <div t-if="doc.date_order and doc.state in ['draft','sent']" class="col-auto mw-100 mb-2">
-                    <strong>Fecha presupuesto:</strong>
+                    <strong>Quotation Date:</strong>
                     <p class="m-0" t-field="doc.date_order"/>
                 </div>
                 <div t-if="doc.client_order_ref" class="col-auto mw-100 mb-2">
-                    <strong>Nº pedido cliente:</strong>
+                    <strong>Nº Customer Order:</strong>
                     <p class="m-0" t-field="doc.client_order_ref"/>
                 </div>
                 <div t-if="doc.partner_id and doc.partner_id.supplier_number" class="col-auto mw-100 mb-2">
-                    <strong>Nº proveedor:</strong>
+                    <strong>Nº Supplier:</strong>
                     <p class="m-0" t-field="doc.partner_id.supplier_number"/>
+                </div>
+                <div t-if="doc.num_line" class="col-auto mw-100 mb-2">
+                    <strong>Nº Line:</strong>
+                    <p class="m-0" t-field="doc.num_line"/>
                 </div>
             </div>
       	</xpath>
@@ -89,7 +93,7 @@
                position="replace">
                  <td class="text-right">
                     <span t-esc="int(line.product_uom_qty)"/>
-                    <span t-field="line.product_uom" groups="uom.group_uom"/>
+                    <!-- <span t-field="line.product_uom" groups="uom.group_uom"/> -->
                 </td>
         </xpath>
         <!-- Mostrar nombre bien en el impuesto -->

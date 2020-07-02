@@ -23,6 +23,7 @@
             </xpath>
             <field name="partner_shipping_id" position="after">
                 <field name="ship_cost"/>
+                <field name="num_line"/>
             </field>
 
         </field>

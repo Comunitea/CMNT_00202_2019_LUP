@@ -14,6 +14,7 @@
         'cost_sheet_lupeon',
         'web',
         'custom_lupeon',
+        'account_due_dates_str'
     ],
     'data': [
         'views/report_sale.xml',

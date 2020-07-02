@@ -14,7 +14,7 @@
                 <t t-set="sa" t-value="o.partner_shipping_id"/>
 
                 <div class="col-6">
-                    <strong>Dirección Facturación:</strong>
+                    <strong>Invoice Address:</strong>
                     <div>
                         <span itemprop="name" t-esc="ia.name"/>
                     </div>
@@ -33,7 +33,7 @@
                     </div>
                 </div>
                 <div class="col-6">
-                    <strong>Dirección de entrega:</strong>
+                    <strong>Shipping Adress:</strong>
                     <div>
                         <span itemprop="name" t-esc="sa.name"/>
                     </div>
@@ -61,34 +61,60 @@
         <xpath expr="//div[@id='informations']" position="replace">
             <div class="row mt32 mb32" id="informations">
                 <div t-if="o.number" class="col-auto mw-100 mb-2">
-                    <strong>Número:</strong>
+                    <strong>Number:</strong>
                     <p class="m-0" t-field="o.number"/>
                 </div>
                  <div class="col-auto mw-100 mb-2" t-if="o.date_invoice" name="invoice_date">
-                    <strong>Fecha factura:</strong>
+                    <strong>Invoice Date:</strong>
                     <p class="m-0" t-field="o.date_invoice"/>
                 </div>
                 <div class="col-auto mw-100 mb-2" t-if="o.origin" name="origin">
-                    <strong>Nº pedido:</strong>
+                    <strong>Nº Order:</strong>
                     <p class="m-0" t-field="o.origin"/>
                 </div>
                <div name="reference" class="col-auto mw-100 mb-2" t-if="o.name">
-                    <strong>Nº pedido cliente:</strong>
+                    <strong>Nº Customer Order:</strong>
                     <p class="m-0" t-field="o.name"/>
                 </div>
                 <div t-if="o.partner_id and o.partner_id.supplier_number" class="col-auto mw-100 mb-2">
-                    <strong>Nº proveedor:</strong>
+                    <strong>Nº Supplier:</strong>
                     <p class="m-0" t-field="o.partner_id.supplier_number"/>
+                </div>
+                <div t-if="o.num_line" class="col-auto mw-100 mb-2">
+                    <strong>Nº Line:</strong>
+                    <p class="m-0" t-field="o.num_line"/>
+                </div>
+                <div class="col-auto mw-100 mb-2" t-if="o.date_due and o.type == 'out_invoice' and o.state in ('open', 'in_payment')" name="due_date">
+                    <strong>Date Due:</strong>
+                    <p class="m-0" t-field="o.date_due"/>
                 </div>
             </div>
       	</xpath>
+
+        <xpath expr="//p[@t-if='o.reference']" position="replace">
+        </xpath>
+
+        <xpath expr="//p[@t-if='o.payment_term_id']" position="replace">
+            <p t-if="o.payment_term_id" name="payment_term">
+                <strong>Payment Term:</strong>
+                <span t-field="o.payment_term_id.note"/>
+            </p>
+        </xpath>
+
+        <xpath expr="//p[@t-if='o.payment_term_id']" position="after">
+            <p t-if="o.expiration_dates_str" name="payment_term">
+                <strong>Due Dates:</strong>
+                <br/>
+                <span t-field="o.expiration_dates_str"/>
+            </p>
+        </xpath>
 
         <!-- Cantidad sin decimales -->
         <xpath expr="//table[@class='table table-sm o_main_table']/tbody/t[@t-foreach='o.invoice_line_ids']/tr/t[1]/td[3]"
                position="replace">
                  <td class="text-right">
                     <span t-esc="int(line.quantity)"/>
-                    <span t-field="line.uom_id"  groups="uom.group_uom"/>
+                    <!-- <span t-field="line.uom_id"  groups="uom.group_uom"/> -->
                 </td>
         </xpath>
 

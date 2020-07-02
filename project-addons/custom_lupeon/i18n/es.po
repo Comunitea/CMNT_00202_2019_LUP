@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-02 12:13+0000\n"
-"PO-Revision-Date: 2020-07-02 12:13+0000\n"
+"POT-Creation-Date: 2020-07-02 15:34+0000\n"
+"PO-Revision-Date: 2020-07-02 15:34+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -26,9 +26,25 @@ msgid "Carrier"
 msgstr "Transportista"
 
 #. module: custom_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_lupeon.view_order_cost_tree
+msgid "Confirmation Date"
+msgstr "Fecha confirmación"
+
+#. module: custom_lupeon
 #: model:ir.model,name:custom_lupeon.model_res_partner
 msgid "Contact"
 msgstr "Contacto"
+
+#. module: custom_lupeon
+#: model:ir.actions.act_window,name:custom_lupeon.action_sale_order_cost
+#: model:ir.ui.menu,name:custom_lupeon.menu_sale_ship_cost
+msgid "Costes de envío en ventas"
+msgstr ""
+
+#. module: custom_lupeon
+#: model_terms:ir.actions.act_window,help:custom_lupeon.action_sale_order_cost
+msgid "Editar para añadir coste de envío a los pedidos"
+msgstr ""
 
 #. module: custom_lupeon
 #: model:ir.model.fields,field_description:custom_lupeon.field_res_partner__admin_fact
@@ -37,10 +53,26 @@ msgid "Factor administrativo"
 msgstr ""
 
 #. module: custom_lupeon
-#: code:addons/custom_lupeon/models/sale_order.py:72
+#: model:ir.model,name:custom_lupeon.model_account_invoice
+msgid "Invoice"
+msgstr "Factura"
+
+#. module: custom_lupeon
+#: code:addons/custom_lupeon/models/sale_order.py:80
 #, python-format
 msgid "No pickings in assigned state to open"
 msgstr "No hay albaranes en estado preparado para mostrar."
+
+#. module: custom_lupeon
+#: model:ir.model.fields,field_description:custom_lupeon.field_account_invoice__num_line
+#: model:ir.model.fields,field_description:custom_lupeon.field_sale_order__num_line
+msgid "Nº Line"
+msgstr "Nº Línea"
+
+#. module: custom_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_lupeon.view_order_cost_tree
+msgid "Order Number"
+msgstr "Número de pedido"
 
 #. module: custom_lupeon
 #: model:ir.model.fields,field_description:custom_lupeon.field_account_payment_mode__payment_cost
@@ -51,6 +83,11 @@ msgstr "Coste modo de pago"
 #: model:ir.model,name:custom_lupeon.model_account_payment_mode
 msgid "Payment Modes"
 msgstr "Modos de pago"
+
+#. module: custom_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_lupeon.view_order_cost_tree
+msgid "Pedidos"
+msgstr ""
 
 #. module: custom_lupeon
 #: model:ir.model,name:custom_lupeon.model_product_product
@@ -103,6 +140,11 @@ msgstr "Movimiento de existencias"
 #: model:ir.model.fields,field_description:custom_lupeon.field_res_users__supplier_number
 msgid "Supplier Number"
 msgstr " Nº proveedor"
+
+#. module: custom_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_lupeon.view_order_cost_tree
+msgid "Total Tax Included"
+msgstr "Total impuestos incluidos"
 
 #. module: custom_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_lupeon.sale_order_filter_custom_lupeon
