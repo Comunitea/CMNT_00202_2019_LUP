@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-01 15:33+0000\n"
-"PO-Revision-Date: 2020-07-01 15:33+0000\n"
+"POT-Creation-Date: 2020-07-02 12:13+0000\n"
+"PO-Revision-Date: 2020-07-02 12:13+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -99,9 +99,15 @@ msgid "Stock Move"
 msgstr "Movimiento de existencias"
 
 #. module: custom_lupeon
+#: model:ir.model.fields,field_description:custom_lupeon.field_res_partner__supplier_number
+#: model:ir.model.fields,field_description:custom_lupeon.field_res_users__supplier_number
+msgid "Supplier Number"
+msgstr " Nº proveedor"
+
+#. module: custom_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_lupeon.sale_order_filter_custom_lupeon
 msgid "Whith Carrier"
-msgstr "Con transpoortista"
+msgstr "Con transportista"
 
 #. module: custom_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_lupeon.sale_order_filter_custom_lupeon

@@ -10,3 +10,4 @@ class ResPartner(models.Model):
 
     admin_fact = fields.Float('Factor administrativo')
     require_num_order = fields.Boolean('Requires num order')
+    supplier_number = fields.Char('Supplier Number')

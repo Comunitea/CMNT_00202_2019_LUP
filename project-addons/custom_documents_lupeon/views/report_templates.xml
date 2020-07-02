@@ -1,6 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+
+    <template id="external_layout_boxed_custom" inherit_id="web.external_layout_boxed">
+        <!-- Logo mas pequeño -->
+      	<xpath expr="//div[@class='col-6']/img" position="attributes">
+        	<div class="col-3">
+          		<attribute name="height">70px;</attribute>
+          		<attribute name="width">200px;</attribute>
+        	</div>
+      	</xpath>
+
+        <!-- Parte dirección custom -->
+        <xpath expr="//div[@name='company_address']" position="replace">
+        	<div>
+                <strong><span itemprop="name" t-esc="company.partner_id.name"/></strong> 
+            </div>
+            <div>
+                CIF: <span t-esc="company.partner_id.vat"/>
+            </div>
+            <div>
+                <span t-esc="company.partner_id.street"/>
+            </div>
+            <div>
+                <span t-esc="company.partner_id.zip"/> 
+                <span t-esc="company.partner_id.city"/> 
+                (  <span t-esc="company.partner_id.state_id.name"/>  )
+            </div>
+      	</xpath> 
+  	</template>
+
+    <!-- <template id="web.address_layout">
+        <t t-set="colclass" t-value="('col-md-5' if report_type == 'html' else 'col-5') + ' ml-auto'"/>
+        <t t-if="address">
+            <div class="address row">
+                <t t-if="information_block">
+                    <t t-set="colclass" t-value="'col-5 offset-1'"/>
+                    <div name="information_block" class="col-6">
+                        <t t-raw="information_block"/>
+                    </div>
+                </t>
+                <div name="address" t-att-class="colclass">
+                    <t t-raw="address"/>
+                </div>
+            </div>
+        </t>
+    </template> -->
+
+
+    <!-- Nombre en negrita -->
+    <!-- <template id="contact_name_custom" inherit_id="base.contact_name">
+        <xpath expr="//div/t[@t-if='object.name']" position="replace">
+           <strong><span itemprop="name" t-esc="name"/></strong> 
+           NIF: <span itemprop="name" t-esc="VAT"/>
+        </xpath>
+    </template> -->
+
+    <!-- <template id="contact_custom" inherit_id="base.contact">
+        <xpath expr="//address/div[@itemprop='address']" position="after">
+            <div t-if="object.vat and 'vat' in fields">
+                <i t-if="not options.get('no_marker')" title="NIF"/>
+                <span class="o_force_ltr" itemprop="vat" t-esc="object.vat"/>
+            </div>
+        </xpath>
+    </template> -->
+
     <!-- <template id="external_layout_standard" inherit_id="web.external_layout_standard">
         <xpath expr="//span[@t-field='company.report_footer']" position="attributes">
             <attribute name="style">font-size: 12px;</attribute>

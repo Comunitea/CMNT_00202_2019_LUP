@@ -12,9 +12,12 @@
         'sale',
         'stock',
         'cost_sheet_lupeon',
+        'web',
+        'custom_lupeon',
     ],
     'data': [
         'views/report_sale.xml',
+        'views/report_invoice.xml',
         'views/report_templates.xml',
     ],
     'installable': True,

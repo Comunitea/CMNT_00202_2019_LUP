@@ -9,6 +9,7 @@
             <field name="category_id" position="after">
                 <field name="admin_fact"/>
                 <field name="require_num_order"/>
+                <field name="supplier_number"/>
             </field>
         </field>
     </record>
