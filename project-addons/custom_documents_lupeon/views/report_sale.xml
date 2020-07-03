@@ -17,6 +17,7 @@
 
                 <div class="col-6">
                     <strong>Invoice Address:</strong>
+                    <hr style="width:50%; margin:1px;"/>
                     <div>
                         <span itemprop="name" t-esc="ia.name"/>
                     </div>
@@ -36,6 +37,7 @@
                 </div>
                 <div class="col-6">
                     <strong>Shipping Adress:</strong>
+                    <hr style="width:50%; margin:1px;"/>
                     <div>
                         <span itemprop="name" t-esc="sa.name"/>
                     </div>
@@ -58,6 +60,20 @@
                 <br/>
             </div>
       	</xpath>
+
+        <!-- Quitar los # y que salga PROFORMA -->
+        <xpath expr="//h2" position="replace">
+             <h2>
+                <t t-if="not (env.context.get('proforma', False) or is_pro_forma)">
+                    <span t-if="doc.state not in ['draft','sent']">Order </span>
+                    <span t-if="doc.state in ['draft','sent']">Quotation </span>
+                </t>
+                <t t-if="env.context.get('proforma', False) or is_pro_forma">
+                    <span>Proforma</span>
+                </t>
+                <span t-field="doc.name"/>
+            </h2>
+        </xpath>
 
       	<xpath expr="//div[@id='informations']" position="replace">
             <div class="row mt32 mb32" id="informations">
@@ -102,6 +118,14 @@
                 <td class="text-right">
                     <span t-esc="', '.join(map(lambda x: (x.name), line.tax_id))"/>
                 </td>
+        </xpath>
+
+        <!-- Etiqueta plazo de pago -->
+        <xpath expr="//p[@t-if='doc.payment_term_id.note']" position="replace">
+            <p t-if="doc.payment_term_id.note" name="payment_term">
+                <strong>Payment Term:</strong>
+                <span t-field="doc.payment_term_id.note"/>
+            </p>
         </xpath>
       
 

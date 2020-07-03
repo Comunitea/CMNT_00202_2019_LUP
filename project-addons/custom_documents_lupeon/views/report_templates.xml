@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    
+     <template id="asset_common" name="custom_documents_lupeon pdf assets" inherit_id="web.report_assets_common">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet" type="text/scss" href="/custom_documents_lupeon/static/src/scss/custom_lupeon.scss"/>
+        </xpath>
+    </template>
 
 
     <template id="external_layout_boxed_custom" inherit_id="web.external_layout_boxed">
@@ -13,19 +19,29 @@
 
         <!-- Parte dirección custom -->
         <xpath expr="//div[@name='company_address']" position="replace">
-        	<div>
-                <strong><span itemprop="name" t-esc="company.partner_id.name"/></strong> 
-            </div>
-            <div>
-                CIF: <span t-esc="company.partner_id.vat"/>
-            </div>
-            <div>
-                <span t-esc="company.partner_id.street"/>
-            </div>
-            <div>
-                <span t-esc="company.partner_id.zip"/> 
-                <span t-esc="company.partner_id.city"/> 
-                (  <span t-esc="company.partner_id.state_id.name"/>  )
+        	<div style="font-size: 10px">
+                <div>
+                    <strong><span itemprop="name" t-esc="company.partner_id.name"/></strong> 
+                </div>
+                <div t-if="company.partner_id.vat">
+                    CIF: <span t-esc="company.partner_id.vat"/>
+                </div>
+                <div t-if="company.partner_id.street">
+                    <span t-esc="company.partner_id.street"/>
+                </div>
+                <div>
+                    <span t-esc="company.partner_id.zip"/> 
+                    <span t-esc="company.partner_id.city"/> 
+                    <t t-if="company.partner_id.state_id">
+                     (  <span t-esc="company.partner_id.state_id.name"/>  )
+                    </t>
+                </div>
+                <div t-if="company.partner_id.phone">
+                    Tel.: <span t-esc="company.partner_id.phone"/> 
+                </div>
+                <div t-if="company.partner_id.email">
+                    <span t-esc="company.partner_id.email"/> 
+                </div>
             </div>
       	</xpath>
 
