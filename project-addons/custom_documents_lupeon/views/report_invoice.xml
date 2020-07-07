@@ -104,7 +104,7 @@
         </xpath>
 
         <xpath expr="//p[@t-if='o.payment_term_id']" position="after">
-            <p t-if="o.expiration_dates_str" name="payment_term">
+            <p t-if="o.expiration_dates_str and o.state not in ('paid', 'in_payment')" name="payment_term">
                 <strong>Due Dates:</strong>
                 <br/>
                 <span t-field="o.expiration_dates_str"/>

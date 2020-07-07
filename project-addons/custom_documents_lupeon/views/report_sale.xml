@@ -101,6 +101,10 @@
                     <strong>Nº Line:</strong>
                     <p class="m-0" t-field="doc.num_line"/>
                 </div>
+                <div t-if="doc.validity_date and env.context.get('proforma', False) or is_pro_forma" class="col-auto mw-100 mb-2">
+                    <strong>Expiration Date:</strong>
+                    <p class="m-0" t-field="doc.validity_date"/>
+                </div>
             </div>
       	</xpath>
         

@@ -136,3 +136,7 @@ msgstr "Tel.:"
 msgid "Web:"
 msgstr ""
 
+#. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
+msgid "<strong>Expiration Date:</strong>"
+msgstr "<strong>Fecha de caducidad:</strong>"
