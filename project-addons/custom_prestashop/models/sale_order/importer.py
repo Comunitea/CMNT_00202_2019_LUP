@@ -45,7 +45,7 @@ class ImportMapChild(Component):
                 values.pop("tax_id")
             prestashop_id = values["prestashop_id"]
             prestashop_binding = self.binder_for(
-                self.env.context['model_name']
+                self.env.context["model_name"]
             ).to_internal(prestashop_id)
             if prestashop_binding:
                 values.pop("prestashop_id")
@@ -63,8 +63,10 @@ class ImportMapChild(Component):
                         and values[item]
                     ):
                         if float(values[item]) != prestashop_binding[item] and (
-                            prestashop_binding[item] - float(values[item]) > 0.01
-                            or prestashop_binding[item] - float(values[item]) < -0.01
+                            prestashop_binding[item] - float(values[item])
+                            > 0.01
+                            or prestashop_binding[item] - float(values[item])
+                            < -0.01
                         ):
                             final_vals[item] = values[item]
                     elif prestashop_binding._fields[item].type == "many2one":
@@ -100,12 +102,6 @@ class SaleOrderImportMapper(Component):
             i += 1
             name = basename + "_%d" % (i)
         return {"name": name}
-
-    def _map_child(self, map_record, from_attr, to_attr, model_name):
-        context = dict(self.env.context)
-        context['model_name'] = model_name
-        self.env.context = context
-        return super()._map_child(map_record, from_attr, to_attr, model_name)
 
     @mapping
     def fiscal_position_id(self, record):
@@ -166,5 +162,5 @@ class SaleOrderImportMapper(Component):
         res = super()._map_child(map_record, from_attr, to_attr, model_name)
         if remove_lines:
             for line in remove_lines:
-                res.append((2, line))
+                res.append((2, line_binder.to_internal(line).id))
         return res
