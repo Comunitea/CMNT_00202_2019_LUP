@@ -140,24 +140,29 @@ class SaleOrderImportMapper(Component):
         pass
 
     def _map_child(self, map_record, from_attr, to_attr, model_name):
-        binder = self.binder_for('prestashop.sale.order')
+        binder = self.binder_for("prestashop.sale.order")
         source = map_record.source
         if callable(from_attr):
             child_records = from_attr(self, source)
         else:
             child_records = source[from_attr]
-        exists = binder.to_internal(source['id'])
+        exists = binder.to_internal(source["id"])
         current_lines = []
         remove_lines = []
         if exists:
-            incoming_lines = [int(x['id']) for x in child_records]
-            if model_name == 'prestashop.sale.order.line':
-                current_lines = [x.prestashop_id for x in exists.prestashop_order_line_ids]
+            incoming_lines = [int(x["id"]) for x in child_records]
+            line_binder = self.binder_for(model_name)
+            if model_name == "prestashop.sale.order.line":
+                current_lines = [
+                    x.prestashop_id for x in exists.prestashop_order_line_ids
+                ]
             else:
-                current_lines = [x.prestashop_id for x in exists.prestashop_discount_line_ids]
+                current_lines = [
+                    x.prestashop_id for x in exists.prestashop_discount_line_ids
+                ]
             remove_lines = list(set(current_lines) - set(incoming_lines))
         context = dict(self.env.context)
-        context['model_name'] = model_name
+        context["model_name"] = model_name
         self.env.context = context
         res = super()._map_child(map_record, from_attr, to_attr, model_name)
         if remove_lines:
