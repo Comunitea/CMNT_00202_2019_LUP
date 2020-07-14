@@ -11,19 +11,19 @@ class ResPartner(models.Model):
 
     @api.model
     def chekc_fpos_vies_vat(self):
-       for partner in self:  
-        fp_prev = partner.property_account_position_id
-        if partner.country_id:
-            fiscal_position_id = \
-                self.env['account.fiscal.position'].\
-                    _get_fpos_by_region(partner.country_id.id, False, False, True)
-            if fiscal_position_id:
-                if fiscal_position_id.check_vies:
-                    partner.check_vat()
-                    if not partner.vies_passed:
-                        return "NOT VIES"
-                    else:
-                        return fiscal_position_id.id
+        for partner in self:  
+            fp_prev = partner.property_account_position_id
+            if partner.country_id:
+                fiscal_position_id = \
+                    self.env['account.fiscal.position'].\
+                        _get_fpos_by_region(partner.country_id.id, False, False, True)
+                if fiscal_position_id:
+                    if fiscal_position_id.check_vies:
+                        partner.check_vat()
+                        if not partner.vies_passed:
+                            return "NOT VIES"
+                        else:
+                            return fiscal_position_id.id
             return fp_prev and fp_prev.id or False
     
     
