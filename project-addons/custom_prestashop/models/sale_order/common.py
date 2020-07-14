@@ -15,6 +15,20 @@ class SaleOrde(models.Model):
 
     _inherit = "sale.order"
 
+    def bypass_vies_fpos_check(self):
+        res = super().bypass_vies_fpos_check()
+        if self.prestashop_bind_ids:
+            return True
+        return res
+
+    @api.onchange('partner_shipping_id', 'partner_id')
+    def onchange_partner_shipping_id(self):
+        """
+        Trigger the change of fiscal position when the shipping address is modified.
+        """
+        if not self._context.get('bypass_vies_fpos_check'):
+            return super().onchange_partner_shipping_id()
+
     @api.onchange('payment_mode_id')
     def onchange_payment_mode_id(self):
         if self.payment_mode_id.default_payment_term_id:
