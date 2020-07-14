@@ -20,7 +20,7 @@ class ResPartner(models.Model):
                     if fiscal_position_id.check_vies:
                         partner.check_vat()
                         if not partner.vies_passed:
-                            return None
+                            return "NOT VIES"
                         else:
                             return fiscal_position_id.id
                 return fp_prev and fp_prev.id or False
@@ -29,7 +29,7 @@ class ResPartner(models.Model):
     def on_change_check_vies(self):
         fp_id = self.chekc_fpos_vies_vat()
         res = {}
-        if not fp_id:
+        if fp_id == "NOT VIES":
             res["warning"] = {
                 "title": _("Warning for %s") % self.name,
                 "message": "Vies not valid",

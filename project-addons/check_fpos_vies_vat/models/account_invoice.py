@@ -20,7 +20,7 @@ class AccountInvoice(models.Model):
                 and not invoice.bypass_vies_fpos_check()
             ):
                 res_vies = invoice.partner_id.chekc_fpos_vies_vat()
-                if not res_vies:
+                if res_vies == "NOT VIES":
                     raise ValidationError(
                         _("The partner %s has not passed VIES validation.")
                         % invoice.partner_id.name
