@@ -4,6 +4,7 @@
 from odoo import models, fields, api, _
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT, float_compare, float_round
 from odoo.exceptions import UserError
+from odoo.tools.float_utils import float_round
 
 
 
@@ -71,6 +72,36 @@ class SaleOrder(models.Model):
                 return res
         raise UserError(_('No pickings in assigned state to open'))
         return
+    
+    # @api.depends('margin', 'amount_untaxed', 'ship_cost', 'payment_mode_id')
+    # def _compute_percent(self):
+    #     for order in self:
+    #         if order.margin and order.amount_untaxed:
+    #             order.percent = ((order.margin - order.ship_cost - order.payment_mode_id.payment_cost) / order.amount_untaxed) * 100
+
+    @api.depends('order_line.margin', 'ship_cost', 'payment_mode_id')
+    def _product_margin(self):
+        if self.env.in_onchange:
+            for order in self:
+                payment_cost = order.payment_mode_id and order.payment_mode_id.payment_cost or 0.0
+                order.margin = sum(order.order_line.filtered(lambda r: r.state != 'cancel').mapped('margin')) - \
+                    order.ship_cost - payment_cost
+        else:
+            # On batch records recomputation (e.g. at install), compute the margins
+            # with a single read_group query for better performance.
+            # This isn't done in an onchange environment because (part of) the data
+            # may not be stored in database (new records or unsaved modifications).
+            grouped_order_lines_data = self.env['sale.order.line'].read_group(
+                [
+                    ('order_id', 'in', self.ids),
+                    ('state', '!=', 'cancel'),
+                ], ['margin', 'order_id'], ['order_id'])
+            for data in grouped_order_lines_data:
+                order = self.browse(data['order_id'][0])
+                payment_cost = order.payment_mode_id and order.payment_mode_id.payment_cost or 0.0
+                order.margin = data['margin'] - \
+                    order.ship_cost - payment_cost
+
 
 
 class SaleOrderLine(models.Model):
@@ -146,3 +177,16 @@ class SaleOrderLine(models.Model):
             line.move_ids.filtered(lambda x: x.state == 'confirmed')._action_assign()
            
         return {'type': 'ir.actions.client', 'tag': 'reload'}
+    
+    
+    @api.multi
+    def _get_display_price(self, product):
+        
+        price = super()._get_display_price(product)
+        if self.order_id.partner_id.\
+            commercial_partner_id.admin_fact:
+            price_precision = self.env['decimal.precision'].precision_get(
+            'Product Price')
+            price = float_round(price * (1 + self.order_id.partner_id.\
+                commercial_partner_id.admin_fact/100), price_precision)
+        return price
