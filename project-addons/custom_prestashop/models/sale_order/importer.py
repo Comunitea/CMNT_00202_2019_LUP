@@ -169,3 +169,9 @@ class SaleOrderImportMapper(Component):
             for line in remove_lines:
                 res.append((2, line_binder.to_internal(line).id))
         return res
+
+    def finalize(self, map_record, values):
+        context = dict(self.env.context)
+        context["bypass_vies_fpos_check"] = True
+        self.env.context = context
+        return super().finalize(map_record, values)
