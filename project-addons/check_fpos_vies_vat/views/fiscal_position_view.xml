@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record id="view_account_position_vies_form" model="ir.ui.view" >
+        <field name="name">fiscal.postion.vies</field>
+        <field name="model">account.fiscal.position</field>
+        <field name="inherit_id" ref="account.view_account_position_form"/>
+        <field name="arch" type="xml">
+            <field name="vat_required" position="after">
+                <field name="check_vies" attrs="{'invisible': [('auto_apply', '!=', True)]}"/>
+
+            </field>
+        </field>
+    </record>
+
+</odoo>
+
