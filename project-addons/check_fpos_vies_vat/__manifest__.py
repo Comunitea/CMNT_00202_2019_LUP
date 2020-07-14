@@ -9,9 +9,5 @@
     "website": "www.comunitea.com",
     "license": "AGPL-3",
     "depends": ["product", "account", "sale"],
-    "data": [
-        'views/fiscal_position_view.xml',
-    ],
-    "installable": True,
-    'application': False,
+    "data": ["views/fiscal_position_view.xml"],
 }
