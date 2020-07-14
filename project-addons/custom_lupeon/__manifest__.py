@@ -9,7 +9,8 @@
     "website": "www.comunitea.com",
     "license": "AGPL-3",
     "depends": ["product", "sale_stock", "delivery", "account_payment", 
-                "sale_order_margin_percent", "stock_barcode", "account"],
+                "sale_margin", "sale_order_margin_percent", "stock_barcode",
+                "stock", "account"],
     "data": [
         'views/partner_view.xml',
         'views/sale_view.xml',
