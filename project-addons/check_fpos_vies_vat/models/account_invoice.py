@@ -25,6 +25,6 @@ class AccountInvoice(models.Model):
                         _("The partner %s has not passed VIES validation.")
                         % invoice.partner_id.name
                     )
-                return False
+                    return False
         res = super().action_invoice_open()
         return res
