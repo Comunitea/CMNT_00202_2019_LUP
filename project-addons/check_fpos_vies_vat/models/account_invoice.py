@@ -11,6 +11,8 @@ class AccountInvoice(models.Model):
 
     def bypass_vies_fpos_check(self):
         self.ensure_one()
+        if not self.commercial_partner_id.vat and not self.commercial_partner_id.property_account_position_id:
+            return True
         return False
 
     def action_invoice_open(self):
