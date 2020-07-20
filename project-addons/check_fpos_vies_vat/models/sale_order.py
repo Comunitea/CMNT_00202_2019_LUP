@@ -11,6 +11,8 @@ class SaleOrder(models.Model):
 
     def bypass_vies_fpos_check(self):
         self.ensure_one()
+        if not self.partner_id.commercial_partner_id.vat and not self.partner_id.commercial_partner_id.property_account_position_id:
+            return True
         return False
 
     def action_confirm(self):
@@ -22,6 +24,6 @@ class SaleOrder(models.Model):
                         _("The partner %s has not passed VIES validation.")
                         % order.partner_id.name
                     )
-                return False
+                    return False
         res = super().action_confirm()
         return res
