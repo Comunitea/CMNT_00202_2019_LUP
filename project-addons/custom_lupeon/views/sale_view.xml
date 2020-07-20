@@ -12,7 +12,8 @@
                         icon="fa-truck"
                         states="draft"
                 />
-                <field name="reserved"/>
+                <!--field name="reserved"/-->
+                <field name="qty_reserved"/>
             </xpath>
             <xpath expr="//field[@name='order_line']" position="before">
                 <button name="create_procurements_all" align="right"
@@ -34,6 +35,31 @@
 
         </field>
     </record>
+
+    <record id="sale_order_custom_delivered" model="ir.ui.view" >
+        <field name="name">sale.order.custom.delivered</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <field name="partner_shipping_id" position="after">
+                <field name="delivered"/>
+            </field>
+
+        </field>
+    </record>
+
+    <record id="sale_order_custom_delivered_tree" model="ir.ui.view" >
+        <field name="name">sale.order.custom.delivered.tree</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_tree"/>
+        <field name="arch" type="xml">
+            <field name="invoice_status" position="after">
+                <field name="delivered"/>
+            </field>
+
+        </field>
+    </record>
+
 
     <record id="view_order_form_inherit_barcode" model="ir.ui.view">
         <field name="name">sale.order.form.barcode</field>
@@ -74,6 +100,8 @@
                 <filter string="Whithout shipping cost" name="shipping_cost" domain="[('ship_cost', '=', 0)]"/>
                 <separator/>
                 <filter string="Whith Carrier" name="carrier" domain="[('carrier_id', '!=', False)]"/>
+                <separator/>
+                <filter string="Not Deliverd " name="delivered" domain="[('delivered', '!=', 'delivered')]"/>
                 <separator/>
             </filter>
 

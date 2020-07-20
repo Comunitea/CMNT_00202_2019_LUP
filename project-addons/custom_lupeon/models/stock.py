@@ -46,3 +46,8 @@ class PickingType(models.Model):
             record.rate_picking_backorders = record.count_picking and record.count_picking_backorders * 100 / record.count_picking or 0
 
    
+class StockPicking(models.Model):
+
+    _inherit = "stock.picking"
+
+    delivered = fields.Boolean('Delivered')
