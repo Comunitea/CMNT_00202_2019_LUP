@@ -11,7 +11,7 @@ class PrestashopSaleOrderListener(Component):
         return
 
 
-class SaleOrde(models.Model):
+class SaleOrder(models.Model):
 
     _inherit = "sale.order"
 

@@ -1,21 +1,19 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# 	* custom_lupeon
+#	* custom_lupeon
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-14 12:01+0000\n"
-"PO-Revision-Date: 2020-07-14 14:03+0200\n"
+"POT-Creation-Date: 2020-07-20 16:32+0000\n"
+"PO-Revision-Date: 2020-07-20 16:32+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
-"Language: es\n"
-"X-Generator: Poedit 2.3.1\n"
 
 #. module: custom_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_lupeon.view_order_form_inherit_barcode
@@ -51,8 +49,8 @@ msgstr ""
 #. module: custom_lupeon
 #: model:ir.model.fields,field_description:custom_lupeon.field_res_partner__admin_fact
 #: model:ir.model.fields,field_description:custom_lupeon.field_res_users__admin_fact
-msgid "Factor administrativo"
-msgstr ""
+msgid "Factor administrativo %"
+msgstr "Factor administrativo %"
 
 #. module: custom_lupeon
 #: model:ir.model,name:custom_lupeon.model_account_invoice
@@ -185,11 +183,6 @@ msgid "Total Tax Included"
 msgstr "Total impuestos incluidos"
 
 #. module: custom_lupeon
-#: model:ir.model,name:custom_lupeon.model_stock_picking
-msgid "Transfer"
-msgstr "Albarán"
-
-#. module: custom_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_lupeon.sale_order_filter_custom_lupeon
 msgid "Whith Carrier"
 msgstr "Con transportista"
@@ -198,3 +191,4 @@ msgstr "Con transportista"
 #: model_terms:ir.ui.view,arch_db:custom_lupeon.sale_order_filter_custom_lupeon
 msgid "Whithout shipping cost"
 msgstr "Sin coste de envío"
+

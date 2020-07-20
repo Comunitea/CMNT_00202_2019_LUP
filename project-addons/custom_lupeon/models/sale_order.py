@@ -16,6 +16,26 @@ class SaleOrder(models.Model):
     num_line = fields.Char(string='Nº Line')
     rejected = fields.Boolean('Rejected')
     rejected_reason = fields.Text('Rejected Reason')
+    delivered = fields.Selection([('delivered', 'Delivered'),
+                                    ('not_delivered', 'Not Delivered'),
+                                    ('partially', 'Partially Delivered')],
+                                string='Delivered',
+                                default='not_delivered',
+                                compute="_compute_delivered",
+                                store=True)
+
+
+    @api.depends('picking_ids.delivered')
+    def _compute_delivered(self):
+        for order in self:
+            delivery_pickings = order.picking_ids.filtered(lambda pick: pick.picking_type_id.code=='outgoing')
+            if all(picking.delivered for picking in delivery_pickings):
+                order.delivered = 'delivered'
+            elif any(picking.delivered for picking in delivery_pickings):
+                order.delivered = 'partially'
+            else:
+                order.delivered = 'not_delivered'
+                
 
     @api.multi
     def _prepare_invoice(self):
@@ -119,12 +139,14 @@ class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
     reserved = fields.Boolean('Reserved', compute="_is_reserve")
+    qty_reserved = fields.Float('Qty Reserved', compute="_is_reserve")
 
     @api.multi
     def _is_reserve(self):
         for line in self:
             if line.move_ids.filtered(lambda x: x.state == 'assigned'):
                 line.reserved = True
+                line.qty_reserved = sum(move.reserved_availability for move in line.move_ids)
 
     @api.multi
     def _action_launch_stock_rule_anticiped(self):

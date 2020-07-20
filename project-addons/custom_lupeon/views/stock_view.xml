@@ -111,6 +111,29 @@
 
     <menuitem id="reserve_picking" name="Reserves" parent="stock.menu_stock_warehouse_mgmt" sequence="15" action="stock_picking_reserves" groups="stock.group_stock_manager,stock.group_stock_user"/>
 
+    <record id="view_picking_delivered_custom" model="ir.ui.view" >
+        <field name="name">view_picking_delivered_custom</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <field name="origin" position="after">
+                <field name="delivered"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- stock.move inherit search view -->
+    <record id="view_picking_delivered_search_custom" model="ir.ui.view">
+        <field name="name">view_picking_delivered_search_custom</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_internal_search"/>
+        <field name="arch" type="xml">
+            <filter name="activities_upcoming_all" position="after">
+                <filter string="Not Delivered" name="not delivered" domain="[('delivered','!=',True)]"/>
+            </filter>
+        </field>
+    </record>
+
 
 </odoo>
 
