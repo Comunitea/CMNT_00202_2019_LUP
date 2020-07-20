@@ -24,6 +24,8 @@
             <field name="partner_shipping_id" position="after">
                 <field name="ship_cost"/>
                 <field name="num_line"/>
+                <field name="rejected" states="cancel"/>
+                <field name="rejected_reason" attrs="{'invisible': [('rejected', '=', False)]}"/>
             </field>
 
         </field>

@@ -62,7 +62,7 @@ class GroupCostSheet(models.Model):
     def create_components_on_fly(self):
         """
         Obtengo los componentes de la lista de materiales que irá
-        asociada al grupo de costes (por lo tanto a la líonea de venta)
+        asociada al grupo de costes (por lo tanto a la línea de venta)
         """
         self.ensure_one()
         res = []
@@ -706,7 +706,7 @@ class CostSheet(models.Model):
             'uom_id': 1,  # TODO get_unit
             'default_code': 'OF-' + (self.name or '/'),
             'type': 'product',
-            'ldt_price': self.price_total,
+            'lst_price': self.price_total,
             'route_ids': [(6, 0, self.env.ref('mrp.route_warehouse0_manufacture').ids)],
             'active': False
         }

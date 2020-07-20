@@ -14,6 +14,8 @@ class SaleOrder(models.Model):
 
     ship_cost = fields.Monetary(string='Ship Cost', default=0.0)
     num_line = fields.Char(string='Nº Line')
+    rejected = fields.Boolean('Rejected')
+    rejected_reason = fields.Text('Rejected Reason')
 
     @api.multi
     def _prepare_invoice(self):
