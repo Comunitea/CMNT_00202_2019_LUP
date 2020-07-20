@@ -27,6 +27,19 @@ class SaleOrder(models.Model):
             self.production_date = self.commitment_date - timedelta(days=2)
         return res
 
+    @api.onchange('production_date')
+    def _onchange_production_date(self):
+        """ Warn if the production date is later than the commitment date """
+        if (self.commitment_date and self.production_date and self.commitment_date < self.production_date):
+            self.production_date = self.commitment_date - timedelta(days=2)
+            return {
+                'warning': {
+                    'title': _('Production date is too late.'),
+                    'message': _("The commitment date is later than the \
+                                 commitment date.")
+                }
+            }
+
     
     def get_group_sheets(self):
         self.ensure_one()
