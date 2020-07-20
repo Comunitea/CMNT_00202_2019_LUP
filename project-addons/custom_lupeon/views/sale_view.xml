@@ -28,6 +28,10 @@
                 <field name="rejected_reason" attrs="{'invisible': [('rejected', '=', False)]}"/>
             </field>
 
+            <field name="commitment_date" position="attributes">
+                <attribute name="attrs">{'required': [('state', 'in', ('draft', 'sent'))]}</attribute>
+            </field>
+
         </field>
     </record>
 

@@ -24,7 +24,7 @@ class SaleOrder(models.Model):
     def _onchange_commitment_date(self):
         res = super()._onchange_commitment_date()
         if self.commitment_date:
-            self.production_date = self.commitment_date - timedelta(days=1)
+            self.production_date = self.commitment_date - timedelta(days=2)
         return res
 
     
