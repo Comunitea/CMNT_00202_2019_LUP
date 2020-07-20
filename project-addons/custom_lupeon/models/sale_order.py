@@ -14,10 +14,8 @@ class SaleOrder(models.Model):
 
     ship_cost = fields.Monetary(string='Ship Cost', default=0.0)
     num_line = fields.Char(string='Nº Line')
-<<<<<<< HEAD
     rejected = fields.Boolean('Rejected')
     rejected_reason = fields.Text('Rejected Reason')
-=======
     delivered = fields.Selection([('delivered', 'Delivered'),
                                     ('not_delivered', 'Not Delivered'),
                                     ('partially', 'Partially Delivered')],
@@ -38,7 +36,6 @@ class SaleOrder(models.Model):
             else:
                 order.delivered = 'not_delivered'
                 
->>>>>>> [IMP] custom_lupeon. Mejoras. Cantidad de producto reservado, filtros de cantidades entregada sobre pedidos y albaranes
 
     @api.multi
     def _prepare_invoice(self):
