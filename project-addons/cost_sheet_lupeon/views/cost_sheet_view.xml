@@ -36,12 +36,12 @@
                                 <field name="cost_init_computed"  attrs="{'invisible': [('sheet_type', 'not in', ['fdm', 'dmls'])]}"/>
                                 <field name="cost_ud" attrs="{'invisible': [('sheet_type', 'in', ['unnplaned', 'meets'])]}"/>
                                 <field name="admin_fact" attrs="{'invisible': [('sheet_type', 'in', ['unnplaned', 'meets'])]}" groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                <field name="use_disc_qty"  attrs="{'invisible': [('sheet_type', 'not in', ['fdm', 'sls', 'poly', 'sla', 'dmls'])]}"/> 
+                                <field name="use_disc_qty"  attrs="{'invisible': [('sheet_type', 'not in', ['fdm', 'sls', 'sls2', 'poly', 'sla', 'dmls'])]}"/> 
 
                         </group>
                         <group>
                                 <!-- <field name="disc_qty" attrs="{'invisible': [('sheet_type', 'not in', ['design'])]}"/>  -->
-                                <field name="disc_qty_computed" attrs="{'invisible': [('sheet_type', 'not in', ['fdm', 'sls', 'poly', 'sla', 'dmls'])]}"/>
+                                <field name="disc_qty_computed" attrs="{'invisible': [('sheet_type', 'not in', ['fdm', 'sls', 'sls2', 'poly', 'sla', 'dmls'])]}"/>
                                 <field name="disc2" attrs="{'invisible': [('sheet_type', 'not in', ['design'])]}"/>
                                 <field name="increment" attrs="{'invisible': [('sheet_type', 'in', ['design', 'unnplaned', 'meets'])]}"/>
                                 <field name="price_unit"  attrs="{'invisible': [('sheet_type', 'in', ['design', 'unnplaned', 'meets'])]}"/>
@@ -179,8 +179,8 @@
                             
                         </page>
 
-                        <!-- SLS -->
-                        <page string="SLS" attrs="{'invisible': [('sheet_type', '!=', 'sls')]}">
+                        <!-- SLS P396 (ANTIGUO SLS)-->
+                        <page string="SLS P396" attrs="{'invisible': [('sheet_type', '!=', 'sls')]}">
                             <group colspan="2" col="8" string="Datos pieza">
                                 <field name="cus_units"/>
                                 <field name="x_mm_sls"/>
@@ -376,6 +376,96 @@
 
                          <!-- SLA -->
                          <page string="SLA" attrs="{'invisible': [('sheet_type', '!=', 'sla')]}">
+                            <group colspan="2" col="8" string="Datos pieza">
+                                <field name="cus_units"/>
+                                <field name="cc_ud"/>
+                                <field name="euros_cc"/>
+                            </group>
+                            <div style="border-bottom: 1px solid black;"></div>
+                            <group colspan="2" col="8" string="Parámetros impresión">
+                                <field name="printer_id"/>
+                                <field name="tray_units"/>
+                                <field name="tray_hours"/>
+                                <field name="euro_machine" groups="cost_sheet_lupeon.group_cs_advanced"/>
+                            </group>
+                            <div style="border-bottom: 1px solid black;"></div>
+                             <group colspan="4" string="Material Cost">
+                                 <field name="material_cost_ids" nolabel="1"/>
+                            </group>
+                             <group class="oe_subtotal_footer oe_right" colspan="2" name="material_total"  groups="cost_sheet_lupeon.group_cs_advanced">
+                                    <field name="total_euro_ud" widget='monetary'/>
+                                    <field name="total_material_cost" widget='monetary'/>
+                            </group>
+                            <group></group>
+                            <div style="border-bottom: 1px solid black;"></div>
+                             <group colspan="2" col="6" string="Coste Máquina">
+                                <field name="machine_hours"/>
+                                <field name="euro_machine_ud" groups="cost_sheet_lupeon.group_cs_advanced"/>
+                                <field name="euro_machine_total" groups="cost_sheet_lupeon.group_cs_advanced"/>
+                            </group>
+                            <div style="border-bottom: 1px solid black;"></div>
+                            <group colspan="4" string="Coste mano de obra">
+                                <field name="workforce_cost_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="name"/>
+                                        <field name="hours"/>
+                                        <field name="minutes"/>
+                                        <field name="euro_unit"  groups="cost_sheet_lupeon.group_cs_advanced"/>
+                                        <field name="total"  groups="cost_sheet_lupeon.group_cs_advanced"/>
+                                    </tree>
+                                </field>
+                            </group>
+                             <group class="oe_subtotal_footer oe_right" colspan="2" name="wf_total"  groups="cost_sheet_lupeon.group_cs_advanced">
+                                    <field name="workforce_total_euro_ud" widget='monetary'/>
+                                    <field name="workforce_total" widget='monetary'/>
+                            </group>
+                            <group></group>
+                            <div style="border-bottom: 1px solid black;"></div>
+                            <group colspan="4" string="Coste externalizacion por pieza">
+                                <field name="outsorcing_cost_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="name"/>
+                                        <field name="cost"/>
+                                        <field name="margin"  groups="cost_sheet_lupeon.group_cs_advanced"/>
+                                        <field name="pvp"  groups="cost_sheet_lupeon.group_cs_advanced"/>
+                                    </tree>
+                                </field>
+                            </group>
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="design_total"  groups="cost_sheet_lupeon.group_cs_advanced">
+                                    <field name="outsorcing_total_ud" widget='monetary'/>
+                                    <field name="outsorcing_total" widget='monetary'/>
+                            </group>
+                            <group></group>
+                            <div style="border-bottom: 1px solid black;"></div>
+                            <group string="Costes Compras">
+                                <field name="purchase_line_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="product_id"/>
+                                        <field name="name"/>
+                                        <field name="qty"/>
+                                        <field name="partner_id"/>
+                                        <field name="cost_ud"/>
+                                        <field name="ports"/>
+                                        <field name="margin"/>
+                                        <field name="pvp_ud" groups="cost_sheet_lupeon.group_cs_advanced"/>
+                                        <field name="pvp_total" groups="cost_sheet_lupeon.group_cs_advanced"/>
+                                    </tree>
+                                </field>
+                            </group>
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="meet_total" groups="cost_sheet_lupeon.group_cs_advanced">
+                                <field name="purchase_total" widget='monetary'/>
+                            </group>
+                            <div style="border-bottom: 1px solid black;"></div>
+                            <group colspan="4" string="Oppi">
+                                 <field name="oppi_line_ids" nolabel="1"/>
+                            </group>
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="material_total">
+                                    <field name="total_oppi" widget='time'/>
+                            </group>
+                        </page>
+
+                        <!-- SLS (igual a SLA, y el anterior SLS pasa a ser SLS P396) -->
+                         <page string="SLS" attrs="{'invisible': [('sheet_type', '!=', 'sls2')]}">
                             <group colspan="2" col="8" string="Datos pieza">
                                 <field name="cus_units"/>
                                 <field name="cc_ud"/>
@@ -766,7 +856,7 @@
                 <field name="gr_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
                 <field name="gr_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
 
-                <!-- SLS fields -->
+                <!-- SLS P396 fields -->
                 <field name="sls_gr_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls')]}"/>
                 <field name="sls_gr_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls')]}"/>
 
@@ -774,14 +864,18 @@
                 <field name="pol_gr_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'poly')]}"/>
                 <!--SLA fields -->
                 <field name="sla_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sla')]}"/>
+                <!--SLS fields -->
+                <field name="sls2_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls2')]}"/>
                 <!--DMLS fields -->
                 <field name="dmls_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'dmls')]}"/>
                 
-                <field name="desviation" attrs="{'column_invisible': [('parent.sheet_type', 'not in', ['poly', 'sla', 'dmls'])], 'readonly': [('can_edit', '!=', True)]}"/>
+                <field name="desviation" attrs="{'column_invisible': [('parent.sheet_type', 'not in', ['poly', 'sla', 'sls2', 'dmls'])], 'readonly': [('can_edit', '!=', True)]}"/>
                 <!--Poly fields -->
                 <field name="pol_gr_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'poly')]}"/>
                 <!--SLA fields -->
                 <field name="sla_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sla')]}"/>
+                <!--SLS fields -->
+                <field name="sls2_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls2')]}"/>
                 <!--DMLS fields -->
                 <field name="dmls_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'dmls')]}"/>
 

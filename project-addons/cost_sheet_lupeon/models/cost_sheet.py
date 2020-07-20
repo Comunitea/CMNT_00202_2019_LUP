@@ -8,9 +8,10 @@ import math
 SHEET_TYPES = [
     ('design', 'Design'),
     ('fdm', 'FDM'),
-    ('sls', 'SLS'),
+    ('sls', 'SLS P396'),  # Renombrado
     ('poly', 'Poly'),
     ('sla', 'SLA'),
+    ('sls2', 'SLS'),  # Copia de sla, nuevo SLS
     ('dmls', 'DMLS'),
     ('unplanned', 'Imprevistos'),
     ('meets', 'Reuniones'),
@@ -50,7 +51,12 @@ class GroupCostSheet(models.Model):
 
     def update_sale_line_price(self):
         for group in self:
-            group.sale_line_id.write({'price_unit': group.line_pvp})
+            pu = group.line_pvp
+            # Divido el precio entre el numero de unidades para obtener el
+            # pvp unitario de verdad
+            if group.sale_line_id.product_uom_qty:
+                pu = group.line_pvp / group.sale_line_id.product_uom_qty
+            group.sale_line_id.write({'price_unit': pu})
 
 
     @api.depends('sheet_ids')
@@ -66,7 +72,7 @@ class GroupCostSheet(models.Model):
         """
         self.ensure_one()
         res = []
-        mrp_types = ['fdm','sls', 'poly', 'sla', 'dmls']
+        mrp_types = ['fdm','sls', 'poly', 'sla', 'sls2', 'dmls']
         for sh in self.sheet_ids.filtered(lambda sh: sh.sheet_type in mrp_types):
             if not sh.product_id:
                 print('error')
@@ -374,7 +380,7 @@ class CostSheet(models.Model):
             if name == 'Horas Técnico' and material:
                 if self.sheet_type == 'fdm':
                     hours = (5/60) + (maq_hours * self.printer_id.machine_hour * material.factor_hour)
-                if self.sheet_type in ['sls', 'poly', 'sla', 'dmls']:
+                if self.sheet_type in ['sls', 'poly', 'sla', 'sls2', 'dmls']:
                     hours = (5/60) + (maq_hours * self.printer_id.machine_hour)
             # Mantener valores de horas diseño y postprocesado si ya existian
             elif self.workforce_cost_ids:
@@ -405,7 +411,7 @@ class CostSheet(models.Model):
                     'printer_id': printer.id,
                 })
 
-        if self.sheet_type in ['poly', 'sla']:
+        if self.sheet_type in ['poly', 'sla', 'sls2']:
             self.cost_init = 20.0
         return  {'domain': {'printer_id': [('type', '=', self.sheet_type)]}}
 
@@ -475,6 +481,11 @@ class CostSheet(models.Model):
                     cost = cost + (sh.cost_init / sh.cus_units)
                 pu = cost * (1 - dqc) * (1 + inc) * (1+ fa)
                 pvp = pu * sh.cus_units
+            elif sh.sheet_type == 'sls2':
+                if sh.cus_units:
+                    cost = cost + (sh.cost_init / sh.cus_units)
+                pu = cost * (1 - dqc) * (1 + inc) * (1+ fa)
+                pvp = pu * sh.cus_units
             elif sh.sheet_type == 'dmls':
                 cost_init_computed = 0
                 if sh.material_cost_ids and sh.material_cost_ids[0].material_id:
@@ -533,7 +544,7 @@ class CostSheet(models.Model):
                 if sh.material_cost_ids and sh.printer_id and sh.material_cost_ids[0].material_id:
                     mat = sh.material_cost_ids[0].material_id
                     sh.euro_machine = sh.printer_id.euro_hour * mat.factor_hour
-            elif sh.sheet_type in ['sls', 'poly', 'sla', 'dmls']:
+            elif sh.sheet_type in ['sls', 'poly', 'sla', 'sls2', 'dmls']:
                 sh.euro_machine = sh.printer_id and sh.printer_id.euro_hour
 
     @api.depends('material_cost_ids')
@@ -595,6 +606,10 @@ class CostSheet(models.Model):
             options = ['Construccion', 'Soporte']
             material = False
         elif self.sheet_type == 'sla':
+            options = ['Construccion']
+            material = False
+            desviation = 50.0
+        elif self.sheet_type == 'sls2':
             options = ['Construccion']
             material = False
             desviation = 50.0
@@ -753,7 +768,7 @@ class CostSheet(models.Model):
         return bom
 
     def create_productions(self):
-        mrp_types = ['fdm','sls', 'poly', 'sla', 'dmls']
+        mrp_types = ['fdm','sls', 'poly', 'sla', 'sls2', 'dmls']
         for sheet in self.filtered(lambda sh: sh.sheet_type in mrp_types):
             line = sheet.sale_line_id
             product = sheet.create_product_on_fly()
@@ -816,7 +831,7 @@ class MaterialCostLine(models.Model):
     gr_cc_tray = fields.Float('gr o cc bandeja', compute='_compute_cost')
     gr_cc_total = fields.Float('gr o cc total', compute='_compute_cost')
 
-    # SLS
+    # SLS P396
     sls_gr_tray = fields.Float('Gr bandeja', compute='_compute_cost')
     sls_gr_total = fields.Float('Gr total', compute='_compute_cost')
 
@@ -829,6 +844,10 @@ class MaterialCostLine(models.Model):
     # SLA
     sla_cc_tray = fields.Float('cc bandeja')
     sla_cc_total = fields.Float('cc Total', compute='_compute_cost')
+
+    # SLS
+    sls2_cc_tray = fields.Float('cc bandeja')
+    sls2_cc_total = fields.Float('cc Total', compute='_compute_cost')
 
     # DMLS
     dmls_cc_tray = fields.Float('gr bandeja', compute='_compute_cost')
@@ -901,6 +920,13 @@ class MaterialCostLine(models.Model):
                     euro_material = (mcl.sla_cc_total * mat.euro_kg) / sh.tray_units
                     mcl.euro_material = euro_material
                     mcl.total = sh.cus_units * euro_material
+            elif sh.sheet_type == 'sls2':
+                dis = mcl.desviation / 100
+                if sh.tray_units:
+                    mcl.sls2_cc_total = ((1 + dis) * mcl.sls2_cc_tray * sh.cus_units) / sh.tray_units
+                    euro_material = (mcl.sls2_cc_total * mat.euro_kg) / sh.tray_units
+                    mcl.euro_material = euro_material
+                    mcl.total = sh.cus_units * euro_material
 
             elif sh.sheet_type == 'dmls':
                 dis = mcl.desviation / 100
@@ -929,6 +955,9 @@ class MaterialCostLine(models.Model):
         elif sh.sheet_type == 'sla':
             res = self.sla_cc_tray
 
+        elif sh.sheet_type == 'sls2':
+            res = self.sls2_cc_tray
+
         elif sh.sheet_type == 'dmls':
            res = self.dmls_cc_tray
         return res
@@ -954,7 +983,7 @@ class WorkforceCostLine(models.Model):
             hours2 = sh.group_id.tech_hours
             hours = wcl.hours
             maq_hours = sh.machine_hours
-            if wcl.name == 'Horas Técnico' and sh.sheet_type in ['sls', 'poly', 'sla', 'dmls']:
+            if wcl.name == 'Horas Técnico' and sh.sheet_type in ['sls', 'poly', 'sla', 'sls2', 'dmls']:
                 hours = (5/60) + (maq_hours * sh.printer_id.machine_hour)
             # if wcl.name == 'Horas Diseño':
             #      hours2 = sh.group_id.ing_hours

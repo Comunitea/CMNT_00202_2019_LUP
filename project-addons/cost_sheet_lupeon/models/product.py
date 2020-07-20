@@ -5,9 +5,10 @@ from odoo import models, fields, api, _
 
 MATERIAL_TYPES = [
     ('fdm', 'FDM'),
-    ('sls', 'SLS'),
+    ('sls', 'SLS P396'),
     ('poly', 'Poly'),
     ('sla', 'SLA'),
+    ('sls2', 'SLS'),
     ('dmls', 'DMLS'),
 ]
 

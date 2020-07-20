@@ -25,6 +25,7 @@
                         <field name="default_sls" attrs="{'invisible': [('type', '!=', 'sls')]}"/>
                         <field name="default_poly" attrs="{'invisible': [('type', '!=', 'poly')]}"/>
                         <field name="default_sla" attrs="{'invisible': [('type', '!=', 'sla')]}"/>
+                        <field name="default_sls2" attrs="{'invisible': [('type', '!=', 'sls2')]}"/>
                         <field name="default_dmls" attrs="{'invisible': [('type', '!=', 'dmls')]}"/>
                     </group>
                 </sheet>

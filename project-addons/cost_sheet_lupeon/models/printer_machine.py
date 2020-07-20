@@ -6,9 +6,10 @@ from odoo import models, fields, api, _
 PRINT_TYPES = [
     ('design', 'Design'),
     ('fdm', 'FDM'),
-    ('sls', 'SLS'),
+    ('sls', 'SLS P396'),
     ('poly', 'Poly'),
     ('sla', 'SLA'),
+    ('sls2', 'SLS'),
     ('dmls', 'DMLS'),
 ]
 
@@ -27,7 +28,8 @@ class PrinterMachine(models.Model):
     max_disc_qty = fields.Float('Max discount quantity')
 
     default_fdm = fields.Boolean('Por defecto en fdm')
-    default_sls = fields.Boolean('Por defecto en sls')
+    default_sls = fields.Boolean('Por defecto en sl P396')
+    default_sls2 = fields.Boolean('Por defecto en sls')
     default_poly = fields.Boolean('Por defecto en poly')
     default_sla = fields.Boolean('Por defecto en sla')
     default_dmls = fields.Boolean('Por defecto en dmls')
@@ -40,6 +42,11 @@ class PrinterMachine(models.Model):
         (
         'default_sls_unique',
         'unique(default_sls)',
+        'Ya existe otra impresora por defecto para SLS P396'
+        ),
+        (
+        'default_sls2_unique',
+        'unique(default_sls2)',
         'Ya existe otra impresora por defecto para SLS'
         ),
         (

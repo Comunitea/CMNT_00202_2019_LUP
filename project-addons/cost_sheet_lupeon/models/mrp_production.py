@@ -6,9 +6,10 @@ from odoo import models, fields, api, _
 SHEET_TYPES = [
     ('design', 'Design'),
     ('fdm', 'FDM'),
-    ('sls', 'SLS'),
+    ('sls', 'SLS P396'),
     ('poly', 'Poly'),
     ('sla', 'SLA'),
+    ('sls2', 'SLS'),
     ('dmls', 'DMLS'),
     ('unplanned', 'Imprevistos'),
     ('meets', 'Reuniones'),
