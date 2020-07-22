@@ -129,10 +129,69 @@
             <p t-if="doc.payment_term_id.note" name="payment_term">
                 <strong>Payment Term:</strong>
                 <span t-field="doc.payment_term_id.note"/>
+                <span t-field="doc.payment_term_id.note"/>
             </p>
         </xpath>
-      
 
+        <!--    MODIFICACIONES INFORME LUPEÓN -->
+
+
+         <xpath expr="//table[@class='table table-sm o_main_table']/thead/tr/th[1]" position="before">
+                <t t-if="lupeon_report">
+                     <th class="text-left">Model</th>
+                     <th class="text-left">Reference</th>
+                     <!-- <th class="text-left">Technology</th>
+                     <th class="text-left">Material</th>
+                     <th class="text-left">Finish</th> -->
+                </t>
+        </xpath>
+      
+         <xpath expr="//table[@class='table table-sm o_main_table']/tbody/t[@t-foreach='doc.order_line']/tr/t[1]/td[1]" position="before">
+                <t t-if="lupeon_report">
+                    <td>
+                        <img t-att-src="'data:image/png;base64,%s' % to_text(line.model_image)" style="max-height: 50px;"/>
+                    </td>
+                    <td>
+                         <span t-field="line.ref"/>
+                    </td>
+                    <!-- <td>
+                         <span t-field="line.report_material"/>
+                    </td>
+                    <td>
+                         <span t-field="line.report_finish"/>
+                    </td> -->
+                </t>
+        </xpath>
+         <xpath expr="//table[@class='table table-sm o_main_table']/tbody/t[@t-foreach='doc.order_line']/tr" position="after">
+                <t t-if="lupeon_report">
+                    <tr>
+                        <td colspan="2" style="border:none;">
+                            Technologia: <span t-field="line.report_tech"/>
+                        </td>
+                        <td colspan="2" style="border:none;">
+                            Material: <span t-field="line.report_material"/>
+                        </td>
+                        <td colspan="2" style="border:none;">
+                            Finish: <span t-field="line.report_finish"/>
+                        </td>
+                        <td style="border:none;">
+                    
+                        </td>
+                    </tr>
+                </t>
+        </xpath>
   	</template>
 
+    
+     <template id="report_saleorder_lupeon">
+        <t t-call="web.html_container">
+            <t t-set="lupeon_report" t-value="True"/>
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="sale.report_saleorder_document" t-lang="doc.partner_id.lang"/>
+            </t>
+        </t>
+    </template>
+
 </odoo>
+
+

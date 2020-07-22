@@ -17,6 +17,8 @@
         'account_due_dates_str'
     ],
     'data': [
+        'views/sale_view.xml',
+        'views/sale_report.xml',
         'views/report_sale.xml',
         'views/report_invoice.xml',
         'views/report_templates.xml',
