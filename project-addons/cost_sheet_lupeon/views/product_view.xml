@@ -29,9 +29,9 @@
                         <field name="euro_kg" string="€/gr"/>
                     </group>
 
-                    <group attrs="{'invisible': [('material_type', '!=', 'sla')]}">
+                    <group attrs="{'invisible': [('material_type', 'not in', ['sla', 'sls2'])]}">
                         <field name="euro_kg" string="€/gr"/>
-                        <field name="printer_id" domain="[('material_type', '=', 'sla')]"/>
+                        <field name="printer_id" domain="[('material_type', 'in', ['sla', 'sls2'])]"/>
                         <field name="washing_time"/>
                         <field name="cured_time"/>
                     </group>
