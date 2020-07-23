@@ -4,6 +4,7 @@ import time
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 
 from odoo import models, fields, api, _
+from odoo.exceptions import ValidationError
 
 
 class StockMove(models.Model):
@@ -21,14 +22,15 @@ class PickingType(models.Model):
 
     def _compute_picking_count(self):
         # SE SOBREESCRIBE
+        
         domains = {
-            'count_picking_draft': [('state', '=', 'draft'), ('sale_id.state','not in', ['draft', 'sent'])],
-            'count_picking_waiting': [('state', 'in', ('confirmed', 'waiting')), ('sale_id.state','not in', ['draft', 'sent'])],
-            'count_picking_ready': [('state', '=', 'assigned'), ('sale_id.state','not in', ['draft', 'sent'])],
-            'count_picking': [('state', 'in', ('assigned', 'waiting', 'confirmed')), ('sale_id.state','not in', ['draft', 'sent'])],
+            'count_picking_draft': [('state', '=', 'draft'), '|', ('picking_type_id.code', '!=', 'outgoing'), '&', ('picking_type_id.code', '=', 'outgoing'), ('sale_id.state','not in', ['draft', 'sent'])],
+            'count_picking_waiting': [('state', 'in', ('confirmed', 'waiting')), '|', ('picking_type_id.code', '!=', 'outgoing'), '&', ('picking_type_id.code', '=', 'outgoing'), ('sale_id.state','not in', ['draft', 'sent'])],
+            'count_picking_ready': [('state', '=', 'assigned'), '|', ('picking_type_id.code', '!=', 'outgoing'), '&', '&', ('picking_type_id.code', '=', 'outgoing'), ('sale_id.state','not in', ['draft', 'sent']), ('delivery_blocked','!=', True)],
+            'count_picking': [('state', 'in', ('assigned', 'waiting', 'confirmed')), '|', ('picking_type_id.code', '!=', 'outgoing'), '&', ('picking_type_id.code', '=', 'outgoing'), ('sale_id.state','not in', ['draft', 'sent'])],
             'count_picking_late': [('scheduled_date', '<', time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)),
                                     ('state', 'in', ('assigned', 'waiting', 'confirmed')),
-                                    ('sale_id.state','not in', ['draft', 'sent'])],
+                                    '|', ('picking_type_id.code', '!=', 'outgoing'), '&', ('picking_type_id.code', '=', 'outgoing'), ('sale_id.state','not in', ['draft', 'sent'])],
             'count_picking_backorders': [('backorder_id', '!=', False), ('state', 'in', ('confirmed', 'assigned', 'waiting'))],
         }
         for field in domains:
@@ -51,3 +53,11 @@ class StockPicking(models.Model):
     _inherit = "stock.picking"
 
     delivered = fields.Boolean('Delivered')
+    delivery_blocked = fields.Boolean('Delivery blocked', related='sale_id.delivery_blocked')
+    
+    
+    def button_validate(self):
+        if self.delivery_blocked:
+            raise ValidationError(_(
+                    'The piclkig i blocking form Sale Order %s') % self.sale_id.name)
+        return super().button_validate()

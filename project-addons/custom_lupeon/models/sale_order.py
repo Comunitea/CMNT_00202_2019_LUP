@@ -23,6 +23,7 @@ class SaleOrder(models.Model):
                                 default='not_delivered',
                                 compute="_compute_delivered",
                                 store=True)
+    delivery_blocked = fields.Boolean("Entrega bloqueada")
 
 
     @api.depends('picking_ids.delivered')

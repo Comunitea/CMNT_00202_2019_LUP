@@ -30,8 +30,10 @@
         <field name="inherit_id" ref="stock.view_picking_internal_search"/>
         <field name="arch" type="xml">
             <field name="group_id" position="after">
-                <filter name="ready_to_pick" string="No proforma" domain="[('sale_id.state','not in', ['draft', 'sent'])]" help="Pickings ready to execute"/>
-                <filter name="reserved" string="Reserved " domain="[('sale_id.state','in', ['draft', 'sent'])]" help="Pickings with reserve from sales"/>
+                <filter name="ready_to_pick" string="No proforma" domain="['|', ('sale_id', '=', False), ('sale_id.state','in', ['sale', 'done'])]" help="Pickings ready to execute"/>
+                <filter name="reserved" string="Reserved " domain="[('sale_id', '!=', False), ('sale_id.state','in', ['draft', 'sent'])]" help="Pickings with reserve from sales"/>
+                <separator/>
+                <filter name="not_blocked" string="Sin bloqueo" domain="[('delivery_blocked','!=', True)]" help="Pickings not blocked from sales"/>
             </field>
         </field>
     </record>
@@ -43,6 +45,7 @@
         <field name="arch" type="xml">
             <field name="backorder_id" position="after">
                 <field name="sale_id"/>
+                <field name="delivery_blocked"/>
             </field>
         </field>
     </record>
@@ -52,7 +55,8 @@
                 'search_default_picking_type_id': [active_id],
                 'default_picking_type_id': active_id,
                 'contact_display': 'partner_address',
-                'search_default_ready_to_pick': True
+                'search_default_ready_to_pick': True,
+                'search_default_not_blocked': True
         }
         </field>
     </record>
@@ -63,7 +67,9 @@
                 'default_picking_type_id': active_id,
                 'contact_display': 'partner_address',
                 'search_default_available': 1,
-                'search_default_ready_to_pick': True
+                'search_default_ready_to_pick': True,
+                'search_default_not_blocked': True
+
         }
         </field>
     </record>
@@ -74,7 +80,9 @@
                 'default_picking_type_id': active_id,
                 'contact_display': 'partner_address',
                 'search_default_late': 1,
-                'search_default_ready_to_pick': True
+                'search_default_ready_to_pick': True,
+                'search_default_not_blocked': True
+
         }
         </field>
     </record>

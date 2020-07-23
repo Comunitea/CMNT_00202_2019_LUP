@@ -30,7 +30,7 @@
             </field>
 
             <field name="commitment_date" position="attributes">
-                <attribute name="attrs">{'required': [('state', 'in', ('draft', 'sent'))]}</attribute>
+                <attribute name="attrs">{'required': [('state', 'in', ('draft', 'sent')), ('company_id', '=', 1)]}</attribute>
             </field>
 
         </field>
@@ -43,6 +43,7 @@
         <field name="arch" type="xml">
             <field name="partner_shipping_id" position="after">
                 <field name="delivered"/>
+                <field name="delivery_blocked"/>
             </field>
 
         </field>
