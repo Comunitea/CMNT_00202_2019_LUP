@@ -6,8 +6,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
+<<<<<<< HEAD
 "POT-Creation-Date: 2020-07-26 23:59+0000\n"
 "PO-Revision-Date: 2020-07-26 23:59+0000\n"
+=======
+"POT-Creation-Date: 2020-07-23 13:11+0000\n"
+"PO-Revision-Date: 2020-07-23 13:11+0000\n"
+>>>>>>> bf54f584e8001f060f1693732adcaef8c067ffa6
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -52,7 +57,16 @@ msgstr ""
 #: model:ir.model.fields,field_description:custom_lupeon.field_stock_picking__delivered
 #: selection:sale.order,delivered:0
 msgid "Delivered"
+<<<<<<< HEAD
 msgstr ""
+=======
+msgstr "Entregado"
+
+#. module: custom_lupeon
+#: model:ir.model.fields,field_description:custom_lupeon.field_stock_picking__delivery_blocked
+msgid "Delivery blocked"
+msgstr "Entrega bloqueada"
+>>>>>>> bf54f584e8001f060f1693732adcaef8c067ffa6
 
 #. module: custom_lupeon
 #: model_terms:ir.actions.act_window,help:custom_lupeon.action_sale_order_cost
@@ -60,10 +74,20 @@ msgid "Editar para añadir coste de envío a los pedidos"
 msgstr ""
 
 #. module: custom_lupeon
+#: model:ir.model.fields,field_description:custom_lupeon.field_sale_order__delivery_blocked
+msgid "Entrega bloqueada"
+msgstr ""
+
+#. module: custom_lupeon
 #: model:ir.model.fields,field_description:custom_lupeon.field_res_partner__admin_fact
 #: model:ir.model.fields,field_description:custom_lupeon.field_res_users__admin_fact
+<<<<<<< HEAD
 msgid "Factor administrativo"
 msgstr ""
+=======
+msgid "Factor administrativo (%)"
+msgstr "Factor administrativo (%)"
+>>>>>>> bf54f584e8001f060f1693732adcaef8c067ffa6
 
 #. module: custom_lupeon
 #: model:ir.model,name:custom_lupeon.model_account_invoice
@@ -76,7 +100,11 @@ msgid "No active picking reserves"
 msgstr "No hay albaranes de  reserva activos"
 
 #. module: custom_lupeon
+<<<<<<< HEAD
 #: code:addons/custom_lupeon/models/sale_order.py:103
+=======
+#: code:addons/custom_lupeon/models/sale_order.py:104
+>>>>>>> bf54f584e8001f060f1693732adcaef8c067ffa6
 #, python-format
 msgid "No pickings in assigned state to open"
 msgstr "No hay albaranes en estado preparado para mostrar."
@@ -84,7 +112,18 @@ msgstr "No hay albaranes en estado preparado para mostrar."
 #. module: custom_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_lupeon.view_picking_internal_search_sale_state
 msgid "No proforma"
-msgstr ""
+msgstr "No en proforma"
+
+#. module: custom_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_lupeon.sale_order_filter_custom_lupeon
+msgid "Not Deliverd"
+msgstr "No entregados"
+
+#. module: custom_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_lupeon.view_picking_delivered_search_custom
+#: selection:sale.order,delivered:0
+msgid "Not Delivered"
+msgstr "No entregado"
 
 #. module: custom_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_lupeon.sale_order_filter_custom_lupeon
@@ -140,6 +179,11 @@ msgstr "Albaranes de reservas"
 
 #. module: custom_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_lupeon.view_picking_internal_search_sale_state
+msgid "Pickings not blocked from sales"
+msgstr ""
+
+#. module: custom_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_lupeon.view_picking_internal_search_sale_state
 msgid "Pickings ready to execute"
 msgstr "Albaranes preparados"
 
@@ -171,13 +215,17 @@ msgstr "Rechazado"
 #. module: custom_lupeon
 #: model:ir.model.fields,field_description:custom_lupeon.field_sale_order__rejected_reason
 msgid "Rejected Reason"
+<<<<<<< HEAD
 msgstr "Motivo rechazo"
+=======
+msgstr "Razón de rechazo"
+>>>>>>> bf54f584e8001f060f1693732adcaef8c067ffa6
 
 #. module: custom_lupeon
 #: model:ir.model.fields,field_description:custom_lupeon.field_res_partner__require_num_order
 #: model:ir.model.fields,field_description:custom_lupeon.field_res_users__require_num_order
 msgid "Requires num order"
-msgstr "Requiere número cliente"
+msgstr "Requiere número de pedido"
 
 #. module: custom_lupeon
 #: model:ir.model.fields,field_description:custom_lupeon.field_sale_order_line__reserved
@@ -211,6 +259,11 @@ msgid "Ship Cost"
 msgstr "Coste de envío"
 
 #. module: custom_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_lupeon.view_picking_internal_search_sale_state
+msgid "Sin bloqueo"
+msgstr ""
+
+#. module: custom_lupeon
 #: model:ir.model.fields,field_description:custom_lupeon.field_stock_move__line_state
 msgid "State sale line"
 msgstr "Estado línea venta"
@@ -225,6 +278,12 @@ msgstr "Movimiento de existencias"
 #: model:ir.model.fields,field_description:custom_lupeon.field_res_users__supplier_number
 msgid "Supplier Number"
 msgstr " Nº proveedor"
+
+#. module: custom_lupeon
+#: code:addons/custom_lupeon/models/stock.py:61
+#, python-format
+msgid "The piclkig i blocking form Sale Order %s"
+msgstr "El albarán está bolqueado en el pedido %s"
 
 #. module: custom_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_lupeon.view_order_cost_tree
