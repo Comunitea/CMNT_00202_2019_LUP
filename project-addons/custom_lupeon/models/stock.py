@@ -52,12 +52,51 @@ class StockPicking(models.Model):
 
     _inherit = "stock.picking"
 
-    delivered = fields.Boolean('Delivered')
+    delivered = fields.Boolean('Delivered', compute="_compute_delivered", store=True, readonly=False)
     delivery_blocked = fields.Boolean('Delivery blocked', related='sale_id.delivery_blocked')
+    partner_phone = fields.Char('Phone', related='partner_id.phone')
+    partner_mobile = fields.Char('Mobile', related='partner_id.mobile')
     
+    
+    @api.depends('sale_id.prestashop_state')
+    def _compute_delivered(self):
+        for picking in self:
+            if picking.delivered != True and picking.sale_id.prestashop_state.trigger_delivered == True:
+                picking.delivered = True
+            
+        
     
     def button_validate(self):
         if self.delivery_blocked:
             raise ValidationError(_(
                     'The piclkig i blocking form Sale Order %s') % self.sale_id.name)
         return super().button_validate()
+    
+    @api.multi
+    def action_barcode_delivery(self):
+        '''
+        This function returns an action that display existing delivery orders
+        of given sales order ids. It can either be a in a list or in a form
+        view, if there is only one delivery order to show.
+        '''
+        
+        if len(self) == 1:
+            return self.open_picking_client_action()
+        else:
+            pt = self.mapped('picking_type_id')
+            if pt:
+                res = pt[0].get_action_picking_tree_ready_kanban()
+                res['context'] = ('{\n'
+                    "            'form_view_initial_mode': 'edit',\n"
+                    "            'search_default_picking_type_id': [%s],\n"
+                    "            'default_picking_type_id': %s,\n"
+                    "            'contact_display': 'partner_address',\n"
+                    "            'search_default_available': 1,\n"
+                    "            'force_detailed_view': True,\n"
+                    '        }' % (pt.id, pt.id)
+                )
+                res['domain'] = [('id', 'in', self.ids)]
+
+            return res
+        raise UserError(_('No pickings in assigned state to open'))
+        return

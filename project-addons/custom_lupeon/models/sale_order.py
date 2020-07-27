@@ -223,3 +223,9 @@ class SaleOrderLine(models.Model):
             price = float_round(price * (1 + self.order_id.partner_id.\
                 commercial_partner_id.admin_fact/100), price_precision)
         return price
+    
+class SaleOrderState(models.Model):
+    _inherit = "sale.order.state"
+
+    trigger_delivered = fields.Boolean('Trigger Delivered')
+    

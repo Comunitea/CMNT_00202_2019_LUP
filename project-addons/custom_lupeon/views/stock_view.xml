@@ -137,8 +137,76 @@
         <field name="inherit_id" ref="stock.view_picking_internal_search"/>
         <field name="arch" type="xml">
             <filter name="activities_upcoming_all" position="after">
-                <filter string="Not Delivered" name="not delivered" domain="[('delivered','!=',True)]"/>
+                <filter string="Not Delivered" name="not_delivered" domain="[('delivered','!=',True)]"/>
             </filter>
+        </field>
+    </record>
+
+
+    <record id="vpicktree_delivered" model="ir.ui.view">
+        <field name="name">stock.picking.tree.delivered</field>
+        <field name="model">stock.picking</field>
+        <field name="priority" eval="20"/>
+        <field name="arch" type="xml">
+            <tree editable="top" create="false" edit="false" delete="false">
+                <field name="name" readonly="1"/>
+                <field name="partner_id" readonly="1"/>
+                <field name="date" invisible="1"/>
+                <field name="scheduled_date" readonly="1"/>
+                <field name="carrier_id" readonly="1"/>
+                <field name="carrier_tracking_ref" readonly="1"/>
+                <field name="origin" readonly="1"/>
+                <field name="state" readonly="1"/>
+                <field name="delivered"/> 
+                <field name="priority" invisible="1"/>
+                <field name="picking_type_id" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="stock_picking_delivered" model="ir.actions.act_window">
+            <field name="name">Picking Delivered</field>
+            <field name="res_model">stock.picking</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,kanban,form,calendar</field>
+            <field name="domain"></field>
+            <field name="context">{
+                'search_default_done': True,
+                'search_default_not_delivered': True,
+            }
+            </field>
+            <field name="search_view_id" ref="stock.view_picking_internal_search"/>
+            <field name="view_id" ref="vpicktree_delivered"/>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                No active picking to deliver
+              </p>
+            </field>
+        </record>
+
+    <menuitem id="delivered_picking" name="Deliveries" parent="stock.menu_stock_warehouse_mgmt" sequence="25" action="stock_picking_delivered" groups="stock.group_stock_manager,stock.group_stock_user"/>
+
+    <record id="view_picking_partner_widget" model="ir.ui.view" >
+        <field name="name">view_picking_partner_widget</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            
+           <div name="button_box" position="inside">
+                <button type="object"
+                    name="action_barcode_delivery"
+                    class="oe_stat_button"
+                    icon="fa-barcode"
+                    groups="base.group_user"
+                    string="Barcode"/>
+            </div>
+
+            <field name="partner_id" position="replace">
+                <field name="partner_id" widget="res_partner_many2one" context="{'show_address': 1}"/>
+                <field name="partner_phone"/>
+                <field name="partner_mobile"/>
+            </field>
         </field>
     </record>
 
