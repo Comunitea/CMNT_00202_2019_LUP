@@ -12,7 +12,7 @@
                     <field name="group_sheets_count"  widget="statinfo"/>
                 </button>
                 <button name="view_sheets_lines" type="object" class="oe_stat_button" icon="fa-file-text">
-                    <field name="sheets_count"  widget="statinfo"/>
+                    <field name="sheets_count"  widget="statinfo" string="Hojas de coste"/>
                 </button>
                 <button class="oe_stat_button" type="object"
                      name="view_tasks" icon="fa-tasks">

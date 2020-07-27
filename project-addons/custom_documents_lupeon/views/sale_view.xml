@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="sale_order_custom_reports_lup" model="ir.ui.view" >
+        <field name="name">sale_order_custom_reports_lup</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <field name="origin" position="after">
+                <field name="report_image" widget="image"/>
+            </field>
+
+            <xpath expr="//field[@name='order_line']/form//field[@name='product_id']" position="after">
+                <field name="model_image" widget="image"/>
+                <field name="report_tech"/>
+                <field name="report_material"/>
+                <field name="report_finish"/>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

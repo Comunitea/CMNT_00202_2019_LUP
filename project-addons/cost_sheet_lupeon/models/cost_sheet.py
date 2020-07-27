@@ -25,7 +25,7 @@ class GroupCostSheet(models.Model):
 
     # display_name = fields.Char('Name', readonly="True")
     sale_line_id = fields.Many2one('sale.order.line', 'Línea de venta',
-                                   readonly=False)
+                                   readonly=False, copy=False)
     sale_id = fields.Many2one('sale.order', 'Pedido de venta',
         related='sale_line_id.order_id', store=True, readonly=True)
     product_id = fields.Many2one('product.product', 'Producto',
@@ -39,7 +39,7 @@ class GroupCostSheet(models.Model):
     sheet_ids = fields.One2many(
         'cost.sheet', 'group_id', string='Cost Sheets', copy=True)
     line_pvp = fields.Float('PVP Línea', compute='_get_line_pvp')
-    bom_id = fields.Many2one('mrp.bom', 'LdM', readonly=True)
+    bom_id = fields.Many2one('mrp.bom', 'LdM', readonly=True,  copy=False)
 
     def name_get(self):
         res = []
@@ -128,7 +128,7 @@ class CostSheet(models.Model):
                                  readonly=True)
     group_id = fields.Many2one('group.cost.sheet', 'Hojas de coste',
                             ondelete="cascade",
-                               readonly=True)
+                               readonly=True, copy=False)
     production_id = fields.Many2one(
         'mrp.production', 'Produción', index=True, copy=False,
         readonly=True)
@@ -781,6 +781,8 @@ class CostSheet(models.Model):
                 'bom_id': bom.id,
                 'date_planned_finished': 
                 sheet.sale_line_id.order_id.production_date or False,
+                # 'line_ref': sheet.sale_line_id.ref,
+                # 'line_name': sheet.sale_line_id.name,
             }
             prod = self.env['mrp.production'].create(vals)
             prod.onchange_product_id()
@@ -798,7 +800,7 @@ class DesignTimeLine(models.Model):
     price_hour = fields.Float('€/h')
     discount = fields.Float('Descuento')
     total = fields.Float('Total', compute="_compute_total")
-    task_id = fields.Many2one('project.task', 'Task', readonly=True)
+    task_id = fields.Many2one('project.task', 'Task', readonly=True, copy=False)
 
     @api.depends('hours', 'price_hour', 'discount')
     def _compute_total(self):
@@ -1084,7 +1086,8 @@ class OppiCostLine(models.Model):
     time = fields.Float('Tiempo')
     time_real = fields.Float('Tiempo real', related='task_id.effective_hours')
     employee_id = fields.Many2one('hr.employee', 'Empleado')
-    task_id = fields.Many2one('project.task', 'Task', readonly=True)
+    task_id = fields.Many2one('project.task', 'Task', readonly=True,  
+                              copy=False)
 
     def create_oppi_tasks(self, project):
         for line in self:

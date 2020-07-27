@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-08 14:33+0000\n"
-"PO-Revision-Date: 2020-06-08 14:33+0000\n"
+"POT-Creation-Date: 2020-07-27 00:00+0000\n"
+"PO-Revision-Date: 2020-07-27 00:00+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -31,7 +31,7 @@ msgid "Advanced User"
 msgstr ""
 
 #. module: cost_sheet_lupeon
-#: code:addons/cost_sheet_lupeon/models/sale_order.py:165
+#: code:addons/cost_sheet_lupeon/models/sale_order.py:185
 #, python-format
 msgid "Agents"
 msgstr ""
@@ -275,7 +275,6 @@ msgstr ""
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_mrp_production__line_name
-#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_mrp_production__ref
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_oppi_cost_line__name
 msgid "Descripción"
 msgstr ""
@@ -402,9 +401,9 @@ msgid "FDM"
 msgstr ""
 
 #. module: cost_sheet_lupeon
-#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_res_partner__admin_fact
-#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_res_users__admin_fact
-msgid "Factor administrativo"
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_product_product__custom_mrp_ok
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_product_template__custom_mrp_ok
+msgid "Fabricación lupeon"
 msgstr ""
 
 #. module: cost_sheet_lupeon
@@ -416,6 +415,11 @@ msgstr ""
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_product_product__factor_hour
 msgid "Factor hora"
+msgstr ""
+
+#. module: cost_sheet_lupeon
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_sale_order__production_date
+msgid "Fecha producción"
 msgstr ""
 
 #. module: cost_sheet_lupeon
@@ -490,8 +494,9 @@ msgstr ""
 #: model:ir.ui.menu,name:cost_sheet_lupeon.menu_action_cost_sheets
 #: model:ir.ui.menu,name:cost_sheet_lupeon.menu_costs_root
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.product_cost_sheet_view_form
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.sale_order_custom_lup
 msgid "Hojas de coste"
-msgstr "Grupo de costes"
+msgstr "Hojas de coste"
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_design_time_line__hours
@@ -840,12 +845,17 @@ msgid "Por defecto en poly"
 msgstr ""
 
 #. module: cost_sheet_lupeon
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_printer_machine__default_sls
+msgid "Por defecto en sl P396"
+msgstr ""
+
+#. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_printer_machine__default_sla
 msgid "Por defecto en sla"
 msgstr ""
 
 #. module: cost_sheet_lupeon
-#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_printer_machine__default_sls
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_printer_machine__default_sls2
 msgid "Por defecto en sls"
 msgstr ""
 
@@ -896,6 +906,12 @@ msgid "Production Order"
 msgstr ""
 
 #. module: cost_sheet_lupeon
+#: code:addons/cost_sheet_lupeon/models/sale_order.py:37
+#, python-format
+msgid "Production date is too late."
+msgstr "La fecha de producción es demasiado tarde"
+
+#. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_sale_order__count_task
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_sale_order__production_count
 msgid "Productions"
@@ -936,12 +952,6 @@ msgid "Referencia"
 msgstr ""
 
 #. module: cost_sheet_lupeon
-#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_res_partner__require_num_order
-#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_res_users__require_num_order
-msgid "Requires num order"
-msgstr "Requiere número cliente"
-
-#. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__description
 msgid "Requisitos técnicos"
 msgstr ""
@@ -971,6 +981,14 @@ msgstr ""
 #: selection:printer.machine,type:0
 #: selection:product.product,material_type:0
 msgid "SLS"
+msgstr ""
+
+#. module: cost_sheet_lupeon
+#: selection:cost.sheet,sheet_type:0
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.cost_sheet_view_form
+#: selection:printer.machine,type:0
+#: selection:product.product,material_type:0
+msgid "SLS P396"
 msgstr ""
 
 #. module: cost_sheet_lupeon
@@ -1068,6 +1086,12 @@ msgstr "Tareas"
 #: selection:cost.sheet,inspection_type:0
 msgid "TechniTécnicacal"
 msgstr ""
+
+#. module: cost_sheet_lupeon
+#: code:addons/cost_sheet_lupeon/models/sale_order.py:38
+#, python-format
+msgid "The production date is later than the                                  commitment date."
+msgstr "La fecha de producción es posterior a la fecha de compromiso"
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_meet_cost_line__hours
@@ -1255,6 +1279,11 @@ msgid "Ya existe otra impresora por defecto para SLS"
 msgstr ""
 
 #. module: cost_sheet_lupeon
+#: sql_constraint:printer.machine:0
+msgid "Ya existe otra impresora por defecto para SLS P396"
+msgstr ""
+
+#. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__z_mm_sls
 msgid "Z (mm)"
 msgstr ""
@@ -1266,11 +1295,13 @@ msgstr ""
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_material_cost_line__sla_cc_total
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_material_cost_line__sls2_cc_total
 msgid "cc Total"
 msgstr ""
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_material_cost_line__sla_cc_tray
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_material_cost_line__sls2_cc_tray
 msgid "cc bandeja"
 msgstr ""
 

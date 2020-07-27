@@ -23,7 +23,7 @@ class SaleAdvancePaymentInv(models.TransientModel):
                     order.client_order_ref == 'PENDIENTE':
                 raise UserError(_(\
                     'Can not create invoice if client order ref is PENDIENTE'))
-        res = super().create_invoices
+        res = super().create_invoices()
         return res
 
 

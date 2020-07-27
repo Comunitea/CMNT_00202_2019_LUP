@@ -11,7 +11,7 @@ class SaleOrder(models.Model):
 
     group_sheets_count = fields.Integer('Grupo de costes',
                                   compute='_count_sheets')
-    sheets_count = fields.Integer('Hojas de coste',
+    sheets_count = fields.Integer(string='Hojas de coste',
                                   compute='_count_sheets')
     production_count = fields.Integer('Productions',
                                 compute='_count_production_and_task')
@@ -35,7 +35,7 @@ class SaleOrder(models.Model):
             return {
                 'warning': {
                     'title': _('Production date is too late.'),
-                    'message': _("The commitment date is later than the \
+                    'message': _("The production date is later than the \
                                  commitment date.")
                 }
             }
@@ -230,6 +230,10 @@ class SaleOrderLine(models.Model):
             default = {}
         self.ensure_one()
         if self.group_sheet_id:
-            new_sheet = self.group_sheet_id.copy()
+            copy_vals = {
+                'bom_id': False,
+                'sale_line_id': self.id,
+            }
+            new_sheet = self.group_sheet_id.copy(default=copy_vals)
             default['group_sheet_id'] = new_sheet.id
         return super().copy_data(default)

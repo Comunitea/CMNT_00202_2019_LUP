@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-03 11:50+0000\n"
-"PO-Revision-Date: 2020-07-03 11:50+0000\n"
+"POT-Creation-Date: 2020-07-27 00:00+0000\n"
+"PO-Revision-Date: 2020-07-27 00:00+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -31,6 +31,11 @@ msgid "<strong>Due Dates:</strong>\n"
 "                <br/>"
 msgstr "<strong>Vencimientos:</strong>\n"
 "                <br/>"
+
+#. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
+msgid "<strong>Expiration Date:</strong>"
+msgstr "<strong>Fecha de caducidad:</strong>"
 
 #. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_invoice_document
@@ -102,9 +107,45 @@ msgid "CIF:"
 msgstr ""
 
 #. module: custom_documents_lupeon
+#: model:ir.model.fields,field_description:custom_documents_lupeon.field_prestashop_sale_order_line__report_finish
+#: model:ir.model.fields,field_description:custom_documents_lupeon.field_prestashop_sale_order_line_discount__report_finish
+#: model:ir.model.fields,field_description:custom_documents_lupeon.field_sale_order_line__report_finish
+msgid "Finish"
+msgstr "Acabado"
+
+#. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
+msgid "Finish:"
+msgstr "Acabado"
+
+#. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.external_layout_boxed_custom
 msgid "Mail:"
 msgstr "Correo:"
+
+#. module: custom_documents_lupeon
+#: model:ir.model.fields,field_description:custom_documents_lupeon.field_prestashop_sale_order_line__report_material
+#: model:ir.model.fields,field_description:custom_documents_lupeon.field_prestashop_sale_order_line_discount__report_material
+#: model:ir.model.fields,field_description:custom_documents_lupeon.field_sale_order_line__report_material
+msgid "Material"
+msgstr ""
+
+#. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
+msgid "Material:"
+msgstr ""
+
+#. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
+msgid "Model"
+msgstr "Modelo"
+
+#. module: custom_documents_lupeon
+#: model:ir.model.fields,field_description:custom_documents_lupeon.field_prestashop_sale_order_line__model_image
+#: model:ir.model.fields,field_description:custom_documents_lupeon.field_prestashop_sale_order_line_discount__model_image
+#: model:ir.model.fields,field_description:custom_documents_lupeon.field_sale_order_line__model_image
+msgid "Model image"
+msgstr "Imagen modelo"
 
 #. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
@@ -122,6 +163,49 @@ msgid "Quotation"
 msgstr "Presupuesto"
 
 #. module: custom_documents_lupeon
+#: model:ir.actions.report,name:custom_documents_lupeon.action_report_saleorder_lupeon
+msgid "Quotation / Order Lupeon"
+msgstr "Presupuesto / Pedido Lupeon"
+
+#. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
+msgid "Reference"
+msgstr "Referencia"
+
+#. module: custom_documents_lupeon
+#: model:ir.model.fields,field_description:custom_documents_lupeon.field_prestashop_sale_order__report_image
+#: model:ir.model.fields,field_description:custom_documents_lupeon.field_sale_order__report_image
+msgid "Report image"
+msgstr "Imagen informe"
+
+#. module: custom_documents_lupeon
+#: model:ir.model,name:custom_documents_lupeon.model_sale_order
+msgid "Sale Order"
+msgstr "Pedido de venta"
+
+#. module: custom_documents_lupeon
+#: model:ir.model,name:custom_documents_lupeon.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Línea de pedido de venta"
+
+#. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
+msgid "Segunda página con la tabla"
+msgstr ""
+
+#. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
+msgid "Technologia:"
+msgstr "Tecnología"
+
+#. module: custom_documents_lupeon
+#: model:ir.model.fields,field_description:custom_documents_lupeon.field_prestashop_sale_order_line__report_tech
+#: model:ir.model.fields,field_description:custom_documents_lupeon.field_prestashop_sale_order_line_discount__report_tech
+#: model:ir.model.fields,field_description:custom_documents_lupeon.field_sale_order_line__report_tech
+msgid "Technology"
+msgstr "Tecnología"
+
+#. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.external_layout_boxed_custom
 msgid "Tel.:"
 msgstr ""
@@ -136,7 +220,3 @@ msgstr "Tel.:"
 msgid "Web:"
 msgstr ""
 
-#. module: custom_documents_lupeon
-#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
-msgid "<strong>Expiration Date:</strong>"
-msgstr "<strong>Fecha de caducidad:</strong>"

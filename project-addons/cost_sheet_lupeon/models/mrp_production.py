@@ -30,5 +30,5 @@ class MrpProduction(models.Model):
                                    related='sheet_id.sale_line_id', readonly=True, 
                                    store=True)
     
-    line_ref = ref = fields.Char('Referencia')
-    line_name = ref = fields.Char('Descripción')
+    line_ref = fields.Char('Referencia')
+    line_name = fields.Char('Descripción')
