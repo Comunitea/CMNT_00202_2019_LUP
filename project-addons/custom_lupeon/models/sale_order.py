@@ -29,7 +29,7 @@ class SaleOrder(models.Model):
     @api.depends('picking_ids.delivered')
     def _compute_delivered(self):
         for order in self:
-            delivery_pickings = order.picking_ids.filtered(lambda pick: pick.picking_type_id.code=='outgoing')
+            delivery_pickings = order.picking_ids.filtered(lambda pick: pick.picking_type_id.code=='outgoing' and pick.state != 'cancel')
             if all(picking.delivered for picking in delivery_pickings):
                 order.delivered = 'delivered'
             elif any(picking.delivered for picking in delivery_pickings):
