@@ -145,7 +145,7 @@ class SaleOrderLine(models.Model):
     @api.multi
     def _is_reserve(self):
         for line in self:
-            if line.move_ids.filtered(lambda x: x.state == 'assigned'):
+            if line.move_ids.filtered(lambda x: x.state in ('assigned', 'partially_available')):
                 line.reserved = True
                 line.qty_reserved = sum(move.reserved_availability for move in line.move_ids)
 
