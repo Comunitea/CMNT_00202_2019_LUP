@@ -18,10 +18,11 @@ class SaleAdvancePaymentInv(models.TransientModel):
         sale_orders = self.env['sale.order'].browse(
             self._context.get('active_ids', []))
         for order in sale_orders:
-            if order.partner_id.require_num_order and \
-                    order.client_order_ref == 'PENDIENTE':
-                raise UserError(_(\
-                    'Can not create invoice if client order ref is PENDIENTE'))
+            if order.company_id.check_commitment_date:
+                if order.partner_id.require_num_order and \
+                        order.client_order_ref == 'PENDIENTE':
+                    raise UserError(_(\
+                        'Can not create invoice if client order ref is PENDIENTE'))
         res = super().create_invoices()
         return res
 

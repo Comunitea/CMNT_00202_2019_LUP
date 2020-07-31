@@ -17,5 +17,6 @@
         'views/invoice_view.xml',
         'views/stock_view.xml',
         'views/payment_mode_view.xml',
+        'views/res_company_view.xml',
     ],
 }
