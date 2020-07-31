@@ -11,6 +11,7 @@
                     <group>
                         <field name="name"/>
                         <field name="type"/>
+                        <field name="routing_id"/>
                     </group>
                      <group>
                         <field name="diameter"/>

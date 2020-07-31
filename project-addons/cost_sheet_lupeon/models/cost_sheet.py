@@ -762,6 +762,9 @@ class CostSheet(models.Model):
             'routing_id': False,  # TODO use_routes,
             'type': 'normal',
             'bom_line_ids': components,
+            'routing_id':
+            self.printer_id.routing_id and self.printer_id.routing_id.id or 
+            False
         }
         bom = self.env['mrp.bom'].create(vals)
 
