@@ -2,6 +2,7 @@
 # License AGPL-3 - See http://www.gnu.org/licenses/agpl-3.0.html
 import time
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
+from odoo.tools.misc import split_every
 
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
@@ -70,7 +71,20 @@ class StockPicking(models.Model):
         if self.delivery_blocked:
             raise ValidationError(_(
                     'The piclkig i blocking form Sale Order %s') % self.sale_id.name)
-        return super().button_validate()
+        res = super().button_validate()
+        
+        # Search all confirmed stock_moves and try to assign them
+        domain = self.env['procurement.group']._get_moves_to_assign_domain()
+        moves_to_assign = self.env['stock.move'].search(domain, limit=None,
+            order='priority desc, date_expected asc')
+        for moves_chunk in split_every(100, moves_to_assign.ids):
+            self.env['stock.move'].browse(moves_chunk)._action_assign()
+            
+        # Merge duplicated quants
+        self.env['stock.quant']._merge_quants()
+        self.env['stock.quant']._unlink_zero_quants()
+        
+        return res
     
     @api.multi
     def action_barcode_delivery(self):
