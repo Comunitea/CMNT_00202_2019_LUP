@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+
+    <template id="report_delivery_document_custom" inherit_id="stock.report_delivery_document">
+
+
+
+        <!--    MODIFICACIONES INFORME LUPEÓN -->
+
+
+         <xpath expr="//table[@t-if=&quot;o.move_line_ids and o.state==&apos;done&apos;&quot;]/thead/tr/th[1]" position="before">
+                <!-- <t t-if="lupeon_report"> -->
+                     <th class="text-left">Model</th>
+                     <th class="text-left">Reference</th>
+                <!-- </t> -->
+        </xpath>
+      
+         <!-- <xpath expr="//table[@t-if=&quot;o.move_line_ids and o.state==&apos;done&apos;&quot;]/tbody/tr[@t-foreach='o.move_line_ids']/td[1]" position="before">
+                <t t-if="lupeon_report">
+                    <td>
+                        <img t-att-src="'data:image/png;base64,%s' % to_text(move_line.move_id.sale_line_id and move_line.move_id.sale_line_id.model_image or '')" style="max-height: 50px;"/>
+                    </td>
+                    <td>
+                         <span t-field="move_line.move_id.sale_line_id and move_line.move_id.sale_line_id.ref"/>
+                    </td>
+                </t>
+        </xpath> -->
+         <xpath expr="//table[@t-if=&quot;o.move_line_ids and o.state==&apos;done&apos;&quot;]/tbody/tr[@t-foreach='o.move_line_ids']" position="replace">
+               <t t-foreach="o.move_line_ids" t-as="move_line">
+                    <tr>
+                        <td>
+                            <img t-att-src="'data:image/png;base64,%s' % to_text(move_line.move_id.sale_line_id and move_line.move_id.sale_line_id.model_image or '')" style="max-height: 50px;"/>
+                        </td>
+                        <td>
+                            <span t-field="move_line.move_id.sale_line_id and move_line.move_id.sale_line_id.ref"/>
+                        </td>
+                        <td>
+                            <span t-field="move_line.product_id"/>
+                            <p t-if="o.picking_type_code == 'outgoing'">
+                                <span t-field="move_line.product_id.sudo().description_pickingout"/>
+                            </p>
+                            <p t-if="o.picking_type_code == 'incoming'">
+                                <span t-field="move_line.product_id.sudo().description_pickingin"/>
+                            </p>
+                        </td>
+                        <td t-if="has_serial_number and move_line.lot_name" groups="stock.group_lot_on_delivery_slip">
+                            <span t-field="move_line.lot_name"/>
+                        </td>
+                        <td t-elif="has_serial_number" groups="stock.group_lot_on_delivery_slip">
+                            <span t-field="move_line.lot_id.name"/>
+                        </td>
+
+
+                        <td class="text-center">
+                            <span t-field="move_line.qty_done"/>
+                            <span t-field="move_line.product_uom_id"/>
+                        </td>
+                        <t t-if="o.valued and o.sale_id and o.move_line_ids">
+                            <t t-if="move_line.picking_id.state != 'done'">
+                                <td class="text-right">
+                                    <span t-field="move_line.product_uom_qty"/>
+                                    <span t-field="move_line.product_uom_id"/></td>
+                            </t>
+                            <td class="text-right"><span
+                                    t-field="move_line.sale_price_unit" /></td>
+                            <td class="text-right" groups="sale.group_discount_per_so_line">
+                                <span t-field="move_line.sale_discount" />
+                            </td>
+                            <td class="text-right"><span
+                                    t-field="move_line.sale_price_subtotal" /></td>
+                            <td class="text-right"><span
+                                    t-field="move_line.sale_tax_description"/></td>
+                        </t>
+                    </tr>
+                    <t t-if="lupeon_report">
+                        <tr  style="border-top:1px solid black;background-color:#F0F8FF">
+                            <td colspan="2" style="border:none;">
+                                Technologia: <span t-field="move_line.move_id.sale_line_id and move_line.move_id.sale_line_id.report_tech"/>
+                            </td>
+                            <td colspan="3" style="border:none;background-color:#F0F8FF">
+                                Material: <span t-field="move_line.move_id.sale_line_id and move_line.move_id.sale_line_id.report_material"/>
+                            </td>
+                            <td colspan="3" style="border:none; background-color:#F0F8FF">
+                                Finish: <span t-field="move_line.move_id.sale_line_id and move_line.move_id.sale_line_id.report_finish"/>
+                            </td>
+                            <!-- <td style="border:none;">
+                        
+                            </td> -->
+                        </tr>
+                    </t>
+               </t>
+        </xpath>
+
+    </template>
+
+     <template id="report_deliveryslip_lupeon">
+        <t t-set="lupeon_report" t-value="True"/>
+        <t t-foreach="docs" t-as="o">
+            <t t-call="stock.report_delivery_document" t-lang="o.partner_id.lang"/>
+        </t>
+    </template>
+
+</odoo>
