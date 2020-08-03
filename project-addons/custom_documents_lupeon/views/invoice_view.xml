@@ -11,6 +11,7 @@
                 <field name="report_tech"/>
                 <field name="report_material"/>
                 <field name="report_finish"/>
+                <field name="ref"/>
             </xpath>
         </field>
     </record>

@@ -140,9 +140,6 @@
                 <t t-if="lupeon_report">
                      <th class="text-left">Model</th>
                      <th class="text-left">Reference</th>
-                     <!-- <th class="text-left">Technology</th>
-                     <th class="text-left">Material</th>
-                     <th class="text-left">Finish</th> -->
                 </t>
         </xpath>
       
@@ -154,12 +151,6 @@
                     <td>
                          <span t-field="line.ref"/>
                     </td>
-                    <!-- <td>
-                         <span t-field="line.report_material"/>
-                    </td>
-                    <td>
-                         <span t-field="line.report_finish"/>
-                    </td> -->
                 </t>
         </xpath>
          <xpath expr="//table[@class='table table-sm o_main_table']/tbody/t[@t-foreach='doc.order_line']/tr" position="after">
@@ -180,7 +171,7 @@
                     </tr>
                 </t>
         </xpath>
-         <xpath expr="//div[@class='page']" position="after">
+        <xpath expr="//div[@class='page']" position="after">
             <t t-if="lupeon_report">
                 <div class="page" style="page-break-before:always;">
                     

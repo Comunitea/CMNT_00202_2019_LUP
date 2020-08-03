@@ -13,5 +13,6 @@ class AccountInvoiceLine(models.Model):
     report_material = fields.Char('Material')
     report_finish = fields.Char('Finish')
     model_image = fields.Binary('Model image')
+    ref = fields.Char('Reference')
     
  

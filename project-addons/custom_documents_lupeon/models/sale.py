@@ -31,7 +31,8 @@ class SaleOrderLine(models.Model):
             'report_tech': self.report_tech,
             'report_material': self.report_material,
             'report_finish': self.report_finish,
-            'model_image': self.model_image
+            'model_image': self.model_image,
+            'ref': self.ref
         })
         return res
     

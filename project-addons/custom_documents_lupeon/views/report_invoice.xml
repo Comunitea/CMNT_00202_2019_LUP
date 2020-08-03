@@ -128,6 +128,56 @@
             </td>
         </xpath>
 
+
+        <!--    MODIFICACIONES INFORME LUPEÓN -->
+
+
+         <xpath expr="//table[@name='invoice_line_table']/thead/tr/th[1]" position="before">
+                <t t-if="lupeon_report">
+                     <th class="text-left">Model</th>
+                     <th class="text-left">Reference</th>
+                </t>
+        </xpath>
+      
+         <xpath expr="//table[@name='invoice_line_table']/tbody/t[@t-foreach='o.invoice_line_ids']/tr/t[1]/td[1]" position="before">
+                <t t-if="lupeon_report">
+                    <td>
+                        <img t-att-src="'data:image/png;base64,%s' % to_text(line.model_image)" style="max-height: 50px;"/>
+                    </td>
+                    <td>
+                         <span t-field="line.ref"/>
+                    </td>
+                </t>
+        </xpath>
+         <xpath expr="//table[@name='invoice_line_table']/tbody/t[@t-foreach='o.invoice_line_ids']/tr" position="after">
+                <t t-if="lupeon_report">
+                    <tr>
+                        <td colspan="2" style="border:none;">
+                            Technologia: <span t-field="line.report_tech"/>
+                        </td>
+                        <td colspan="2" style="border:none;">
+                            Material: <span t-field="line.report_material"/>
+                        </td>
+                        <td colspan="2" style="border:none;">
+                            Finish: <span t-field="line.report_finish"/>
+                        </td>
+                        <td style="border:none;">
+                    
+                        </td>
+                    </tr>
+                </t>
+        </xpath>
+
+    </template>
+
+     <template id="report_invoice_lupeon">
+        <t t-call="web.html_container">
+            <t t-set="lupeon_report" t-value="True"/>
+            <t t-foreach="docs" t-as="o">
+                <t t-set="lang" t-value="o.user_id.sudo().lang if o.type in ('in_invoice', 'in_refund') else o.partner_id.lang"/>
+                <t t-call="account.report_invoice_document" t-lang="lang"/>
+            </t>
+        </t>
     </template>
 
 </odoo>
