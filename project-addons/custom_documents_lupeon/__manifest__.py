@@ -18,6 +18,7 @@
     ],
     'data': [
         'views/sale_view.xml',
+        'views/invoice_view.xml',
         'views/sale_report.xml',
         'views/report_sale.xml',
         'views/report_invoice.xml',

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="invoice_line_form_custom_reports_lup" model="ir.ui.view" >
+        <field name="name">invoice_line_form_custom_reports_lup</field>
+        <field name="model">account.invoice.line</field>
+        <field name="inherit_id" ref="account.view_invoice_line_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_id']" position="after">
+                <field name="model_image" widget="image"/>
+                <field name="report_tech"/>
+                <field name="report_material"/>
+                <field name="report_finish"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
