@@ -181,9 +181,77 @@
                 </t>
         </xpath>
          <xpath expr="//div[@class='page']" position="after">
-            <div class="page" style="page-break-before:always;">
-                 <h1>Segunda página con la tabla</h1>
-             </div>
+            <t t-if="lupeon_report">
+                <div class="page" style="page-break-before:always;">
+                    
+                    <div>
+                        <table class="table" border="1" width="700px" height="300px;">
+                            <tr width="100%">
+                                <td width="40%" rowspan="3">
+                                <strong>Aceptación del presupuesto</strong>
+                                <br/>
+                                (Devolver firmado y sellado)
+                                </td>
+                                <td colspan="3" style="border:1px solid black;">
+                                    <strong>Legislación aplicable </strong> (a completar por el cliente)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border:1px solid black;text-align:center;vertical-align:middle" width="20%">Sector</td>
+                                <td style="border:1px solid black;text-align:center;vertical-align:middle" width="20%">Norma</td>
+                                <td style="border:1px solid black;text-align:center;vertical-align:middle" width="20%">Aplica</td>
+                            </tr>
+                            <tr>
+                                <td style="border:1px solid black; vertical-align:middle">Automoción</td>
+                                <td style="border:1px solid black;"></td>
+                                <td style="border:1px solid black;text-align:center;vertical-align:middle"><input type="checkbox" name="cb-autos"/></td>
+                            </tr>
+                            <tr>
+                                <td width="40%" rowspan="2">
+                                Firmado
+                                </td>
+                                <td style="border:1px solid black; vertical-align:middle">Alimentación</td>
+                                <td style="border:1px solid black;"></td>
+                                <td style="border:1px solid black;text-align:center;vertical-align:middle"><input type="checkbox" name="cb-autos"/></td>
+                            </tr>
+                            <tr>
+                                <td style="border:1px solid black; vertical-align:middle">Sanitario</td>
+                                <td style="border:1px solid black;"></td>
+                                <td style="border:1px solid black;text-align:center;vertical-align:middle"><input type="checkbox" name="cb-autos"/></td>
+                            </tr>
+                            <tr>
+                                <td width="40%" rowspan="2">
+                                Fecha
+                                </td>
+                                <td style="border:1px solid black; vertical-align:middle">Aeronáutico</td>
+                                <td style="border:1px solid black;"></td>
+                                <td style="border:1px solid black;text-align:center;vertical-align:middle"><input type="checkbox" name="cb-autos"/></td>
+                            </tr>
+                            <tr>
+                                <td style="border:1px solid black; vertical-align:middle">Otros:</td>
+                                <td style="border:1px solid black;"></td>
+                                <td style="border:1px solid black;text-align:center;vertical-align:middle"><input type="checkbox" name="cb-autos"/></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div>
+                        <p>
+                        Nota: cualquier tipo de requisito legislativo que deban cumplir los componentes solicitados debe ser comunicado por el clienta a Lupeon durante la fase de oferta. En caso de no comunicarse dichos requisitos, Lupeon no se hace responsable de cualquier perjuicio que puedan causar los componentes fabricados.                    </p>
+                    </div>
+                    <div>
+                        <h2>Gracias por confiar en nosotros</h2>
+                        <p>
+                        Sus datos de carácter personal han sido recogidos de acuerdo con lo dispuesto en el Reglamento (UE) 2016/679 del Parlamento Europeo y del Consejo, de 27 de abril de 2016, relativo a la protección de las personas físicas en lo que respecta al tratamiento de datos personales y a la libre circulación de los mismos. Le ponemos en conocimiento que estos datos se encuentran almacenados en un fichero propiedad de Lupeon SL. De acuerdo con la Ley anterior, tiene derecho a ejercer los derechos de acceso, rectificación, cancelación, limitación, oposición y portabilidad de manera gratuita mediante correo electrónico a: admin@lupeon.com o bien en la siguiente dirección: Polígono Industrial Porto do Molle, Nave 7A, C.P. 36350, Nigrán (Pontevedra).
+                        </p>
+                    </div>
+                    <t t-if="doc.report_image">
+                        <div style="text-align:center;">
+                                <img t-att-src="'data:image/png;base64,%s' % to_text(doc.report_image)" style="max-height: 500px;"/>
+                        </div>
+                    </t>
+                </div>
+            </t>
         </xpath>
   	</template>
 
