@@ -25,7 +25,7 @@ msgstr "Código de barras"
 #: code:addons/custom_lupeon/wizard/sale_make_invoice_advanced.py:24
 #, python-format
 msgid "Can not create invoice if client order ref is PENDIENTE"
-msgstr "No se puede crear gactura si la referencia de cliente es PENDIENTE"
+msgstr "No se puede crear factura si la referencia de cliente es PENDIENTE"
 
 #. module: custom_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_lupeon.sale_order_filter_custom_lupeon
