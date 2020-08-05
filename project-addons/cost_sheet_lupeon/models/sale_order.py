@@ -182,7 +182,7 @@ class SaleOrder(models.Model):
             'sale.view_order_form'
         )
         return {
-            'name': _('Agents'),
+            'name': _('Duplicated'),
             'type': 'ir.actions.act_window',
             'view_type': 'form',
             'view_mode': 'form',
@@ -191,7 +191,7 @@ class SaleOrder(models.Model):
             'view_id': view.id,
             'target': 'current',
             'res_id': new.id,
-            'context': new.env.context,
+            'context': self._context,
         }
     
 
