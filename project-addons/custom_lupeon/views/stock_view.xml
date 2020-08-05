@@ -33,7 +33,7 @@
                 <filter name="ready_to_pick" string="No proforma" domain="['|', ('sale_id', '=', False), ('sale_id.state','in', ['sale', 'done'])]" help="Pickings ready to execute"/>
                 <filter name="reserved" string="Reserved " domain="[('sale_id', '!=', False), ('sale_id.state','in', ['draft', 'sent'])]" help="Pickings with reserve from sales"/>
                 <separator/>
-                <filter name="not_blocked" string="Sin bloqueo" domain="['|', ('sale_id', '=', False), ('delivery_blocked','!=', True)]" help="Pickings not blocked from sales"/>
+                <filter name="not_blocked" string="Sin bloqueo" domain="['|', ('sale_id', '=', False), ('sale_id.prestashop_state.pending_payment','!=', True), ('delivery_blocked','!=', True)]" help="Pickings not blocked from sales"/>
             </field>
         </field>
     </record>
@@ -130,6 +130,17 @@
         </field>
     </record>
 
+    <record id="view_picking_tracking_ref_custom" model="ir.ui.view" >
+        <field name="name">view_picking_tracking_ref_custom</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="delivery.view_picking_withcarrier_out_form"/>
+        <field name="arch" type="xml">
+            <field name="carrier_tracking_ref" position="attributes">
+                 <attribute name="readonly">False</attribute>
+            </field>
+        </field>
+    </record>
+
     <!-- stock.move inherit search view -->
     <record id="view_picking_delivered_search_custom" model="ir.ui.view">
         <field name="name">view_picking_delivered_search_custom</field>
@@ -206,6 +217,7 @@
                 <field name="partner_id" context="{'show_address': 1}" options="{'always_reload': True}" />
                 <field name="partner_phone"/>
                 <field name="partner_mobile"/>
+                <field name="partner_email"/>
             </field>
         </field>
     </record>

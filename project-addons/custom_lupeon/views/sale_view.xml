@@ -168,6 +168,7 @@
             <xpath expr="//field[@name='name']/.." position="after">
                 <group>
                     <field name="trigger_delivered"/>
+                    <field name="pending_payment"/>
                 </group>
             </xpath>
 

@@ -25,13 +25,23 @@ class PickingType(models.Model):
         # SE SOBREESCRIBE
         
         domains = {
-            'count_picking_draft': [('state', '=', 'draft'), '|', ('picking_type_id.code', '!=', 'outgoing'), '&', ('picking_type_id.code', '=', 'outgoing'), ('sale_id.state','not in', ['draft', 'sent'])],
-            'count_picking_waiting': [('state', 'in', ('confirmed', 'waiting')), '|', ('picking_type_id.code', '!=', 'outgoing'), '&', ('picking_type_id.code', '=', 'outgoing'), ('sale_id.state','not in', ['draft', 'sent'])],
-            'count_picking_ready': [('state', '=', 'assigned'), '|', ('picking_type_id.code', '!=', 'outgoing'), '&', '&', ('picking_type_id.code', '=', 'outgoing'), ('sale_id.state','not in', ['draft', 'sent']), ('delivery_blocked','!=', True)],
-            'count_picking': [('state', 'in', ('assigned', 'waiting', 'confirmed')), '|', ('picking_type_id.code', '!=', 'outgoing'), '&', ('picking_type_id.code', '=', 'outgoing'), ('sale_id.state','not in', ['draft', 'sent'])],
+            'count_picking_draft': [('state', '=', 'draft'), '|', 
+                                    ('picking_type_id.code', '!=', 'outgoing'),
+                                     '&', ('picking_type_id.code', '=', 'outgoing'), ('sale_id.state','not in', ['draft', 'sent'])],
+            'count_picking_waiting': [('state', 'in', ('confirmed', 'waiting')), 
+                                      '|', ('picking_type_id.code', '!=', 'outgoing'), 
+                                      '&', ('picking_type_id.code', '=', 'outgoing'), ('sale_id.state','not in', ['draft', 'sent'])],
+            'count_picking_ready': [('state', '=', 'assigned'), 
+                                    '|', ('picking_type_id.code', '!=', 'outgoing'),
+                                     '&', '&','&', ('picking_type_id.code', '=', 'outgoing'), ('sale_id.state','not in', ['draft', 'sent']), ('delivery_blocked','!=', True), 
+                                     ('sale_id.prestashop_state.pending_payment', '!=', True)],
+            'count_picking': [('state', 'in', ('assigned', 'waiting', 'confirmed')),
+                               '|', ('picking_type_id.code', '!=', 'outgoing'), 
+                               '&', ('picking_type_id.code', '=', 'outgoing'), ('sale_id.state','not in', ['draft', 'sent'])],
             'count_picking_late': [('scheduled_date', '<', time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)),
                                     ('state', 'in', ('assigned', 'waiting', 'confirmed')),
-                                    '|', ('picking_type_id.code', '!=', 'outgoing'), '&', ('picking_type_id.code', '=', 'outgoing'), ('sale_id.state','not in', ['draft', 'sent'])],
+                                    '|', ('picking_type_id.code', '!=', 'outgoing'), 
+                                    '&', ('picking_type_id.code', '=', 'outgoing'), ('sale_id.state','not in', ['draft', 'sent'])],
             'count_picking_backorders': [('backorder_id', '!=', False), ('state', 'in', ('confirmed', 'assigned', 'waiting'))],
         }
         for field in domains:
@@ -57,6 +67,7 @@ class StockPicking(models.Model):
     delivery_blocked = fields.Boolean('Delivery blocked', related='sale_id.delivery_blocked')
     partner_phone = fields.Char('Phone', related='partner_id.phone')
     partner_mobile = fields.Char('Mobile', related='partner_id.mobile')
+    partner_email = fields.Char('Email', related='partner_id.email')
     
     
     @api.depends('sale_id.prestashop_state')

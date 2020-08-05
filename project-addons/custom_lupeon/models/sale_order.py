@@ -228,4 +228,4 @@ class SaleOrderState(models.Model):
     _inherit = "sale.order.state"
 
     trigger_delivered = fields.Boolean('Trigger Delivered')
-    
+    pending_payment = fields.Boolean('Pending Payment')
