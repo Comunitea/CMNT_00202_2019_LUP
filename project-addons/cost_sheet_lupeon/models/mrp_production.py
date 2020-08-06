@@ -41,8 +41,7 @@ class MrpProduction(models.Model):
     origin_production_id = fields.Many2one('mrp.production', 'Origin production')
 
 
-    def create_partial_mrp(self, qty):
-        import ipdb; ipdb.set_trace()
+    def create_partial_mrp(self, qty, mode):
         self.ensure_one()
 
         version = len(self.repeated_production_ids) + 1
@@ -57,7 +56,8 @@ class MrpProduction(models.Model):
             'product_id': self.product_id.id,
             'product_uom_qty': qty,
             'product_uom_id': self.product_uom_id.id,
-            'production_id': self.id
+            'production_id': self.id,
+            'origin': self.name + ' (%s)' % mode
         }
         scrap = self.env['stock.scrap'].create(vals)
         scrap.action_validate()

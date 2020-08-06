@@ -16,7 +16,7 @@ class QualityWizard(models.TransientModel):
         return res
 
     mode = fields.Selection(
-        [('ok_tech', 'OK Tech'), ('ok_quality', 'OK_Quality')], 'Mode',
+        [('ok_tech', 'OK Tech'), ('ok_quality', 'OK Quality')], 'Mode',
          readonly=True)
     qty = fields.Integer('No OK Qty')
 
@@ -37,4 +37,4 @@ class QualityWizard(models.TransientModel):
             mrp.no_ok_quality = self.qty
         
         if self.qty > 0:
-            mrp.create_partial_mrp(self.qty)
+            mrp.create_partial_mrp(self.qty, self.mode)
