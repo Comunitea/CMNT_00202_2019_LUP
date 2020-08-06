@@ -7,6 +7,11 @@
         <field name="model">mrp.production</field>
         <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
         <field name="arch" type="xml">
+            <header position="inside">
+               <button name="%(action_quality_wizard)d" type="action" context="{'mode': 'ok_tech'}" string="OK TECH" attrs="{'invisible': ['|', ('state', '!=', 'done'), ('ok_tech', '=', True)]}"/>
+               <button name="%(action_quality_wizard)d" type="action" context="{'mode': 'ok_quality'}" string="OK QUALITY" attrs="{'invisible': ['|', ('state', '!=', 'done'), ('ok_quality', '=', True)]}"/>
+            </header>
+
             <field name="product_id" position="after">
                 <field name="sheet_id" context="{'form_view_ref': 'cost_sheet_lupeon.simple_cost_sheet_view_form'}" />
                 <field name="sheet_type"/>
@@ -15,6 +20,28 @@
                 <field name="line_ref"/>
                 <field name="line_name"/>
             </field>
+
+             <field name="company_id" position="after">
+                <field name="ok_tech"/>
+                <field name="no_ok_tech"/>
+                <field name="ok_quality"/>
+                <field name="no_ok_quality"/>
+                <field name="origin_production_id"/>
+            </field>
+
+            <notebook position="inside">
+                <page string="Repeated Producions">
+                    <group string="Repeated productions">
+                        <field name="repeated_production_ids" nolabel="1">
+                            <tree>
+                                <field name="name"/>
+                                <field name="product_qty"/>
+                                <field name="state"/>
+                            </tree>
+                        </field>
+                    </group>
+                </page>
+            </notebook>
             
         </field>
     </record>
@@ -31,6 +58,13 @@
                 <field name="sale_line_id"/>
                 <field name="line_ref"/>
                 <field name="line_name"/>
+            </field>
+
+             <field name="state" position="after">
+                <field name="ok_tech"/>
+                <field name="no_ok_tech"/>
+                <field name="ok_quality"/>
+                <field name="no_ok_quality"/>
             </field>
             
         </field>

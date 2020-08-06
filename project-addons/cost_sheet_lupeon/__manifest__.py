@@ -32,6 +32,7 @@
         'views/design_software_view.xml',
         'views/project_view.xml',
         'views/mrp_production_view.xml',
+        'wizard/quality_wizard_view.xml',
     ],
     "installable": True,
     'application': False,
