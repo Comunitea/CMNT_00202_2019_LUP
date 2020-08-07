@@ -12,3 +12,4 @@ from . import design_software
 from . import cost_sheet
 from . import project
 from . import mrp_production
+from . import stock_quant

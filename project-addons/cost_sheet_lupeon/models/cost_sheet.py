@@ -105,6 +105,7 @@ class GroupCostSheet(models.Model):
                 'routing_id': False,  # TODO use_routes,
                 'type': 'normal',
                 'bom_line_ids': components,
+                'ready_to_produce': 'all_available',
             }
             bom = self.env['mrp.bom'].create(vals)
             group.bom_id = bom.id
@@ -764,7 +765,8 @@ class CostSheet(models.Model):
             'bom_line_ids': components,
             'routing_id':
             self.printer_id.routing_id and self.printer_id.routing_id.id or 
-            False
+            False,
+            'ready_to_produce': 'all_available'
         }
         bom = self.env['mrp.bom'].create(vals)
 
@@ -789,6 +791,7 @@ class CostSheet(models.Model):
             }
             prod = self.env['mrp.production'].create(vals)
             prod.onchange_product_id()
+            prod.button_plan()
             sheet.write({'production_id': prod.id})
         return
 

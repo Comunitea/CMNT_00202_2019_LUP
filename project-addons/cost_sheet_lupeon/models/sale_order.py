@@ -181,6 +181,8 @@ class SaleOrder(models.Model):
         view = self.env.ref(
             'sale.view_order_form'
         )
+        for line in new.order_line:
+            line.group_sheet_id.write({'sale_line_id': line.id})
         return {
             'name': _('Duplicated'),
             'type': 'ir.actions.act_window',
@@ -232,8 +234,10 @@ class SaleOrderLine(models.Model):
         if self.group_sheet_id:
             copy_vals = {
                 'bom_id': False,
-                'sale_line_id': self.id,
+                'sale_line_id': False,
             }
             new_sheet = self.group_sheet_id.copy(default=copy_vals)
             default['group_sheet_id'] = new_sheet.id
-        return super().copy_data(default)
+        
+        res = super().copy_data(default)
+        return res
