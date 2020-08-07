@@ -10,7 +10,7 @@
             <header position="inside">
                <button name="%(action_quality_wizard)d" type="action" context="{'mode': 'ok_tech'}" string="OK TECH" attrs="{'invisible': ['|', ('state', '!=', 'done'), ('ok_tech', '=', True)]}"/>
                <button name="%(action_quality_wizard)d" type="action" context="{'mode': 'ok_quality'}" string="OK QUALITY" attrs="{'invisible': ['|', '|', ('state', '!=', 'done'), ('ok_tech', '=', False), ('ok_quality', '=', True)]}"/>
-               <button name="block_stock" string="block" type="object"/>
+               <!-- <button name="block_stock" string="block" type="object"/> -->
             </header>
 
             <field name="product_id" position="after">
