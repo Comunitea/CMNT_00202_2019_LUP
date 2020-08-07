@@ -39,7 +39,6 @@ class QualityWizard(models.TransientModel):
         if self.qty > 0:
             mrp.create_partial_mrp(self.qty, self.mode)
         
-        import ipdb; ipdb.set_trace()
         if self. mode == 'ok_quality':
             quants = self.env['stock.quant'].with_context(no_blocked=True).\
                 _gather(mrp.product_id, mrp.location_dest_id)
