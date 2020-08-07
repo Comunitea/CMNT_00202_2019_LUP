@@ -35,7 +35,7 @@ class MrpProduction(models.Model):
     ok_tech = fields.Boolean('OK tech', copy=False, readonly=True)
     no_ok_tech = fields.Integer('Qty no ok tech', copy=False, readonly=True)
     ok_quality = fields.Boolean('OK quality', copy=False, readonly=True)
-    no_ok_quality = fields.Integer('Qty no ok tech', copy=False, readonly=True)
+    no_ok_quality = fields.Integer('Qty no ok quality', copy=False, readonly=True)
 
     repeated_production_ids = fields.One2many('mrp.production', 'origin_production_id', 'Repeated production')
     origin_production_id = fields.Many2one('mrp.production', 'Origin production')

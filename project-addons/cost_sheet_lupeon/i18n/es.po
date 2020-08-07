@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-27 00:00+0000\n"
-"PO-Revision-Date: 2020-07-27 00:00+0000\n"
+"POT-Creation-Date: 2020-08-07 12:18+0000\n"
+"PO-Revision-Date: 2020-08-07 12:18+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -31,12 +31,6 @@ msgid "Advanced User"
 msgstr ""
 
 #. module: cost_sheet_lupeon
-#: code:addons/cost_sheet_lupeon/models/sale_order.py:185
-#, python-format
-msgid "Agents"
-msgstr ""
-
-#. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__bucket_height_sls
 msgid "Altura cubeta"
 msgstr ""
@@ -52,10 +46,26 @@ msgid "Basic User"
 msgstr ""
 
 #. module: cost_sheet_lupeon
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_stock_quant__blocked
+msgid "Blocked"
+msgstr "Bloqueado"
+
+#. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__can_edit
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_material_cost_line__can_edit
 msgid "Can Edit"
 msgstr ""
+
+#. module: cost_sheet_lupeon
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.view_quality_wizard
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: cost_sheet_lupeon
+#: code:addons/cost_sheet_lupeon/wizard/quality_wizard.py:29
+#, python-format
+msgid "Cannot reject %s units because you only produce %s"
+msgstr "No se pueden rechazar %s unidades porque solo hay producidas %s"
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__feature_ids
@@ -64,6 +74,7 @@ msgstr ""
 
 #. module: cost_sheet_lupeon
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.cost_sheet_view_form
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.simple_cost_sheet_view_form
 msgid "Carcterísticas pieza"
 msgstr ""
 
@@ -80,6 +91,7 @@ msgstr ""
 #. module: cost_sheet_lupeon
 #: selection:cost.sheet,sheet_type:0
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.cost_sheet_view_form
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.simple_cost_sheet_view_form
 msgid "Compras"
 msgstr ""
 
@@ -97,6 +109,11 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.cost_sheet_view_form
 msgid "Configuración oferta"
 msgstr ""
+
+#. module: cost_sheet_lupeon
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.view_quality_wizard
+msgid "Confirm"
+msgstr "Confirmar"
 
 #. module: cost_sheet_lupeon
 #: model:ir.model,name:cost_sheet_lupeon.model_res_partner
@@ -204,6 +221,7 @@ msgstr ""
 
 #. module: cost_sheet_lupeon
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.cost_sheet_view_form
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.simple_cost_sheet_view_form
 msgid "Costes Compras"
 msgstr ""
 
@@ -221,6 +239,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_part_feature__create_uid
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_printer_machine__create_uid
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_purchase_cost_line__create_uid
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_quality_wizard__create_uid
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_tinted__create_uid
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_workforce_cost_line__create_uid
 msgid "Created by"
@@ -240,6 +259,7 @@ msgstr "Creado por"
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_part_feature__create_date
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_printer_machine__create_date
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_purchase_cost_line__create_date
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_quality_wizard__create_date
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_tinted__create_date
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_workforce_cost_line__create_date
 msgid "Created on"
@@ -253,6 +273,7 @@ msgstr ""
 #. module: cost_sheet_lupeon
 #: selection:cost.sheet,sheet_type:0
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.cost_sheet_view_form
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.simple_cost_sheet_view_form
 #: selection:printer.machine,type:0
 #: selection:product.product,material_type:0
 msgid "DMLS"
@@ -260,6 +281,7 @@ msgstr ""
 
 #. module: cost_sheet_lupeon
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.cost_sheet_view_form
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.simple_cost_sheet_view_form
 msgid "Datos pieza"
 msgstr ""
 
@@ -329,6 +351,7 @@ msgstr ""
 
 #. module: cost_sheet_lupeon
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.cost_sheet_view_form
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.simple_cost_sheet_view_form
 msgid "Diseño"
 msgstr ""
 
@@ -346,6 +369,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_part_feature__display_name
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_printer_machine__display_name
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_purchase_cost_line__display_name
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_quality_wizard__display_name
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_tinted__display_name
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_workforce_cost_line__display_name
 msgid "Display Name"
@@ -360,6 +384,12 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.sale_order_custom_lup
 msgid "Duplicate costs"
 msgstr "Duplicar con costes"
+
+#. module: cost_sheet_lupeon
+#: code:addons/cost_sheet_lupeon/models/sale_order.py:187
+#, python-format
+msgid "Duplicated"
+msgstr "Duplicado"
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_oppi_cost_line__employee_id
@@ -395,6 +425,7 @@ msgstr ""
 #. module: cost_sheet_lupeon
 #: selection:cost.sheet,sheet_type:0
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.cost_sheet_view_form
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.simple_cost_sheet_view_form
 #: selection:printer.machine,type:0
 #: selection:product.product,material_type:0
 msgid "FDM"
@@ -424,6 +455,7 @@ msgstr ""
 
 #. module: cost_sheet_lupeon
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.cost_sheet_view_form
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.simple_cost_sheet_view_form
 msgid "General"
 msgstr ""
 
@@ -496,7 +528,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.product_cost_sheet_view_form
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.sale_order_custom_lup
 msgid "Hojas de coste"
-msgstr "Hojas de coste"
+msgstr ""
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_design_time_line__hours
@@ -544,6 +576,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_part_feature__id
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_printer_machine__id
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_purchase_cost_line__id
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_quality_wizard__id
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_tinted__id
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_workforce_cost_line__id
 msgid "ID"
@@ -563,6 +596,7 @@ msgstr ""
 #. module: cost_sheet_lupeon
 #: selection:cost.sheet,sheet_type:0
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.cost_sheet_view_form
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.simple_cost_sheet_view_form
 msgid "Imprevistos"
 msgstr ""
 
@@ -580,6 +614,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__infill
 msgid "Infill"
 msgstr ""
+
+#. module: cost_sheet_lupeon
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.view_quality_wizard
+msgid "Invoice Sales Order"
+msgstr "Facturar pedido de venta"
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_meet_cost_line__kms
@@ -600,6 +639,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_part_feature____last_update
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_printer_machine____last_update
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_purchase_cost_line____last_update
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_quality_wizard____last_update
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_tinted____last_update
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_workforce_cost_line____last_update
 msgid "Last Modified on"
@@ -619,6 +659,7 @@ msgstr "Última modificación en"
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_part_feature__write_uid
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_printer_machine__write_uid
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_purchase_cost_line__write_uid
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_quality_wizard__write_uid
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_tinted__write_uid
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_workforce_cost_line__write_uid
 msgid "Last Updated by"
@@ -638,6 +679,7 @@ msgstr "Última actualización por"
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_part_feature__write_date
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_printer_machine__write_date
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_purchase_cost_line__write_date
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_quality_wizard__write_date
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_tinted__write_date
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_workforce_cost_line__write_date
 msgid "Last Updated on"
@@ -652,6 +694,7 @@ msgstr ""
 #: model:ir.actions.act_window,name:cost_sheet_lupeon.action_applicable_legislations
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__legislation_ids
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.cost_sheet_view_form
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.simple_cost_sheet_view_form
 msgid "Legislación aplicable"
 msgstr ""
 
@@ -693,6 +736,7 @@ msgstr ""
 
 #. module: cost_sheet_lupeon
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.cost_sheet_view_form
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.simple_cost_sheet_view_form
 msgid "Material Cost"
 msgstr "Coste material"
 
@@ -722,6 +766,11 @@ msgid "Minutos"
 msgstr ""
 
 #. module: cost_sheet_lupeon
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_quality_wizard__mode
+msgid "Mode"
+msgstr "Modo"
+
+#. module: cost_sheet_lupeon
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.cost_sheet_view_form
 msgid "Modelos asociados"
 msgstr ""
@@ -733,6 +782,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_tinted__name
 msgid "Name"
 msgstr "Nombre"
+
+#. module: cost_sheet_lupeon
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_quality_wizard__qty
+msgid "No OK Qty"
+msgstr "Cantidad NO OK"
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_material_cost_line__name
@@ -752,6 +806,36 @@ msgid "Nº personas"
 msgstr ""
 
 #. module: cost_sheet_lupeon
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.mrp_production_form_cost_sheet
+msgid "OK QUALITY"
+msgstr "OK CALIDAD"
+
+#. module: cost_sheet_lupeon
+#: selection:quality.wizard,mode:0
+msgid "OK Quality"
+msgstr "OK CALIDAD"
+
+#. module: cost_sheet_lupeon
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.mrp_production_form_cost_sheet
+msgid "OK TECH"
+msgstr "OK TÉCNICO"
+
+#. module: cost_sheet_lupeon
+#: selection:quality.wizard,mode:0
+msgid "OK Tech"
+msgstr "OK TÉCNICO"
+
+#. module: cost_sheet_lupeon
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_mrp_production__ok_quality
+msgid "OK quality"
+msgstr "OK CALIDAD"
+
+#. module: cost_sheet_lupeon
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_mrp_production__ok_tech
+msgid "OK tech"
+msgstr "OK TÉCNICO"
+
+#. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__oppi_line_ids
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.cost_sheet_view_form
 msgid "Oppi"
@@ -763,7 +847,13 @@ msgid "Oppi Line"
 msgstr ""
 
 #. module: cost_sheet_lupeon
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_mrp_production__origin_production_id
+msgid "Origin production"
+msgstr "Producción origen"
+
+#. module: cost_sheet_lupeon
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.cost_sheet_view_form
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.simple_cost_sheet_view_form
 msgid "POLY"
 msgstr ""
 
@@ -802,6 +892,7 @@ msgstr "Características pieza"
 
 #. module: cost_sheet_lupeon
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.cost_sheet_view_form
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.simple_cost_sheet_view_form
 msgid "Parámetros impresión"
 msgstr ""
 
@@ -940,6 +1031,26 @@ msgid "Proveedor"
 msgstr ""
 
 #. module: cost_sheet_lupeon
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_mrp_production__no_ok_quality
+msgid "Qty no ok quality"
+msgstr "Cant. NO OK CALIDAD"
+
+#. module: cost_sheet_lupeon
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_mrp_production__no_ok_tech
+msgid "Qty no ok tech"
+msgstr "Cant. NO OK TËCNICO"
+
+#. module: cost_sheet_lupeon
+#: model:ir.actions.act_window,name:cost_sheet_lupeon.action_quality_wizard
+msgid "Quality Wizard"
+msgstr "Asistente calidad"
+
+#. module: cost_sheet_lupeon
+#: model:ir.model,name:cost_sheet_lupeon.model_stock_quant
+msgid "Quants"
+msgstr ""
+
+#. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_purchase_cost_line__name
 msgid "Ref. / Descripción"
 msgstr ""
@@ -952,6 +1063,21 @@ msgid "Referencia"
 msgstr ""
 
 #. module: cost_sheet_lupeon
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.mrp_production_form_cost_sheet
+msgid "Repeated Producions"
+msgstr "Producciones repetidas"
+
+#. module: cost_sheet_lupeon
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_mrp_production__repeated_production_ids
+msgid "Repeated production"
+msgstr "Producción repedida"
+
+#. module: cost_sheet_lupeon
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.mrp_production_form_cost_sheet
+msgid "Repeated productions"
+msgstr "Producciones repetidas"
+
+#. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__description
 msgid "Requisitos técnicos"
 msgstr ""
@@ -959,6 +1085,7 @@ msgstr ""
 #. module: cost_sheet_lupeon
 #: selection:cost.sheet,sheet_type:0
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.cost_sheet_view_form
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.simple_cost_sheet_view_form
 msgid "Reuniones"
 msgstr ""
 
@@ -968,8 +1095,14 @@ msgid "Reunión"
 msgstr ""
 
 #. module: cost_sheet_lupeon
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_printer_machine__routing_id
+msgid "Routing"
+msgstr "Ruta de producción"
+
+#. module: cost_sheet_lupeon
 #: selection:cost.sheet,sheet_type:0
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.cost_sheet_view_form
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.simple_cost_sheet_view_form
 #: selection:printer.machine,type:0
 #: selection:product.product,material_type:0
 msgid "SLA"
@@ -978,6 +1111,7 @@ msgstr ""
 #. module: cost_sheet_lupeon
 #: selection:cost.sheet,sheet_type:0
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.cost_sheet_view_form
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.simple_cost_sheet_view_form
 #: selection:printer.machine,type:0
 #: selection:product.product,material_type:0
 msgid "SLS"
@@ -986,6 +1120,7 @@ msgstr ""
 #. module: cost_sheet_lupeon
 #: selection:cost.sheet,sheet_type:0
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.cost_sheet_view_form
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.simple_cost_sheet_view_form
 #: selection:printer.machine,type:0
 #: selection:product.product,material_type:0
 msgid "SLS P396"
@@ -1037,7 +1172,7 @@ msgstr ""
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_mrp_production__sheet_type
 msgid "Sheet type"
-msgstr ""
+msgstr "Tipo de hoja"
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_design_time_line__software_id
@@ -1122,6 +1257,7 @@ msgstr ""
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__time_line_ids
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.cost_sheet_view_form
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.simple_cost_sheet_view_form
 msgid "Tiempos"
 msgstr ""
 
@@ -1237,6 +1373,11 @@ msgstr ""
 #: selection:cost.sheet,inspection_type:0
 msgid "Visual"
 msgstr ""
+
+#. module: cost_sheet_lupeon
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.view_quality_wizard
+msgid "Wizard Quality"
+msgstr "Asistente calidad"
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__x_mm_sls
@@ -1414,6 +1555,11 @@ msgstr ""
 #. module: cost_sheet_lupeon
 #: model:ir.model,name:cost_sheet_lupeon.model_purchase_cost_line
 msgid "purchase.cost.line"
+msgstr ""
+
+#. module: cost_sheet_lupeon
+#: model:ir.model,name:cost_sheet_lupeon.model_quality_wizard
+msgid "quality.wizard"
 msgstr ""
 
 #. module: cost_sheet_lupeon
