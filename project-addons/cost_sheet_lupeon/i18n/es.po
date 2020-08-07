@@ -1038,7 +1038,7 @@ msgstr "Cant. NO OK CALIDAD"
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_mrp_production__no_ok_tech
 msgid "Qty no ok tech"
-msgstr "Cant. NO OK TËCNICO"
+msgstr "Cant. NO OK TÉCNICO"
 
 #. module: cost_sheet_lupeon
 #: model:ir.actions.act_window,name:cost_sheet_lupeon.action_quality_wizard

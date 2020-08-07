@@ -74,7 +74,7 @@ class MrpProduction(models.Model):
         for production in self:
             production.qty_produced = production.qty_produced - \
                 production.no_ok_tech - production.no_ok_quality
-        return True
+        return res
     
     def block_stock(self):
         self.ensure_one()
