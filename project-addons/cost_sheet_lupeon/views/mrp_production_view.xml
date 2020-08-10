@@ -13,6 +13,14 @@
                <!-- <button name="block_stock" string="block" type="object"/> -->
             </header>
 
+            <!-- No dejar producir si no está todo disponible -->
+            <xpath expr="//header/button[@name='open_produce_product'][1]" position="replace">
+                <button name="open_produce_product" attrs="{'invisible': ['|', '|', '|', '|', ('is_locked', '=', False), ('check_to_done', '=', True), ('availability', 'not in', ['assigned']), ('state', 'not in', ('confirmed','progress')), ('routing_id', '!=', False)]}" string="Produce" type="object" class="oe_highlight"/>
+            </xpath>
+            <xpath expr="//header/button[@name='open_produce_product'][2]" position="replace">
+                <button name="open_produce_product" attrs="{'invisible': ['|', '|', '|', '|', ('is_locked', '=', False), ('check_to_done', '=', True), ('availability', '!=', 'assigned'), ('state', 'not in', ('confirmed','progress')), ('routing_id', '!=', False)]}" string="Produce" type="object"/>
+            </xpath>
+
             <field name="product_id" position="after">
                 <field name="sheet_id" context="{'form_view_ref': 'cost_sheet_lupeon.simple_cost_sheet_view_form'}" />
                 <field name="sheet_type"/>
