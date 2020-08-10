@@ -47,12 +47,11 @@ class MrpProduction(models.Model):
         When OK tech or OK quality, replan a production
         """
         self.ensure_one()
-
         version = len(self.repeated_production_ids) + 1
         mrp = self.copy({
             'name': self.name + ' - R%s' % version,
             'product_uom_qty': qty,
-            'sheet_id': self.sheet_id,
+            'sheet_id': self.sheet_id.id,
             'origin_production_id': self.id,
         })
 
@@ -63,7 +62,8 @@ class MrpProduction(models.Model):
             'production_id': self.id,
             'origin': self.name + ' (%s)' % mode
         }
-        scrap = self.env['stock.scrap'].create(vals)
+        scrap = self.env['stock.scrap'].with_context(no_blocked=True).\
+                create(vals)
         scrap.action_validate()
 
     
