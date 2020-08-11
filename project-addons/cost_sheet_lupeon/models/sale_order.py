@@ -17,7 +17,8 @@ class SaleOrder(models.Model):
                                 compute='_count_production_and_task')
     count_task = fields.Integer('Productions',
                                 compute='_count_production_and_task')
-    project_id = fields.Many2one('project.project', 'Project', readonly=True)
+    project_id = fields.Many2one('project.project', 'Project', readonly=True,
+        copy=False)
     production_date = fields.Datetime('Fecha producción')
 
     @api.onchange('commitment_date')

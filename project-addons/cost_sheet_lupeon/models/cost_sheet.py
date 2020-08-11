@@ -102,7 +102,7 @@ class GroupCostSheet(models.Model):
                 'product_tmpl_id': line.product_id.product_tmpl_id.id,
                 'product_qty': line.product_uom_qty,
                 'product_uom_id': line.product_uom.id,
-                'routing_id': False,  # TODO use_routes,
+                'routing_id': False,  # esta no lleva ruta,
                 'type': 'normal',
                 'bom_line_ids': components,
                 'ready_to_produce': 'all_available',
@@ -133,6 +133,10 @@ class CostSheet(models.Model):
     production_id = fields.Many2one(
         'mrp.production', 'Produción', index=True, copy=False,
         readonly=True)
+    production_state = fields.Selection(
+        string="Production State", related='production_id.state')
+    sale_state = fields.Selection(
+        string="Sale State", related='sale_id.state')
 
     sheet_type = fields.Selection(SHEET_TYPES, 'Tipo de hoja')
 
@@ -683,6 +687,23 @@ class CostSheet(models.Model):
 
         if production_sheets:
             production_sheets.create_productions()
+        return
+    
+    @api.multi
+    def manually_create_task_or_production(self):
+        """
+        Create a task if sheet type is design, or if exist oppi line
+        or a production for each sheet.
+        """
+        if self.production_id:
+            self.production_id.action_cancel()
+            self.production_id.unlink()
+        
+        if self.sale_id.project_id:
+            self.mapped('project_id.task_ids').unlink()
+            self.mapped('project_id').unlink()
+
+        self.create_task_or_production()
         return
 
     def create_tasks(self):

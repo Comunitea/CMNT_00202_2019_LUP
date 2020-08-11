@@ -979,7 +979,7 @@ msgstr "Impresoras"
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__production_id
 msgid "Produción"
-msgstr ""
+msgstr "Producción"
 
 #. module: cost_sheet_lupeon
 #: model:ir.model,name:cost_sheet_lupeon.model_product_product
