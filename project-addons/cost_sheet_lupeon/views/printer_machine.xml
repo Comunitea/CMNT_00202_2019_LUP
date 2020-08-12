@@ -41,7 +41,7 @@
             <tree>
                 <field name="name"/>
                 <field name="type"/>
-                
+                <field name="routing_id"/>
                 <field name="diameter"/>
                 <field name="machine_hour"/>
                 <field name="euro_hour"/>

@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<odoo>
+
+   
+    <record id="group_production_view_form" model="ir.ui.view">
+        <field name="name">group.production.view.form</field>
+        <field name="model">group.production</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="setup_group" type="object" string="Setup Group"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                    <group string="Grouped Productions">
+                        <field name="production_ids" nolabel="1">
+                            <tree>
+                                <field name="name"/>
+                                <field name="product_id"/>
+                                <field name="product_qty"/>
+                                <field name="sheet_type"/>
+                                <field name="sale_id"/>
+                                <field name="state"/>
+                            </tree>
+                        </field>
+                    </group>
+                    <notebook>
+                        <page string="Materials to consume">
+                            <group string="Materials to consume">
+                                <field name="material_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="product_id"/>
+                                        <field name="qty"/>
+                                        <field name="real_qty"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+                        <page string="Real consumes">
+                            <group string="Real consumes">
+                                <field name="repart_material_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="production_id"/>
+                                        <field name="product_id"/>
+                                        <field name="qty"/>
+                                        <field name="real_qty"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+                    </notebook>
+                    
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="group_production_view_tree" model="ir.ui.view">
+        <field name="name">group.production.view.tree</field>
+        <field name="model">group.production</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="group_production_view_search" model="ir.ui.view">
+        <field name="name">group.production.view.search</field>
+        <field name="model">group.production</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_group_productions" model="ir.actions.act_window">
+        <field name="name">Grouped Productions</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">group.production</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <menuitem id="menu_group_production_view" action="action_group_productions"  name="Grouped productions" parent="mrp.menu_mrp_manufacturing" sequence="99"/>
+
+</odoo>

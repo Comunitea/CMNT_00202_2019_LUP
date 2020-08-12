@@ -40,6 +40,8 @@ class MrpProduction(models.Model):
     repeated_production_ids = fields.One2many('mrp.production', 'origin_production_id', 'Repeated production')
     origin_production_id = fields.Many2one('mrp.production', 'Origin production')
 
+    group_mrp_id = fields.Many2one('group.production', 'Group', readonly=True)
+
 
     # TODO FECHA
     def create_partial_mrp(self, qty, mode):

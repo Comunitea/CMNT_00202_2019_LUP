@@ -124,7 +124,7 @@ class CostSheet(models.Model):
     #     return res
 
     # COMUN
-    name = fields.Char('Referencia')
+    name = fields.Char('Referencia', required=True)
     product_id = fields.Many2one('product.product', 'Producto asociado',
                                  readonly=True)
     group_id = fields.Many2one('group.cost.sheet', 'Hojas de coste',

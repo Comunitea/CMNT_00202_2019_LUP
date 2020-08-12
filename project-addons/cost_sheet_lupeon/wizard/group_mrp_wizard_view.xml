@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="vieww_group_mrp_wizard" model="ir.ui.view">
+            <field name="name">Group Production Wizard</field>
+            <field name="model">group.mrp.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Invoice Sales Order">
+                    <p class="oe_grey">
+                        Gropup the selected productions
+                    </p>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                    <footer>
+                        <button name="do_group" string="Group Productions" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window id="action_view_group_mrp_wizard"
+                multi="True"
+                key2="client_action_multi"
+                name="Group Productions"
+                src_model="mrp.production"
+                res_model="group.mrp.wizard"
+                view_mode="form"
+                view_type="form"
+                target="new" />
+
+</odoo>
