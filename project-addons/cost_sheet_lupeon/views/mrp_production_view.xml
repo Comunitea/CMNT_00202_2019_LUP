@@ -43,6 +43,7 @@
                 <field name="no_ok_quality"/>
                 <field name="origin_production_id"/>
                 <field name="qty_produced"/>
+                <field name="group_mrp_id"/>
             </field>
 
             <notebook position="inside">

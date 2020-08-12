@@ -8,12 +8,17 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="setup_group" type="object" string="Setup Group"/>
-                    <field name="state" widget="statusbar"/>
+                    <button name="action_confirm_group" type="object" string="Confirm Group" states="draft" class="btn-success"/>
+                    <button name="action_plan_group" type="object" string="Plan Group" states="confirmed" class="btn-success"/>
+                    <button name="action_done_group" type="object" string="Done Group" states="planned" class="btn-success"/>
+                    <button name="action_cancel_group" type="object" string="Cancel Group" states="draft,confirmed,planned" class="btn-danger"/>
+                    <button name="action_draft_group" type="object" string="Back to draft Group" states="cancel" class="btn-warning"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,planned,done"/>
                 </header>
                 <sheet>
                     <group>
                         <field name="name"/>
+                        <field name="total_time" widget="float_time"/>
                     </group>
                     <group string="Grouped Productions">
                         <field name="production_ids" nolabel="1">
@@ -64,6 +69,7 @@
         <field name="arch" type="xml">
             <tree>
                 <field name="name"/>
+                <field name="state"/>
             </tree>
         </field>
     </record>
