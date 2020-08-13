@@ -7,8 +7,12 @@
         <field name="model">product.product</field>
         <field name="inherit_id" ref="product.product_normal_form_view"/>
         <field name="arch" type="xml">
+
+            <field name="default_code" position="after">
+                <field name="is_material" invisible="1"/>
+            </field>
             <notebook position="inside">
-                <page string="Material Info">
+                <page string="Material Info" attrs="{'invisible': [('is_material', '=', False)]}">
                     <group>
                         <field name="material_type"/>
                     </group>
@@ -56,6 +60,8 @@
                     <div attrs="{'invisible':[('type', 'not in', ['product', 'consu', 'service'])]}">
                         <field name="custom_mrp_ok"/>
                         <label for="custom_mrp_ok"/>
+                        <field name="is_material"/>
+                        <label for="is_material"/>
                     </div>
                 </div>
             </field>

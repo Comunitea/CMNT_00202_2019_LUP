@@ -383,7 +383,7 @@ msgstr "Línea de diseño"
 #: model:ir.actions.act_window,name:cost_sheet_lupeon.action_design_software
 #: model:ir.ui.menu,name:cost_sheet_lupeon.menu_action_design_softwares
 msgid "Design Software"
-msgstr ""
+msgstr "Software de diseño"
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_material_cost_line__desviation

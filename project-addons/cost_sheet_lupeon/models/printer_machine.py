@@ -18,7 +18,7 @@ class PrinterMachine(models.Model):
     _name = 'printer.machine'
 
     name = fields.Char('Name')
-    type = fields.Selection(PRINT_TYPES, 'Print Type')
+    type = fields.Selection(PRINT_TYPES, 'Print Type', required=True)
     routing_id = fields.Many2one('mrp.routing', 'Routing', required=True)
 
     diameter = fields.Float('Diameter')

@@ -21,6 +21,8 @@
     "data": [
         'security/ir.model.access.csv',
         'security/sheet_security.xml',
+        'wizard/quality_wizard_view.xml',
+        'wizard/group_mrp_wizard_view.xml',
         'data/sheet_data.xml',
         'views/sale_view.xml',
         'views/cost_sheet_view.xml',
@@ -33,8 +35,6 @@
         'views/project_view.xml',
         'views/mrp_production_view.xml',
         'views/group_production_view.xml',
-        'wizard/quality_wizard_view.xml',
-        'wizard/group_mrp_wizard_view.xml',
     ],
     "installable": True,
     'application': False,
