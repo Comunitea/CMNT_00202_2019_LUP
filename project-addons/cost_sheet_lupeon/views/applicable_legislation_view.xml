@@ -36,7 +36,7 @@
         <field name="view_mode">tree,form</field>
     </record>
 
-    <menuitem id="menu_cost_cfg" name="Cost Configuration" parent="menu_costs_root" sequence="90"/>
+    <menuitem id="menu_cost_cfg" name="Legislación aplicable" parent="menu_costs_root" sequence="90"/>
 
     <menuitem id="menu_action_applicable_legislations" action="action_applicable_legislations"  name="Cost Configuration" parent="menu_cost_cfg" sequence="10"/>
 
