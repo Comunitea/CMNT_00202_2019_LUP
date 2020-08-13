@@ -52,10 +52,20 @@ class MrpProduction(models.Model):
         version = len(self.repeated_production_ids) + 1
         mrp = self.copy({
             'name': self.name + ' - R%s' % version,
-            'product_uom_qty': qty,
+            # 'product_uom_qty': qty,
             'sheet_id': self.sheet_id.id,
             'origin_production_id': self.id,
         })
+
+        # Por algun motivo no se duplica con lo que yo le digo
+        # mrp.write({'product_uom_qty': qty})
+
+        # Change the quantity of the production order to qty
+        wiz = self.env['change.production.qty'].create({'mo_id': mrp.id,
+                                                 'product_qty': qty})
+        wiz.change_prod_qty()
+        
+        mrp.button_plan()
 
         vals = {
             'product_id': self.product_id.id,
