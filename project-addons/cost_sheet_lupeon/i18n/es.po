@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-07 12:18+0000\n"
-"PO-Revision-Date: 2020-08-07 12:18+0000\n"
+"POT-Creation-Date: 2020-08-13 10:05+0000\n"
+"PO-Revision-Date: 2020-08-13 10:05+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -41,9 +41,14 @@ msgid "Altura de Capa"
 msgstr ""
 
 #. module: cost_sheet_lupeon
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.group_production_view_form
+msgid "Back to draft Group"
+msgstr "Volver a borrador grupo"
+
+#. module: cost_sheet_lupeon
 #: model:res.groups,name:cost_sheet_lupeon.group_cs_user
 msgid "Basic User"
-msgstr ""
+msgstr "Usuario básico"
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_stock_quant__blocked
@@ -54,18 +59,35 @@ msgstr "Bloqueado"
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__can_edit
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_material_cost_line__can_edit
 msgid "Can Edit"
-msgstr ""
+msgstr "Puede editar"
 
 #. module: cost_sheet_lupeon
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.view_quality_wizard
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.vieww_group_mrp_wizard
 msgid "Cancel"
 msgstr "Cancelar"
+
+#. module: cost_sheet_lupeon
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.group_production_view_form
+msgid "Cancel Group"
+msgstr "Cancelar grupo"
+
+#. module: cost_sheet_lupeon
+#: selection:group.production,state:0
+msgid "Cancelled"
+msgstr "Cancelado"
 
 #. module: cost_sheet_lupeon
 #: code:addons/cost_sheet_lupeon/wizard/quality_wizard.py:29
 #, python-format
 msgid "Cannot reject %s units because you only produce %s"
 msgstr "No se pueden rechazar %s unidades porque solo hay producidas %s"
+
+#. module: cost_sheet_lupeon
+#: code:addons/cost_sheet_lupeon/models/group_production.py:104
+#, python-format
+msgid "Cant reserve materials form production %s"
+msgstr "No se pueden reservar materiales para la producción %s"
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__feature_ids
@@ -116,6 +138,27 @@ msgid "Confirm"
 msgstr "Confirmar"
 
 #. module: cost_sheet_lupeon
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.group_production_view_form
+msgid "Confirm Group"
+msgstr "Confirmar grupo"
+
+#. module: cost_sheet_lupeon
+#: selection:group.production,state:0
+msgid "Confirmed"
+msgstr "Confirmado"
+
+#. module: cost_sheet_lupeon
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_repart_material_line__move_id
+msgid "Consumed move"
+msgstr "Movimiento consumo"
+
+#. module: cost_sheet_lupeon
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_material_line__real_qty
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_repart_material_line__real_qty
+msgid "Consumed quantity"
+msgstr "Cantidad consumida real"
+
+#. module: cost_sheet_lupeon
 #: model:ir.model,name:cost_sheet_lupeon.model_res_partner
 msgid "Contact"
 msgstr "Contacto"
@@ -143,7 +186,7 @@ msgstr "Hoja de coste"
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_cost_sheet__sheet_ids
 #: model:ir.module.category,name:cost_sheet_lupeon.module_category_cost_sheet
 msgid "Cost Sheets"
-msgstr ""
+msgstr "Hojas de coste"
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__cost_ud
@@ -231,6 +274,9 @@ msgstr ""
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_design_software__create_uid
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_design_time_line__create_uid
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_cost_sheet__create_uid
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_material_line__create_uid
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_mrp_wizard__create_uid
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_production__create_uid
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_material_cost_line__create_uid
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_meet_cost_line__create_uid
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_oppi_cost_line__create_uid
@@ -240,6 +286,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_printer_machine__create_uid
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_purchase_cost_line__create_uid
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_quality_wizard__create_uid
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_repart_material_line__create_uid
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_tinted__create_uid
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_workforce_cost_line__create_uid
 msgid "Created by"
@@ -251,6 +298,9 @@ msgstr "Creado por"
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_design_software__create_date
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_design_time_line__create_date
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_cost_sheet__create_date
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_material_line__create_date
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_mrp_wizard__create_date
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_production__create_date
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_material_cost_line__create_date
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_meet_cost_line__create_date
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_oppi_cost_line__create_date
@@ -260,6 +310,7 @@ msgstr "Creado por"
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_printer_machine__create_date
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_purchase_cost_line__create_date
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_quality_wizard__create_date
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_repart_material_line__create_date
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_tinted__create_date
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_workforce_cost_line__create_date
 msgid "Created on"
@@ -326,7 +377,7 @@ msgstr "Diseño"
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_project_task__time_line_id
 msgid "Design Line"
-msgstr ""
+msgstr "Línea de diseño"
 
 #. module: cost_sheet_lupeon
 #: model:ir.actions.act_window,name:cost_sheet_lupeon.action_design_software
@@ -361,6 +412,9 @@ msgstr ""
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_design_software__display_name
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_design_time_line__display_name
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_cost_sheet__display_name
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_material_line__display_name
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_mrp_wizard__display_name
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_production__display_name
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_material_cost_line__display_name
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_meet_cost_line__display_name
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_oppi_cost_line__display_name
@@ -370,6 +424,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_printer_machine__display_name
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_purchase_cost_line__display_name
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_quality_wizard__display_name
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_repart_material_line__display_name
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_tinted__display_name
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_workforce_cost_line__display_name
 msgid "Display Name"
@@ -381,12 +436,27 @@ msgid "Diámetro"
 msgstr ""
 
 #. module: cost_sheet_lupeon
+#: selection:group.production,state:0
+msgid "Done"
+msgstr "Realizado"
+
+#. module: cost_sheet_lupeon
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.group_production_view_form
+msgid "Done Group"
+msgstr "Finalizar grupo"
+
+#. module: cost_sheet_lupeon
+#: selection:group.production,state:0
+msgid "Draft"
+msgstr "Borrador"
+
+#. module: cost_sheet_lupeon
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.sale_order_custom_lup
 msgid "Duplicate costs"
 msgstr "Duplicar con costes"
 
 #. module: cost_sheet_lupeon
-#: code:addons/cost_sheet_lupeon/models/sale_order.py:187
+#: code:addons/cost_sheet_lupeon/models/sale_order.py:188
 #, python-format
 msgid "Duplicated"
 msgstr "Duplicado"
@@ -460,6 +530,16 @@ msgid "General"
 msgstr ""
 
 #. module: cost_sheet_lupeon
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.cost_sheet_view_form
+msgid "Generate production manually"
+msgstr "Generar producción manualmente"
+
+#. module: cost_sheet_lupeon
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.cost_sheet_view_form
+msgid "Generate tasks manually"
+msgstr "Generar tareas manualmente"
+
+#. module: cost_sheet_lupeon
 #: selection:cost.sheet,finish_pol:0
 msgid "Glossy"
 msgstr ""
@@ -482,10 +562,44 @@ msgid "Gr/cc"
 msgstr ""
 
 #. module: cost_sheet_lupeon
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_production__production_ids
+msgid "Gropued Productions"
+msgstr "Producciones agrupadas"
+
+#. module: cost_sheet_lupeon
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.vieww_group_mrp_wizard
+msgid "Gropup the selected productions"
+msgstr "Agrupar las producciones seleccionadas"
+
+#. module: cost_sheet_lupeon
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_material_line__group_mrp_id
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_mrp_production__group_mrp_id
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_repart_material_line__group_mrp_id
+msgid "Group"
+msgstr "Grupo"
+
+#. module: cost_sheet_lupeon
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.cost_sheet_view_search
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.product_cost_sheet_view_search
 msgid "Group By"
 msgstr "Agrupar por"
+
+#. module: cost_sheet_lupeon
+#: model:ir.actions.act_window,name:cost_sheet_lupeon.action_view_group_mrp_wizard
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.vieww_group_mrp_wizard
+msgid "Group Productions"
+msgstr "Agrupar producciones"
+
+#. module: cost_sheet_lupeon
+#: model:ir.actions.act_window,name:cost_sheet_lupeon.action_group_productions
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.group_production_view_form
+msgid "Grouped Productions"
+msgstr "Producciones agrupadas"
+
+#. module: cost_sheet_lupeon
+#: model:ir.ui.menu,name:cost_sheet_lupeon.menu_group_production_view
+msgid "Grouped productions"
+msgstr "Producciones agrupadas"
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_sale_order__group_sheets_count
@@ -568,6 +682,9 @@ msgstr ""
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_design_software__id
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_design_time_line__id
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_cost_sheet__id
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_material_line__id
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_mrp_wizard__id
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_production__id
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_material_cost_line__id
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_meet_cost_line__id
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_oppi_cost_line__id
@@ -577,6 +694,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_printer_machine__id
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_purchase_cost_line__id
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_quality_wizard__id
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_repart_material_line__id
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_tinted__id
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_workforce_cost_line__id
 msgid "ID"
@@ -617,6 +735,7 @@ msgstr ""
 
 #. module: cost_sheet_lupeon
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.view_quality_wizard
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.vieww_group_mrp_wizard
 msgid "Invoice Sales Order"
 msgstr "Facturar pedido de venta"
 
@@ -631,6 +750,9 @@ msgstr ""
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_design_software____last_update
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_design_time_line____last_update
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_cost_sheet____last_update
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_material_line____last_update
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_mrp_wizard____last_update
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_production____last_update
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_material_cost_line____last_update
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_meet_cost_line____last_update
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_oppi_cost_line____last_update
@@ -640,6 +762,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_printer_machine____last_update
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_purchase_cost_line____last_update
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_quality_wizard____last_update
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_repart_material_line____last_update
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_tinted____last_update
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_workforce_cost_line____last_update
 msgid "Last Modified on"
@@ -651,6 +774,9 @@ msgstr "Última modificación en"
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_design_software__write_uid
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_design_time_line__write_uid
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_cost_sheet__write_uid
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_material_line__write_uid
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_mrp_wizard__write_uid
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_production__write_uid
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_material_cost_line__write_uid
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_meet_cost_line__write_uid
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_oppi_cost_line__write_uid
@@ -660,6 +786,7 @@ msgstr "Última modificación en"
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_printer_machine__write_uid
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_purchase_cost_line__write_uid
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_quality_wizard__write_uid
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_repart_material_line__write_uid
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_tinted__write_uid
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_workforce_cost_line__write_uid
 msgid "Last Updated by"
@@ -671,6 +798,9 @@ msgstr "Última actualización por"
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_design_software__write_date
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_design_time_line__write_date
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_cost_sheet__write_date
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_material_line__write_date
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_mrp_wizard__write_date
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_production__write_date
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_material_cost_line__write_date
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_meet_cost_line__write_date
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_oppi_cost_line__write_date
@@ -680,6 +810,7 @@ msgstr "Última actualización por"
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_printer_machine__write_date
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_purchase_cost_line__write_date
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_quality_wizard__write_date
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_repart_material_line__write_date
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_tinted__write_date
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_workforce_cost_line__write_date
 msgid "Last Updated on"
@@ -725,6 +856,11 @@ msgid "Margin (%)"
 msgstr ""
 
 #. module: cost_sheet_lupeon
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.mrp_production_form_cost_sheet
+msgid "Mark as Done"
+msgstr "Marcar como Hecho"
+
+#. module: cost_sheet_lupeon
 #: selection:cost.sheet,finish_pol:0
 msgid "Mate"
 msgstr ""
@@ -744,6 +880,12 @@ msgstr "Coste material"
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.product_material_view_form
 msgid "Material Info"
 msgstr ""
+
+#. module: cost_sheet_lupeon
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_production__material_ids
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.group_production_view_form
+msgid "Materials to consume"
+msgstr "Materiales a consumir"
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_printer_machine__discount
@@ -777,6 +919,8 @@ msgstr ""
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_design_software__name
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_mrp_wizard__name
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_production__name
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_oppi_type__name
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_printer_machine__name
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_tinted__name
@@ -844,7 +988,7 @@ msgstr ""
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_project_task__oppi_line_id
 msgid "Oppi Line"
-msgstr ""
+msgstr "Línea Oppi"
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_mrp_production__origin_production_id
@@ -907,6 +1051,16 @@ msgstr ""
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__perfil
 msgid "Perfil"
 msgstr ""
+
+#. module: cost_sheet_lupeon
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.group_production_view_form
+msgid "Plan Group"
+msgstr "Planificar grupo"
+
+#. module: cost_sheet_lupeon
+#: selection:group.production,state:0
+msgid "Planned"
+msgstr "Planificado"
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__flat_ref
@@ -977,12 +1131,19 @@ msgid "Printers"
 msgstr "Impresoras"
 
 #. module: cost_sheet_lupeon
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.mrp_production_form_cost_sheet
+msgid "Produce"
+msgstr "Producir"
+
+#. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__production_id
 msgid "Produción"
 msgstr "Producción"
 
 #. module: cost_sheet_lupeon
 #: model:ir.model,name:cost_sheet_lupeon.model_product_product
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_material_line__product_id
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_repart_material_line__product_id
 msgid "Product"
 msgstr "Producto"
 
@@ -992,15 +1153,42 @@ msgid "Product Template"
 msgstr "Plantilla de producto"
 
 #. module: cost_sheet_lupeon
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_repart_material_line__production_id
+msgid "Production"
+msgstr "Producción"
+
+#. module: cost_sheet_lupeon
+#: code:addons/cost_sheet_lupeon/wizard/group_mrp_wizard.py:17
+#, python-format
+msgid "Production %s already in a group"
+msgstr "La producción %s ya está asignada a un grupo"
+
+#. module: cost_sheet_lupeon
+#: code:addons/cost_sheet_lupeon/wizard/group_mrp_wizard.py:21
+#, python-format
+msgid "Production %s must be planned without nothing done"
+msgstr "La produccion %s debe estar en estado planificado sin nada realizado en ella"
+
+#. module: cost_sheet_lupeon
 #: model:ir.model,name:cost_sheet_lupeon.model_mrp_production
 msgid "Production Order"
 msgstr ""
 
 #. module: cost_sheet_lupeon
-#: code:addons/cost_sheet_lupeon/models/sale_order.py:37
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__production_state
+msgid "Production State"
+msgstr "Estado producción"
+
+#. module: cost_sheet_lupeon
+#: code:addons/cost_sheet_lupeon/models/sale_order.py:38
 #, python-format
 msgid "Production date is too late."
 msgstr "La fecha de producción es demasiado tarde"
+
+#. module: cost_sheet_lupeon
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_production__repart_material_ids
+msgid "Production material"
+msgstr "Materiales de producción"
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_sale_order__count_task
@@ -1049,6 +1237,11 @@ msgstr "Asistente calidad"
 #: model:ir.model,name:cost_sheet_lupeon.model_stock_quant
 msgid "Quants"
 msgstr ""
+
+#. module: cost_sheet_lupeon
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.group_production_view_form
+msgid "Real consumes"
+msgstr "Consumos reales"
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_purchase_cost_line__name
@@ -1147,6 +1340,11 @@ msgid "Sale Order Line"
 msgstr "Línea pedido de venta"
 
 #. module: cost_sheet_lupeon
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__sale_state
+msgid "Sale State"
+msgstr "Estado venta"
+
+#. module: cost_sheet_lupeon
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.mrp_production_search_cost_sheet
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.project_task_search_cost_sheet
 msgid "Sale order"
@@ -1183,6 +1381,11 @@ msgstr ""
 #: selection:cost.sheet,offer_type:0
 msgid "Standard"
 msgstr ""
+
+#. module: cost_sheet_lupeon
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_production__state
+msgid "State"
+msgstr "Provincia"
 
 #. module: cost_sheet_lupeon
 #: model:ir.model,name:cost_sheet_lupeon.model_stock_move
@@ -1223,7 +1426,7 @@ msgid "TechniTécnicacal"
 msgstr ""
 
 #. module: cost_sheet_lupeon
-#: code:addons/cost_sheet_lupeon/models/sale_order.py:38
+#: code:addons/cost_sheet_lupeon/models/sale_order.py:39
 #, python-format
 msgid "The production date is later than the                                  commitment date."
 msgstr "La fecha de producción es posterior a la fecha de compromiso"
@@ -1304,6 +1507,12 @@ msgid "Tipos Oppi"
 msgstr ""
 
 #. module: cost_sheet_lupeon
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_material_line__qty
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_repart_material_line__qty
+msgid "To consume"
+msgstr "A consumir"
+
+#. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__outsorcing_total
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__total_material_cost
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__workforce_total
@@ -1311,6 +1520,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_material_cost_line__total
 msgid "Total"
 msgstr ""
+
+#. module: cost_sheet_lupeon
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_production__total_time
+msgid "Total time"
+msgstr "Tiempo total"
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__outsorcing_total_ud
@@ -1425,6 +1639,23 @@ msgid "Ya existe otra impresora por defecto para SLS P396"
 msgstr ""
 
 #. module: cost_sheet_lupeon
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.mrp_production_form_cost_sheet
+msgid "You have consumed less material than what was planned. Are you sure you want to close this MO?"
+msgstr "Ha consumido menos material de lo que estaba previsto. ¿Seguro que desea cerrar este pedido de fabricación?"
+
+#. module: cost_sheet_lupeon
+#: code:addons/cost_sheet_lupeon/models/group_production.py:61
+#, python-format
+msgid "You need to set the time for this production"
+msgstr "Debes establecer el tiempo total empleado en esta producción agrupada"
+
+#. module: cost_sheet_lupeon
+#: code:addons/cost_sheet_lupeon/models/group_production.py:65
+#, python-format
+msgid "You need to set up the real consumes of material"
+msgstr "Debes establecer los consumos de material empleados"
+
+#. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__z_mm_sls
 msgid "Z (mm)"
 msgstr ""
@@ -1502,6 +1733,21 @@ msgid "group.cost.sheet"
 msgstr ""
 
 #. module: cost_sheet_lupeon
+#: model:ir.model,name:cost_sheet_lupeon.model_group_material_line
+msgid "group.material.line"
+msgstr ""
+
+#. module: cost_sheet_lupeon
+#: model:ir.model,name:cost_sheet_lupeon.model_group_mrp_wizard
+msgid "group.mrp.wizard"
+msgstr ""
+
+#. module: cost_sheet_lupeon
+#: model:ir.model,name:cost_sheet_lupeon.model_group_production
+msgid "group.production"
+msgstr ""
+
+#. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__tray_hours
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__tray_hours_sls
 msgid "h Maq. Bandeja"
@@ -1560,6 +1806,11 @@ msgstr ""
 #. module: cost_sheet_lupeon
 #: model:ir.model,name:cost_sheet_lupeon.model_quality_wizard
 msgid "quality.wizard"
+msgstr ""
+
+#. module: cost_sheet_lupeon
+#: model:ir.model,name:cost_sheet_lupeon.model_repart_material_line
+msgid "repart.material.line"
 msgstr ""
 
 #. module: cost_sheet_lupeon

@@ -11,6 +11,16 @@ class GroupMrpWizard(models.TransientModel):
     def do_group(self):
         production_ids =  self.env['mrp.production'].browse(
             self._context.get('active_ids', []))
+        for mrp in production_ids:
+            if mrp.group_mrp_id:
+                raise UserError(
+                    _('Production %s already in a group') % mrp.name)
+            
+            if mrp.state != 'planned':
+                 raise UserError(
+                    _('Production %s must be planned without nothing done') 
+                    % mrp.name)
+
         group = self.env['group.production'].create({
             'name': self.name
         })

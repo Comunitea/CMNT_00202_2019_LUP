@@ -813,6 +813,8 @@ class CostSheet(models.Model):
             prod = self.env['mrp.production'].create(vals)
             prod.onchange_product_id()
             prod.button_plan()
+            prod.workorder_ids.write({
+                'duration_expected': sheet.machine_hours * 60})
             sheet.write({'production_id': prod.id})
         return
 
