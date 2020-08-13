@@ -19,7 +19,7 @@ class PrinterMachine(models.Model):
 
     name = fields.Char('Name')
     type = fields.Selection(PRINT_TYPES, 'Print Type')
-    routing_id = fields.Many2one('mrp.routing', 'Routing',)
+    routing_id = fields.Many2one('mrp.routing', 'Routing', required=True)
 
     diameter = fields.Float('Diameter')
     machine_hour = fields.Float('H hombre / H maquina', digits=(16, 9))
