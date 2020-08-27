@@ -138,6 +138,9 @@
             <field name="carrier_tracking_ref" position="attributes">
                  <attribute name="readonly">False</attribute>
             </field>
+            <field name="carrier_tracking_ref" position="after">
+                <field name="carrier_tracking_url" widget="url"/>
+            </field>
         </field>
     </record>
 
