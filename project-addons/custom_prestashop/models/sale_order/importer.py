@@ -104,6 +104,20 @@ class SaleOrderImportMapper(Component):
         return {"name": name}
 
     @mapping
+    def prestashop_picking_data(self, record):
+        tracking_adapter = self.component(
+            usage='backend.adapter',
+            model_name='__not_exit_prestashop.order_carrier')
+        filters = {
+            'filter[id_order]': record['id'],
+        }
+        order_carrier_id = tracking_adapter.search(filters)
+        if order_carrier_id:
+            order_carrier_id = order_carrier_id[0]
+            vals = tracking_adapter.read(order_carrier_id)
+            return {'prestashop_picking_tracking_ref': vals.get('tracking_number'), 'prestashop_picking_weight': vals.get('weight')}
+
+    @mapping
     def fiscal_position_id(self, record):
         order_lines = record.get('associations').get('order_rows').get('order_row')
         if isinstance(order_lines, dict):

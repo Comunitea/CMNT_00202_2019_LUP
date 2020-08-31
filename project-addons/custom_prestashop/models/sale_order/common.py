@@ -1,6 +1,6 @@
 # © 2020 Comunitea
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-from odoo import api, models
+from odoo import api, fields, models
 from odoo.addons.component.core import Component
 
 
@@ -14,6 +14,8 @@ class PrestashopSaleOrderListener(Component):
 class SaleOrde(models.Model):
 
     _inherit = "sale.order"
+    prestashop_picking_tracking_ref = fields.Char()
+    prestashop_picking_weight = fields.Float()
 
     def bypass_vies_fpos_check(self):
         res = super().bypass_vies_fpos_check()
@@ -36,12 +38,26 @@ class SaleOrde(models.Model):
 
     def write(self, vals):
         run = False
+        if vals.get('prestashop_picking_tracking_ref'):
+            self.picking_ids.write({'carrier_tracking_ref': vals.get('prestashop_picking_tracking_ref')})
+        if vals.get('prestashop_picking_weight'):
+            self.picking_ids.write({'volume': vals.get('prestashop_picking_weight')})
         if vals.get("prestashop_state") or vals.get("invoice_status"):
             run = True
         res = super().write(vals)
         if run:
             for workflow in self.mapped("workflow_process_id"):
                 self.env["automatic.workflow.job"].run_with_workflow(workflow)
+        return res
+
+    @api.multi
+    def _action_confirm(self):
+        res = super()._action_confirm()
+        if self.prestashop_picking_tracking_ref:
+            self.picking_ids.write({'carrier_tracking_ref': self.prestashop_picking_tracking_ref})
+        if self.prestashop_picking_weight:
+            import ipdb; ipdb.set_trace()
+            self.picking_ids.write({'volume': self.prestashop_picking_weight})
         return res
 
 
@@ -86,3 +102,15 @@ class PrestashopSaleOrderLine(models.Model):
         if self.odoo_id:
             self.odoo_id.unlink()
         return super().unlink()
+
+
+class StockPicking(models.Model):
+    _inherit = 'stock.picking'
+
+    @api.multi
+    def action_calculate_volume(self):
+        res = super().action_calculate_volume()
+        for rec in self:
+            if rec.sale_id.prestashop_picking_weight:
+                rec.volume = rec.sale_id.prestashop_picking_weight
+        return res
