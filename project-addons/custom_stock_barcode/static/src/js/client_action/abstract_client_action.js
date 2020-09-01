@@ -17,9 +17,9 @@ odoo.define('custom_stock_barcode.ClientAction', function (require) {
             if (this.product_check) {
                 this.line_check = this._findCandidateLineToIncrement({'product': this.product_check, 'barcode': barcode});
                 if (!this.line_check) {
-                    var r = confirm("El producto no se encuentra en el albarán, ¿introducirlo igualmente?");
+                    var r = confirm(_t("The scanned product is not in the picking, would you like to add it?"));
                     if (r!= true) {
-                        errorMessage = "Cancelada introducción del producto.";
+                        errorMessage = _t("Product addition cancelled");
                         return $.Deferred().reject(errorMessage);
                     }
                 }
