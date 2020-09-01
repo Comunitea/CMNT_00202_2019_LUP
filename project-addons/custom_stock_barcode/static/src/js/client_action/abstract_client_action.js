@@ -10,6 +10,14 @@ odoo.define('custom_stock_barcode.ClientAction', function (require) {
             this._super.apply(this, arguments);
             this.product_check = null;
             this.line_check = null;
+            this.productsByDefaultCodes = [];
+            this.productsByProviderCodes = []
+        },
+        willStart: function () {
+            var self = this;
+            self._getProductDefaultCodes();
+            self._getProductProviderCodes();
+            return this._super();
         },
         _step_product: function (barcode, linesActions) {  
             var errorMessage;          
@@ -25,6 +33,49 @@ odoo.define('custom_stock_barcode.ClientAction', function (require) {
                 }
             }
             return this._super(barcode, linesActions);
+        },
+        _isProduct: function (barcode) {
+            var res = this._super(barcode);
+            if (!res) {
+                if (this.productsByDefaultCodes[barcode]) {
+                    return this.productsByDefaultCodes[barcode];
+                } else if (this.productsByProviderCodes[barcode]) {
+                    return this.productsByProviderCodes[barcode];
+                }
+            }
+            return res;
+        },
+        /**
+         * Make an rpc to get the products default codes and afterwards set `this.productsByDefaultCodes`.
+         *
+         * @private
+         * @return {Deferred}
+         */
+        _getProductDefaultCodes: function () {
+            var self = this;
+            return this._rpc({
+                'model': 'product.product',
+                'method': 'get_all_products_by_default_code',
+                'args': [[]],
+            }).then(function (res) {
+                self.productsByDefaultCodes = res;
+            });
+        },
+        /**
+         * Make an rpc to get the products provider codes and afterwards set `this.productsByProviderCodes`.
+         *
+         * @private
+         * @return {Deferred}
+         */
+        _getProductProviderCodes: function () {
+            var self = this;
+            return this._rpc({
+                'model': 'product.product',
+                'method': 'get_all_products_by_provider_code',
+                'args': [[]],
+            }).then(function (res) {
+                self.productsByProviderCodes = res;
+            });
         },
     });
 
