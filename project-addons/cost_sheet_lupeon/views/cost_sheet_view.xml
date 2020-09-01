@@ -847,7 +847,7 @@
                 <field name="can_edit" invisible="1"/>
 
                 <field name="name"/>
-                <field name="material_id"/>
+                <field name="material_id" domain="[('is_material', '=', True), ('material_type', '=', parent.sheet_type)]"/>
                 <!-- FDM FIELDS -->
                 <field name="diameter" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
                 <field name="color" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
@@ -996,8 +996,8 @@
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
                             <group cospan="2" col="8" string="Parámetros impresión">
-                                <!-- <field name="printer_id" domain="[('type', '=', 'fdm')]"/> -->
-                                <field name="printer_id"/>
+                                <field name="printer_id" domain="[('type', '=', sheet_type)]"/>
+                                <!-- <field name="printer_id"/> -->
                                 <field name="perfil"/>
                                 <field name="tray_units"/>
                                 <field name="tray_hours"/>

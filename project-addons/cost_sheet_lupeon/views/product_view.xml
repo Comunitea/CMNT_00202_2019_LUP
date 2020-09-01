@@ -34,10 +34,11 @@
                     </group>
 
                     <group attrs="{'invisible': [('material_type', 'not in', ['sla', 'sls2'])]}">
+                        <field name="gr_cc"/>
                         <field name="euro_kg" string="€/gr"/>
                         <field name="printer_id" domain="[('material_type', 'in', ['sla', 'sls2'])]"/>
-                        <field name="washing_time"/>
-                        <field name="cured_time"/>
+                        <!-- <field name="washing_time"/>
+                        <field name="cured_time"/> -->
                     </group>
 
                     <group attrs="{'invisible': [('material_type', '!=', 'dmls')]}">

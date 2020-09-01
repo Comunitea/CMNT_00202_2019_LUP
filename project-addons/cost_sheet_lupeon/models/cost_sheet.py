@@ -564,7 +564,7 @@ class CostSheet(models.Model):
         res = {}
         options =  ['Extrusor 1', 'Extrusor 2', 'Extrusor 3']
         # TODO revisar
-        if self.sheet_type == 'fdm' and not self.material_cost_ids:
+        if self.sheet_type == 'fdm':
             cost_lines = [(5, 0, 0)]
             for name in options:
                 vals = {
@@ -598,7 +598,6 @@ class CostSheet(models.Model):
             sh.total_euro_ud = sum(
                 [x.euro_material for x in sh.material_cost_ids])
             sh.total_material_cost = sh.total_euro_ud * sh.cus_units
-
 
     @api.depends('tray_units', 'tray_hours', 'tray_hours_sls', 'cus_units', 
                  'euro_machine')
@@ -986,21 +985,21 @@ class MaterialCostLine(models.Model):
                 dis = mcl.desviation / 100
                 if sh.tray_units:
                     mcl.pol_gr_total = ((1 + dis) * mcl.pol_gr_tray * sh.cus_units) / sh.tray_units
-                    euro_material = (mcl.pol_gr_total * mat.euro_kg) / sh.tray_units
+                    euro_material = (mcl.pol_gr_total * mat.euro_kg) / sh.cus_units
                     mcl.euro_material = euro_material
                     mcl.total = sh.cus_units * euro_material
             elif sh.sheet_type == 'sla':
                 dis = mcl.desviation / 100
                 if sh.tray_units:
                     mcl.sla_cc_total = ((1 + dis) * mcl.sla_cc_tray * sh.cus_units) / sh.tray_units
-                    euro_material = (mcl.sla_cc_total * mat.euro_kg) / sh.tray_units
+                    euro_material = (mcl.sla_cc_total * mat.euro_kg * mat.gr_cc) / sh.cus_units
                     mcl.euro_material = euro_material
                     mcl.total = sh.cus_units * euro_material
             elif sh.sheet_type == 'sls2':
                 dis = mcl.desviation / 100
                 if sh.tray_units:
                     mcl.sls2_cc_total = ((1 + dis) * mcl.sls2_cc_tray * sh.cus_units) / sh.tray_units
-                    euro_material = (mcl.sls2_cc_total * mat.euro_kg) / sh.tray_units
+                    euro_material = (mcl.sls2_cc_total * mat.euro_kg * mat.gr_cc) / sh.cus_units
                     mcl.euro_material = euro_material
                     mcl.total = sh.cus_units * euro_material
 
@@ -1120,8 +1119,8 @@ class PurchaseCostLine(models.Model):
     product_id = fields.Many2one('product.product', 'Producto')
     name = fields.Char('Ref. / Descripción')
     qty = fields.Float('Unidades')
-    partner_id = fields.Many2one('res.partner', 'Proveedor',
-        domain=[('supplier', '=', True)])
+    partner_id = fields.Many2one(
+        'res.partner', 'Proveedor', domain=[('supplier', '=', True)])
     cost_ud = fields.Float('Coste Ud.')
     ports = fields.Float('Portes')
     margin = fields.Float('Margin (%)', default=30.0)
