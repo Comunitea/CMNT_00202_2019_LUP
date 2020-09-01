@@ -18,6 +18,7 @@ SHEET_TYPES = [
     ('purchase', 'Compras'),
 ]
 
+
 class GroupCostSheet(models.Model):
 
     _name = 'group.cost.sheet'
@@ -26,9 +27,11 @@ class GroupCostSheet(models.Model):
     # display_name = fields.Char('Name', readonly="True")
     sale_line_id = fields.Many2one('sale.order.line', 'Línea de venta',
                                    readonly=False, copy=False)
-    sale_id = fields.Many2one('sale.order', 'Pedido de venta',
+    sale_id = fields.Many2one(
+        'sale.order', 'Pedido de venta',
         related='sale_line_id.order_id', store=True, readonly=True)
-    product_id = fields.Many2one('product.product', 'Producto',
+    product_id = fields.Many2one(
+        'product.product', 'Producto',
         related='sale_line_id.product_id')
     admin_fact = fields.Float('Factor administrativo (%)')
 
@@ -44,9 +47,9 @@ class GroupCostSheet(models.Model):
     def name_get(self):
         res = []
         for sheet in self:
-            res.append((sheet.id, ("[%s] %s") % \
-                (sheet.sale_line_id.order_id.name,
-                 sheet.sale_line_id.name)))
+            res.append((sheet.id, ("[%s] %s") %
+                       (sheet.sale_line_id.order_id.name,
+                        sheet.sale_line_id.name)))
         return res
 
     def update_sale_line_price(self):
@@ -58,11 +61,9 @@ class GroupCostSheet(models.Model):
                 pu = group.line_pvp / group.sale_line_id.product_uom_qty
             group.sale_line_id.write({'price_unit': pu})
 
-
     @api.depends('sheet_ids')
     def _get_line_pvp(self):
         for group in self:
-            pvp = sum(group.sheet_ids.mapped('price_total'))
             group.line_pvp = sum([x.price_total for x in group.sheet_ids])
 
     def create_components_on_fly(self):
@@ -73,7 +74,8 @@ class GroupCostSheet(models.Model):
         self.ensure_one()
         res = []
         mrp_types = ['fdm','sls', 'poly', 'sla', 'sls2', 'dmls']
-        for sh in self.sheet_ids.filtered(lambda sh: sh.sheet_type in mrp_types):
+        for sh in self.sheet_ids.filtered(
+                lambda sh: sh.sheet_type in mrp_types):
             if not sh.product_id:
                 print('error')
                 continue
@@ -113,23 +115,17 @@ class GroupCostSheet(models.Model):
         return bom
 
 
-
 class CostSheet(models.Model):
 
     _name = 'cost.sheet'
 
-    # def copy_data(self, default=None):
-    #     res = super().copy_data(default)
-    #     del res[0]['group_id']
-    #     return res
-
     # COMUN
     name = fields.Char('Referencia', required=True)
-    product_id = fields.Many2one('product.product', 'Producto asociado',
-                                 readonly=True)
-    group_id = fields.Many2one('group.cost.sheet', 'Hojas de coste',
-                            ondelete="cascade",
-                               readonly=True, copy=False)
+    product_id = fields.Many2one(
+        'product.product', 'Producto asociado', readonly=True)
+    group_id = fields.Many2one(
+        'group.cost.sheet', 'Hojas de coste', ondelete="cascade",
+        readonly=True, copy=False)
     production_id = fields.Many2one(
         'mrp.production', 'Produción', index=True, copy=False,
         readonly=True)
@@ -140,18 +136,22 @@ class CostSheet(models.Model):
 
     sheet_type = fields.Selection(SHEET_TYPES, 'Tipo de hoja')
 
-    sale_line_id = fields.Many2one('sale.order.line', 'Línea de venta',
+    sale_line_id = fields.Many2one(
+        'sale.order.line', 'Línea de venta',
         related='group_id.sale_line_id', store=True, readonly=True)
-    sale_id = fields.Many2one('sale.order', 'Pedido de venta',
+    sale_id = fields.Many2one(
+        'sale.order', 'Pedido de venta',
         related='group_id.sale_line_id.order_id', store=True, readonly=True)
 
     cost_init = fields.Float('Coste inicial')
-    cost_init_computed = fields.Float('Coste inicial', compute='_get_cost_prices')
+    cost_init_computed = fields.Float(
+        'Coste inicial', compute='_get_cost_prices')
     cost_ud = fields.Float('Coste', compute="_get_cost_prices")
-    admin_fact = fields.Float('Factor administrativo (%)',
-        related='group_id.admin_fact')
+    admin_fact = fields.Float(
+        'Factor administrativo (%)', related='group_id.admin_fact')
     disc_qty = fields.Float('Descuento cantidad (%)')
-    disc_qty_computed = fields.Float('Descuento cantidad (%)', compute='_get_cost_prices')
+    disc_qty_computed = fields.Float(
+        'Descuento cantidad (%)', compute='_get_cost_prices')
     use_disc_qty = fields.Boolean('Usar descuento cantidad', default=True)
     disc2 = fields.Float('Descuento adicional (%)')
     increment = fields.Float('Incremento no estándar (%)')
@@ -171,7 +171,8 @@ class CostSheet(models.Model):
 
     # [ALL] COSTE MANO DE OBRA
     workforce_cost_ids = fields.One2many(
-        'workforce.cost.line', 'sheet_id', string='Coste Mano de obra', copy=True)
+        'workforce.cost.line', 'sheet_id', string='Coste Mano de obra',
+        copy=True)
     workforce_total_euro_ud = fields.Float(
         'Total € ud', compute="_get_totals_workforce")
     workforce_total = fields.Float(
@@ -179,7 +180,8 @@ class CostSheet(models.Model):
 
     # [ALL] COSTE EXTERNALIZACION POR PIEZA
     outsorcing_cost_ids = fields.One2many(
-        'outsorcing.cost.line', 'sheet_id', string='Coste externalizacion por pieza', copy=True)
+        'outsorcing.cost.line', 'sheet_id',
+        string='Coste externalizacion por pieza', copy=True)
     outsorcing_total_ud = fields.Float(
         'Total ud', compute="_get_totals_outsorcing")
     outsorcing_total = fields.Float(
@@ -192,7 +194,8 @@ class CostSheet(models.Model):
         'cost_sheet_applicable_legislation_rel',
         'sheet_id', 'legislation_id',
         string='Legislación aplicable')
-    time_line_ids = fields.One2many('design.time.line', 'sheet_id', string='Tiempos', copy=True)
+    time_line_ids = fields.One2many(
+        'design.time.line', 'sheet_id', string='Tiempos', copy=True)
     description = fields.Text('Requisitos técnicos')
     customer_note = fields.Text('Comentarios Cliente')
     hours_total = fields.Float('Horas totales', compute="_get_totals_design")
@@ -211,15 +214,17 @@ class CostSheet(models.Model):
     # FDM COSTE MATERIAL
     material_cost_ids = fields.One2many(
         'material.cost.line', 'sheet_id', string='Coste material', copy=True)
-    total_euro_ud = fields.Float('Total € ud', compute='_get_totals_material_cost')
-    total_material_cost = fields.Float('Total', compute='_get_totals_material_cost')
+    total_euro_ud = fields.Float(
+        'Total € ud', compute='_get_totals_material_cost')
+    total_material_cost = fields.Float(
+        'Total', compute='_get_totals_material_cost')
     # COSTE MÁQUINA
-    machine_hours = fields.Float('Horas Maq total',
-        compute='_get_fdm_machine_cost')
-    euro_machine_ud = fields.Float('Euros Maq ud',
-        compute='_get_fdm_machine_cost')
-    euro_machine_total = fields.Float('Euros Maq total',
-        compute='_get_fdm_machine_cost')
+    machine_hours = fields.Float(
+        'Horas Maq total', compute='_get_fdm_machine_cost')
+    euro_machine_ud = fields.Float(
+        'Euros Maq ud', compute='_get_fdm_machine_cost')
+    euro_machine_total = fields.Float(
+        'Euros Maq total', compute='_get_fdm_machine_cost')
     # FDM PART FEATURES
     feature_ids = fields.Many2many(
         'part.feature',
@@ -240,7 +245,8 @@ class CostSheet(models.Model):
 
     # SLS PARÁMETROS IMPRESIÓN
     print_increment = fields.Float('Incremento (mm)', default=18.0)
-    tray_hours_sls = fields.Float('h Maq. Bandeja', compute='_get_sls_print_totals', digits=(16, 3))
+    tray_hours_sls = fields.Float(
+        'h Maq. Bandeja', compute='_get_sls_print_totals', digits=(16, 3))
 
 
     # SLS OFERT CONFIGURATION
@@ -265,8 +271,8 @@ class CostSheet(models.Model):
     # DMLS DATOS PIEZA
     units_dmls = fields.Integer('Uds. Cliente')
     use_treatment = fields.Boolean('Usar tratamiento térmico')
-    heat_treatment_cost = fields.Float('Tratamiento térmico',
-        compute='_get_heat_treatment_cost')
+    heat_treatment_cost = fields.Float(
+        'Tratamiento térmico', compute='_get_heat_treatment_cost')
 
     cc_soport_dmls = fields.Float('cc soporte')
 
@@ -331,25 +337,25 @@ class CostSheet(models.Model):
 
     @api.model
     def create(self, vals):
-       res = super().create(vals)
-       res.group_id.update_sale_line_price()
-       res.update_workforce_cost()
-       return res
+        res = super().create(vals)
+        res.group_id.update_sale_line_price()
+        res.update_workforce_cost()
+        return res
 
     def write(self, vals):
-       res = super().write(vals)
-       self.mapped('group_id').update_sale_line_price()
-       self.update_workforce_cost()
-       return res
+        res = super().write(vals)
+        self.mapped('group_id').update_sale_line_price()
+        self.update_workforce_cost()
+        return res
 
     @api.onchange('price_unit', 'cus_units')
     def change_inspection_type(self):
         if self.price_unit > 3000:
             self.inspection_type = 'tech'
         elif self.cus_units > 10:
-             self.inspection_type = 'tech'
+            self.inspection_type = 'tech'
         elif self.cus_units > 0:
-             self.inspection_type = 'visual'
+            self.inspection_type = 'visual'
 
     @api.onchange('sheet_type', 'material_cost_ids.material_id', 'machine_hours', 'printer_id')
     def onchange_sheet_type(self):
@@ -389,7 +395,8 @@ class CostSheet(models.Model):
                     hours = (5/60) + (maq_hours * self.printer_id.machine_hour)
             # Mantener valores de horas diseño y postprocesado si ya existian
             elif self.workforce_cost_ids:
-                wfl = self.workforce_cost_ids.filtered(lambda x: x.name == name)
+                wfl = self.workforce_cost_ids.filtered(
+                    lambda x: x.name == name)
                 if wfl:
                     hours = wfl.hours
             vals = {
@@ -407,7 +414,8 @@ class CostSheet(models.Model):
             })
 
         # Poner impresoras por defecto
-        if self.sheet_type and self.sheet_type != 'design' and self.sheet_type != 'unplanned':
+        if self.sheet_type and self.sheet_type != 'design' and \
+                self.sheet_type != 'unplanned':
             srch_field = 'default_' + self.sheet_type
             domain = [(srch_field, '=', True)]
             printer = self.env['printer.machine'].search(domain)
@@ -418,7 +426,7 @@ class CostSheet(models.Model):
 
         if self.sheet_type in ['poly', 'sla', 'sls2']:
             self.cost_init = 20.0
-        return  {'domain': {'printer_id': [('type', '=', self.sheet_type)]}}
+        return {'domain': {'printer_id': [('type', '=', self.sheet_type)]}}
 
 
     @api.depends('price_total', 'cc_ud')
@@ -446,8 +454,6 @@ class CostSheet(models.Model):
                 res = dm
         return res
 
-
-    # @api.depends()
     def _get_cost_prices(self):
         for sh in self:
             cost = 0.0
@@ -461,52 +467,85 @@ class CostSheet(models.Model):
             fa = sh.admin_fact / 100.0
             inc = sh.increment / 100.0
 
-            #Init cost
-            sum_wf_costs = sh.workforce_total_euro_ud
-            cost = sh.total_euro_ud + sh.euro_machine_ud + sum_wf_costs + sh.outsorcing_total_ud
+            # Método antiguo
+            # sum_wf_costs = sh.workforce_total_euro_ud
+            # cost = sh.total_euro_ud + sh.euro_machine_ud + sum_wf_costs + sh.outsorcing_total_ud
+            # if sh.sheet_type == 'design':
+            #     cost = sh.amount_total
+            #     pvp = cost * (1 - dq - da + fa)
+            # elif sh.sheet_type == 'fdm':
+            #     pu = cost * (1 - dqc) * (1 + inc) * (1 + fa)
+            #     pvp = pu * sh.cus_units
+            # elif sh.sheet_type == 'sls':
+            #     cost = round(sh.total_euro_ud, 2) + round(sh.euro_machine_ud, 2) + round(sum_wf_costs, 2) + round(sh.outsorcing_total_ud, 2)
+            #     if sh.cus_units:
+            #         cost = cost + (sh.cost_init / sh.cus_units)
+            #     pu = cost * (1 - dqc) * (1 + inc) * (1+ fa)
+            #     pvp = pu * sh.cus_units
+            # elif sh.sheet_type == 'poly':
+            #     if sh.cus_units:
+            #         cost = cost + (sh.cost_init / sh.cus_units)
+            #     pu = cost * (1 - dqc) * (1 + inc) * (1+ fa)
+            #     pvp = pu * sh.cus_units
+            # elif sh.sheet_type == 'sla':
+            #     if sh.cus_units:
+            #         cost = cost + (sh.cost_init / sh.cus_units)
+            #     pu = cost * (1 - dqc) * (1 + inc) * (1+ fa)
+            #     pvp = pu * sh.cus_units
+            # elif sh.sheet_type == 'sls2':
+            #     if sh.cus_units:
+            #         cost = cost + (sh.cost_init / sh.cus_units)
+            #     pu = cost * (1 - dqc) * (1 + inc) * (1+ fa)
+            #     pvp = pu * sh.cus_units
+            # elif sh.sheet_type == 'dmls':
+            #     cost_init_computed = 0
+            #     if sh.material_cost_ids and sh.material_cost_ids[0].material_id:
+            #         cost_init_computed = sh.material_cost_ids[0].material_id.init_cost
+            #         sh.cost_init_computed = cost_init_computed
+            #     if sh.cus_units:
+            #         cost = cost + (sh.cost_init_computed / sh.cus_units)
+            #         pu = cost * (1 - dqc) * (1 + inc) * (1+ fa)
+            #         pvp =pu * sh.cus_units
+            # elif sh.sheet_type == 'unplanned':
+            #         pvp = sh.unplanned_cost
+            # elif sh.sheet_type == 'meets':
+            #         pvp = sh.meet_total
+            # elif sh.sheet_type == 'purchase':
+            #         pvp = sh.purchase_total
+
             if sh.sheet_type == 'design':
                 cost = sh.amount_total
                 pvp = cost * (1 - dq - da + fa)
-            elif sh.sheet_type == 'fdm':
-                pu = cost * (1 - dqc) * (1 + inc) * (1 + fa)
-                pvp = pu * sh.cus_units
-            elif sh.sheet_type == 'sls':
-                cost = round(sh.total_euro_ud, 2) + round(sh.euro_machine_ud, 2) + round(sum_wf_costs, 2) + round(sh.outsorcing_total_ud, 2)
-                if sh.cus_units:
-                    cost = cost + (sh.cost_init / sh.cus_units)
-                pu = cost * (1 - dqc) * (1 + inc) * (1+ fa)
-                pvp = pu * sh.cus_units
-            elif sh.sheet_type == 'poly':
-                if sh.cus_units:
-                    cost = cost + (sh.cost_init / sh.cus_units)
-                pu = cost * (1 - dqc) * (1 + inc) * (1+ fa)
-                pvp = pu * sh.cus_units
-            elif sh.sheet_type == 'sla':
-                if sh.cus_units:
-                    cost = cost + (sh.cost_init / sh.cus_units)
-                pu = cost * (1 - dqc) * (1 + inc) * (1+ fa)
-                pvp = pu * sh.cus_units
-            elif sh.sheet_type == 'sls2':
-                if sh.cus_units:
-                    cost = cost + (sh.cost_init / sh.cus_units)
-                pu = cost * (1 - dqc) * (1 + inc) * (1+ fa)
-                pvp = pu * sh.cus_units
-            elif sh.sheet_type == 'dmls':
-                cost_init_computed = 0
-                if sh.material_cost_ids and sh.material_cost_ids[0].material_id:
-                    cost_init_computed = sh.material_cost_ids[0].material_id.init_cost
-                    sh.cost_init_computed = cost_init_computed
-                if sh.cus_units:
-                    cost = cost + (sh.cost_init_computed / sh.cus_units)
-                    pu = cost * (1 - dqc) * (1 + inc) * (1+ fa)
-                    pvp =pu * sh.cus_units
-            elif sh.sheet_type == 'unplanned':
-                    pvp = sh.unplanned_cost
-            elif sh.sheet_type == 'meets':
-                    pvp = sh.meet_total
-            elif sh.sheet_type == 'purchase':
-                    pvp = sh.purchase_total
+            elif sh.sheet_type in ('fdm', 'sls', 'poly', 'sla', 'sls2', 
+                                   'dmls'):
+                if sh.sheet_type == 'dmls':
+                    cost_init_computed = 0
+                    if sh.material_cost_ids and \
+                            sh.material_cost_ids[0].material_id:
+                        cost_init_computed = sh.material_cost_ids[0].\
+                            material_id.init_cost
+                        sh.cost_init_computed = cost_init_computed
 
+                ci = sh.cost_init if sh.sheet_type not in ['fdm', 'dmls'] \
+                    else sh.cost_init_computed
+
+                num1 = (ci + sh.heat_treatment_cost) if \
+                    sh.sheet_type == 'dmls' else ci
+                cost = (
+                    (num1 / sh.cus_units) +
+                    (sh.total_euro_ud + sh.euro_machine_ud)*(1 - dqc) +
+                    (sh.workforce_total_euro_ud + sh.outsorcing_total_ud +
+                     sh.purchase_total))
+
+                pu = cost * (1 + fa) * (1 + inc)
+                pvp = pu * sh.cus_units
+
+            elif sh.sheet_type == 'unplanned':
+                pvp = sh.unplanned_cost
+            elif sh.sheet_type == 'meets':
+                pvp = sh.meet_total
+            elif sh.sheet_type == 'purchase':
+                pvp = sh.purchase_total
 
             sh.update({
                 'cost_ud': cost,
@@ -546,7 +585,8 @@ class CostSheet(models.Model):
     def get_euro_machine(self):
         for sh in self:
             if sh.sheet_type == 'fdm':
-                if sh.material_cost_ids and sh.printer_id and sh.material_cost_ids[0].material_id:
+                if sh.material_cost_ids and sh.printer_id and \
+                        sh.material_cost_ids[0].material_id:
                     mat = sh.material_cost_ids[0].material_id
                     sh.euro_machine = sh.printer_id.euro_hour * mat.factor_hour
             elif sh.sheet_type in ['sls', 'poly', 'sla', 'sls2', 'dmls']:
@@ -560,7 +600,8 @@ class CostSheet(models.Model):
             sh.total_material_cost = sh.total_euro_ud * sh.cus_units
 
 
-    @api.depends('tray_units', 'tray_hours', 'tray_hours_sls', 'cus_units', 'euro_machine')
+    @api.depends('tray_units', 'tray_hours', 'tray_hours_sls', 'cus_units', 
+                 'euro_machine')
     def _get_fdm_machine_cost(self):
         for sh in self:
             tray_hours = sh.tray_hours
@@ -576,15 +617,17 @@ class CostSheet(models.Model):
     @api.depends('workforce_cost_ids')
     def _get_totals_workforce(self):
         for sh in self:
-            sh.workforce_total_euro_ud = sum([x.euro_unit for x in sh.workforce_cost_ids])
+            sh.workforce_total_euro_ud = \
+                sum([x.euro_unit for x in sh.workforce_cost_ids])
             sh.workforce_total = sh.workforce_total_euro_ud * sh.cus_units
 
 
     @api.depends('outsorcing_cost_ids')
     def _get_totals_outsorcing(self):
         for sh in self:
-            sh.outsorcing_total_ud = sum([x.pvp for x in sh.outsorcing_cost_ids])
-            sh.outsorcing_total =sh.outsorcing_total_ud * sh.cus_units
+            sh.outsorcing_total_ud = \
+                sum([x.pvp for x in sh.outsorcing_cost_ids])
+            sh.outsorcing_total = sh.outsorcing_total_ud * sh.cus_units
 
     @api.onchange('cus_units')
     def onchange_units_sls(self):
@@ -603,10 +646,11 @@ class CostSheet(models.Model):
         material = False
         desviation = 0.0
         if self.sheet_type == 'fdm':
-            return # Está en el onchange print id
+            return  # Está en el onchange print id
         elif self.sheet_type == 'sls':
             options = ['PA2200']
-            material = self.env['product.product'].search([('name', '=', options[0])])
+            material = self.env['product.product'].search(
+                [('name', '=', options[0])])
         elif self.sheet_type == 'poly':
             options = ['Construccion', 'Soporte']
             material = False
@@ -688,7 +732,7 @@ class CostSheet(models.Model):
         if production_sheets:
             production_sheets.create_productions()
         return
-    
+
     @api.multi
     def manually_create_task_or_production(self):
         """
@@ -698,7 +742,7 @@ class CostSheet(models.Model):
         if self.production_id:
             self.production_id.action_cancel()
             self.production_id.unlink()
-        
+
         if self.sale_id.project_id:
             self.mapped('project_id.task_ids').unlink()
             self.mapped('project_id').unlink()
@@ -796,13 +840,12 @@ class CostSheet(models.Model):
     def create_productions(self):
         mrp_types = ['fdm','sls', 'poly', 'sla', 'sls2', 'dmls']
         for sheet in self.filtered(lambda sh: sh.sheet_type in mrp_types):
-            line = sheet.sale_line_id
             product = sheet.create_product_on_fly()
             bom = sheet.create_bom_on_fly(product)
             vals = {
                 'sheet_id': sheet.id,
-                'product_id':sheet.product_id.id,
-                'product_uom_id':sheet.product_id.uom_id.id,
+                'product_id': sheet.product_id.id,
+                'product_uom_id': sheet.product_id.uom_id.id,
                 'product_qty': sheet.cus_units,  # TODO get_qty,
                 'bom_id': bom.id,
                 'date_planned_finished': 
@@ -829,7 +872,8 @@ class DesignTimeLine(models.Model):
     price_hour = fields.Float('€/h')
     discount = fields.Float('Descuento')
     total = fields.Float('Total', compute="_compute_total")
-    task_id = fields.Many2one('project.task', 'Task', readonly=True, copy=False)
+    task_id = fields.Many2one(
+        'project.task', 'Task', readonly=True, copy=False)
 
     @api.depends('hours', 'price_hour', 'discount')
     def _compute_total(self):
@@ -841,6 +885,7 @@ class DesignTimeLine(models.Model):
     def onchange_doftware_id(self):
         for line in self:
             line.price_hour = line.software_id.price_hour
+
 
 # FDM COSTE MATERIAL
 class MaterialCostLine(models.Model):
@@ -994,7 +1039,6 @@ class MaterialCostLine(models.Model):
         return res
 
 
-
 # FDM COSTE MANO DE OBRA
 class WorkforceCostLine(models.Model):
 
@@ -1023,7 +1067,6 @@ class WorkforceCostLine(models.Model):
                 wcl.euro_unit = euro_unit
                 wcl.total = euro_unit * sh.cus_units
             wcl.minutes = wcl.hours * 60.0
-
 
 
 # Coste externalizacion por piezaS
@@ -1103,7 +1146,6 @@ class PurchaseCostLine(models.Model):
             self.cost_ud = self.product_id.standard_price
 
 
-
 class OppiCostLine(models.Model):
 
     _name = 'oppi.cost.line'
@@ -1135,6 +1177,3 @@ class OppiCostLine(models.Model):
             # un posible error de seguridad
             task = self.env['project.task'].sudo().create(vals)
             line.write({'task_id': task.id})
-
-
-
