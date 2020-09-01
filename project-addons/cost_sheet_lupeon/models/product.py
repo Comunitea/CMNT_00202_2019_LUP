@@ -18,11 +18,6 @@ class ProductProduct(models.Model):
 
     is_material = fields.Boolean('Es un material')
     custom_mrp_ok = fields.Boolean('Fabricación lupeon')
-
-class ProductProduct(models.Model):
-
-    _inherit = 'product.product'
-
     # material = fields.Boolean('Material')
     material_type = fields.Selection(MATERIAL_TYPES, 'Tipo material')
 
@@ -45,8 +40,8 @@ class ProductProduct(models.Model):
     # SLA
     euro_cc = fields.Float('€/cc')
     printer_id = fields.Many2one('printer.machine', 'Impresora')
-    washing_time = fields.Float('Tiempo Lavado')
-    cured_time = fields.Float('Tiempo curado')  # De momento uso el euro Kg
+    # washing_time = fields.Float('Tiempo Lavado')
+    # cured_time = fields.Float('Tiempo curado')  # De momento uso el euro Kg
 
     # DMLS
     init_cost = fields.Float('Coste Inicial')
