@@ -56,7 +56,6 @@ class SaleOrder(models.Model):
         if self.prestashop_picking_tracking_ref:
             self.picking_ids.write({'carrier_tracking_ref': self.prestashop_picking_tracking_ref})
         if self.prestashop_picking_weight:
-            import ipdb; ipdb.set_trace()
             self.picking_ids.write({'volume': self.prestashop_picking_weight})
         return res
 
