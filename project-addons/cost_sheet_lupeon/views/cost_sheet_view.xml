@@ -845,7 +845,6 @@
         <field name="arch" type="xml">
             <tree editable="bottom">
                 <field name="can_edit" invisible="1"/>
-
                 <field name="name"/>
                 <field name="material_id" domain="[('is_material', '=', True), ('material_type', '=', parent.sheet_type)]"/>
                 <!-- FDM FIELDS -->

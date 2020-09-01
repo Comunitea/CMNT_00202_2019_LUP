@@ -298,7 +298,7 @@ class CostSheet(models.Model):
     can_edit = fields.Boolean(compute='_compute_can_edit')
 
     def _compute_can_edit(self):
-        self.can_edit_name = self.env.user.has_group(
+        self.can_edit = self.env.user.has_group(
             'cost_sheet_lupeon.group_cs_advanced') or \
                 self.env.user.has_group('cost_sheet_lupeon.group_cs_manager')
 
