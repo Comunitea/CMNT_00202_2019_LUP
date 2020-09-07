@@ -28,6 +28,7 @@
                         <field name="euro_kg"/>
                         <field name="factor_hour"/>
                     </group>
+                    <!-- SLS P396 -->
                     <group attrs="{'invisible': [('material_type', '!=', 'sls')]}">
                         <field name="dens_cc"/>
                         <field name="dens_bulk"/>
@@ -40,10 +41,19 @@
                         <field name="euro_kg" string="€/gr"/>
                     </group>
 
-                    <group attrs="{'invisible': [('material_type', 'not in', ['sla', 'sls2'])]}">
+                    <!-- SLA -->
+                    <group attrs="{'invisible': [('material_type', 'not in', ['sla'])]}">
+                        <field name="gr_cc"/>
+                        <field name="euro_cc"/>
+                        <field name="printer_id" domain="[('type', 'in', ['sla'])]"/>
+                        <!-- <field name="washing_time"/>
+                        <field name="cured_time"/> -->
+                    </group>
+                    <!-- SLS -->
+                    <group attrs="{'invisible': [('material_type', 'not in', ['sls2'])]}">
                         <field name="gr_cc"/>
                         <field name="euro_kg" string="€/gr"/>
-                        <field name="printer_id" domain="[('type', 'in', ['sla', 'sls2'])]"/>
+                        <field name="printer_id" domain="[('type', 'in', ['sls2'])]"/>
                         <!-- <field name="washing_time"/>
                         <field name="cured_time"/> -->
                     </group>

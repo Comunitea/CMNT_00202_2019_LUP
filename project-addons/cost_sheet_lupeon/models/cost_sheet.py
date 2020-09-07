@@ -298,9 +298,11 @@ class CostSheet(models.Model):
     can_edit = fields.Boolean(compute='_compute_can_edit')
 
     def _compute_can_edit(self):
-        self.can_edit = self.env.user.has_group(
-            'cost_sheet_lupeon.group_cs_advanced') or \
-                self.env.user.has_group('cost_sheet_lupeon.group_cs_manager')
+        for sh in self:
+            sh.can_edit = sh.env.user.has_group(
+                'cost_sheet_lupeon.group_cs_advanced') or \
+                    sh.env.user.has_group(
+                        'cost_sheet_lupeon.group_cs_manager')
 
 
     @api.depends('oppi_line_ids')
@@ -332,7 +334,7 @@ class CostSheet(models.Model):
         for sh in self:
             if sh.use_treatment and sh.material_cost_ids and  sh.tray_units:
                 mat = sh.material_cost_ids[0].material_id
-                ciclo = self.cus_units / self.tray_units
+                ciclo = sh.cus_units / sh.tray_units
                 sh.heat_treatment_cost = ciclo * mat.term_cost
 
     @api.model
@@ -515,8 +517,8 @@ class CostSheet(models.Model):
 
             if sh.sheet_type == 'design':
                 cost = sh.amount_total
-                pvp = cost * (1 - dq - da + fa)
-            elif sh.sheet_type in ('fdm', 'sls', 'poly', 'sla', 'sls2', 
+                pvp = cost * (1 - dq) * (1 - da) * (1 + fa)
+            elif sh.sheet_type in ('fdm', 'sls', 'poly', 'sla', 'sls2',
                                    'dmls'):
                 if sh.sheet_type == 'dmls':
                     cost_init_computed = 0
@@ -972,7 +974,7 @@ class MaterialCostLine(models.Model):
                     mcl.gr_cc_total = round(gr_cc_total)
                     euro_material = (mat.euro_kg * (gr_cc_total / 1000.0)) / sh.cus_units
                     mcl.euro_material = euro_material
-            elif sh.sheet_type == 'sls':
+            elif sh.sheet_type == 'sls':  # SLS P396
                 sls_gr_tray = mcl.get_sls_gr_tray()
                 mcl.sls_gr_tray = round(sls_gr_tray)
                 if sh.tray_units:
@@ -988,14 +990,14 @@ class MaterialCostLine(models.Model):
                     euro_material = (mcl.pol_gr_total * mat.euro_kg) / sh.cus_units
                     mcl.euro_material = euro_material
                     mcl.total = sh.cus_units * euro_material
-            elif sh.sheet_type == 'sla':
+            elif sh.sheet_type == 'sla':  # SLA
                 dis = mcl.desviation / 100
                 if sh.tray_units:
                     mcl.sla_cc_total = ((1 + dis) * mcl.sla_cc_tray * sh.cus_units) / sh.tray_units
-                    euro_material = (mcl.sla_cc_total * mat.euro_kg * mat.gr_cc) / sh.cus_units
+                    euro_material = (mcl.sla_cc_total * mat.euro_cc) / sh.cus_units
                     mcl.euro_material = euro_material
                     mcl.total = sh.cus_units * euro_material
-            elif sh.sheet_type == 'sls2':
+            elif sh.sheet_type == 'sls2':  # SLS
                 dis = mcl.desviation / 100
                 if sh.tray_units:
                     mcl.sls2_cc_total = ((1 + dis) * mcl.sls2_cc_tray * sh.cus_units) / sh.tray_units

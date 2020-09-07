@@ -12,7 +12,7 @@ MATERIAL_TYPES = [
     ('dmls', 'DMLS'),
 ]
 
-class ProductProduct(models.Model):
+class ProductTemplate(models.Model):
 
     _inherit = 'product.template'
 
@@ -26,7 +26,7 @@ class ProductProduct(models.Model):
     euro_kg = fields.Float('€/kg')
     factor_hour = fields.Float('Factor hora')
 
-    #SLS
+    #SLS p396
     dens_cc = fields.Float('Densidad impreso gr/cc')
     dens_bulk = fields.Float('Densidad en bulk gr/cc')
     vel_cc = fields.Float('Velocidad cc/h full dense')

@@ -849,7 +849,7 @@
                 <field name="material_id" domain="[('is_material', '=', True), ('material_type', '=', parent.sheet_type)]"/>
                 <!-- FDM FIELDS -->
                 <field name="diameter" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
-                <field name="color" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
+                <!-- <field name="color" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/> -->
                 <field name="tray_meters" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
                 <field name="gr_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
                 <field name="gr_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
