@@ -12,7 +12,8 @@
         'stock_picking_report_valued',
         'project',
         'mrp',
-        'hr'
+        'hr',
+        'mrp_workorder'
     ],
     'contributors': [
         "Comunitea ",
@@ -35,6 +36,7 @@
         'views/project_view.xml',
         'views/mrp_production_view.xml',
         'views/group_production_view.xml',
+        'views/mrp_workorder_views.xml',
     ],
     "installable": True,
     'application': False,

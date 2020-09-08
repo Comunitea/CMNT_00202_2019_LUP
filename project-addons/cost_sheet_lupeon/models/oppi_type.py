@@ -3,6 +3,7 @@
 
 from odoo import models, fields, api, _
 
+
 class OppiType(models.Model):
 
     _name = 'oppi.type'

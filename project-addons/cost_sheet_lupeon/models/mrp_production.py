@@ -42,8 +42,7 @@ class MrpProduction(models.Model):
 
     group_mrp_id = fields.Many2one('group.production', 'Group', readonly=True)
 
-
-    # TODO FECHA
+    #  TODO FECHA
     def create_partial_mrp(self, qty, mode):
         """
         When OK tech or OK quality, replan a production
@@ -61,10 +60,10 @@ class MrpProduction(models.Model):
         # mrp.write({'product_uom_qty': qty})
 
         # Change the quantity of the production order to qty
-        wiz = self.env['change.production.qty'].create({'mo_id': mrp.id,
-                                                 'product_qty': qty})
+        wiz = self.env['change.production.qty'].create(
+            {'mo_id': mrp.id, 'product_qty': qty})
         wiz.change_prod_qty()
-        
+
         mrp.button_plan()
 
         vals = {
@@ -75,10 +74,9 @@ class MrpProduction(models.Model):
             'origin': self.name + ' (%s)' % mode
         }
         scrap = self.env['stock.scrap'].with_context(no_blocked=True).\
-                create(vals)
+            create(vals)
         scrap.action_validate()
 
-    
     @api.multi
     @api.depends('workorder_ids.state', 'move_finished_ids', 'is_locked')
     def _get_produced_qty(self):
@@ -87,14 +85,14 @@ class MrpProduction(models.Model):
             production.qty_produced = production.qty_produced - \
                 production.no_ok_tech - production.no_ok_quality
         return res
-    
+
     def block_stock(self):
         self.ensure_one()
         quants = self.env['stock.quant']._gather(
             self.product_id, self.location_dest_id)
         if quants:
             quants.sudo().write({'blocked': True})
-    
+
     @api.multi
     def button_mark_done(self):
         res = super().button_mark_done()

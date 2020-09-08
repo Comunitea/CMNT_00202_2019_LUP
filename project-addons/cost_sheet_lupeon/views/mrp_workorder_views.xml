@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- No quiero la vista de tablet, ya que al acabar nos devuelve a la nada -->
+    <record id="mrp_workorder.mrp_workorder_view_form_inherit_workorder" model="ir.ui.view">
+        <field name="name">mrp.workorder.view.form.inherit.workorder</field>
+        <field name="model">mrp.workorder</field>
+        <field name="inherit_id" ref="mrp.mrp_production_workorder_form_view_inherit"/>
+        <field name="arch" type="xml">
+            <button name="record_production" position="replace">
+                <button name="record_production" type="object" string="Done" class="btn-success" attrs="{'invisible': ['|', '|', ('state', '!=', 'progress'), ('is_user_working', '=', False), ('quality_check_todo','=', True)]}"/>
+                <field name="quality_check_todo" invisible="1"/>
+            </button>
+            <!-- <xpath expr="//header" position="replace">
+                <field name="check_ids" invisible="1"/>
+                <field name="quality_check_fail" invisible="1"/>
+                <header>
+                    <button name="open_tablet_view" type="object" string="Process" attrs="{'invisible': [('state', 'not in', ('ready', 'progress'))]}"/>
+                    <field name="state" widget="statusbar" statusbar_visible="pending,ready,progress,done"/>
+                </header>
+            </xpath> -->
+            <xpath expr="//header" position="before">
+                <field name="check_ids" invisible="1"/>
+                <field name="quality_check_fail" invisible="1"/>
+            </xpath>
+            <notebook position="inside">
+                <page string="Finished Steps">
+                    <field name="check_ids" domain="[('quality_state', '!=', 'none')]" readonly="1">
+                        <tree>
+                            <field name="quality_state" invisible="1"/>
+                            <field name="test_type" invisible="1"/>
+                            <field name="control_date" string="Date"/>
+                            <field name="user_id" string="Operator"/>
+                            <field name="title"/>
+                            <field name="result"/>
+                        </tree>
+                    </field>
+                </page>
+            </notebook>
+        </field>
+    </record>
+
+</odoo>

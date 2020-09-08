@@ -41,7 +41,6 @@ class SaleOrder(models.Model):
                 }
             }
 
-    
     def get_group_sheets(self):
         self.ensure_one()
         return self.mapped('order_line.group_sheet_id')
@@ -54,7 +53,7 @@ class SaleOrder(models.Model):
         for order in self:
             order.group_sheets_count = len(order.get_group_sheets())
             order.sheets_count = len(order.get_sheet_lines())
-    
+
     @api.multi
     def _count_production_and_task(self):
         for order in self:
@@ -69,7 +68,7 @@ class SaleOrder(models.Model):
                 len(
                 order.get_sheet_lines().mapped('oppi_line_ids.task_id')
                 )
-    
+
     @api.multi
     def view_product_cost_sheets(self):
         self.ensure_one()
@@ -86,7 +85,7 @@ class SaleOrder(models.Model):
         else:
             action = {'type': 'ir.actions.act_window_close'}
         return action
-    
+
     @api.multi
     def view_sheets_lines(self):
         self.ensure_one()
@@ -102,12 +101,12 @@ class SaleOrder(models.Model):
             action['res_id'] = sheets.ids[0]
         else:
             action = {'type': 'ir.actions.act_window_close'}
-        
+
         action['context'] = {
             'search_default_group_line': self.id,
         }
         return action
-    
+
     @api.multi
     def view_tasks(self):
         self.ensure_one()
@@ -123,7 +122,7 @@ class SaleOrder(models.Model):
         else:
             action = {'type': 'ir.actions.act_window_close'}
         return action
-    
+
     @api.multi
     def view_productions(self):
         self.ensure_one()
@@ -137,12 +136,12 @@ class SaleOrder(models.Model):
         if productions:
             action = self.env.ref(
                 'mrp.mrp_production_action').read()[0]
-        
+
             action['domain'] = [('id', 'in', productions.ids)]
-            
+
         else:
             action = {'type': 'ir.actions.act_window_close'}
-        
+
         action['context'] = "{}"
         return action
 
@@ -160,7 +159,7 @@ class SaleOrder(models.Model):
             # Creo la lista de materiales asociada al grupo de costes
             group_costs = order.get_group_sheets()
             group_costs.create_bom_on_fly()
-        
+
         res = super().action_confirm()
         return res
 
@@ -176,7 +175,7 @@ class SaleOrder(models.Model):
             # boms = self.get_group_sheets().mapped('bom_id')
             # boms.unlink()
         return res
-    
+
     def duplicate_with_costs(self):
         new = self.with_context(from_copy=True).copy()
         view = self.env.ref(
@@ -196,7 +195,7 @@ class SaleOrder(models.Model):
             'res_id': new.id,
             'context': self._context,
         }
-    
+
 
 class SaleOrderLine(models.Model):
 
@@ -205,7 +204,7 @@ class SaleOrderLine(models.Model):
     group_sheet_id = fields.Many2one(
         'group.cost.sheet', 'Grupo de hojas coste', readonly=True)
     ref = fields.Char('Referencia')
-    
+
     @api.model
     def create(self, vals):
         res = super().create(vals)
@@ -227,7 +226,7 @@ class SaleOrderLine(models.Model):
             }
             line.group_sheet_id = self.env['group.cost.sheet'].create(vals)
         return
-    
+
     def copy_data(self, default=None):
         if default is None:
             default = {}
@@ -239,6 +238,6 @@ class SaleOrderLine(models.Model):
             }
             new_sheet = self.group_sheet_id.copy(default=copy_vals)
             default['group_sheet_id'] = new_sheet.id
-        
+
         res = super().copy_data(default)
         return res

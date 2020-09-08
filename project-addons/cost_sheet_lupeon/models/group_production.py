@@ -5,6 +5,7 @@ from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 from datetime import timedelta
 
+
 class GroupProduction(models.Model):
 
     _name = "group.production"
@@ -12,7 +13,7 @@ class GroupProduction(models.Model):
     name = fields.Char('Name')
     production_ids = fields.One2many(
         'mrp.production', 'group_mrp_id', 'Gropued Productions')
-    
+
     material_ids = fields.One2many(
         'group.material.line', 'group_mrp_id', 'Materials to consume')
     repart_material_ids = fields.One2many(
@@ -24,9 +25,9 @@ class GroupProduction(models.Model):
         ('done', 'Done'),
         ('cancel', 'Cancelled')], string='State',
         copy=False, default='draft', track_visibility='onchange')
-    
+
     total_time = fields.Float('Total time')
-    
+
     def action_confirm_group(self):
         self.ensure_one()
         product_qtys = {}
@@ -44,7 +45,7 @@ class GroupProduction(models.Model):
                     'move_id': move.id
                 }
                 self.env['repart.material.line'].create(vals)
-        
+
         for product in product_qtys:
             vals = {
                 'group_mrp_id': self.id,
@@ -53,17 +54,17 @@ class GroupProduction(models.Model):
             }
             self.env['group.material.line'].create(vals)
         self.state = 'confirmed'
-    
+
     def action_plan_group(self):
         self.ensure_one()
         if not self.total_time:
             raise UserError(
                 _('You need to set the time for this production'))
-        
+
         if any(not ml.real_qty for ml in self.material_ids):
             raise UserError(
                 _('You need to set up the real consumes of material'))
-        
+
         for ml in self.material_ids:
             total_qty = sum(
                 [x.qty for x in self.repart_material_ids if 
@@ -75,7 +76,6 @@ class GroupProduction(models.Model):
                     percent = rml.qty / total_qty
                     rml.real_qty = ml.real_qty * percent
         self.state = 'planned'
-                
 
     def action_done_group(self):
         self.ensure_one()
@@ -95,13 +95,13 @@ class GroupProduction(models.Model):
                     h = self.total_time *  percent
                     next_date = wo.time_ids[0].date_start + timedelta(hours=h)
                     # wo.time_ids[0].duration = self.total_time * 60 * percent
-                    wo.time_ids[0].date_end =next_date
+                    wo.time_ids[0].date_end = next_date
                 wo.record_production()
-            
+
             mrp.action_assign()
             if mrp.availability != 'assigned':
                 raise UserError(
-            _('Cant reserve materials form production %s') % mrp.name)
+                _('Cant reserve materials form production %s') % mrp.name)
             rml.move_id.active_move_line_ids.write({'qty_done': rml.real_qty})
             mrp.button_mark_done()
         self.state = 'done'
