@@ -9,3 +9,5 @@ class OppiType(models.Model):
     _name = 'oppi.type'
 
     name = fields.Char('Name')
+    workcenter_id = fields.Many2one(
+        'mrp.workcenter', 'Workcenter', required=True)

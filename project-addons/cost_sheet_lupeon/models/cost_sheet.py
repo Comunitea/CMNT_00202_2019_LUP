@@ -818,20 +818,34 @@ class CostSheet(models.Model):
             res.append((0,0, vals))
         return res
 
+    def get_routing_on_fly(self):
+        self.ensure_one()
+        res = self.printer_id.routing_id
+        if res and self.oppi_line_ids:
+            new_routing = res.copy({'name': res.name + ' - ' + self.name})
+            values = []
+            for oppi in self.oppi_line_ids:
+                vals = {
+                    'name': oppi.name or '/',
+                    'workcenter_id': oppi.type.workcenter_id.id,
+                }
+                values.append((0, 0, vals))
+            new_routing.write({'operation_ids': values})
+            res = new_routing
+        return res
+
     def create_bom_on_fly(self, product):
         self.ensure_one()
         components = self.create_components_on_fly()
+        routing = self.get_routing_on_fly()
         vals = {
             'product_id': product.id,
             'product_tmpl_id': product.product_tmpl_id.id,
             'product_qty': self.cus_units,  # TODO get_qty,
             'product_uom_id': product.uom_id.id,
-            'routing_id': False,  # TODO use_routes,
             'type': 'normal',
             'bom_line_ids': components,
-            'routing_id':
-            self.printer_id.routing_id and self.printer_id.routing_id.id or 
-            False,
+            'routing_id': routing and routing.id or False,
             'ready_to_produce': 'all_available'
         }
         bom = self.env['mrp.bom'].create(vals)
@@ -894,7 +908,7 @@ class MaterialCostLine(models.Model):
     _name = 'material.cost.line'
 
     # COMUN
-    name = fields.Char('Nombre')
+    name = fields.Char('Nombre', required=True)
     material_id = fields.Many2one('product.product', 'Material')
 
     euro_material = fields.Float('Euros Mat ud', compute='_compute_cost')
@@ -958,7 +972,6 @@ class MaterialCostLine(models.Model):
             if d4:
                 res = (d4/d4)*((c7*d4*dens_cc)+((35.5*35.5*(1+f10)-(c7*d4))*dens_bulk))
         return res
-
 
     def _compute_cost(self):
         for mcl in self:
@@ -1153,8 +1166,8 @@ class OppiCostLine(models.Model):
 
     sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
 
-    name = fields.Char('Descripción')
-    type = fields.Many2one('oppi.type', 'Tipo')
+    name = fields.Char('Descripción', required=True)
+    type = fields.Many2one('oppi.type', 'Tipo', required=True)
     time = fields.Float('Tiempo')
     time_real = fields.Float('Tiempo real', related='task_id.effective_hours')
     employee_id = fields.Many2one('hr.employee', 'Empleado')
