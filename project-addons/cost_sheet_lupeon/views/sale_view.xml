@@ -8,24 +8,98 @@
         <field name="arch" type="xml">
 
             <div name="button_box" position="inside">
-                <button name="view_product_cost_sheets" type="object" class="oe_stat_button" icon="fa-money">
+                <button name="view_product_cost_sheets" type="object" class="oe_stat_button" icon="fa-money" attrs="{'invisible': [('company_id', '!=', 1)]}">
                     <field name="group_sheets_count"  widget="statinfo"/>
                 </button>
-                <button name="view_sheets_lines" type="object" class="oe_stat_button" icon="fa-file-text">
+                <button name="view_sheets_lines" type="object" class="oe_stat_button" icon="fa-file-text" attrs="{'invisible': [('company_id', '!=', 1)]}">
                     <field name="sheets_count"  widget="statinfo" string="Hojas de coste"/>
                 </button>
                 <button class="oe_stat_button" type="object"
-                     name="view_tasks" icon="fa-tasks">
+                     name="view_tasks" icon="fa-tasks" attrs="{'invisible': [('company_id', '!=', 1)]}">
                     <field string="Tasks" name="count_task" widget="statinfo"/>
                 </button>
-                <button name="view_productions" type="object" class="oe_stat_button" icon="fa-paste">
+                <button name="view_productions" type="object" class="oe_stat_button" icon="fa-paste" attrs="{'invisible': [('company_id', '!=', 1)]}">
                     <field name="production_count"  widget="statinfo"/>
                 </button>
             </div>
 
-            <button name="action_done" position="after">
+
+            <!-- AÑADIR DISEÑO AL FLUJO DE VENTAS -->
+            <!-- <button name="action_done" position="after">
                 <button name="duplicate_with_costs" type="object" string="Duplicate costs"/>
+            </button> -->
+            <!-- <xpath expr="//buttom[@id='action_confirm'][2]" position="replace">
+            </xpath> -->
+            <!-- <field name="state" position="attributes">
+                <attribute name="statusbar_visible">draft,sent,design,sale</attribute>
+            </field>
+            <button name="action_cancel" position="attributes">
+                <attribute name="states">draft,sent,design,sale</attribute>
             </button>
+            <button name="action_quotation_send" position="attributes">
+                <attribute name="states">draft,sent</attribute>
+            </button>
+            <button name="print_quotation" position="before">
+                <button name="action_design" type="object" string="Design" class="btn-primary" states="draft,sent"/>
+            </button>
+            <xpath expr="//button[@id='action_confirm'][1]" position="replace">
+                    <button name="action_confirm" id="action_confirm"
+                        string="Confirm" class="btn-primary" type="object"
+                        attrs="{'invisible': [('state', 'not in', ['design'])]}"/>
+            </xpath>
+            <xpath expr="//button[@name='action_confirm'][2]" position="replace">
+            </xpath> -->
+
+            <!-- Replazo el header para meter el flujo del estado de diseño
+                SOLO en la compañia de lupen
+             -->
+            <header position="replace">
+                <header>
+                    <field name="authorized_transaction_ids" invisible="1"/>
+                    <button name="payment_action_capture" type="object"
+                            string="Capture Transaction" class="oe_highlight"
+                            attrs="{'invisible': [('authorized_transaction_ids', '=', [])]}"/>
+                    <button name="payment_action_void" type="object"
+                            string="Void Transaction"
+                            confirm="Are you sure you want to void the authorized transaction? This action can't be undone."
+                            attrs="{'invisible': [('authorized_transaction_ids', '=', [])]}"/>
+                    <button name="action_quotation_send" string="Send by Email" type="object" states="draft" class="btn-primary"/>
+                    <button name="action_quotation_send" type="object" string="Send PRO-FORMA Invoice" groups="sale.group_proforma_sales" class="btn-primary" attrs="{'invisible': ['|', ('state', '!=', 'draft'), ('invoice_count','&gt;=',1)]}" context="{'proforma': True}"/>
+                    <button name="print_quotation" string="Print" type="object" states="draft" class="btn-primary o_sale_print"/>
+                    <!-- Nuevo estado solo en lupeon -->
+                    <button name="action_design" type="object" string="Design" class="btn-primary"  attrs="{'invisible': ['|', ('company_id', '!=', 1), ('state', 'not in', ['sent'])]}"/>
+                    <!-- Botones por defecto no se ven en compañía Lupeón -->
+                    <button name="action_confirm" id="action_confirm"
+                        string="Confirm" class="btn-primary" type="object"
+                        attrs="{'invisible': ['|', ('company_id', '=', 1), ('state', 'not in', ['sent'])]}"/>
+                    <button name="action_confirm"
+                        string="Confirm" type="object"
+                        attrs="{'invisible': ['|', ('company_id', '=', 1), ('state', 'not in', ['draft'])]}"/>
+                    
+                    <!-- Este es el confirm de lupeon SOLO EN ESTADO DISEÑO -->
+                    <button name="action_confirm" id="action_confirm"
+                        string="Confirm" class="btn-primary" type="object"
+                        attrs="{'invisible': ['|', ('company_id', '!=', 1), ('state', 'not in', ['design'])]}"/>
+                    <button name="preview_sale_order(" type="object" string="Preview"/>
+                    <button name="action_quotation_send" type="object" string="Send PRO-FORMA Invoice" groups="sale.group_proforma_sales" attrs="{'invisible': ['|', ('state', '=', 'draft'), ('invoice_count','&gt;=',1)]}" context="{'proforma': True}"/>
+                    <button name="print_quotation" string="Print" type="object" states="sent,design,sale" class="o_sale_print"/>
+                    <!-- añado estado diseño -->
+                    <button name="action_quotation_send" string="Send by Email" type="object" states="sent,design,sale"/>
+                     <!-- añado estado diseño -->
+                    <button name="action_cancel" states="draft,sent,design,sale" type="object" string="Cancel"/>
+                    <button name="action_draft" states="cancel" type="object" string="Set to Quotation"/>
+                    <button name="action_done" type="object" string="Lock" states="sale"
+                        help="If the sale is locked, you can not modify it anymore. However, you will still be able to invoice or deliver."/>
+                    
+                    <!-- Nuevo botón solo visible en lupeón -->
+                    <button name="duplicate_with_costs" type="object" string="Duplicate costs" attrs="{'invisible': [('company_id', '!=', 1)]}"/>
+                    <button name="action_unlock" type="object" string="Unlock" states="done" groups="sales_team.group_sale_manager"/>
+                    <!-- Estado design solo en lupeon -->
+                    <field name="state" widget="statusbar" statusbar_visible="draft,sent,sale" attrs="{'invisible': [('company_id', '=', 1)]}"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,sent,'design',sale"  attrs="{'invisible': [('company_id', '!=', 1)]}"/>
+                </header>
+            </header>
+
 
             <xpath expr="//field[@name='order_line']/form//field[@name='product_id']" position="after">
                 <field name="ref"/>

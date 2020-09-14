@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-13 10:05+0000\n"
-"PO-Revision-Date: 2020-08-13 10:05+0000\n"
+"POT-Creation-Date: 2020-09-14 14:41+0000\n"
+"PO-Revision-Date: 2020-09-14 14:41+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -41,6 +41,35 @@ msgid "Altura de Capa"
 msgstr ""
 
 #. module: cost_sheet_lupeon
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.sale_order_custom_lup
+msgid "Are you sure you want to void the authorized transaction? This action can't be undone."
+msgstr "¿Está seguro de que desea anular la transacción autorizada? Esta acción no puede deshacerse."
+
+#. module: cost_sheet_lupeon
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_applicable_legislation__attachment_ids
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__attachment_ids
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_design_software__attachment_ids
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_design_time_line__attachment_ids
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_cost_sheet__attachment_ids
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_material_line__attachment_ids
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_mrp_wizard__attachment_ids
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_production__attachment_ids
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_material_cost_line__attachment_ids
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_meet_cost_line__attachment_ids
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_oppi_cost_line__attachment_ids
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_oppi_type__attachment_ids
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_outsorcing_cost_line__attachment_ids
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_part_feature__attachment_ids
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_printer_machine__attachment_ids
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_purchase_cost_line__attachment_ids
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_quality_wizard__attachment_ids
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_repart_material_line__attachment_ids
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_tinted__attachment_ids
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_workforce_cost_line__attachment_ids
+msgid "Attachments"
+msgstr "Adjuntos"
+
+#. module: cost_sheet_lupeon
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.group_production_view_form
 msgid "Back to draft Group"
 msgstr "Volver a borrador grupo"
@@ -62,6 +91,7 @@ msgid "Can Edit"
 msgstr "Puede editar"
 
 #. module: cost_sheet_lupeon
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.sale_order_custom_lup
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.view_quality_wizard
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.vieww_group_mrp_wizard
 msgid "Cancel"
@@ -74,6 +104,7 @@ msgstr "Cancelar grupo"
 
 #. module: cost_sheet_lupeon
 #: selection:group.production,state:0
+#: selection:sale.order,state:0
 msgid "Cancelled"
 msgstr "Cancelado"
 
@@ -88,6 +119,11 @@ msgstr "No se pueden rechazar %s unidades porque solo hay producidas %s"
 #, python-format
 msgid "Cant reserve materials form production %s"
 msgstr "No se pueden reservar materiales para la producción %s"
+
+#. module: cost_sheet_lupeon
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.sale_order_custom_lup
+msgid "Capture Transaction"
+msgstr "Capturar transacción"
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__feature_ids
@@ -133,6 +169,7 @@ msgid "Configuración oferta"
 msgstr ""
 
 #. module: cost_sheet_lupeon
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.sale_order_custom_lup
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.view_quality_wizard
 msgid "Confirm"
 msgstr "Confirmar"
@@ -165,7 +202,6 @@ msgstr "Contacto"
 
 #. module: cost_sheet_lupeon
 #: model:ir.ui.menu,name:cost_sheet_lupeon.menu_action_applicable_legislations
-#: model:ir.ui.menu,name:cost_sheet_lupeon.menu_cost_cfg
 msgid "Cost Configuration"
 msgstr "Configuración costes"
 
@@ -201,6 +237,7 @@ msgstr ""
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_product_product__init_cost
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_product_template__init_cost
 msgid "Coste Inicial"
 msgstr ""
 
@@ -226,6 +263,7 @@ msgstr ""
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_product_product__term_cost
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_product_template__term_cost
 msgid "Coste ciclo tratamiento térmico"
 msgstr ""
 
@@ -326,7 +364,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.cost_sheet_view_form
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.simple_cost_sheet_view_form
 #: selection:printer.machine,type:0
-#: selection:product.product,material_type:0
+#: selection:product.template,material_type:0
 msgid "DMLS"
 msgstr ""
 
@@ -338,11 +376,13 @@ msgstr ""
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_product_product__dens_bulk
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_product_template__dens_bulk
 msgid "Densidad en bulk gr/cc"
 msgstr ""
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_product_product__dens_cc
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_product_template__dens_cc
 msgid "Densidad impreso gr/cc"
 msgstr ""
 
@@ -370,7 +410,9 @@ msgstr ""
 
 #. module: cost_sheet_lupeon
 #: selection:cost.sheet,sheet_type:0
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.sale_order_custom_lup
 #: selection:printer.machine,type:0
+#: selection:sale.order,state:0
 msgid "Design"
 msgstr "Diseño"
 
@@ -456,7 +498,7 @@ msgid "Duplicate costs"
 msgstr "Duplicar con costes"
 
 #. module: cost_sheet_lupeon
-#: code:addons/cost_sheet_lupeon/models/sale_order.py:188
+#: code:addons/cost_sheet_lupeon/models/sale_order.py:207
 #, python-format
 msgid "Duplicated"
 msgstr "Duplicado"
@@ -469,6 +511,7 @@ msgstr ""
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_product_product__is_material
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_product_template__is_material
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.product_template_search_view_custom
 msgid "Es un material"
 msgstr ""
 
@@ -497,7 +540,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.cost_sheet_view_form
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.simple_cost_sheet_view_form
 #: selection:printer.machine,type:0
-#: selection:product.product,material_type:0
+#: selection:product.template,material_type:0
 msgid "FDM"
 msgstr ""
 
@@ -515,6 +558,7 @@ msgstr ""
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_product_product__factor_hour
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_product_template__factor_hour
 msgid "Factor hora"
 msgstr ""
 
@@ -558,6 +602,7 @@ msgstr ""
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_product_product__gr_cc
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_product_template__gr_cc
 msgid "Gr/cc"
 msgstr ""
 
@@ -642,7 +687,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.product_cost_sheet_view_form
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.sale_order_custom_lup
 msgid "Hojas de coste"
-msgstr ""
+msgstr "Grupo de costes"
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_design_time_line__hours
@@ -701,6 +746,11 @@ msgid "ID"
 msgstr ""
 
 #. module: cost_sheet_lupeon
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.sale_order_custom_lup
+msgid "If the sale is locked, you can not modify it anymore. However, you will still be able to invoice or deliver."
+msgstr "Si la venta está bloqueada, no puede modificarla. Sin embargo, todavía podrá facturarla o entregarla."
+
+#. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__amount_total
 msgid "Importe TOTAL"
 msgstr ""
@@ -708,6 +758,7 @@ msgstr ""
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__printer_id
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_product_product__printer_id
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_product_template__printer_id
 msgid "Impresora"
 msgstr ""
 
@@ -824,10 +875,21 @@ msgstr ""
 #. module: cost_sheet_lupeon
 #: model:ir.actions.act_window,name:cost_sheet_lupeon.action_applicable_legislations
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__legislation_ids
+#: model:ir.ui.menu,name:cost_sheet_lupeon.menu_cost_cfg
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.cost_sheet_view_form
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.simple_cost_sheet_view_form
 msgid "Legislación aplicable"
 msgstr ""
+
+#. module: cost_sheet_lupeon
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.sale_order_custom_lup
+msgid "Lock"
+msgstr "Bloquear"
+
+#. module: cost_sheet_lupeon
+#: selection:sale.order,state:0
+msgid "Locked"
+msgstr "Bloqueado"
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__loops
@@ -858,7 +920,7 @@ msgstr ""
 #. module: cost_sheet_lupeon
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.mrp_production_form_cost_sheet
 msgid "Mark as Done"
-msgstr "Marcar como Hecho"
+msgstr "Marcar como realizado"
 
 #. module: cost_sheet_lupeon
 #: selection:cost.sheet,finish_pol:0
@@ -877,7 +939,7 @@ msgid "Material Cost"
 msgstr "Coste material"
 
 #. module: cost_sheet_lupeon
-#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.product_material_view_form
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.view_product_template_custom_lupeon
 msgid "Material Info"
 msgstr ""
 
@@ -1070,7 +1132,7 @@ msgstr ""
 #. module: cost_sheet_lupeon
 #: selection:cost.sheet,sheet_type:0
 #: selection:printer.machine,type:0
-#: selection:product.product,material_type:0
+#: selection:product.template,material_type:0
 msgid "Poly"
 msgstr ""
 
@@ -1115,9 +1177,19 @@ msgid "Precios"
 msgstr ""
 
 #. module: cost_sheet_lupeon
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.sale_order_custom_lup
+msgid "Preview"
+msgstr "Previsualizar"
+
+#. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_design_software__price_hour
 msgid "Price / hour"
 msgstr "Precio/hora"
+
+#. module: cost_sheet_lupeon
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.sale_order_custom_lup
+msgid "Print"
+msgstr "Imprimir"
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_printer_machine__type
@@ -1180,7 +1252,7 @@ msgid "Production State"
 msgstr "Estado producción"
 
 #. module: cost_sheet_lupeon
-#: code:addons/cost_sheet_lupeon/models/sale_order.py:38
+#: code:addons/cost_sheet_lupeon/models/sale_order.py:58
 #, python-format
 msgid "Production date is too late."
 msgstr "La fecha de producción es demasiado tarde"
@@ -1237,6 +1309,16 @@ msgstr "Asistente calidad"
 #: model:ir.model,name:cost_sheet_lupeon.model_stock_quant
 msgid "Quants"
 msgstr ""
+
+#. module: cost_sheet_lupeon
+#: selection:sale.order,state:0
+msgid "Quotation"
+msgstr "Presupuesto"
+
+#. module: cost_sheet_lupeon
+#: selection:sale.order,state:0
+msgid "Quotation Sent"
+msgstr "Presupuesto enviado"
 
 #. module: cost_sheet_lupeon
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.group_production_view_form
@@ -1297,7 +1379,7 @@ msgstr "Ruta de producción"
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.cost_sheet_view_form
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.simple_cost_sheet_view_form
 #: selection:printer.machine,type:0
-#: selection:product.product,material_type:0
+#: selection:product.template,material_type:0
 msgid "SLA"
 msgstr ""
 
@@ -1306,7 +1388,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.cost_sheet_view_form
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.simple_cost_sheet_view_form
 #: selection:printer.machine,type:0
-#: selection:product.product,material_type:0
+#: selection:product.template,material_type:0
 msgid "SLS"
 msgstr ""
 
@@ -1315,7 +1397,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.cost_sheet_view_form
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.simple_cost_sheet_view_form
 #: selection:printer.machine,type:0
-#: selection:product.product,material_type:0
+#: selection:product.template,material_type:0
 msgid "SLS P396"
 msgstr ""
 
@@ -1357,6 +1439,11 @@ msgid "Sale order line"
 msgstr "Línea de venta"
 
 #. module: cost_sheet_lupeon
+#: selection:sale.order,state:0
+msgid "Sales Order"
+msgstr "Pedido de venta"
+
+#. module: cost_sheet_lupeon
 #: model:ir.model,name:cost_sheet_lupeon.model_sale_order_line
 msgid "Sales Order Line"
 msgstr "Línea de pedido de venta"
@@ -1366,6 +1453,21 @@ msgstr "Línea de pedido de venta"
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_part_feature__name
 msgid "Sector"
 msgstr ""
+
+#. module: cost_sheet_lupeon
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.sale_order_custom_lup
+msgid "Send PRO-FORMA Invoice"
+msgstr "Enviar Proforma"
+
+#. module: cost_sheet_lupeon
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.sale_order_custom_lup
+msgid "Send by Email"
+msgstr "Enviar por correo electrónico"
+
+#. module: cost_sheet_lupeon
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.sale_order_custom_lup
+msgid "Set to Quotation"
+msgstr "Convertir a presupuesto"
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_mrp_production__sheet_type
@@ -1386,6 +1488,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_group_production__state
 msgid "State"
 msgstr "Provincia"
+
+#. module: cost_sheet_lupeon
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_sale_order__state
+msgid "Status"
+msgstr "Estado"
 
 #. module: cost_sheet_lupeon
 #: model:ir.model,name:cost_sheet_lupeon.model_stock_move
@@ -1426,7 +1533,7 @@ msgid "TechniTécnicacal"
 msgstr ""
 
 #. module: cost_sheet_lupeon
-#: code:addons/cost_sheet_lupeon/models/sale_order.py:39
+#: code:addons/cost_sheet_lupeon/models/sale_order.py:59
 #, python-format
 msgid "The production date is later than the                                  commitment date."
 msgstr "La fecha de producción es posterior a la fecha de compromiso"
@@ -1435,16 +1542,6 @@ msgstr "La fecha de producción es posterior a la fecha de compromiso"
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_meet_cost_line__hours
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_oppi_cost_line__time
 msgid "Tiempo"
-msgstr ""
-
-#. module: cost_sheet_lupeon
-#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_product_product__washing_time
-msgid "Tiempo Lavado"
-msgstr ""
-
-#. module: cost_sheet_lupeon
-#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_product_product__cured_time
-msgid "Tiempo curado"
 msgstr ""
 
 #. module: cost_sheet_lupeon
@@ -1492,6 +1589,7 @@ msgstr ""
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_product_product__material_type
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_product_template__material_type
 msgid "Tipo material"
 msgstr ""
 
@@ -1559,6 +1657,11 @@ msgid "Unidades"
 msgstr ""
 
 #. module: cost_sheet_lupeon
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.sale_order_custom_lup
+msgid "Unlock"
+msgstr "Desbloquear"
+
+#. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__use_disc_qty
 msgid "Usar descuento cantidad"
 msgstr ""
@@ -1570,11 +1673,13 @@ msgstr ""
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_product_product__vel_cc
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_product_template__vel_cc
 msgid "Velocidad cc/h full dense"
 msgstr ""
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_product_product__vel_z
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_product_template__vel_z
 msgid "Velocidad en Z (cm/h) no exposur"
 msgstr ""
 
@@ -1589,9 +1694,19 @@ msgid "Visual"
 msgstr ""
 
 #. module: cost_sheet_lupeon
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.sale_order_custom_lup
+msgid "Void Transaction"
+msgstr "Transacción vacía"
+
+#. module: cost_sheet_lupeon
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.view_quality_wizard
 msgid "Wizard Quality"
 msgstr "Asistente calidad"
+
+#. module: cost_sheet_lupeon
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_oppi_type__workcenter_id
+msgid "Workcenter"
+msgstr ""
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__x_mm_sls
@@ -1644,13 +1759,13 @@ msgid "You have consumed less material than what was planned. Are you sure you w
 msgstr "Ha consumido menos material de lo que estaba previsto. ¿Seguro que desea cerrar este pedido de fabricación?"
 
 #. module: cost_sheet_lupeon
-#: code:addons/cost_sheet_lupeon/models/group_production.py:61
+#: code:addons/cost_sheet_lupeon/models/group_production.py:62
 #, python-format
 msgid "You need to set the time for this production"
 msgstr "Debes establecer el tiempo total empleado en esta producción agrupada"
 
 #. module: cost_sheet_lupeon
-#: code:addons/cost_sheet_lupeon/models/group_production.py:65
+#: code:addons/cost_sheet_lupeon/models/group_production.py:66
 #, python-format
 msgid "You need to set up the real consumes of material"
 msgstr "Debes establecer los consumos de material empleados"
@@ -1835,6 +1950,7 @@ msgstr ""
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_product_product__euro_hour_maq
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_product_template__euro_hour_maq
 msgid "€/H Maquina"
 msgstr ""
 
@@ -1842,11 +1958,12 @@ msgstr ""
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__e_cc_sls
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__euros_cc
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_product_product__euro_cc
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_product_template__euro_cc
 msgid "€/cc"
 msgstr ""
 
 #. module: cost_sheet_lupeon
-#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.product_material_view_form
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.view_product_template_custom_lupeon
 msgid "€/gr"
 msgstr ""
 
@@ -1857,11 +1974,13 @@ msgstr ""
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_product_product__euro_kg
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_product_template__euro_kg
 msgid "€/kg"
 msgstr ""
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_product_product__euro_kg_bucket
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_product_template__euro_kg_bucket
 msgid "€/kg cubeta"
 msgstr ""
 

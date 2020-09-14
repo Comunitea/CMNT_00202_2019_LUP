@@ -59,7 +59,10 @@ class GroupCostSheet(models.Model):
             # pvp unitario de verdad
             if group.sale_line_id.product_uom_qty:
                 pu = group.line_pvp / group.sale_line_id.product_uom_qty
-            group.sale_line_id.write({'price_unit': pu})
+
+            if group.sale_id and group.sale_id.state in (
+                    'draft', 'sent', 'design'):
+                group.sale_line_id.write({'price_unit': pu})
 
     @api.depends('sheet_ids')
     def _get_line_pvp(self):
@@ -714,25 +717,50 @@ class CostSheet(models.Model):
             sh.tray_hours_sls = res
 
     @api.multi
-    def create_task_or_production(self):
+    def create_tasks(self):
         """
         Create a task if sheet type is design, or if exist oppi line
-        or a production for each sheet.
         """
         design_sheets = self.filtered(lambda s: s.sheet_type == 'design')
-        production_sheets = self - design_sheets
 
         project = False
         if design_sheets:
-            project = design_sheets.create_tasks()
+            project = design_sheets.create_design_tasks()
             if project:
                 oppi_lines = self.mapped('oppi_line_ids').filtered(
                     lambda x: not x.task_id)
                 oppi_lines.create_oppi_tasks(project)
+        return
+
+    @api.multi
+    def create_productions(self):
+        design_sheets = self.filtered(lambda s: s.sheet_type == 'design')
+        production_sheets = self - design_sheets
 
         if production_sheets:
             production_sheets.create_productions()
         return
+    
+    # @api.multi
+    # def create_task_or_production(self):
+    #     """
+    #     Create a task if sheet type is design, or if exist oppi line
+    #     or a production for each sheet.
+    #     """
+    #     design_sheets = self.filtered(lambda s: s.sheet_type == 'design')
+    #     production_sheets = self - design_sheets
+
+    #     project = False
+    #     if design_sheets:
+    #         project = design_sheets.create_tasks()
+    #         if project:
+    #             oppi_lines = self.mapped('oppi_line_ids').filtered(
+    #                 lambda x: not x.task_id)
+    #             oppi_lines.create_oppi_tasks(project)
+
+    #     if production_sheets:
+    #         production_sheets.create_productions()
+    #     return
 
     @api.multi
     def manually_create_task_or_production(self):
@@ -748,10 +776,11 @@ class CostSheet(models.Model):
             self.mapped('project_id.task_ids').unlink()
             self.mapped('project_id').unlink()
 
-        self.create_task_or_production()
+        self.create_tasks()
+        self.create_productions()
         return
 
-    def create_tasks(self):
+    def create_design_tasks(self):
         order = self[0].sale_id
         vals = {
             'name': order.name,

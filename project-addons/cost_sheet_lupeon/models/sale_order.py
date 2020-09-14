@@ -20,6 +20,26 @@ class SaleOrder(models.Model):
     project_id = fields.Many2one('project.project', 'Project', readonly=True,
         copy=False)
     production_date = fields.Datetime('Fecha producción')
+     # Sobrescribo del todo para tener el orden correcto en el estado de design
+    # el statusbar_visible no lo ordena
+    state = fields.Selection([
+        ('draft', 'Quotation'),
+        ('sent', 'Quotation Sent'),
+        ('design', 'Design'),
+        ('sale', 'Sales Order'),
+        ('done', 'Locked'),
+        ('cancel', 'Cancelled'),
+        ], string='Status', readonly=True, copy=False, 
+        index=True, track_visibility='onchange', track_sequence=3,
+        default='draft')
+
+    @api.multi
+    def action_design(self):
+        for order in self:
+            # Creo las tareas y producciones asociadas a cada hoja de costes
+            sheet_lines = order.get_sheet_lines()
+            sheet_lines.create_tasks()
+        return self.write({'state': 'design'})
 
     @api.onchange('commitment_date')
     def _onchange_commitment_date(self):
@@ -152,9 +172,9 @@ class SaleOrder(models.Model):
         Creation of product sheet ids
         """
         for order in self:
-            # Creo las tareas y producciones asociadas a cada hooja de costes
+            # Creo las tareas y producciones asociadas a cada hoja de costes
             sheet_lines = order.get_sheet_lines()
-            sheet_lines.create_task_or_production()
+            sheet_lines.create_productions()
 
             # Creo la lista de materiales asociada al grupo de costes
             group_costs = order.get_group_sheets()

@@ -35,5 +35,3 @@ class SaleOrderLine(models.Model):
             'ref': self.ref
         })
         return res
-    
- 
