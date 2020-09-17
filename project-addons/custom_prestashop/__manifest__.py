@@ -9,6 +9,6 @@
     "website": "www.comunitea.com",
     "license": "AGPL-3",
     "depends": ["connector_prestashop", "cmnt_prestashop_custom", "check_fpos_vies_vat"],
-    "data": ['data/res_partner_category.xml', 'views/account_fiscal_position.xml',
+    "data": ['data/ir_cron.xml', 'data/res_partner_category.xml', 'views/account_fiscal_position.xml',
              'views/account_payment_mode.xml', 'security/ir.model.access.csv'],
 }
