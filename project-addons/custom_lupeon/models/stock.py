@@ -76,14 +76,9 @@ class StockPicking(models.Model):
             if picking.delivered != True and picking.sale_id.prestashop_state.trigger_delivered == True:
                 picking.delivered = True
             
-        
-    
-    def button_validate(self):
-        if self.delivery_blocked:
-            raise ValidationError(_(
-                    'The piclkig i blocking form Sale Order %s') % self.sale_id.name)
-        res = super().button_validate()
-        
+    @api.multi
+    def action_done(self):
+        res = super().action_done()
         # Search all confirmed stock_moves and try to assign them
         domain = self.env['procurement.group']._get_moves_to_assign_domain()
         domain.append(('company_id', '=', self.company_id.id))
@@ -95,7 +90,13 @@ class StockPicking(models.Model):
         # Merge duplicated quants
         self.env['stock.quant']._merge_quants()
         self.env['stock.quant']._unlink_zero_quants()
-        
+        return res
+    
+    def button_validate(self):
+        if self.delivery_blocked:
+            raise ValidationError(_(
+                    'The piclkig i blocking form Sale Order %s') % self.sale_id.name)
+        res = super().button_validate()
         return res
     
     @api.multi
