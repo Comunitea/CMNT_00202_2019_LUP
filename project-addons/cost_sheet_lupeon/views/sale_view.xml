@@ -14,6 +14,9 @@
                 <button name="view_sheets_lines" type="object" class="oe_stat_button" icon="fa-file-text" attrs="{'invisible': [('company_id', '!=', 1)]}">
                     <field name="sheets_count"  widget="statinfo" string="Hojas de coste"/>
                 </button>
+                <button name="view_purchases" type="object" class="oe_stat_button" icon="fa-euro" attrs="{'invisible': [('company_id', '!=', 1)]}">
+                    <field name="purchase_count"  widget="statinfo" string="Compras"/>
+                </button>
                 <button class="oe_stat_button" type="object"
                      name="view_tasks" icon="fa-tasks" attrs="{'invisible': [('company_id', '!=', 1)]}">
                     <field string="Tasks" name="count_task" widget="statinfo"/>
@@ -118,15 +121,6 @@
             <field name="commitment_date" position="after">
                 <field name="production_date"/>
             </field>
-
-            <notebook position="inside">
-                <page string="Purchases">
-                    <group string="Purchases">
-                        <field name="purchase_ids" nolabel="1">
-                        </field>
-                    </group>
-                </page>
-            </notebook>
         </field>
     </record>
 

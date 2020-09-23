@@ -1562,6 +1562,7 @@
                                 <field name="meet_line_ids" nolabel="1">
                                     <tree editable="bottom">
                                         <field name="name"/>
+                                        <field name="task_id"/>
                                         <field name="type"/>
                                         <field name="num_people"/>
                                         <field name="hours"/>

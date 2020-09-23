@@ -3,6 +3,7 @@
 
 from odoo import models, fields, api, _
 import math
+from datetime import datetime, timedelta
 
 
 SHEET_TYPES = [
@@ -684,6 +685,10 @@ class CostSheet(models.Model):
             #     oppi_lines = self.mapped('oppi_line_ids').filtered(
             #         lambda x: not x.task_id)
             #     oppi_lines.create_oppi_tasks(project)
+            if project:
+                meet_lines = self.mapped('meet_line_ids').filtered(
+                    lambda x: not x.task_id)
+                meet_lines.create_meet_tasks(project)
         return
 
     @api.multi
@@ -855,7 +860,13 @@ class CostSheet(models.Model):
             prod.onchange_product_id()
             prod.button_plan()
             prod.workorder_ids.write({
-                'duration_expected': sheet.machine_hours * 60})
+                'duration_expected': sheet.machine_hours * 60,
+                'date_planned_start': 
+                sheet.sale_line_id.order_id.production_date,
+                'date_planned_finished': 
+                sheet.sale_line_id.order_id.production_date + 
+                timedelta(hours=3),
+            })
             sheet.write({'production_id': prod.id})
         return
 
@@ -1096,6 +1107,8 @@ class MeetCostLine(models.Model):
     hours = fields.Float('Tiempo')
     kms = fields.Float('Kms', default=0.0)
     pvp = fields.Float('PVP ud', compute="_get_pvp")
+    task_id = fields.Many2one('project.task', 'Task', readonly=True,
+                              copy=False)
 
     @api.depends('num_people', 'hours', 'kms')
     def _get_pvp(self):
@@ -1104,8 +1117,26 @@ class MeetCostLine(models.Model):
             km_cost = mcl.sheet_id.group_id.km_cost
             pvp = (mcl.num_people * mcl.hours * ing_hours)
             if mcl.type == 'visit':
-                pvp +=  + (mcl.kms * km_cost)
+                pvp += (mcl.kms * km_cost)
             mcl.pvp = pvp
+
+    def create_meet_tasks(self, project):
+        for line in self:
+            if line.task_id:
+                continue
+            line_name = line.name if line.name else ''
+            vals = {
+                'name': "[" + project.name + '] ' + 'REUNIÓN - ' + line_name,
+                'project_id': project.id,
+                'sheet_id': line.sheet_id.id,
+                'meet_line_id': line.id,
+                'planned_hours': line.hours,
+                # 'user_id': line.employee_id.user_id.id
+            }
+            # Lo hago con sudo , porque me falla con el employye_id admin,
+            # un posible error de seguridad
+            task = self.env['project.task'].sudo().create(vals)
+            line.write({'task_id': task.id})
 
 
 class PurchaseCostLine(models.Model):

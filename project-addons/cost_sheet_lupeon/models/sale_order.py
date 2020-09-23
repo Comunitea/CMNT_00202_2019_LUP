@@ -13,6 +13,8 @@ class SaleOrder(models.Model):
                                   compute='_count_sheets')
     sheets_count = fields.Integer(string='Hojas de coste',
                                   compute='_count_sheets')
+    purchase_count = fields.Integer(string='Compras',
+                                    compute='_count_purchases')
     production_count = fields.Integer('Productions',
                                 compute='_count_production_and_task')
     count_task = fields.Integer('Productions',
@@ -48,14 +50,14 @@ class SaleOrder(models.Model):
     def _onchange_commitment_date(self):
         res = super()._onchange_commitment_date()
         if self.commitment_date:
-            self.production_date = self.commitment_date - timedelta(days=2)
+            self.production_date = self.commitment_date - timedelta(days=3)
         return res
 
     @api.onchange('production_date')
     def _onchange_production_date(self):
         """ Warn if the production date is later than the commitment date """
         if (self.commitment_date and self.production_date and self.commitment_date < self.production_date):
-            self.production_date = self.commitment_date - timedelta(days=2)
+            self.production_date = self.commitment_date - timedelta(days=3)
             return {
                 'warning': {
                     'title': _('Production date is too late.'),
@@ -78,6 +80,11 @@ class SaleOrder(models.Model):
             order.sheets_count = len(order.get_sheet_lines())
 
     @api.multi
+    def _count_purchases(self):
+        for order in self:
+            order.purchase_count = len(order.purchase_ids)
+
+    @api.multi
     def _count_production_and_task(self):
         for order in self:
             boms = order.get_group_sheets().mapped('bom_id')
@@ -87,10 +94,29 @@ class SaleOrder(models.Model):
             order.production_count = len(productions)
             order.count_task = \
                 len(
-                order.get_sheet_lines().mapped('time_line_ids.task_id')) + \
+                    order.get_sheet_lines().
+                    mapped('time_line_ids.task_id')) + \
                 len(
-                order.get_sheet_lines().mapped('oppi_line_ids.task_id')
-                )
+                    order.get_sheet_lines().
+                    mapped('oppi_line_ids.task_id')) + \
+                len(
+                    order.get_sheet_lines().mapped('meet_line_ids.task_id'))
+
+    @api.multi
+    def view_purchases(self):
+        self.ensure_one()
+        action = self.env.ref(
+            'purchase.purchase_form_action').read()[0]
+        if len(self.purchase_ids) > 1:
+            action['domain'] = [('id', 'in', self.purchase_ids.ids)]
+        elif len(self.purchase_ids) == 1:
+            form_view_name = 'purchase.purchase_order_form'
+            action['views'] = [
+                (self.env.ref(form_view_name).id, 'form')]
+            action['res_id'] = self.purchase_ids.ids[0]
+        else:
+            action = {'type': 'ir.actions.act_window_close'}
+        return action
 
     @api.multi
     def view_product_cost_sheets(self):
