@@ -687,7 +687,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.product_cost_sheet_view_form
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.sale_order_custom_lup
 msgid "Hojas de coste"
-msgstr "Grupo de costes"
+msgstr "Hojas de coste"
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_design_time_line__hours
