@@ -118,6 +118,15 @@
             <field name="commitment_date" position="after">
                 <field name="production_date"/>
             </field>
+
+            <notebook position="inside">
+                <page string="Purchases">
+                    <group string="Purchases">
+                        <field name="purchase_ids" nolabel="1">
+                        </field>
+                    </group>
+                </page>
+            </notebook>
         </field>
     </record>
 

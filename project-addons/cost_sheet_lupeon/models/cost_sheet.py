@@ -472,52 +472,6 @@ class CostSheet(models.Model):
             fa = sh.admin_fact / 100.0
             inc = sh.increment / 100.0
 
-            # Método antiguo
-            # sum_wf_costs = sh.workforce_total_euro_ud
-            # cost = sh.total_euro_ud + sh.euro_machine_ud + sum_wf_costs + sh.outsorcing_total_ud
-            # if sh.sheet_type == 'design':
-            #     cost = sh.amount_total
-            #     pvp = cost * (1 - dq - da + fa)
-            # elif sh.sheet_type == 'fdm':
-            #     pu = cost * (1 - dqc) * (1 + inc) * (1 + fa)
-            #     pvp = pu * sh.cus_units
-            # elif sh.sheet_type == 'sls':
-            #     cost = round(sh.total_euro_ud, 2) + round(sh.euro_machine_ud, 2) + round(sum_wf_costs, 2) + round(sh.outsorcing_total_ud, 2)
-            #     if sh.cus_units:
-            #         cost = cost + (sh.cost_init / sh.cus_units)
-            #     pu = cost * (1 - dqc) * (1 + inc) * (1+ fa)
-            #     pvp = pu * sh.cus_units
-            # elif sh.sheet_type == 'poly':
-            #     if sh.cus_units:
-            #         cost = cost + (sh.cost_init / sh.cus_units)
-            #     pu = cost * (1 - dqc) * (1 + inc) * (1+ fa)
-            #     pvp = pu * sh.cus_units
-            # elif sh.sheet_type == 'sla':
-            #     if sh.cus_units:
-            #         cost = cost + (sh.cost_init / sh.cus_units)
-            #     pu = cost * (1 - dqc) * (1 + inc) * (1+ fa)
-            #     pvp = pu * sh.cus_units
-            # elif sh.sheet_type == 'sls2':
-            #     if sh.cus_units:
-            #         cost = cost + (sh.cost_init / sh.cus_units)
-            #     pu = cost * (1 - dqc) * (1 + inc) * (1+ fa)
-            #     pvp = pu * sh.cus_units
-            # elif sh.sheet_type == 'dmls':
-            #     cost_init_computed = 0
-            #     if sh.material_cost_ids and sh.material_cost_ids[0].material_id:
-            #         cost_init_computed = sh.material_cost_ids[0].material_id.init_cost
-            #         sh.cost_init_computed = cost_init_computed
-            #     if sh.cus_units:
-            #         cost = cost + (sh.cost_init_computed / sh.cus_units)
-            #         pu = cost * (1 - dqc) * (1 + inc) * (1+ fa)
-            #         pvp =pu * sh.cus_units
-            # elif sh.sheet_type == 'unplanned':
-            #         pvp = sh.unplanned_cost
-            # elif sh.sheet_type == 'meets':
-            #         pvp = sh.meet_total
-            # elif sh.sheet_type == 'purchase':
-            #         pvp = sh.purchase_total
-
             if sh.sheet_type == 'design':
                 cost = sh.amount_total
                 pvp = cost * (1 - dq) * (1 - da) * (1 + fa)
@@ -733,14 +687,14 @@ class CostSheet(models.Model):
         return
 
     @api.multi
-    def create_productions(self):
+    def create_sale_productions(self):
         design_sheets = self.filtered(lambda s: s.sheet_type == 'design')
         production_sheets = self - design_sheets
 
         if production_sheets:
             production_sheets.create_productions()
         return
-    
+
     # @api.multi
     # def create_task_or_production(self):
     #     """
@@ -777,7 +731,7 @@ class CostSheet(models.Model):
             self.mapped('project_id').unlink()
 
         self.create_tasks()
-        self.create_productions()
+        self.create_sale_productions()
         return
 
     def create_design_tasks(self):
@@ -1164,7 +1118,7 @@ class PurchaseCostLine(models.Model):
     name = fields.Char('Ref. / Descripción')
     qty = fields.Float('Unidades')
     partner_id = fields.Many2one(
-        'res.partner', 'Proveedor', domain=[('supplier', '=', True)])
+        'res.partner', 'Proveedor', required=True, domain=[('supplier', '=', True)])
     cost_ud = fields.Float('Coste Ud.')
     ports = fields.Float('Portes')
     margin = fields.Float('Margin (%)', default=30.0)

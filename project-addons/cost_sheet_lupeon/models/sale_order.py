@@ -20,7 +20,7 @@ class SaleOrder(models.Model):
     project_id = fields.Many2one('project.project', 'Project', readonly=True,
         copy=False)
     production_date = fields.Datetime('Fecha producción')
-     # Sobrescribo del todo para tener el orden correcto en el estado de design
+    # Sobrescribo del todo para tener el orden correcto en el estado de design
     # el statusbar_visible no lo ordena
     state = fields.Selection([
         ('draft', 'Quotation'),
@@ -32,6 +32,9 @@ class SaleOrder(models.Model):
         ], string='Status', readonly=True, copy=False, 
         index=True, track_visibility='onchange', track_sequence=3,
         default='draft')
+
+    purchase_ids = fields.One2many(
+        'purchase.order', 'dest_sale_id', 'Purchases')
 
     @api.multi
     def action_design(self):
@@ -165,6 +168,44 @@ class SaleOrder(models.Model):
         action['context'] = "{}"
         return action
 
+    def create_sale_purchase(self):
+        self.ensure_one()
+        supplier_purchase = {}
+        sheet_lines = self.get_sheet_lines()
+        suppliers = sheet_lines.mapped('purchase_line_ids.partner_id')
+        for partner in suppliers:
+            vals = {
+                'partner_id': partner.id,
+                'origin': self.name,
+                'dest_sale_id': self.id,
+                'payment_term_id':
+                partner.property_supplier_payment_term_id.id,
+                'date_order': fields.Datetime.now()
+            }
+            po = self.env['purchase.order'].create(vals)
+            supplier_purchase[partner.id] = po
+
+        for line in sheet_lines.mapped('purchase_line_ids'):
+            po = supplier_purchase[line.partner_id.id]
+            taxes = line.product_id.supplier_taxes_id
+            # fpos = po.fiscal_position_id
+            # taxes_id = fpos.map_tax(
+            #     taxes, line.product_id.id, line.partne_id.name) if fpos \
+            #     else taxes
+
+            vals = {
+                'name': line.name or line.product_id.name,
+                'product_qty': line.qty,
+                'product_id': line.product_id.id,
+                'product_uom': line.product_id.uom_po_id.id,
+                'price_unit': line.pvp_ud,
+                'date_planned': fields.Datetime.now(),
+                # 'taxes_id': [(6, 0, taxes_id.ids)],
+                'taxes_id': [(6, 0, taxes.ids)],
+                'order_id': po.id,
+            }
+            self.env['purchase.order.line'].create(vals)
+
     @api.multi
     def action_confirm(self):
         """
@@ -174,11 +215,14 @@ class SaleOrder(models.Model):
         for order in self:
             # Creo las tareas y producciones asociadas a cada hoja de costes
             sheet_lines = order.get_sheet_lines()
-            sheet_lines.create_productions()
+            sheet_lines.create_sale_productions()
 
             # Creo la lista de materiales asociada al grupo de costes
             group_costs = order.get_group_sheets()
             group_costs.create_bom_on_fly()
+
+            # Creo las compras en borrador, agrupadas por proveedor
+            order.create_sale_purchase()
 
         res = super().action_confirm()
         return res
@@ -187,6 +231,7 @@ class SaleOrder(models.Model):
         res = super().action_cancel()
         self.mapped('project_id.task_ids').unlink()
         self.mapped('project_id').unlink()
+        self.mapped('purchase_ids').unlink()
         for order in self:
             prods = order.get_sheet_lines().mapped('production_id')
             prods.action_cancel()
@@ -194,6 +239,8 @@ class SaleOrder(models.Model):
 
             # boms = self.get_group_sheets().mapped('bom_id')
             # boms.unlink()
+
+
         return res
 
     def duplicate_with_costs(self):

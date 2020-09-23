@@ -13,6 +13,7 @@
         'project',
         'mrp',
         'hr',
+        'purchase',
         'mrp_workorder'
     ],
     'contributors': [

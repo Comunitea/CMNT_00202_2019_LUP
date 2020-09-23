@@ -14,3 +14,4 @@ from . import project
 from . import mrp_production
 from . import stock_quant
 from . import group_production
+from . import purchase
