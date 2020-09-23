@@ -680,10 +680,10 @@ class CostSheet(models.Model):
         project = False
         if design_sheets:
             project = design_sheets.create_design_tasks()
-            if project:
-                oppi_lines = self.mapped('oppi_line_ids').filtered(
-                    lambda x: not x.task_id)
-                oppi_lines.create_oppi_tasks(project)
+            # if project:
+            #     oppi_lines = self.mapped('oppi_line_ids').filtered(
+            #         lambda x: not x.task_id)
+            #     oppi_lines.create_oppi_tasks(project)
         return
 
     @api.multi
