@@ -61,7 +61,7 @@ class GroupCostSheet(models.Model):
                 pu = group.line_pvp / group.sale_line_id.product_uom_qty
 
             if group.sale_id and group.sale_id.state in (
-                    'draft', 'sent', 'design'):
+                    'draft', 'sent'):
                 group.sale_line_id.write({'price_unit': pu})
 
     @api.depends('sheet_ids')
@@ -836,7 +836,7 @@ class CostSheet(models.Model):
         return bom
 
     def create_productions(self):
-        mrp_types = ['fdm','sls', 'poly', 'sla', 'sls2', 'dmls']
+        mrp_types = ['fdm', 'sls', 'poly', 'sla', 'sls2', 'dmls']
         for sheet in self.filtered(lambda sh: sh.sheet_type in mrp_types):
             product = sheet.create_product_on_fly()
             bom = sheet.create_bom_on_fly(product)
