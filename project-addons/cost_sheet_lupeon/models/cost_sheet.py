@@ -174,6 +174,7 @@ class CostSheet(models.Model):
     printer_id = fields.Many2one('printer.machine', 'Impresora')
 
     # [ALL] COSTE MANO DE OBRA
+    calc_material_id = fields.Many2one('product.product', 'Material FDM principal')
     workforce_cost_ids = fields.One2many(
         'workforce.cost.line', 'sheet_id', string='Coste Mano de obra',
         copy=True)
@@ -363,9 +364,9 @@ class CostSheet(models.Model):
         elif self.cus_units > 0:
             self.inspection_type = 'visual'
 
-    @api.onchange('sheet_type', 'material_cost_ids.material_id', 'machine_hours', 'printer_id')
+    @api.onchange('sheet_type', 'calc_material_id', 'machine_hours', 'printer_id')
+    # @api.onchange('sheet_type', 'material_cost_ids.material_id', 'machine_hours', 'printer_id')
     def onchange_sheet_type(self):
-        # import ipdb; ipdb.set_trace()
         if not self.sheet_type or self.sheet_type in ['unplanned', 'meets', 'purchase']:
             return
         # options =  ['Horas Técnico', 'Horas Diseño', 'Horas Posprocesado']
@@ -387,15 +388,17 @@ class CostSheet(models.Model):
             material = False
             maq_hours = 0.0
             if self.material_cost_ids:
-                material = self.material_cost_ids[0].material_id
+                # material = self.material_cost_ids[0].material_id
+                material = self.calc_material_id
                 tray_hours = self.tray_hours
                 if self.sheet_type == 'sls':
                     tray_hours = self.tray_hours_sls
                 if self.cus_units:
                     maq_hours = self.machine_hours
                     maq_hours = (tray_hours / self.tray_units) * self.cus_units
-            if name == 'Horas Técnico' and material:
-                if self.sheet_type == 'fdm':
+            if name == 'Horas Técnico':
+                # import ipdb; ipdb.set_trace()
+                if self.sheet_type == 'fdm' and material:
                     hours = (5/60) + (maq_hours * self.printer_id.machine_hour * material.factor_hour)
                 if self.sheet_type in ['sls', 'poly', 'sla', 'sls2', 'dmls']:
                     hours = (5/60) + (maq_hours * self.printer_id.machine_hour)

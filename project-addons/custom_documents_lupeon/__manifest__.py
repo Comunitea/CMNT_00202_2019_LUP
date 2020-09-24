@@ -15,7 +15,8 @@
         'web',
         'custom_lupeon',
         'account_due_dates_str',
-        'stock_picking_report_valued'
+        'stock_picking_report_valued',
+        'web_gantt'
     ],
     'data': [
         'views/sale_view.xml',
