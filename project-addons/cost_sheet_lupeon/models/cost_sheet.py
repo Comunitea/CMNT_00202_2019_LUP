@@ -863,13 +863,19 @@ class CostSheet(models.Model):
             prod.onchange_product_id()
             prod.button_plan()
             prod.workorder_ids.write({
-                'duration_expected': sheet.machine_hours * 60,
+                # 'duration_expected': sheet.machine_hours * 60,
                 'date_planned_start': 
                 sheet.sale_line_id.order_id.production_date,
                 'date_planned_finished': 
-                sheet.sale_line_id.order_id.production_date + 
+                sheet.sale_line_id.order_id.production_date +
                 timedelta(hours=3),
             })
+
+            # Escribir duraccion esperada en la oppi
+            for oppi in sheet.oppi_line_ids:
+                wo = prod.workorder_ids.filtered(lambda w: w.name == oppi.name)
+                if wo:
+                    wo.duration_expected = oppi.time * 60
             sheet.write({'production_id': prod.id})
         return
 

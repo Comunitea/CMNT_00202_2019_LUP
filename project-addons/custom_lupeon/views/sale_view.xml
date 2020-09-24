@@ -29,9 +29,10 @@
                 <field name="rejected_reason" attrs="{'invisible': [('rejected', '=', False)]}"/>
             </field>
 
-            <!-- <field name="commitment_date" position="attributes">
-                <attribute name="attrs">{'required': [('state', 'in', ('draft', 'sent')), ('company_id', '=', 1)]}</attribute>
-            </field> -->
+            <field name="commitment_date" position="attributes">
+                <!-- <attribute name="attrs">{'required': [('state', 'in', ('draft', 'sent')), ('company_id', '=', 1)]}</attribute> -->
+                <attribute name="attrs">{'readonly': [('state', 'not in', ('draft', 'design', 'sent'))]}</attribute>
+            </field>
 
         </field>
     </record>
