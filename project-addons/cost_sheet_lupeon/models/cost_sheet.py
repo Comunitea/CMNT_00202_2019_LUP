@@ -160,7 +160,7 @@ class CostSheet(models.Model):
     disc2 = fields.Float('Descuento adicional (%)')
     increment = fields.Float('Incremento no estándar (%)')
     inspection_type = fields.Selection(
-        [('visual', 'Visual'), ('tech', 'TechniTécnicacal')],
+        [('visual', 'Visual'), ('tech', 'Técnica')],
         string="Tipo de inspeción", default="visual")
     price_unit = fields.Float('PVP unidad', compute='_get_cost_prices')
     price_total = fields.Float('PVP TOTAL', compute='_get_cost_prices')
@@ -168,7 +168,7 @@ class CostSheet(models.Model):
 
     # DATOS PIEZA
     cus_units = fields.Integer('Uds. Cliente')
-    cc_ud = fields.Integer('cc ud')
+    cc_ud = fields.Float('cc ud')
     euros_cc = fields.Float('€/cc', compute='get_euros_cc_fdm')
 
     printer_id = fields.Many2one('printer.machine', 'Impresora')
@@ -365,7 +365,7 @@ class CostSheet(models.Model):
 
     @api.onchange('sheet_type', 'material_cost_ids.material_id', 'machine_hours', 'printer_id')
     def onchange_sheet_type(self):
-
+        # import ipdb; ipdb.set_trace()
         if not self.sheet_type or self.sheet_type in ['unplanned', 'meets', 'purchase']:
             return
         # options =  ['Horas Técnico', 'Horas Diseño', 'Horas Posprocesado']
