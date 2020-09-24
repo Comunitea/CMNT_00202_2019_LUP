@@ -836,7 +836,7 @@
         <field name="view_mode">tree,form</field>
     </record>
 
-    <menuitem id="menu_product_cost_sheets" action="action_product_cost_sheets"  name="Grupos de costes" parent="menu_cost_sheets" sequence="0"/>
+    <menuitem id="menu_product_cost_sheets" action="action_product_cost_sheets"  name="Grupos de costes" parent="menu_cost_sheets" sequence="1"/>
 
     <!-- Vistas de campos One2many -->
     <record id="cost_material_line_view_tree" model="ir.ui.view">

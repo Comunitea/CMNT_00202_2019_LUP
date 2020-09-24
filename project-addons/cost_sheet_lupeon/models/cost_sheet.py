@@ -884,7 +884,8 @@ class DesignTimeLine(models.Model):
 
     _name = 'design.time.line'
 
-    sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
+    sheet_id = fields.Many2one(
+        'cost.sheet', 'Hoja de coste', ondelete="cascade")
     software_id = fields.Many2one('design.software', 'Software')
     hours = fields.Float('Horas')
     price_hour = fields.Float('€/h')
@@ -918,7 +919,8 @@ class MaterialCostLine(models.Model):
     total = fields.Float('Total', compute='_compute_cost')
 
     # FDM
-    sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
+    sheet_id = fields.Many2one(
+        'cost.sheet', 'Hoja de coste', ondelete="cascade")
     diameter = fields.Float('Diámetro')
     color = fields.Char('Color')
     tray_meters = fields.Float('Metros Bandeja')
@@ -1061,7 +1063,8 @@ class WorkforceCostLine(models.Model):
 
     _name = 'workforce.cost.line'
 
-    sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
+    sheet_id = fields.Many2one(
+        'cost.sheet', 'Hoja de coste', ondelete="cascade")
     name = fields.Char('Nombre')
     hours = fields.Float('Horas')
     minutes = fields.Float('Minutos', compute="compute_workforce_totals")
@@ -1091,7 +1094,8 @@ class OutsorcingCostLine(models.Model):
 
     _name = 'outsorcing.cost.line'
 
-    sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
+    sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste',
+                               ondelete="cascade")
 
     name = fields.Char('Tarea')
     cost = fields.Float('Coste')
@@ -1108,7 +1112,8 @@ class MeetCostLine(models.Model):
 
     _name = 'meet.cost.line'
 
-    sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
+    sheet_id = fields.Many2one(
+        'cost.sheet', 'Hoja de coste', ondelete="cascade")
     type = fields.Selection([('visit', 'Visita'), ('meets', 'Reunión'),
                              ('call', 'Conferencia')], 'Tipo', default='visit')
     name = fields.Char('Nombre')
@@ -1152,7 +1157,8 @@ class PurchaseCostLine(models.Model):
 
     _name = 'purchase.cost.line'
 
-    sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
+    sheet_id = fields.Many2one(
+        'cost.sheet', 'Hoja de coste', ondelete="cascade")
 
     product_id = fields.Many2one('product.product', 'Producto')
     name = fields.Char('Ref. / Descripción')
@@ -1187,7 +1193,8 @@ class OppiCostLine(models.Model):
 
     _name = 'oppi.cost.line'
 
-    sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste')
+    sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste',
+                               ondelete="cascade")
 
     name = fields.Char('Descripción', required=True)
     type = fields.Many2one('oppi.type', 'Tipo', required=True)
