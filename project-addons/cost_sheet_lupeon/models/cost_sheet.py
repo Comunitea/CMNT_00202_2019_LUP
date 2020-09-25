@@ -889,10 +889,10 @@ class CostSheet(models.Model):
                     duration = oppi.time
                 wo.write({
                     'duration_expected': duration * 60,
-                    'date_planned_start':
-                    sheet.sale_line_id.order_id.production_date,
                     'date_planned_finished':
-                    sheet.sale_line_id.order_id.production_date +
+                    sheet.sale_line_id.order_id.production_date,
+                    'date_planned_start':
+                    sheet.sale_line_id.order_id.production_date -
                     timedelta(hours=duration),
                 })
             sheet.write({'production_id': prod.id})
