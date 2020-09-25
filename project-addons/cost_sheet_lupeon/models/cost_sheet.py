@@ -873,20 +873,28 @@ class CostSheet(models.Model):
             prod = self.env['mrp.production'].create(vals)
             prod.onchange_product_id()
             prod.button_plan()
-            prod.workorder_ids.write({
-                # 'duration_expected': sheet.machine_hours * 60,
-                'date_planned_start': 
-                sheet.sale_line_id.order_id.production_date,
-                'date_planned_finished': 
-                sheet.sale_line_id.order_id.production_date +
-                timedelta(hours=3),
-            })
 
-            # Escribir duraccion esperada en la oppi
-            for oppi in sheet.oppi_line_ids:
-                wo = prod.workorder_ids.filtered(lambda w: w.name == oppi.name)
-                if wo:
-                    wo.duration_expected = oppi.time * 60
+            # PLANIFICACIÓN TIEMPOS
+            # Horás técnico a la orden de trabajo de impresión y
+            # las oppis cogen su propia duración
+            tech_line = sheet.workforce_cost_ids.filtered(
+                lambda x: x.name == 'Horas Técnico'
+            )
+            duration = tech_line.hours if tech_line else 0
+
+            for wo in prod.workorder_ids:
+                oppi = sheet.oppi_line_ids.filtered(
+                    lambda o: wo.name == o.name)
+                if oppi:
+                    duration = oppi.time
+                wo.write({
+                    'duration_expected': duration * 60,
+                    'date_planned_start':
+                    sheet.sale_line_id.order_id.production_date,
+                    'date_planned_finished':
+                    sheet.sale_line_id.order_id.production_date +
+                    timedelta(hours=duration),
+                })
             sheet.write({'production_id': prod.id})
         return
 

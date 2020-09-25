@@ -29,19 +29,17 @@
                 <field name="rejected_reason" attrs="{'invisible': [('rejected', '=', False)]}"/>
             </field>
 
-            <field name="commitment_date" position="attributes">
-                <!-- <attribute name="attrs">{'required': [('state', 'in', ('draft', 'sent')), ('company_id', '=', 1)]}</attribute> -->
-                <!-- <attribute name="attrs">{'readonly': [('state', 'not in', ('draft', 'design', 'sent'))]}</attribute> -->
-                <attribute name="invisible">1</attribute>
+            <field name="commitment_date" position="replace">
             </field>
+          
 
-            <field name="client_order_ref" position="attributes">
-                <attribute name="invisible">1</attribute>
+            <field name="client_order_ref" position="replace">
             </field>
+           
 
-             <field name="confirmation_date" position="after">
-                <field name="commitment_date"/>
-                <field name="production_date"/>
+            <field name="confirmation_date" position="after">
+                <field name="commitment_date" attrs="{'readonly': [('state', 'not in', ('draft', 'design', 'sent'))]}"/>
+                <field name="production_date" attrs="{'invisible': [('company_id', '!=', 1)], 'readonly': [('state', 'not in', ('draft', 'design', 'sent'))]}"/>
                 <field name="client_order_ref"/>
             </field>
 
