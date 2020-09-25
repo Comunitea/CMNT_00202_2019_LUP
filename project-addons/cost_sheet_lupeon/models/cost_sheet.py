@@ -118,6 +118,17 @@ class GroupCostSheet(models.Model):
 
         return bom
 
+    @api.model
+    def create(self, vals):
+        res = super().create(vals)
+        res.update_sale_line_price()
+        return res
+
+    def write(self, vals):
+        res = super().write(vals)
+        self.update_sale_line_price()
+        return res
+
 
 class CostSheet(models.Model):
 
