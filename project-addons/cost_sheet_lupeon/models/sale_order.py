@@ -334,3 +334,11 @@ class SaleOrderLine(models.Model):
 
         res = super().copy_data(default)
         return res
+
+    @api.multi
+    def _get_display_price(self, product):
+        res = super()._get_display_price(product)
+        if product.custom_mrp_ok and self.group_sheet_id and \
+                self.product_uom_qty:
+            res = self.group_sheet_id.line_pvp / self.product_uom_qty
+        return res

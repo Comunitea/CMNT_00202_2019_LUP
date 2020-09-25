@@ -935,8 +935,8 @@
                     </group>
                     <group string="Precios">
                         <group>
-                                <field name="cost_init" attrs="{'invisible': [('sheet_type', 'in', ['fdm', 'dmls', 'unnplaned', 'meets'])]}"/>
-                                <field name="cost_init_computed"  attrs="{'invisible': [('sheet_type', 'not in', ['fdm', 'dmls'])]}"/>
+                                <field name="cost_init" attrs="{'invisible': [('sheet_type', 'in', ['dmls', 'unnplaned', 'meets'])]}"/>
+                                <field name="cost_init_computed"  attrs="{'invisible': [('sheet_type', 'not in', ['dmls'])]}"/>
                                 <field name="cost_ud" attrs="{'invisible': [('sheet_type', 'in', ['unnplaned', 'meets'])]}"/>
                                 <field name="admin_fact" attrs="{'invisible': [('sheet_type', 'in', ['unnplaned', 'meets'])]}" groups="cost_sheet_lupeon.group_cs_advanced"/>
                                 <field name="use_disc_qty"  attrs="{'invisible': [('sheet_type', 'not in', ['fdm', 'sls', 'sls2', 'poly', 'sla', 'dmls'])]}"/> 

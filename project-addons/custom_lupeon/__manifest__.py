@@ -10,7 +10,8 @@
     "license": "AGPL-3",
     "depends": ["product", "sale_stock", "delivery", "account_payment", 
                 "sale_margin", "sale_order_margin_percent", "stock_barcode",
-                "stock", "account", "custom_prestashop", "l10n_es_facturae"],
+                "stock", "account", "custom_prestashop", "l10n_es_facturae",
+                "cost_sheet_lupeon"],
     "data": [
         'views/partner_view.xml',
         'views/sale_view.xml',
