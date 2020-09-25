@@ -31,7 +31,18 @@
 
             <field name="commitment_date" position="attributes">
                 <!-- <attribute name="attrs">{'required': [('state', 'in', ('draft', 'sent')), ('company_id', '=', 1)]}</attribute> -->
-                <attribute name="attrs">{'readonly': [('state', 'not in', ('draft', 'design', 'sent'))]}</attribute>
+                <!-- <attribute name="attrs">{'readonly': [('state', 'not in', ('draft', 'design', 'sent'))]}</attribute> -->
+                <attribute name="invisible">1</attribute>
+            </field>
+
+            <field name="client_order_ref" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+
+             <field name="confirmation_date" position="after">
+                <field name="commitment_date"/>
+                <field name="production_date"/>
+                <field name="client_order_ref"/>
             </field>
 
         </field>
