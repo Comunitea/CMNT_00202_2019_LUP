@@ -112,6 +112,7 @@ class GroupCostSheet(models.Model):
                 'type': 'normal',
                 'bom_line_ids': components,
                 'ready_to_produce': 'all_available',
+                'created_on_fly': True
             }
             bom = self.env['mrp.bom'].create(vals)
             group.bom_id = bom.id
@@ -713,27 +714,6 @@ class CostSheet(models.Model):
             production_sheets.create_productions()
         return
 
-    # @api.multi
-    # def create_task_or_production(self):
-    #     """
-    #     Create a task if sheet type is design, or if exist oppi line
-    #     or a production for each sheet.
-    #     """
-    #     design_sheets = self.filtered(lambda s: s.sheet_type == 'design')
-    #     production_sheets = self - design_sheets
-
-    #     project = False
-    #     if design_sheets:
-    #         project = design_sheets.create_tasks()
-    #         if project:
-    #             oppi_lines = self.mapped('oppi_line_ids').filtered(
-    #                 lambda x: not x.task_id)
-    #             oppi_lines.create_oppi_tasks(project)
-
-    #     if production_sheets:
-    #         production_sheets.create_productions()
-    #     return
-
     @api.multi
     def manually_create_task_or_production(self):
         """
@@ -791,9 +771,11 @@ class CostSheet(models.Model):
             'type': 'product',
             'lst_price': self.price_total,
             'route_ids': [(6, 0, self.env.ref('mrp.route_warehouse0_manufacture').ids)],
-            'active': False
+            'active': False,
+            'created_on_fly': True
         }
         product = self.env['product.product'].create(vals)
+        product.product_tmpl_id.active = False
         self.product_id = product.id
         return product
 
@@ -831,6 +813,8 @@ class CostSheet(models.Model):
                 vals = {
                     'name': oppi.name or '/',
                     'workcenter_id': oppi.type.workcenter_id.id,
+                    'created_on_fly': True,
+                    'active': False,
                 }
                 values.append((0, 0, vals))
             new_routing.write({'operation_ids': values})
@@ -849,11 +833,43 @@ class CostSheet(models.Model):
             'type': 'normal',
             'bom_line_ids': components,
             'routing_id': routing and routing.id or False,
-            'ready_to_produce': 'all_available'
+            'ready_to_produce': 'all_available',
+            'created_on_fly': True
         }
         bom = self.env['mrp.bom'].create(vals)
 
         return bom
+
+    def update_workorders(self, prod):
+        """
+        PLANIFICACIÓN TIEMPOS
+        Horas técnico a la orden de trabajo de impresión y
+        las oppis cogen su propia duración
+        """
+        self.ensure_one()
+        tech_line = self.workforce_cost_ids.filtered(
+                lambda x: x.name == 'Horas Técnico'
+            )
+        duration = tech_line.hours if tech_line else 0
+
+        for wo in prod.workorder_ids:
+            oppi = self.oppi_line_ids.filtered(
+                lambda o: wo.name == o.name)
+            if oppi:
+                duration = oppi.time
+                vals = {
+                    'duration_expected': duration * 60,
+                    'date_planned_finished':
+                    self.sale_line_id.order_id.production_date,
+                    'date_planned_start':
+                    self.sale_line_id.order_id.production_date -
+                    timedelta(hours=duration),
+                }
+                if oppi.e_partner_id:
+                    vals.update(e_partner_id= oppi.e_partner_id.id)
+                    
+                wo.write(vals)
+        self.write({'production_id': prod.id})
 
     def create_productions(self):
         mrp_types = ['fdm', 'sls', 'poly', 'sla', 'sls2', 'dmls']
@@ -874,29 +890,7 @@ class CostSheet(models.Model):
             prod = self.env['mrp.production'].create(vals)
             prod.onchange_product_id()
             prod.button_plan()
-
-            # PLANIFICACIÓN TIEMPOS
-            # Horás técnico a la orden de trabajo de impresión y
-            # las oppis cogen su propia duración
-            tech_line = sheet.workforce_cost_ids.filtered(
-                lambda x: x.name == 'Horas Técnico'
-            )
-            duration = tech_line.hours if tech_line else 0
-
-            for wo in prod.workorder_ids:
-                oppi = sheet.oppi_line_ids.filtered(
-                    lambda o: wo.name == o.name)
-                if oppi:
-                    duration = oppi.time
-                wo.write({
-                    'duration_expected': duration * 60,
-                    'date_planned_finished':
-                    sheet.sale_line_id.order_id.production_date,
-                    'date_planned_start':
-                    sheet.sale_line_id.order_id.production_date -
-                    timedelta(hours=duration),
-                })
-            sheet.write({'production_id': prod.id})
+            sheet.update_workorders(prod)
         return
 
 
@@ -1223,6 +1217,7 @@ class OppiCostLine(models.Model):
     employee_id = fields.Many2one('hr.employee', 'Empleado')
     task_id = fields.Many2one('project.task', 'Task', readonly=True,  
                               copy=False)
+    e_partner_id = fields.Many2one('res.partner', 'Externalización')
 
     def create_oppi_tasks(self, project):
         for line in self:

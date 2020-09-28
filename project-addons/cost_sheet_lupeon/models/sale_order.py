@@ -257,6 +257,7 @@ class SaleOrder(models.Model):
         res = super().action_cancel()
         self.mapped('project_id.task_ids').unlink()
         self.mapped('project_id').unlink()
+        self.mapped('purchase_ids').button_cancel()
         self.mapped('purchase_ids').unlink()
         for order in self:
             prods = order.get_sheet_lines().mapped('production_id')

@@ -890,10 +890,11 @@
         <field name="arch" type="xml">
             <tree editable="bottom">
                 <field name="name"/>
+                <field name="e_partner_id" domain="[('supplier', '=', True)]"/>
                 <field name="type"/>
                 <field name="time"/>
-                <field name="employee_id"/>
-                <field name="task_id"/>
+                <!-- <field name="employee_id"/> -->
+                <!-- <field name="task_id"/> -->
                 <field name="time_real"/>
             </tree>
         </field>

@@ -16,3 +16,5 @@ from . import mrp_workorder
 from . import stock_quant
 from . import group_production
 from . import purchase
+from . import mrp_bom
+from . import mrp_routing

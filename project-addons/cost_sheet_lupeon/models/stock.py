@@ -25,6 +25,11 @@ class StockMove(models.Model):
             })
         return values
 
+class StockLocation(models.Model):
+    _inherit = 'stock.location'
+
+    external_location = fields.Boolean('Ubicación externalización')
+
 
 class StockRule(models.Model):
     _inherit = 'stock.rule'

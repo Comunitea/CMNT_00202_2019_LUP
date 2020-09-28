@@ -10,6 +10,7 @@
             <!-- Tampoco quiero que se oculte el botón de registrar produccion si no tengo hechos los checks de calidad -->
             <button name="record_production" position="replace">
                 <!-- <button name="record_production" type="object" string="Done" class="btn-success" attrs="{'invisible': ['|', '|', ('state', '!=', 'progress'), ('is_user_working', '=', False), ('quality_check_todo','=', True)]}"/> -->
+                <button name="create_pickings" type="object" string="Generar albaranes"  attrs="{'invisible': ['|', ('e_partner_id', '=', False), ('out_pick_id', '!=', False)]}"/>
                 <button name="record_production" type="object" string="Done" class="btn-success" attrs="{'invisible': ['|', ('state', '!=', 'progress'), ('is_user_working', '=', False)]}"/>
                 <field name="quality_check_todo" invisible="1"/>
             </button>
@@ -37,6 +38,13 @@
                             <field name="result"/>
                         </tree>
                     </field>
+                </page>
+                <page string="Externalización">
+                    <group>
+                        <field name="e_partner_id"/>
+                        <field name="out_pick_id"/>
+                        <field name="in_pick_id"/>
+                    </group>
                 </page>
             </notebook>
 
