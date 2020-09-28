@@ -10,3 +10,7 @@ class MrpWorkorder(models.Model):
 
     sheet_id = fields.Many2one(
         'cost.sheet', 'Cost Sheet', related='production_id.sheet_id')
+
+    # No quiero que cree checks de calidad
+    def _create_checks(self):
+        return

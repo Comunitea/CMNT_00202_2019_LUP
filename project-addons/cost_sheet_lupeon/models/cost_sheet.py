@@ -408,7 +408,6 @@ class CostSheet(models.Model):
                     maq_hours = self.machine_hours
                     maq_hours = (tray_hours / self.tray_units) * self.cus_units
             if name == 'Horas Técnico':
-                # import ipdb; ipdb.set_trace()
                 if self.sheet_type == 'fdm' and material:
                     hours = (5/60) + (maq_hours * self.printer_id.machine_hour * material.factor_hour)
                 if self.sheet_type in ['sls', 'poly', 'sla', 'sls2', 'dmls']:
@@ -798,15 +797,17 @@ class CostSheet(models.Model):
         self.product_id = product.id
         return product
 
-    def create_components_on_fly(self):
+    def create_components_on_fly(self, routing):
         self.ensure_one()
         res = []
+        operation = routing.operation_ids[0].id if routing.operation_ids \
+            else False
         for line in self.material_cost_ids.filtered('material_id'):
             vals = {
                 'product_id': line.material_id.id,
                 'product_qty': line.get_bom_qty(),  # TODO review,
                 'product_uom_id': line.material_id.uom_id.id,
-                'operation_id': False,
+                'operation_id': operation,
             }
             res.append((0,0, vals))
 
@@ -815,7 +816,7 @@ class CostSheet(models.Model):
                 'product_id': line.product_id.id,
                 'product_qty': line.qty,
                 'product_uom_id': line.product_id.uom_id.id,
-                'operation_id': False,
+                'operation_id': operation,
             }
             res.append((0,0, vals))
         return res
@@ -838,8 +839,8 @@ class CostSheet(models.Model):
 
     def create_bom_on_fly(self, product):
         self.ensure_one()
-        components = self.create_components_on_fly()
         routing = self.get_routing_on_fly()
+        components = self.create_components_on_fly(routing)
         vals = {
             'product_id': product.id,
             'product_tmpl_id': product.product_tmpl_id.id,

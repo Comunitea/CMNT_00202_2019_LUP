@@ -7,8 +7,10 @@
         <field name="model">mrp.workorder</field>
         <field name="inherit_id" ref="mrp.mrp_production_workorder_form_view_inherit"/>
         <field name="arch" type="xml">
+            <!-- Tampoco quiero que se oculte el botón de registrar produccion si no tengo hechos los checks de calidad -->
             <button name="record_production" position="replace">
-                <button name="record_production" type="object" string="Done" class="btn-success" attrs="{'invisible': ['|', '|', ('state', '!=', 'progress'), ('is_user_working', '=', False), ('quality_check_todo','=', True)]}"/>
+                <!-- <button name="record_production" type="object" string="Done" class="btn-success" attrs="{'invisible': ['|', '|', ('state', '!=', 'progress'), ('is_user_working', '=', False), ('quality_check_todo','=', True)]}"/> -->
+                <button name="record_production" type="object" string="Done" class="btn-success" attrs="{'invisible': ['|', ('state', '!=', 'progress'), ('is_user_working', '=', False)]}"/>
                 <field name="quality_check_todo" invisible="1"/>
             </button>
             <!-- <xpath expr="//header" position="replace">
