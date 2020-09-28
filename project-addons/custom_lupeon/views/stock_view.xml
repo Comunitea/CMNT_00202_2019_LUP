@@ -33,7 +33,7 @@
                 <filter name="ready_to_pick" string="No proforma" domain="['|', ('sale_id', '=', False), ('sale_id.state','in', ['sale', 'done'])]" help="Pickings ready to execute"/>
                 <filter name="reserved" string="Reserved " domain="[('sale_id', '!=', False), ('sale_id.state','in', ['draft', 'sent'])]" help="Pickings with reserve from sales"/>
                 <separator/>
-                <filter name="not_blocked" string="Sin bloqueo" domain="['|', ('sale_id', '=', False), '&amp;', ('sale_id.prestashop_state.pending_payment','!=', True), ('delivery_blocked','!=', True)]" help="Pickings not blocked from sales"/>
+                <filter name="not_blocked" string="Sin bloqueo" domain="['|', '|', ('sale_id', '=', False), ('sale_id.prestashop_state', '=', 'False'), '&amp;', ('sale_id.prestashop_state.pending_payment','!=', True), ('delivery_blocked','!=', True)]" help="Pickings not blocked from sales"/>
             </field>
         </field>
     </record>
