@@ -813,11 +813,13 @@ class CostSheet(models.Model):
                 vals = {
                     'name': oppi.name or '/',
                     'workcenter_id': oppi.type.workcenter_id.id,
-                    'created_on_fly': True,
-                    'active': False,
                 }
                 values.append((0, 0, vals))
-            new_routing.write({'operation_ids': values})
+            new_routing.write({
+                'operation_ids': values,
+                'created_on_fly': True,
+                'active': False,
+            })
             res = new_routing
         return res
 
