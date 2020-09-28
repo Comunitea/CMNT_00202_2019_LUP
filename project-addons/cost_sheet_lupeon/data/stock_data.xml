@@ -32,7 +32,7 @@
         </record>
 
         <record id="externalization_in" model="stock.picking.type">
-            <field name="name">Recepción externalizaciónm</field>
+            <field name="name">Recepción externalización</field>
             <field name="sequence_id" ref="seq_externalization_in"/>
             <field name="default_location_src_id" ref="location_externalization"/>
             <field name="default_location_dest_id" ref="stock.stock_location_stock"/>
