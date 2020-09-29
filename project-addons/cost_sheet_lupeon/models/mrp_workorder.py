@@ -109,4 +109,4 @@ class MachineTime(models.Model):
     _name = "machine.time"
 
     workorder_id = fields.Many2one('mrp.workorder')
-    time = fields.Float('Machine time')
+    time = fields.Float('Horas máquina')

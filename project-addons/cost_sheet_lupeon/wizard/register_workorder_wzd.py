@@ -8,8 +8,9 @@ class RegisterWorkorderWizard(models.TransientModel):
 
     @api.model
     def default_get(self, default_fields):
+        wo = self.env['mrp.workorder'].browse(self._context.get('active_id'))
         res = super().default_get(default_fields)
-        res['qty'] = 1
+        res['qty'] = wo.qty_producing
         return res
 
     qty = fields.Float('Cantidad hecha', required=True)
