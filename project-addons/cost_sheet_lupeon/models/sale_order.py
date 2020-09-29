@@ -245,7 +245,7 @@ class SaleOrder(models.Model):
 
             # Creo la lista de materiales asociada al grupo de costes
             group_costs = order.get_group_sheets()
-            group_costs.create_bom_on_fly()
+            group_costs.create_group_bom_on_fly()
 
             # Creo las compras en borrador, agrupadas por proveedor
             order.create_sale_purchase()

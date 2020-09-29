@@ -20,117 +20,6 @@ SHEET_TYPES = [
 ]
 
 
-class GroupCostSheet(models.Model):
-
-    _name = 'group.cost.sheet'
-    _rec_name = 'sale_line_id'
-
-    # display_name = fields.Char('Name', readonly="True")
-    sale_line_id = fields.Many2one('sale.order.line', 'Línea de venta',
-                                   readonly=False, copy=False)
-    sale_id = fields.Many2one(
-        'sale.order', 'Pedido de venta',
-        related='sale_line_id.order_id', store=True, readonly=True)
-    product_id = fields.Many2one(
-        'product.product', 'Producto',
-        related='sale_line_id.product_id')
-    admin_fact = fields.Float('Factor administrativo (%)')
-
-    ing_hours = fields.Integer('Horas ingenieria', default=55)
-    tech_hours = fields.Integer('Horas técnico', default=35)
-    help_hours = fields.Integer('Horas ayudante', default=35)
-    km_cost = fields.Float('Coste Km', default=0.30)
-    sheet_ids = fields.One2many(
-        'cost.sheet', 'group_id', string='Cost Sheets', copy=True)
-    line_pvp = fields.Float('PVP Línea', compute='_get_line_pvp')
-    bom_id = fields.Many2one('mrp.bom', 'LdM', readonly=True,  copy=False)
-
-    def name_get(self):
-        res = []
-        for sheet in self:
-            res.append((sheet.id, ("[%s] %s") %
-                       (sheet.sale_line_id.order_id.name,
-                        sheet.sale_line_id.name)))
-        return res
-
-    def update_sale_line_price(self):
-        for group in self:
-            pu = group.line_pvp
-            # Divido el precio entre el numero de unidades para obtener el
-            # pvp unitario de verdad
-            if group.sale_line_id.product_uom_qty:
-                pu = group.line_pvp / group.sale_line_id.product_uom_qty
-
-            if group.sale_id and group.sale_id.state in (
-                    'draft', 'sent'):
-                group.sale_line_id.write({'price_unit': pu})
-
-    @api.depends('sheet_ids')
-    def _get_line_pvp(self):
-        for group in self:
-            group.line_pvp = sum([x.price_total for x in group.sheet_ids])
-
-    def create_components_on_fly(self):
-        """
-        Obtengo los componentes de la lista de materiales que irá
-        asociada al grupo de costes (por lo tanto a la línea de venta)
-        """
-        self.ensure_one()
-        res = []
-        mrp_types = ['fdm','sls', 'poly', 'sla', 'sls2', 'dmls']
-        for sh in self.sheet_ids.filtered(
-                lambda sh: sh.sheet_type in mrp_types):
-            if not sh.product_id:
-                print('error')
-                continue
-            vals = {
-                'product_id': sh.product_id.id,
-                'product_qty': sh.cus_units,  # TODO review,
-                'product_uom_id': sh.product_id.uom_id.id,
-                'operation_id': False,
-            }
-            res.append((0,0, vals))
-        return res
-
-    def create_bom_on_fly(self):
-        """
-        Creo la LdM asociada y la asocio al grupo de costes para poder luego
-        pasarla en el values del método _prepare_procurement_values de la
-        línea de venta, para que se me cree la producción bajo pedido con
-        esta lísta de materiales.
-        """
-        bom = False
-        for group in self:
-            line = group.sale_line_id
-            components = group.create_components_on_fly()
-            vals = {
-                'product_id': line.product_id.id,
-                'product_tmpl_id': line.product_id.product_tmpl_id.id,
-                'product_qty': line.product_uom_qty,
-                'product_uom_id': line.product_uom.id,
-                'routing_id': False,  # esta no lleva ruta,
-                'type': 'normal',
-                'bom_line_ids': components,
-                'ready_to_produce': 'all_available',
-                'created_on_fly': True
-            }
-            bom = self.env['mrp.bom'].create(vals)
-            group.bom_id = bom.id
-
-        return bom
-
-    @api.model
-    def create(self, vals):
-        res = super().create(vals)
-        res.update_sale_line_price()
-        return res
-
-    def write(self, vals):
-        res = super().write(vals)
-        self.update_sale_line_price()
-        return res
-
-
 class CostSheet(models.Model):
 
     _name = 'cost.sheet'
@@ -870,7 +759,6 @@ class CostSheet(models.Model):
                 }
                 if oppi.e_partner_id:
                     vals.update(e_partner_id= oppi.e_partner_id.id)
-                    
                 wo.write(vals)
         self.write({'production_id': prod.id})
 

@@ -803,6 +803,16 @@
                             </tree>
                         </field>
                     </group>
+                    <group colespan="4" string="Ensamblaje">
+                        <field name="assembly_ids" nolabel="1">
+                            <tree create="1" editable="bottom">
+                                <field name="name"/>
+                                <field name="type"/>
+                                <field name="time"/>
+                                <field name="total"/>
+                            </tree>
+                        </field>
+                    </group>
                     <group class="oe_subtotal_footer oe_right" colspan="2" name="pvp_total">
                         <field name="line_pvp" widget='monetary'/>
                     </group>
