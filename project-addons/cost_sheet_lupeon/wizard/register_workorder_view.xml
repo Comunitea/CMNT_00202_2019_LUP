@@ -10,7 +10,7 @@
                     </p>
                     <group>
                         <field name="qty"/>
-                        <field name="machine_hours" widget="float_time" required="1"/>
+                        <field name="machine_hours" widget="float_time"/>
                     </group>
                     <footer>
                         <button name="confirm" string="Confirmar" type="object" class="btn-primary"/>

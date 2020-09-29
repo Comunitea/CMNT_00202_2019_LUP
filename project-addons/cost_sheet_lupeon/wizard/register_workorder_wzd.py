@@ -18,10 +18,12 @@ class RegisterWorkorderWizard(models.TransientModel):
     def confirm(self):
         wo = self.env['mrp.workorder'].browse(self._context.get('active_id'))
         wo.qty_producing = self.qty
-        vals = {
-            'workorder_id': wo.id,
-            'time': self.machine_hours
-        }
-        self.env['machine.time'].create(vals)
+
+        if self.machine_hours:
+            vals = {
+                'workorder_id': wo.id,
+                'time': self.machine_hours
+            }
+            self.env['machine.time'].create(vals)
         wo.record_production()
         return
