@@ -71,6 +71,11 @@ class StockPicking(models.Model):
     partner_email = fields.Char('Email', related='partner_id.email')
     
     
+    @api.multi
+    def do_print_picking(self):
+        self.write({'printed': True})
+        return self.env.ref('stock.action_report_delivery').report_action(self)
+    
     @api.depends('sale_id.prestashop_state')
     def _compute_delivered(self):
         for picking in self:
