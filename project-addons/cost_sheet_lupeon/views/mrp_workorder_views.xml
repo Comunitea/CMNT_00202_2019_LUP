@@ -11,7 +11,9 @@
             <button name="record_production" position="replace">
                 <!-- <button name="record_production" type="object" string="Done" class="btn-success" attrs="{'invisible': ['|', '|', ('state', '!=', 'progress'), ('is_user_working', '=', False), ('quality_check_todo','=', True)]}"/> -->
                 <button name="create_pickings" type="object" string="Generar albaranes"  attrs="{'invisible': ['|', ('e_partner_id', '=', False), ('out_pick_id', '!=', False)]}"/>
-                <button name="record_production" type="object" string="Done" class="btn-success" attrs="{'invisible': ['|', ('state', '!=', 'progress'), ('is_user_working', '=', False)]}"/>
+                <button name="%(action_register_workorder_wizard)d" type="action"   class="btn-success" string="Registrar Producción" attrs="{'invisible': ['|', ('state', '!=', 'progress'), ('is_user_working', '=', False)]}"/>
+
+                <!-- <button name="record_production" type="object" string="Done" class="btn-success" attrs="{'invisible': ['|', ('state', '!=', 'progress'), ('is_user_working', '=', False)]}"/> -->
                 <field name="quality_check_todo" invisible="1"/>
             </button>
             <!-- <xpath expr="//header" position="replace">
@@ -27,7 +29,7 @@
                 <field name="quality_check_fail" invisible="1"/>
             </xpath>
             <notebook position="inside">
-                <page string="Finished Steps">
+                <page string="Finished Steps" invisible="1">
                     <field name="check_ids" domain="[('quality_state', '!=', 'none')]" readonly="1">
                         <tree>
                             <field name="quality_state" invisible="1"/>
@@ -38,6 +40,19 @@
                             <field name="result"/>
                         </tree>
                     </field>
+                </page>
+                <page string="Tiempo máqina">
+                    <group  string="Tiempo máqina">
+                        <field name="machine_time_ids" readonly="1" nolabel="1">
+                            <tree>
+                                <field name="create_date"/>
+                                <field name="time" widget="float_time"/>
+                            </tree>
+                        </field>
+                        <group class="oe_subtotal_footer oe_right" colspan="2">
+                            <field name="machine_time" widget="float_time"/>
+                        </group>
+                    </group>
                 </page>
                 <page string="Externalización">
                     <group>

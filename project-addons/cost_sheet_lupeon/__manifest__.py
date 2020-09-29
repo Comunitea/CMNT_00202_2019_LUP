@@ -14,7 +14,7 @@
         'mrp',
         'hr',
         'purchase',
-        'mrp_workorder'
+        'mrp_workorder',
     ],
     'contributors': [
         "Comunitea ",
@@ -25,6 +25,7 @@
         'security/sheet_security.xml',
         'wizard/quality_wizard_view.xml',
         'wizard/group_mrp_wizard_view.xml',
+        'wizard/register_workorder_view.xml',
         'data/sheet_data.xml',
         'data/stock_data.xml',
         'views/sale_view.xml',

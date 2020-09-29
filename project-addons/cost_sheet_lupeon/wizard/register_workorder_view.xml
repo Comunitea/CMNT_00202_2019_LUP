@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="view_register_workorder_wizard" model="ir.ui.view">
+            <field name="name">Register Wizard</field>
+            <field name="model">register.workorder.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <p class="oe_grey">
+                        Yo can register partyally
+                    </p>
+                    <group>
+                        <field name="qty"/>
+                        <field name="machine_hours" widget="float_time" required="1"/>
+                    </group>
+                    <footer>
+                        <button name="confirm" string="Confirmar" type="object" class="btn-primary"/>
+                        <!-- <button name="close_partiall" string="Finalizar parcialmente" type="object" class="btn-warning"/> -->
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_register_workorder_wizard" model="ir.actions.act_window">
+            <field name="name">Register Wizard</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">register.workorder.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+</odoo>

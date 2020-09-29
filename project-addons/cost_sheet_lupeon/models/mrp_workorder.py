@@ -12,11 +12,20 @@ class MrpWorkorder(models.Model):
     sheet_id = fields.Many2one(
         'cost.sheet', 'Cost Sheet', related='production_id.sheet_id')
     e_partner_id = fields.Many2one(
-        'res.partner', 'Proveedor Externalización', readonly=False)
+        'res.partner', 'Proveedor Externalización', readonly=True)
     out_pick_id = fields.Many2one('stock.picking', 'Albarán salida',
-                                   readonly=False)
+                                  readonly=True)
     in_pick_id = fields.Many2one('stock.picking', 'Albarán entrada',
-                                 readonly=False)
+                                 readonly=True)
+    machine_time_ids = fields.One2many('machine.time', 'workorder_id',
+                                       'Machine times')
+    machine_time = fields.Float(
+        'Horas máquina total', compute="_get_machine_time")
+
+    @api.depends('machine_time_ids.time')
+    def _get_machine_time(self):
+        for wo in self:
+            wo.machine_time = sum([x.time for x in wo.machine_time_ids])
 
     # No quiero que cree checks de calidad
     def _create_checks(self):
@@ -93,3 +102,11 @@ class MrpWorkorder(models.Model):
             'out_pick_id': out_pick.id
         })
         return
+
+
+class MachineTime(models.Model):
+
+    _name = "machine.time"
+
+    workorder_id = fields.Many2one('mrp.workorder')
+    time = fields.Float('Machine time')

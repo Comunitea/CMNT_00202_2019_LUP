@@ -4,7 +4,7 @@
             <field name="name">Group Production Wizard</field>
             <field name="model">group.mrp.wizard</field>
             <field name="arch" type="xml">
-                <form string="Invoice Sales Order">
+                <form>
                     <p class="oe_grey">
                         Gropup the selected productions
                     </p>
