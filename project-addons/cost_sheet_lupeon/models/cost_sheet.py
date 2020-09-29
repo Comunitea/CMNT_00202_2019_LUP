@@ -684,6 +684,8 @@ class CostSheet(models.Model):
             res.append((0,0, vals))
 
         for line in self.purchase_line_ids.filtered('product_id'):
+            if line.product_id.type != 'product':
+                continue
             vals = {
                 'product_id': line.product_id.id,
                 'product_qty': line.qty,
