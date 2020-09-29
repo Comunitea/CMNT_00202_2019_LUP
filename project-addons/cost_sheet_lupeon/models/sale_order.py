@@ -298,6 +298,7 @@ class SaleOrderLine(models.Model):
     group_sheet_id = fields.Many2one(
         'group.cost.sheet', 'Grupo de hojas coste', readonly=True)
     ref = fields.Char('Referencia')
+    sample = fields.Boolean('Muestra')
 
     @api.model
     def create(self, vals):
@@ -340,6 +341,6 @@ class SaleOrderLine(models.Model):
     def _get_display_price(self, product):
         res = super()._get_display_price(product)
         if product.custom_mrp_ok and self.group_sheet_id and \
-                self.product_uom_qty:
+                self.product_uom_qty and not self.sample:
             res = self.group_sheet_id.line_pvp / self.product_uom_qty
         return res
