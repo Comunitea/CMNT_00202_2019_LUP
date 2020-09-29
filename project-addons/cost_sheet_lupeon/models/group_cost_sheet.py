@@ -76,8 +76,8 @@ class GroupCostSheet(models.Model):
                 continue
 
             operation_id = False
-            if routing:
-                routing = routing.operation_ids[0].id
+            if routing and routing.operation_ids:
+                operation_id = routing.operation_ids[0].id
             vals = {
                 'product_id': sh.product_id.id,
                 'product_qty': sh.cus_units,  # TODO review,
