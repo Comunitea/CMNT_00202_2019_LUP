@@ -13,6 +13,8 @@ class SaleOrder(models.Model):
                                   compute='_count_sheets')
     sheets_count = fields.Integer(string='Hojas de coste',
                                   compute='_count_sheets')
+    purchase_count = fields.Integer(string='Compras',
+                                    compute='_count_purchases')
     production_count = fields.Integer('Productions',
                                 compute='_count_production_and_task')
     count_task = fields.Integer('Productions',
@@ -20,7 +22,7 @@ class SaleOrder(models.Model):
     project_id = fields.Many2one('project.project', 'Project', readonly=True,
         copy=False)
     production_date = fields.Datetime('Fecha producción')
-     # Sobrescribo del todo para tener el orden correcto en el estado de design
+    # Sobrescribo del todo para tener el orden correcto en el estado de design
     # el statusbar_visible no lo ordena
     state = fields.Selection([
         ('draft', 'Quotation'),
@@ -32,6 +34,9 @@ class SaleOrder(models.Model):
         ], string='Status', readonly=True, copy=False, 
         index=True, track_visibility='onchange', track_sequence=3,
         default='draft')
+
+    purchase_ids = fields.One2many(
+        'purchase.order', 'dest_sale_id', 'Purchases')
 
     @api.multi
     def action_design(self):
@@ -45,14 +50,14 @@ class SaleOrder(models.Model):
     def _onchange_commitment_date(self):
         res = super()._onchange_commitment_date()
         if self.commitment_date:
-            self.production_date = self.commitment_date - timedelta(days=2)
+            self.production_date = self.commitment_date - timedelta(days=3)
         return res
 
     @api.onchange('production_date')
     def _onchange_production_date(self):
         """ Warn if the production date is later than the commitment date """
         if (self.commitment_date and self.production_date and self.commitment_date < self.production_date):
-            self.production_date = self.commitment_date - timedelta(days=2)
+            self.production_date = self.commitment_date - timedelta(days=3)
             return {
                 'warning': {
                     'title': _('Production date is too late.'),
@@ -75,6 +80,11 @@ class SaleOrder(models.Model):
             order.sheets_count = len(order.get_sheet_lines())
 
     @api.multi
+    def _count_purchases(self):
+        for order in self:
+            order.purchase_count = len(order.purchase_ids)
+
+    @api.multi
     def _count_production_and_task(self):
         for order in self:
             boms = order.get_group_sheets().mapped('bom_id')
@@ -84,10 +94,29 @@ class SaleOrder(models.Model):
             order.production_count = len(productions)
             order.count_task = \
                 len(
-                order.get_sheet_lines().mapped('time_line_ids.task_id')) + \
+                    order.get_sheet_lines().
+                    mapped('time_line_ids.task_id')) + \
                 len(
-                order.get_sheet_lines().mapped('oppi_line_ids.task_id')
-                )
+                    order.get_sheet_lines().
+                    mapped('oppi_line_ids.task_id')) + \
+                len(
+                    order.get_sheet_lines().mapped('meet_line_ids.task_id'))
+
+    @api.multi
+    def view_purchases(self):
+        self.ensure_one()
+        action = self.env.ref(
+            'purchase.purchase_form_action').read()[0]
+        if len(self.purchase_ids) > 1:
+            action['domain'] = [('id', 'in', self.purchase_ids.ids)]
+        elif len(self.purchase_ids) == 1:
+            form_view_name = 'purchase.purchase_order_form'
+            action['views'] = [
+                (self.env.ref(form_view_name).id, 'form')]
+            action['res_id'] = self.purchase_ids.ids[0]
+        else:
+            action = {'type': 'ir.actions.act_window_close'}
+        return action
 
     @api.multi
     def view_product_cost_sheets(self):
@@ -165,6 +194,44 @@ class SaleOrder(models.Model):
         action['context'] = "{}"
         return action
 
+    def create_sale_purchase(self):
+        self.ensure_one()
+        supplier_purchase = {}
+        sheet_lines = self.get_sheet_lines()
+        suppliers = sheet_lines.mapped('purchase_line_ids.partner_id')
+        for partner in suppliers:
+            vals = {
+                'partner_id': partner.id,
+                'origin': self.name,
+                'dest_sale_id': self.id,
+                'payment_term_id':
+                partner.property_supplier_payment_term_id.id,
+                'date_order': fields.Datetime.now()
+            }
+            po = self.env['purchase.order'].create(vals)
+            supplier_purchase[partner.id] = po
+
+        for line in sheet_lines.mapped('purchase_line_ids'):
+            po = supplier_purchase[line.partner_id.id]
+            taxes = line.product_id.supplier_taxes_id
+            # fpos = po.fiscal_position_id
+            # taxes_id = fpos.map_tax(
+            #     taxes, line.product_id.id, line.partne_id.name) if fpos \
+            #     else taxes
+
+            vals = {
+                'name': line.name or line.product_id.name,
+                'product_qty': line.qty,
+                'product_id': line.product_id.id,
+                'product_uom': line.product_id.uom_po_id.id,
+                'price_unit': line.pvp_ud,
+                'date_planned': fields.Datetime.now(),
+                # 'taxes_id': [(6, 0, taxes_id.ids)],
+                'taxes_id': [(6, 0, taxes.ids)],
+                'order_id': po.id,
+            }
+            self.env['purchase.order.line'].create(vals)
+
     @api.multi
     def action_confirm(self):
         """
@@ -174,11 +241,14 @@ class SaleOrder(models.Model):
         for order in self:
             # Creo las tareas y producciones asociadas a cada hoja de costes
             sheet_lines = order.get_sheet_lines()
-            sheet_lines.create_productions()
+            sheet_lines.create_sale_productions()
 
             # Creo la lista de materiales asociada al grupo de costes
             group_costs = order.get_group_sheets()
-            group_costs.create_bom_on_fly()
+            group_costs.create_group_bom_on_fly()
+
+            # Creo las compras en borrador, agrupadas por proveedor
+            order.create_sale_purchase()
 
         res = super().action_confirm()
         return res
@@ -187,6 +257,8 @@ class SaleOrder(models.Model):
         res = super().action_cancel()
         self.mapped('project_id.task_ids').unlink()
         self.mapped('project_id').unlink()
+        self.mapped('purchase_ids').button_cancel()
+        self.mapped('purchase_ids').unlink()
         for order in self:
             prods = order.get_sheet_lines().mapped('production_id')
             prods.action_cancel()
@@ -194,6 +266,8 @@ class SaleOrder(models.Model):
 
             # boms = self.get_group_sheets().mapped('bom_id')
             # boms.unlink()
+
+
         return res
 
     def duplicate_with_costs(self):
@@ -224,6 +298,7 @@ class SaleOrderLine(models.Model):
     group_sheet_id = fields.Many2one(
         'group.cost.sheet', 'Grupo de hojas coste', readonly=True)
     ref = fields.Char('Referencia')
+    sample = fields.Boolean('Muestra')
 
     @api.model
     def create(self, vals):
@@ -260,4 +335,12 @@ class SaleOrderLine(models.Model):
             default['group_sheet_id'] = new_sheet.id
 
         res = super().copy_data(default)
+        return res
+
+    @api.multi
+    def _get_display_price(self, product):
+        res = super()._get_display_price(product)
+        if product.custom_mrp_ok and self.group_sheet_id and \
+                self.product_uom_qty and not self.sample:
+            res = self.group_sheet_id.line_pvp / self.product_uom_qty
         return res

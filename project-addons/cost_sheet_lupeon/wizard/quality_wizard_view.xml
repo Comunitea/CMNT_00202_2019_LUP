@@ -4,7 +4,7 @@
             <field name="name">Quality Wizard</field>
             <field name="model">quality.wizard</field>
             <field name="arch" type="xml">
-                <form string="Invoice Sales Order">
+                <form>
                     <p class="oe_grey">
                         Wizard Quality
                     </p>

@@ -32,9 +32,10 @@ class PickingType(models.Model):
                                       '|', ('picking_type_id.code', '!=', 'outgoing'), 
                                       '&', ('picking_type_id.code', '=', 'outgoing'), ('sale_id.state','not in', ['draft', 'sent'])],
             'count_picking_ready': [('state', '=', 'assigned'), 
-                                    '|', ('picking_type_id.code', '!=', 'outgoing'),
+                                    '|', '|', ('picking_type_id.code', '!=', 'outgoing'),
+                                    ('sale_id', '=', False), 
                                      '&', '&','&', ('picking_type_id.code', '=', 'outgoing'), ('sale_id.state','not in', ['draft', 'sent']), ('delivery_blocked','!=', True), 
-                                     ('sale_id.prestashop_state.pending_payment', '!=', True)],
+                                     '|', ('sale_id.prestashop_state.pending_payment', '!=', True), ('sale_id.prestashop_state', '=', False)],
             'count_picking': [('state', 'in', ('assigned', 'waiting', 'confirmed')),
                                '|', ('picking_type_id.code', '!=', 'outgoing'), 
                                '&', ('picking_type_id.code', '=', 'outgoing'), ('sale_id.state','not in', ['draft', 'sent'])],
@@ -69,6 +70,11 @@ class StockPicking(models.Model):
     partner_mobile = fields.Char('Mobile', related='partner_id.mobile')
     partner_email = fields.Char('Email', related='partner_id.email')
     
+    
+    @api.multi
+    def do_print_picking(self):
+        self.write({'printed': True})
+        return self.env.ref('stock.action_report_delivery').report_action(self)
     
     @api.depends('sale_id.prestashop_state')
     def _compute_delivered(self):

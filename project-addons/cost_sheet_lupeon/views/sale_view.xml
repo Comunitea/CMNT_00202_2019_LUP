@@ -14,6 +14,9 @@
                 <button name="view_sheets_lines" type="object" class="oe_stat_button" icon="fa-file-text" attrs="{'invisible': [('company_id', '!=', 1)]}">
                     <field name="sheets_count"  widget="statinfo" string="Hojas de coste"/>
                 </button>
+                <button name="view_purchases" type="object" class="oe_stat_button" icon="fa-euro" attrs="{'invisible': [('company_id', '!=', 1)]}">
+                    <field name="purchase_count"  widget="statinfo" string="Compras"/>
+                </button>
                 <button class="oe_stat_button" type="object"
                      name="view_tasks" icon="fa-tasks" attrs="{'invisible': [('company_id', '!=', 1)]}">
                     <field string="Tasks" name="count_task" widget="statinfo"/>
@@ -67,7 +70,7 @@
                     <button name="action_quotation_send" type="object" string="Send PRO-FORMA Invoice" groups="sale.group_proforma_sales" class="btn-primary" attrs="{'invisible': ['|', ('state', '!=', 'draft'), ('invoice_count','&gt;=',1)]}" context="{'proforma': True}"/>
                     <button name="print_quotation" string="Print" type="object" states="draft" class="btn-primary o_sale_print"/>
                     <!-- Nuevo estado solo en lupeon -->
-                    <button name="action_design" type="object" string="Design" class="btn-primary"  attrs="{'invisible': ['|', ('company_id', '!=', 1), ('state', 'not in', ['draft','sent'])]}"/>
+                    <button name="action_design" type="object" string="Confirmar diseño" class="btn-primary"  attrs="{'invisible': ['|', ('company_id', '!=', 1), ('state', 'not in', ['draft','sent'])]}"/>
                     <!-- Botones por defecto no se ven en compañía Lupeón -->
                     <button name="action_confirm" id="action_confirm"
                         string="Confirm" class="btn-primary" type="object"
@@ -103,11 +106,13 @@
 
             <xpath expr="//field[@name='order_line']/form//field[@name='product_id']" position="after">
                 <field name="ref"/>
+                <field name="sample"/>
                 <field name="group_sheet_id" readonly="True"/>
             </xpath>
 
             <xpath expr="//field[@name='order_line']/tree//field[@name='product_id']" position="after">
                 <field name="ref"/>
+                <field name="sample"/>
                 <field name="group_sheet_id" readonly="True"/>
             </xpath>
 
@@ -115,9 +120,9 @@
                 <field name="project_id"/>
             </field>
 
-            <field name="commitment_date" position="after">
+            <!-- <field name="commitment_date" position="after">
                 <field name="production_date"/>
-            </field>
+            </field> -->
         </field>
     </record>
 

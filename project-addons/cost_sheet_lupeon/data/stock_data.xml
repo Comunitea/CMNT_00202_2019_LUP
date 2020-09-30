@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <record id="location_externalization" model="stock.location">
+            <field name="name">Externalización</field>
+            <field name="usage">internal</field>
+            <field name="location_id" ref="stock.stock_location_customers"/>
+        </record>
+
+        <record id="seq_externalization_out" model="ir.sequence">
+            <field name="name">Envío Externalización</field>
+            <field name="prefix">EX-OUT</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_externalization_in" model="ir.sequence">
+            <field name="name">Envío Externalización</field>
+            <field name="prefix">EX-IN</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="externalization_out" model="stock.picking.type">
+            <field name="name">Envio externalización</field>
+            <field name="sequence_id" ref="seq_externalization_out"/>
+            <field name="default_location_src_id" ref="stock.stock_location_stock"/>
+            <field name="default_location_dest_id" ref="location_externalization"/>
+            <field name="warehouse_id" eval="False"/>
+            <field name="code">outgoing</field>
+        </record>
+
+        <record id="externalization_in" model="stock.picking.type">
+            <field name="name">Recepción externalización</field>
+            <field name="sequence_id" ref="seq_externalization_in"/>
+            <field name="default_location_src_id" ref="location_externalization"/>
+            <field name="default_location_dest_id" ref="stock.stock_location_stock"/>
+            <field name="warehouse_id" eval="False"/>
+            <field name="code">incoming</field>
+        </record>
+        
+
+    </data>
+</odoo>

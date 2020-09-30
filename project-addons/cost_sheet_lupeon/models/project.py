@@ -15,10 +15,14 @@ class Projecttask(models.Model):
 
     _inherit = "project.task"
 
-    sheet_id = fields.Many2one('cost.sheet', 'Cost Sheet', readonly=True)
-    oppi_line_id = fields.Many2one('oppi.cost.line', 'Oppi Line', readonly=True)
-    time_line_id = fields.Many2one('design.time.line', 'Design Line', readonly=True)
+    sheet_id = fields.Many2one(
+        'cost.sheet', 'Cost Sheet', readonly=True)
+    oppi_line_id = fields.Many2one(
+        'oppi.cost.line', 'Oppi Line', readonly=True)
+    meet_line_id = fields.Many2one(
+        'meet.cost.line', 'Meet Line', readonly=True)
+    time_line_id = fields.Many2one(
+        'design.time.line', 'Design Line', readonly=True)
     sale_id = fields.Many2one('sale.order', 'Sale Order',
-                              related='sheet_id.sale_id', readonly=True, 
+                              related='sheet_id.sale_id', readonly=True,
                               store=True)
-

@@ -9,8 +9,13 @@ from . import printer_machine
 from . import tinted
 from . import product
 from . import design_software
+from . import group_cost_sheet
 from . import cost_sheet
 from . import project
 from . import mrp_production
+from . import mrp_workorder
 from . import stock_quant
 from . import group_production
+from . import purchase
+from . import mrp_bom
+from . import mrp_routing

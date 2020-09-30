@@ -1,0 +1,33 @@
+{
+    // Use IntelliSense para saber los atributos posibles.
+    // Mantenga el puntero para ver las descripciones de los existentes atributos.
+    // Para más información, visite: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+    {
+        "name": "Attach",
+        "port": 9229,
+        "request": "attach",
+        "skipFiles": [
+            "<node_internals>/**"
+        ],
+        "type": "pwa-node"
+    },
+        {
+            "name": "Python: Odoo",
+            "type": "python",
+            "request": "launch",
+            "program": "bin/start_odoo",
+            "console": "integratedTerminal"
+        }
+
+        {
+            "name": "Python: FIX taxes",
+            "type": "python",
+            "request": "launch",
+            "program": "bin/python_odoo",
+            "args": ["scripts/account_move_taxes.py"],
+            "console": "integratedTerminal"
+        },
+    ]
+}

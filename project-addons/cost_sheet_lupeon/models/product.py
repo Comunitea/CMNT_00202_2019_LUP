@@ -48,3 +48,4 @@ class ProductTemplate(models.Model):
     term_cost = fields.Float('Coste ciclo tratamiento térmico')
     # dens_cc = fields.Float('Densidad impreso gr/cc')
     # euro_kg = fields.Float('€/kg')
+    created_on_fly = fields.Boolean('Creado al vuelo')

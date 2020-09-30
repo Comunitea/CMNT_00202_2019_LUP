@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-14 14:41+0000\n"
-"PO-Revision-Date: 2020-09-14 14:41+0000\n"
+"POT-Creation-Date: 2020-09-24 09:18+0000\n"
+"PO-Revision-Date: 2020-09-24 09:18+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -148,7 +148,9 @@ msgstr ""
 
 #. module: cost_sheet_lupeon
 #: selection:cost.sheet,sheet_type:0
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_sale_order__purchase_count
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.cost_sheet_view_form
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.sale_order_custom_lup
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.simple_cost_sheet_view_form
 msgid "Compras"
 msgstr ""
@@ -178,6 +180,11 @@ msgstr "Confirmar"
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.group_production_view_form
 msgid "Confirm Group"
 msgstr "Confirmar grupo"
+
+#. module: cost_sheet_lupeon
+#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.sale_order_custom_lup
+msgid "Confirmar diseño"
+msgstr ""
 
 #. module: cost_sheet_lupeon
 #: selection:group.production,state:0
@@ -410,7 +417,6 @@ msgstr ""
 
 #. module: cost_sheet_lupeon
 #: selection:cost.sheet,sheet_type:0
-#: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.sale_order_custom_lup
 #: selection:printer.machine,type:0
 #: selection:sale.order,state:0
 msgid "Design"
@@ -498,7 +504,7 @@ msgid "Duplicate costs"
 msgstr "Duplicar con costes"
 
 #. module: cost_sheet_lupeon
-#: code:addons/cost_sheet_lupeon/models/sale_order.py:207
+#: code:addons/cost_sheet_lupeon/models/sale_order.py:280
 #, python-format
 msgid "Duplicated"
 msgstr "Duplicado"
@@ -687,7 +693,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.product_cost_sheet_view_form
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.sale_order_custom_lup
 msgid "Hojas de coste"
-msgstr "Grupo de costes"
+msgstr ""
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_design_time_line__hours
@@ -958,6 +964,11 @@ msgstr "Descuento máximo"
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_printer_machine__max_disc_qty
 msgid "Max discount quantity"
 msgstr "Descuento máximo cantidad"
+
+#. module: cost_sheet_lupeon
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_project_task__meet_line_id
+msgid "Meet Line"
+msgstr ""
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_material_cost_line__tray_meters
@@ -1252,7 +1263,7 @@ msgid "Production State"
 msgstr "Estado producción"
 
 #. module: cost_sheet_lupeon
-#: code:addons/cost_sheet_lupeon/models/sale_order.py:58
+#: code:addons/cost_sheet_lupeon/models/sale_order.py:63
 #, python-format
 msgid "Production date is too late."
 msgstr "La fecha de producción es demasiado tarde"
@@ -1281,6 +1292,7 @@ msgstr ""
 
 #. module: cost_sheet_lupeon
 #: model:ir.model,name:cost_sheet_lupeon.model_project_project
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_purchase_order__dest_sale_id
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_sale_order__project_id
 msgid "Project"
 msgstr "Proyecto"
@@ -1288,6 +1300,16 @@ msgstr "Proyecto"
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_purchase_cost_line__partner_id
 msgid "Proveedor"
+msgstr ""
+
+#. module: cost_sheet_lupeon
+#: model:ir.model,name:cost_sheet_lupeon.model_purchase_order
+msgid "Purchase Order"
+msgstr "Pedido de compra"
+
+#. module: cost_sheet_lupeon
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_sale_order__purchase_ids
+msgid "Purchases"
 msgstr ""
 
 #. module: cost_sheet_lupeon
@@ -1518,6 +1540,7 @@ msgstr ""
 #. module: cost_sheet_lupeon
 #: model:ir.model,name:cost_sheet_lupeon.model_project_task
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_design_time_line__task_id
+#: model:ir.model.fields,field_description:cost_sheet_lupeon.field_meet_cost_line__task_id
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_oppi_cost_line__task_id
 msgid "Task"
 msgstr "Tarea"
@@ -1528,12 +1551,7 @@ msgid "Tasks"
 msgstr "Tareas"
 
 #. module: cost_sheet_lupeon
-#: selection:cost.sheet,inspection_type:0
-msgid "TechniTécnicacal"
-msgstr ""
-
-#. module: cost_sheet_lupeon
-#: code:addons/cost_sheet_lupeon/models/sale_order.py:59
+#: code:addons/cost_sheet_lupeon/models/sale_order.py:64
 #, python-format
 msgid "The production date is later than the                                  commitment date."
 msgstr "La fecha de producción es posterior a la fecha de compromiso"
@@ -1638,6 +1656,11 @@ msgstr ""
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__heat_treatment_cost
 msgid "Tratamiento térmico"
+msgstr ""
+
+#. module: cost_sheet_lupeon
+#: selection:cost.sheet,inspection_type:0
+msgid "Técnica"
 msgstr ""
 
 #. module: cost_sheet_lupeon

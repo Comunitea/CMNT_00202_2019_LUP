@@ -803,6 +803,16 @@
                             </tree>
                         </field>
                     </group>
+                    <group colespan="4" string="Ensamblaje">
+                        <field name="assembly_ids" nolabel="1">
+                            <tree create="1" editable="bottom">
+                                <field name="name"/>
+                                <field name="type"/>
+                                <field name="time"/>
+                                <field name="total"/>
+                            </tree>
+                        </field>
+                    </group>
                     <group class="oe_subtotal_footer oe_right" colspan="2" name="pvp_total">
                         <field name="line_pvp" widget='monetary'/>
                     </group>
@@ -836,7 +846,7 @@
         <field name="view_mode">tree,form</field>
     </record>
 
-    <menuitem id="menu_product_cost_sheets" action="action_product_cost_sheets"  name="Grupos de costes" parent="menu_cost_sheets" sequence="0"/>
+    <menuitem id="menu_product_cost_sheets" action="action_product_cost_sheets"  name="Grupos de costes" parent="menu_cost_sheets" sequence="1"/>
 
     <!-- Vistas de campos One2many -->
     <record id="cost_material_line_view_tree" model="ir.ui.view">
@@ -890,10 +900,11 @@
         <field name="arch" type="xml">
             <tree editable="bottom">
                 <field name="name"/>
+                <field name="e_partner_id" domain="[('supplier', '=', True)]"/>
                 <field name="type"/>
                 <field name="time"/>
-                <field name="employee_id"/>
-                <field name="task_id"/>
+                <!-- <field name="employee_id"/> -->
+                <!-- <field name="task_id"/> -->
                 <field name="time_real"/>
             </tree>
         </field>
@@ -935,8 +946,8 @@
                     </group>
                     <group string="Precios">
                         <group>
-                                <field name="cost_init" attrs="{'invisible': [('sheet_type', 'in', ['fdm', 'dmls', 'unnplaned', 'meets'])]}"/>
-                                <field name="cost_init_computed"  attrs="{'invisible': [('sheet_type', 'not in', ['fdm', 'dmls'])]}"/>
+                                <field name="cost_init" attrs="{'invisible': [('sheet_type', 'in', ['dmls', 'unnplaned', 'meets'])]}"/>
+                                <field name="cost_init_computed"  attrs="{'invisible': [('sheet_type', 'not in', ['dmls'])]}"/>
                                 <field name="cost_ud" attrs="{'invisible': [('sheet_type', 'in', ['unnplaned', 'meets'])]}"/>
                                 <field name="admin_fact" attrs="{'invisible': [('sheet_type', 'in', ['unnplaned', 'meets'])]}" groups="cost_sheet_lupeon.group_cs_advanced"/>
                                 <field name="use_disc_qty"  attrs="{'invisible': [('sheet_type', 'not in', ['fdm', 'sls', 'sls2', 'poly', 'sla', 'dmls'])]}"/> 
@@ -996,7 +1007,6 @@
                             <div style="border-bottom: 1px solid black;"></div>
                             <group cospan="2" col="8" string="Parámetros impresión">
                                 <field name="printer_id" domain="[('type', '=', sheet_type)]"/>
-                                <!-- <field name="printer_id"/> -->
                                 <field name="perfil"/>
                                 <field name="tray_units"/>
                                 <field name="tray_hours"/>
@@ -1022,7 +1032,11 @@
                                 <field name="euro_machine_total"  groups="cost_sheet_lupeon.group_cs_advanced"/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
-                            <group colspan="4" string="Coste mano de obra">
+                            <group string="Coste mano de obra">
+                                <!-- (SOLO FDM) Este campo está porque en compute o en onchange no lo doy sacardo de material_cost_ids[0].product_id, por ser un new_id -->
+                                <field name="calc_material_id"/>  
+                            </group>
+                            <group colspan="4">
                                 <field name="workforce_cost_ids" nolabel="1">
                                     <tree editable="bottom">
                                         <field name="name"/>
@@ -1562,6 +1576,7 @@
                                 <field name="meet_line_ids" nolabel="1">
                                     <tree editable="bottom">
                                         <field name="name"/>
+                                        <field name="task_id"/>
                                         <field name="type"/>
                                         <field name="num_people"/>
                                         <field name="hours"/>

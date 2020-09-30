@@ -10,6 +10,8 @@ access_workforce_cost_line,acess_workforce_cost_line,model_workforce_cost_line,b
 access_outsorcing_cost_line,acess_outsorcing_cost_line,model_outsorcing_cost_line,base.group_user,1,1,1,1
 access_meet_cost_line,acess_meet_cost_line,model_meet_cost_line,base.group_user,1,1,1,1
 access_oppi_cost_line,acess_oppi_cost_line,model_oppi_cost_line,base.group_user,1,1,1,1
+access_assembly_cost_line,acess_assembly_cost_line,model_assembly_cost_line,base.group_user,1,1,1,1
+access_machine_time,acess_machine_time,model_machine_time,base.group_user,1,1,1,1
 access_purchase_cost_line,acess_purchase_cost_line,model_purchase_cost_line,base.group_user,1,1,1,1
 access_part_feature,acess_part_feature,model_part_feature,base.group_user,1,1,1,1
 access_tinted,acess_tinted,model_tinted,base.group_user,1,1,1,1

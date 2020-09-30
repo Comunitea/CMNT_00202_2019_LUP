@@ -52,11 +52,17 @@ class SaleOrder(models.Model):
         Creation of product sheet ids
         """
         for order in self:
-            if (order.partner_id.require_num_order):
+            if (order.partner_id.require_num_order and not
+                    order.client_order_ref):
                 order.client_order_ref = 'PENDIENTE'
+
+            # Solo lupeon
+            if (order.company_id.id == 1 and not order.commitment_date):
+                raise UserError(_('You need to set commitment date.'))
+
         res = super().action_confirm()
         return res
-    
+
     @api.multi
     def write(self, vals):
         """
