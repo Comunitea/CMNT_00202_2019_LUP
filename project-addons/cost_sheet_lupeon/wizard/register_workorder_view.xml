@@ -5,18 +5,30 @@
             <field name="model">register.workorder.wizard</field>
             <field name="arch" type="xml">
                 <form>
-                    <p class="oe_grey">
-                        Yo can register partyally
-                    </p>
-                    <group>
-                        <field name="qty"/>
-                        <field name="machine_hours" widget="float_time"/>
-                    </group>
-                    <footer>
-                        <button name="confirm" string="Confirmar" type="object" class="btn-primary"/>
-                        <!-- <button name="close_partiall" string="Finalizar parcialmente" type="object" class="btn-warning"/> -->
-                        <button string="Cancel" class="btn-secondary" special="cancel"/>
-                    </footer>
+                    <sheet>
+                        <p class="oe_grey">
+                            Yo can register partyally
+                        </p>
+                        <group>
+                            <field name="qty" required="1"/>
+                            <field name="machine_hours" widget="float_time"/>
+                        </group>
+                        <group string="Consumos" attrs="{'invisible': [('consume_ids', '=', [])]}">
+                            <field name="consume_ids" nolabel="1">
+                                <tree editable="bottom" create="0" delete="0">
+                                    <field name="move_line_id" invisible="1"/>
+                                    <field name="product_id" required="1"/>
+                                    <field name="lot_id"  required="1" domain="[('product_id', '=', product_id)]" context="{'default_product_id': product_id}"/>
+                                    <field name="qty_done" required="1"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <footer>
+                            <button name="confirm" string="Confirmar" type="object" class="btn-primary"/>
+                            <!-- <button name="close_partiall" string="Finalizar parcialmente" type="object" class="btn-warning"/> -->
+                            <button string="Cancel" class="btn-secondary" special="cancel"/>
+                        </footer>
+                    </sheet>
                 </form>
             </field>
         </record>

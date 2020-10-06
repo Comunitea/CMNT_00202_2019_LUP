@@ -25,3 +25,6 @@ delete from mrp_workorder;
 delete from group_cost_sheet where sale_line_id is null;
 delete from cost_sheet where sale_line_id is null;
 delete from purchase_order where company_id = 1;
+
+-- otras
+update product_template set tracking='lot' where is_material is True;
