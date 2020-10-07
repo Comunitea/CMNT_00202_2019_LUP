@@ -21,6 +21,7 @@ class MrpWorkorder(models.Model):
                                        'Machine times')
     machine_time = fields.Float(
         'Horas máquina total', compute="_get_machine_time")
+    employee_id = fields.Many2one('hr.employee', 'Asignado a')
 
     @api.depends('machine_time_ids.time')
     def _get_machine_time(self):

@@ -20,12 +20,23 @@ class GroupCostSheet(models.Model):
     product_id = fields.Many2one(
         'product.product', 'Producto',
         related='sale_line_id.product_id')
-    admin_fact = fields.Float('Factor administrativo (%)')
+    admin_fact = fields.Float(
+        'Factor administrativo (%)',
+        default=lambda self: self.env.user.company_id.admin_fact)
 
-    ing_hours = fields.Integer('Horas ingenieria', default=55)
-    tech_hours = fields.Integer('Horas técnico', default=35)
-    help_hours = fields.Integer('Horas ayudante', default=35)
-    km_cost = fields.Float('Coste Km', default=0.30)
+    ing_hours = fields.Integer(
+        'Horas ingenieria',
+        default=lambda self: self.env.user.company_id.ing_hours)
+    tech_hours = fields.Integer(
+        'Horas técnico',
+        default=lambda self: self.env.user.company_id.tech_hours)
+    help_hours = fields.Integer(
+        'Horas ayudante',
+        default=lambda self: self.env.user.company_id.help_hours)
+    km_cost = fields.Float(
+        'Coste Km',
+        default=lambda self: self.env.user.company_id.help_hours
+    )
     sheet_ids = fields.One2many(
         'cost.sheet', 'group_id', string='Cost Sheets', copy=True)
     line_pvp = fields.Float('PVP Línea', compute='_get_line_pvp')

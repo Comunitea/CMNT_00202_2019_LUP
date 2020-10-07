@@ -50,7 +50,11 @@ class SaleOrder(models.Model):
     def _onchange_commitment_date(self):
         res = super()._onchange_commitment_date()
         if self.commitment_date:
-            self.production_date = self.commitment_date - timedelta(days=3)
+            days_before = self.commitment_date - timedelta(days=3)
+            if datetime.now() <= days_before:
+                self.production_date = days_before
+            else:
+                self.production_date = datetime.now()
         return res
 
     @api.onchange('production_date')
@@ -275,8 +279,16 @@ class SaleOrder(models.Model):
         view = self.env.ref(
             'sale.view_order_form'
         )
+        c = self.company_id
         for line in new.order_line:
-            line.group_sheet_id.write({'sale_line_id': line.id})
+            line.group_sheet_id.write({
+                'sale_line_id': line.id,
+                'ing_hours': c.ing_hours,
+                'tech_hours': c.tech_hours,
+                'help_hours': c.help_hours,
+                'km_cost': c.km_cost,
+                'admin_fact': c.admin_fact,
+            })
         return {
             'name': _('Duplicated'),
             'type': 'ir.actions.act_window',

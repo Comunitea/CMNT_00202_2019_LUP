@@ -19,3 +19,4 @@ from . import group_production
 from . import purchase
 from . import mrp_bom
 from . import mrp_routing
+from . import res_company

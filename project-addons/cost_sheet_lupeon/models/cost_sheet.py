@@ -758,6 +758,7 @@ class CostSheet(models.Model):
                     'date_planned_start':
                     self.sale_line_id.order_id.production_date -
                     timedelta(hours=duration),
+                    'employee_id': oppi.employee_id.id
                 }
                 if oppi.e_partner_id:
                     vals.update(e_partner_id= oppi.e_partner_id.id)
@@ -1107,7 +1108,7 @@ class OppiCostLine(models.Model):
     type = fields.Many2one('oppi.type', 'Tipo', required=True)
     time = fields.Float('Tiempo')
     time_real = fields.Float('Tiempo real', related='task_id.effective_hours')
-    employee_id = fields.Many2one('hr.employee', 'Empleado')
+    employee_id = fields.Many2one('hr.employee', 'Asignado a')
     task_id = fields.Many2one('project.task', 'Task', readonly=True,  
                               copy=False)
     e_partner_id = fields.Many2one('res.partner', 'Externalización')
