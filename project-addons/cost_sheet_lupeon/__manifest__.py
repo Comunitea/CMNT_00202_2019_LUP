@@ -26,6 +26,7 @@
         'wizard/quality_wizard_view.xml',
         'wizard/group_mrp_wizard_view.xml',
         'wizard/register_workorder_view.xml',
+        'wizard/register_group_view.xml',
         'data/sheet_data.xml',
         'data/stock_data.xml',
         'views/sale_view.xml',

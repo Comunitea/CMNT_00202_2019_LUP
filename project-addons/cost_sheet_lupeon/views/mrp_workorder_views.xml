@@ -65,7 +65,8 @@
 
             <field name="is_produced" position="after">
                 <field name="sheet_id" context="{'form_view_ref': 'cost_sheet_lupeon.simple_cost_sheet_view_form'}" />
-                <field name="employee_id" context="{'form_view_ref': 'cost_sheet_lupeon.simple_cost_sheet_view_form'}" />
+                <field name="employee_id"/>
+                <field name="group_mrp_id"/>
             </field>
         </field>
     </record>

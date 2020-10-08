@@ -22,7 +22,7 @@ class MrpProduction(models.Model):
 
     sheet_id = fields.Many2one('cost.sheet', 'Cost Sheet', readonly=True)
     sheet_type = fields.Selection(SHEET_TYPES, string='Sheet type',
-                                  related='sheet_id.sheet_type')
+                                  related='sheet_id.sheet_type', store=True)
     sale_id = fields.Many2one('sale.order', 'Sale Order',
                               related='sheet_id.sale_id', readonly=True, 
                               store=True)

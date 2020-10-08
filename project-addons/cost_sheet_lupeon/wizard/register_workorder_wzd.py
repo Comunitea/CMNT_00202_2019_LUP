@@ -29,6 +29,7 @@ class RegisterWorkorderWizard(models.TransientModel):
 
     def confirm(self):
         wo = self.env['mrp.workorder'].browse(self._context.get('active_id'))
+        wo.button_pending()
         wo.qty_producing = self.qty
 
         if self.machine_hours:
@@ -41,7 +42,7 @@ class RegisterWorkorderWizard(models.TransientModel):
         # Write consumes on workorrder
         for line in self.consume_ids:
             line.move_line_id.write({
-                'product_id': line.product_id.id,
+                # 'product_id': line.product_id.id,
                 'lot_id': line.lot_id.id,
                 'qty_done': line.qty_done,
             })

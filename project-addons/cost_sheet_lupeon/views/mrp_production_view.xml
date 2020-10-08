@@ -105,6 +105,7 @@
                 <filter name="sheet" string="Cost Sheet" context="{'group_by': 'sheet_id'}"/>
                 <filter name="sale" string="Sale order" context="{'group_by' :'sale_id'}"/>
                 <filter name="sale_line" string="Sale order line" context="{'group_by' :'sale_line_id'}"/>
+                <filter name="sheet_type" string="Tipo de hoja" context="{'group_by' :'sheet_type'}"/>
             </filter>
         </field>
     </record>

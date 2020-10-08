@@ -1,0 +1,150 @@
+
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError
+
+
+class RegistergroupWizard(models.TransientModel):
+    _name = 'register.group.wizard'
+
+    @api.model
+    def default_get(self, default_fields):
+        gp = self.env['group.production'].browse(
+            self._context.get('active_id'))
+        res = super().default_get(default_fields)
+
+        res['consume_ids'] = []
+        res['qty_done_ids'] = []
+
+        # Load qty
+        for wo in gp.workorder_ids:
+            vals = {
+                'workorder_id': wo.id,
+                'production_id': wo.production_id.id,
+                'product_id': wo.product_id.id,
+                'product_qty': wo.qty_production,
+                'qty_produced': wo.qty_produced,
+                'qty_done': wo.qty_producing,
+            }
+            res['qty_done_ids'].append((0, 0, vals))
+
+        # Load consumes
+        for line in gp.material_ids:
+            vals = {
+                'group_line_id': line.id,
+                'product_id': line.product_id.id,
+                'qty_consume': line.qty - line.real_qty,
+                'lot_id': False,
+                'qty_done': 0,
+            }
+            res['consume_ids'].append((0, 0, vals))
+        return res
+
+    machine_hours = fields.Float('Horas máquina')
+    qty_done_ids = fields.One2many(
+        'group.done.line', 'wzd_id', 'Cantidades Producidas')
+    consume_ids = fields.One2many(
+        'group.consume.line', 'wzd_id', 'Consumos')
+
+    def confirm(self):
+        gp = self.env['group.production'].browse(
+            self._context.get('active_id'))
+
+        if not self.machine_hours:
+            raise UserError('Es necesario indicar el tiempo máquina')
+
+        for consume in self.consume_ids:
+            if not consume.lot_id:
+                raise UserError('Es necesario indicar lote \
+                        para el producto %s' % consume.product_id.name)
+            if not consume.qty_done:
+                raise UserError('Es necesario indicar na cantidad consumida \
+                    para el producto %s' % consume.product_id.name)
+
+        for line in self.qty_done_ids:
+
+            if not line.qty_done:
+                raise UserError('Es necesario indicar la cantidad prducida \
+                    para el producto %s' % line.product_id.name)
+
+            wo = line.workorder_id
+            if not wo or wo.state not in ('ready', 'progress'):
+                continue
+            wo.button_start()
+
+            consume_ids = []
+            for move in wo.active_move_line_ids:
+
+                # Reparto proporcional consumos
+                grouped_line = self.consume_ids.filtered(
+                    lambda x: x.product_id == move.product_id)
+                total_qty = grouped_line.qty_consume
+                prop_qty = 0
+                if total_qty:
+                    percent = move.qty_done / total_qty
+                    prop_qty = grouped_line.qty_done * percent
+
+                consume_vals = {
+                    'product_id': line.product_id.id,
+                    'lot_id': grouped_line.lot_id.id,
+                    'qty_done': prop_qty,
+                    'move_line_id': move.id,
+                }
+                consume_ids.append((0, 0, consume_vals))
+
+            vals = {
+                'qty': line.qty_done,
+                'machine_hours': self.machine_hours / len(self.qty_done_ids),
+                'consume_ids': consume_ids
+            }
+            reg = self.env['register.workorder.wizard'].with_context(
+                active_id=wo.id).new(vals)
+            reg.confirm()
+
+        if gp.workorder_ids.filtered(lambda x: x.state != 'done'):
+            gp.state = 'progress'
+        else:
+            gp.state = 'done'
+
+        if self.machine_hours:
+            time = gp.total_time
+            gp.total_time = time + self.machine_hours
+
+        # Actualizo consumos
+        for consume in self.consume_ids:
+            consume.group_line_id.write({
+                'real_qty':
+                consume.group_line_id.real_qty + consume.qty_done})
+        return
+
+
+class GroupConsumeLine(models.TransientModel):
+    _name = 'group.done.line'
+
+    wzd_id = fields.Many2one(
+        'register.group.wizard', 'Registro producción')
+    workorder_id = fields.Many2one(
+        'mrp.workorder', 'Orden de trabajo', readonly=True)
+    production_id = fields.Many2one(
+        'mrp.production', 'Producción Asociada', readonly=True)
+    product_id = fields.Many2one(
+        'product.product', 'Producto', readonly=True)
+    product_qty = fields.Float(
+        'Cantidad inicial', readonly=True)
+    qty_produced = fields.Float(
+        'Cantidad producida', readonly=True)
+    qty_done = fields.Float('Cantidad realizada')
+
+
+class ConsumeLine(models.TransientModel):
+    _name = 'group.consume.line'
+
+    wzd_id = fields.Many2one(
+        'register.group.wizard', 'Registro producción')
+    group_line_id = fields.Many2one(
+        'group.material.line', 'Movimiento agrupado', readonly=True)
+    product_id = fields.Many2one(
+        'product.product', 'Producto', readonly=True)
+    qty_consume = fields.Float(
+        'Cantidad a consumir', readonly=True)
+    lot_id = fields.Many2one('stock.production.lot', 'Lote', required=True)
+    qty_done = fields.Float('Cantidad consumida', required=True)
