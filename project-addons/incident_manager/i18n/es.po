@@ -1,0 +1,225 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* incident_manager
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-10-08 14:52+0000\n"
+"PO-Revision-Date: 2020-10-08 14:52+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__attachment_ids
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report_type__attachment_ids
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report_wzd__attachment_ids
+msgid "Attachments"
+msgstr "Adjuntos"
+
+#. module: incident_manager
+#: model_terms:ir.ui.view,arch_db:incident_manager.incident_report_wzd_view
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: incident_manager
+#: model_terms:ir.ui.view,arch_db:incident_manager.purchase_order_form
+#: model_terms:ir.ui.view,arch_db:incident_manager.view_order_form
+#: model_terms:ir.ui.view,arch_db:incident_manager.view_picking_form
+msgid "Create Incident"
+msgstr "Crear incidencia"
+
+#. module: incident_manager
+#: model_terms:ir.ui.view,arch_db:incident_manager.incident_report_wzd_view
+msgid "Create Report"
+msgstr "Crear Incidencia"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__create_uid
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report_type__create_uid
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report_wzd__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__create_date
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report_type__create_date
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report_wzd__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__display_name
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report_type__display_name
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report_wzd__display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: incident_manager
+#: model_terms:ir.ui.view,arch_db:incident_manager.incident_report_search
+msgid "Group By"
+msgstr "Agrupar por"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__id
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report_type__id
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report_wzd__id
+msgid "ID"
+msgstr ""
+
+#. module: incident_manager
+#: model:ir.ui.menu,name:incident_manager.menu_incident_manager_root
+msgid "Incident Manager"
+msgstr "Incidencias"
+
+#. module: incident_manager
+#: code:addons/incident_manager/wizard/incident_report_wzd.py:26
+#: model:ir.model,name:incident_manager.model_incident_report
+#, python-format
+msgid "Incident Report"
+msgstr "Informe de incidencia"
+
+#. module: incident_manager
+#: model:ir.model,name:incident_manager.model_incident_report_type
+msgid "Incident Report Type"
+msgstr "Tipo de incidencia"
+
+#. module: incident_manager
+#: model:ir.model,name:incident_manager.model_incident_report_wzd
+msgid "Incident Report Wizard"
+msgstr "Asistente informe incidencia"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_purchase_order__incident_reports_count
+#: model:ir.model.fields,field_description:incident_manager.field_sale_order__incident_reports_count
+#: model:ir.model.fields,field_description:incident_manager.field_stock_picking__incident_reports_count
+msgid "Incident Reports Count"
+msgstr "Incidencias totales"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__name
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report_wzd__name
+msgid "Incident title"
+msgstr "Título"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__incident_type
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report_wzd__incident_type
+msgid "Incident type"
+msgstr "Tipo de incidencia"
+
+#. module: incident_manager
+#: model_terms:ir.ui.view,arch_db:incident_manager.purchase_order_form
+#: model_terms:ir.ui.view,arch_db:incident_manager.view_order_form
+#: model_terms:ir.ui.view,arch_db:incident_manager.view_picking_form
+msgid "Incidents"
+msgstr "Incidencias"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report____last_update
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report_type____last_update
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report_wzd____last_update
+msgid "Last Modified on"
+msgstr "Última modificación en"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__write_uid
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report_type__write_uid
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report_wzd__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__write_date
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report_type__write_date
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report_wzd__write_date
+msgid "Last Updated on"
+msgstr "Última actualización el"
+
+#. module: incident_manager
+#: model_terms:ir.ui.view,arch_db:incident_manager.incident_report_search
+msgid "Model"
+msgstr "Modelo"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report_type__name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: incident_manager
+#: model:ir.actions.act_window,name:incident_manager.action_create_incident_report_wzd_form
+#: model_terms:ir.ui.view,arch_db:incident_manager.incident_report_wzd_view
+msgid "New Incident Report"
+msgstr "Nuevo informe de incidencia"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__model_id
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report_wzd__model_id
+msgid "Object"
+msgstr "Objeto"
+
+#. module: incident_manager
+#: code:addons/incident_manager/models/incident_report.py:29
+#: model_terms:ir.ui.view,arch_db:incident_manager.incident_report_form
+#, python-format
+msgid "Origin document"
+msgstr "Documento origen"
+
+#. module: incident_manager
+#: model:ir.model,name:incident_manager.model_purchase_order
+msgid "Purchase Order"
+msgstr "Pedido de compra"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__res_id
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report_wzd__res_id
+msgid "Record ID"
+msgstr "ID de registro"
+
+#. module: incident_manager
+#: model:ir.actions.act_window,name:incident_manager.action_incident_report_type_form
+#: model:ir.ui.menu,name:incident_manager.master_incident_report_type_menu
+msgid "Report Types"
+msgstr "Tipos de incidencia"
+
+#. module: incident_manager
+#: model:ir.actions.act_window,name:incident_manager.action_incident_report_form
+#: model:ir.ui.menu,name:incident_manager.master_incident_report_menu
+msgid "Reports"
+msgstr "Informes"
+
+#. module: incident_manager
+#: model:ir.model,name:incident_manager.model_sale_order
+msgid "Sale Order"
+msgstr "Pedido de venta"
+
+#. module: incident_manager
+#: code:addons/incident_manager/models/incident_report.py:38
+#, python-format
+msgid "There is no origin document for this incident report."
+msgstr "No existe un documento de origen para esta informe de incidencia."
+
+#. module: incident_manager
+#: model:ir.model,name:incident_manager.model_stock_picking
+msgid "Transfer"
+msgstr "Albarán"
+
+#. module: incident_manager
+#: model_terms:ir.ui.view,arch_db:incident_manager.incident_report_search
+msgid "Type"
+msgstr "Tipo"
+
+#. module: incident_manager
+#: model_terms:ir.ui.view,arch_db:incident_manager.incident_report_search
+msgid "User"
+msgstr "Usuario"
+
+#. module: incident_manager
+#: model_terms:ir.ui.view,arch_db:incident_manager.incident_report_wzd_view
+msgid "or"
+msgstr "o"

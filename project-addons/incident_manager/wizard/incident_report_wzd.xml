@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Incident report wzd form -->
+    <record id="incident_report_wzd_view" model="ir.ui.view">
+        <field name="name">incident.report.wzd.form</field>
+        <field name="model">incident.report.wzd</field>
+        <field name="arch" type="xml">
+            <form string="New Incident Report">
+                <group>
+                    <field name="name"/>
+                    <field name="incident_type"/>
+                    <field name="model_id" readonly="1"/>
+                    <field name="res_id" readonly="1"/>
+                </group>
+                <footer>
+                    <button name="create_report" string="Create Report" type="object" class="oe_highlight"/>
+                    or
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_create_incident_report_wzd_form" model="ir.actions.act_window">
+        <field name="name">New Incident Report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">incident.report.wzd</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="incident_report_wzd_view"/>
+    </record>
+
+</odoo>
