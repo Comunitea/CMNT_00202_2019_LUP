@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <!-- Incident report type -->
+    <record id="incident_report_type_tree" model="ir.ui.view">
+        <field name="name">incident.report.type.tree</field>
+        <field name="model">incident.report.type</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="incident_report_type_form" model="ir.ui.view">
+        <field name="name">incident.report.type.form</field>
+        <field name="model">incident.report.type</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="incident_report_type_search" model="ir.ui.view">
+        <field name="name">incident.report.type.search</field>
+        <field name="model">incident.report.type</field>
+        <field name="type">search</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_incident_report_type_form" model="ir.actions.act_window">
+        <field name="name">Report Types</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">incident.report.type</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="incident_report_type_search"/>
+    </record>
+
+    <!-- Incident report -->
+    <record id="incident_report_tree" model="ir.ui.view">
+        <field name="name">incident.report.tree</field>
+        <field name="model">incident.report</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree create="false">
+                <field name="name"/>
+                <field name="incident_type"/>
+                <field name="model_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="incident_report_form" model="ir.ui.view">
+        <field name="name">incident.report.form</field>
+        <field name="model">incident.report</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form create="false">
+                <header>
+                    <button
+                        attrs="{'invisible': ['|', ('model_id', '=', False), ('res_id', '=', False)]}" 
+                        name="open_origin_document"
+                        string="Origin document"
+                        type="object" class="oe_start_button" icon="fa-file-text"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="incident_type"/>
+                    </group>
+                    <group>
+                        <field name="create_uid" readonly="1"/>
+                        <field name="create_date" readonly="1"/>
+                        <field name="model_id" readonly="1"/>
+                        <field name="res_id" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="incident_report_search" model="ir.ui.view">
+        <field name="name">incident.report.search</field>
+        <field name="model">incident.report</field>
+        <field name="type">search</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="res_id"/>
+                <field name="model_id"/>
+                <separator/>
+                <group expand="0" name="group_by" string="Group By">
+                    <filter name="group_model_id" string="Model" context="{'group_by': 'model_id'}"/>
+                    <filter name="group_create_uid" string="User" context="{'group_by': 'create_uid'}"/>
+                    <filter name="group_incident_type" string="Type" context="{'group_by': 'incident_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_incident_report_form" model="ir.actions.act_window">
+        <field name="name">Reports</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">incident.report</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="incident_report_search"/>
+    </record>
+
+    <!-- Menus -->
+    <menuitem id="menu_incident_manager_root" name="Incident Manager"
+        sequence="30"
+        web_icon="incident_manager,static/description/icon.png"/>
+
+    <menuitem id="master_incident_report_menu" 
+        name="Reports" 
+        parent="incident_manager.menu_incident_manager_root"
+        action="action_incident_report_form" 
+        sequence="10"/>
+    
+    <menuitem id="master_incident_report_type_menu" 
+        name="Report Types" 
+        parent="incident_manager.menu_incident_manager_root"
+        action="action_incident_report_type_form" 
+        sequence="20"/>
+
+</odoo>
