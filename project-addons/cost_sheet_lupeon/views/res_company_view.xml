@@ -10,7 +10,6 @@
             <notebook position="inside">
                 <page string="Configuración costes">
                     <group>
-                        <field name="admin_fact"/>
                         <field name="ing_hours"/>
                         <field name="tech_hours"/>
                         <field name="help_hours"/>

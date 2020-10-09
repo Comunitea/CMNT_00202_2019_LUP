@@ -95,6 +95,9 @@ class SaleOrder(models.Model):
             domain = [('bom_id', 'in', boms.ids)]
             productions = order.get_sheet_lines().mapped('production_id')
             productions |= self.env['mrp.production'].search(domain)
+            # Buscar producciones imprevistas
+            domain = [('add_sale_id', '=', self.id)]
+            productions |= self.env['mrp.production'].search(domain)
             order.production_count = len(productions)
             order.count_task = \
                 len(
@@ -183,9 +186,15 @@ class SaleOrder(models.Model):
             lambda s: s.sheet_type != 'design'
         ).mapped('production_id')
 
+        # Buscar produccion principal
         boms = self.get_group_sheets().mapped('bom_id')
         domain = [('bom_id', 'in', boms.ids)]
         productions |= self.env['mrp.production'].search(domain)
+
+        # Buscar producciones imprevistas
+        domain = [('add_sale_id', '=', self.id)]
+        productions |= self.env['mrp.production'].search(domain)
+
         if productions:
             action = self.env.ref(
                 'mrp.mrp_production_action').read()[0]
@@ -287,7 +296,6 @@ class SaleOrder(models.Model):
                 'tech_hours': c.tech_hours,
                 'help_hours': c.help_hours,
                 'km_cost': c.km_cost,
-                'admin_fact': c.admin_fact,
             })
         return {
             'name': _('Duplicated'),

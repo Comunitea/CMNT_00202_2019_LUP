@@ -23,7 +23,8 @@ class RegistergroupWizard(models.TransientModel):
                 'product_id': wo.product_id.id,
                 'product_qty': wo.qty_production,
                 'qty_produced': wo.qty_produced,
-                'qty_done': wo.qty_producing,
+                # 'qty_done': wo.planned_qty if wo.planned_qty else
+                'qty_done': wo.planned_qty,
             }
             res['qty_done_ids'].append((0, 0, vals))
 
@@ -114,6 +115,9 @@ class RegistergroupWizard(models.TransientModel):
             consume.group_line_id.write({
                 'real_qty':
                 consume.group_line_id.real_qty + consume.qty_done})
+
+        # Vuelvo a dejar la cantidad planificada a 0
+        gp.workorder_ids.write({'planned_qty': 0})
         return
 
 

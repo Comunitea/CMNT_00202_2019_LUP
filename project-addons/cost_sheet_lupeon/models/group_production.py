@@ -17,7 +17,7 @@ class GroupProduction(models.Model):
 
     workorder_ids = fields.One2many(
         'mrp.workorder', 'group_mrp_id', 'Gropued Productions',
-        readonly=True)
+        readonly=False)
 
     material_ids = fields.One2many(
         'group.material.line', 'group_mrp_id', 'Materials to consume',
@@ -26,6 +26,7 @@ class GroupProduction(models.Model):
     state = fields.Selection([
         ('draft', 'Draft'),
         ('confirmed', 'Confirmed'),
+        ('planned', 'Planificado'),
         ('progress', 'En progreso'),
         ('done', 'Done'),
         ('cancel', 'Cancelled')], string='Estado',
@@ -34,13 +35,17 @@ class GroupProduction(models.Model):
     total_time = fields.Float('Total time', readonly=True)
 
     def action_confirm_group(self):
+        """
+        Creo las líneas on los consumos agrtupados y enlazo las órdenes de
+        trabajo al grupo
+        """
         self.ensure_one()
         product_qtys = {}
         for prod in self.production_ids:
             wo = prod.workorder_ids.filtered(lambda x: x.active_move_line_ids)
-            if not wo or wo.state not in ('ready', 'progress'):
-                raise UserError('La producción %s no tiene orden de trabajo \
-                    o no está en un estado de preparada o en proceso')
+            # if not wo or wo.state not in ('ready', 'progress'):
+            #     raise UserError('La producción %s no tiene orden de trabajo \
+            #         o no está en un estado de preparada o en proceso')
 
             # Agrupo consumos
             for move in wo.active_move_line_ids:
@@ -59,6 +64,14 @@ class GroupProduction(models.Model):
             self.env['group.material.line'].create(vals)
         self.state = 'confirmed'
 
+    def action_plan_group(self):
+        self.ensure_one()
+        for wo in self.workorder_ids:
+            if not wo.planned_qty:
+                raise UserError(
+                    _('Debes planificar las cantidades a realizar'))
+        self.state = 'planned'
+
     def action_cancel_group(self):
         self.ensure_one()
         self.material_ids.unlink()
@@ -68,6 +81,7 @@ class GroupProduction(models.Model):
     def action_draft_group(self):
         self.ensure_one()
         self.state = 'draft'
+
 
     def unlink(self):
         for gr in self:

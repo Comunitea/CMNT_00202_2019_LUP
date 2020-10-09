@@ -26,21 +26,35 @@ class MrpProduction(models.Model):
     sale_id = fields.Many2one('sale.order', 'Sale Order',
                               related='sheet_id.sale_id', readonly=True, 
                               store=True)
+    add_sale_id = fields.Many2one(
+        'sale.order', 'Añadir a venta', readonly=True)
+    imprevist = fields.Boolean(
+        'Fabricación imprevista', readonly=True)
     sale_line_id = fields.Many2one('sale.order.line', 'Sale Order Line',
-                                   related='sheet_id.sale_line_id', readonly=True, 
+                                   related='sheet_id.sale_line_id',
+                                   readonly=True,
                                    store=True)
-    
     line_ref = fields.Char('Referencia')
     line_name = fields.Char('Descripción')
     ok_tech = fields.Boolean('OK tech', copy=False, readonly=True)
     no_ok_tech = fields.Integer('Qty no ok tech', copy=False, readonly=True)
     ok_quality = fields.Boolean('OK quality', copy=False, readonly=True)
-    no_ok_quality = fields.Integer('Qty no ok quality', copy=False, readonly=True)
-
-    repeated_production_ids = fields.One2many('mrp.production', 'origin_production_id', 'Repeated production')
-    origin_production_id = fields.Many2one('mrp.production', 'Producción origen', readonly=True)
+    no_ok_quality = fields.Integer(
+        'Qty no ok quality', copy=False, readonly=True)
+    repeated_production_ids = fields.One2many(
+        'mrp.production', 'origin_production_id', 'Repeated production')
+    origin_production_id = fields.Many2one(
+        'mrp.production', 'Producción origen', readonly=True)
 
     group_mrp_id = fields.Many2one('group.production', 'Group', readonly=True)
+
+    qty_printed = fields.Float('CAntidad impresa', compute='get_printed_qty')
+
+    def get_printed_qty(self):
+        for prod in self:
+            wo = prod.workorder_ids.filtered(lambda x: x.active_move_line_ids)
+            if wo:
+                prod.qty_printed = wo.qty_produced
 
     #  TODO FECHA
     def create_partial_mrp(self, qty, mode):

@@ -34,6 +34,8 @@
                 <field name="sale_line_id"/>
                 <field name="line_ref"/>
                 <field name="line_name"/>
+                <field name="imprevist"/>
+                <field name="add_sale_id" attrs="{'invisible': [('imprevist', '=', False)]}"/>
             </field>
 
              <field name="company_id" position="after">
@@ -77,11 +79,17 @@
                 <field name="line_name"/>
             </field>
 
-             <field name="state" position="after">
+            <field name="product_qty" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+
+            <field name="state" position="after">
                 <field name="ok_tech"/>
                 <field name="no_ok_tech"/>
                 <field name="ok_quality"/>
                 <field name="no_ok_quality"/>
+                <field name="product_qty"/>
+                <field name="qty_printed"/>
                 <field name="qty_produced"/>
             </field>
             

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="view_assign_production_wizard" model="ir.ui.view">
+            <field name="name">Asignar a pedido</field>
+            <field name="model">assign.production.wzd</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="sale_id"/>
+                    </group>
+                    <footer>
+                        <button name="confirm" string="Asignar" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window id="action_view_assign_production_wizard"
+                multi="False"
+                key2="client_action_multi"
+                name="Asignar a pedido de venta"
+                src_model="mrp.production"
+                res_model="assign.production.wzd"
+                view_mode="form"
+                view_type="form"
+                target="new" />
+
+</odoo>
