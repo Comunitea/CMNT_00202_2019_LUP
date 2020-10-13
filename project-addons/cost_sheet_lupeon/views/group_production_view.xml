@@ -23,7 +23,7 @@
                         <field name="create_date"/>
                         <field name="total_time" widget="float_time"/>
                     </group>
-                    <group string="Órdenes de trabajo agrupadas">
+                    <!-- <group string="Órdenes de trabajo agrupadas">
                         <field name="workorder_ids" nolabel="1">
                             <tree editable="bottom" create="0" delete="0">
                                 <field name="name" readonly="1"/>
@@ -37,6 +37,19 @@
                                 <field name="planned_qty"/>
                             </tree>
                         </field>
+                    </group> -->
+                    <group string="Órdenes de trabajo agrupadas">
+                        <field name="register_ids" nolabel="1">
+                            <tree editable="bottom" create="0" delete="0">
+                                    <field name="production_id"/>
+                                    <field name="workorder_id"/>
+                                    <field name="product_id"/>
+                                    <field name="qty_produced" string="Producido"  />
+                                    <field name="product_qty" string="Total a producir"  />
+                                    <field name="qty_pending"/>
+                                    <field name="qty_done"  string="Realizado"/>
+                            </tree>
+                        </field>
                     </group>
                     <notebook>
                         <page string="Materials to consume">
@@ -45,13 +58,13 @@
                                     <tree editable="bottom">
                                         <field name="product_id"/>
                                         <field name="qty"/>
-                                        <field name="real_qty"/>
                                         <field name="pending"/>
+                                        <field name="real_qty"/>
                                     </tree>
                                 </field>
                             </group>
                         </page>
-                        <page string="Producciones">
+                        <!-- <page string="Producciones">
                             <group string="Producciones agrupadas">
                                 <field name="production_ids" nolabel="1">
                                     <tree>
@@ -64,7 +77,7 @@
                                     </tree>
                                 </field>
                             </group>
-                        </page>
+                        </page> -->
                     </notebook>
                     
                 </sheet>

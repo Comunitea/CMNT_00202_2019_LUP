@@ -8,6 +8,7 @@
                     <sheet>
                         <group>
                             <field name="machine_hours" widget="float_time"/>
+                            <field name="user_hours" widget="float_time"/>
                         </group>
                         <group string="Cantidades hechas" attrs="{'invisible': [('qty_done_ids', '=', [])]}">
                             <field name="qty_done_ids" nolabel="1">
@@ -17,7 +18,7 @@
                                     <field name="product_id"  force_save="1"/>
                                     <field name="qty_produced" string="Producido"  force_save="1"/>
                                     <field name="product_qty" string="Total a producir"  force_save="1"/>
-                                    <field name="qty_done"  string="Realizado" required="1"/>
+                                    <field name="qty_done"  string="Realizado" force_save="1" readonly="1"/>
                                 </tree>
                             </field>
                         </group>

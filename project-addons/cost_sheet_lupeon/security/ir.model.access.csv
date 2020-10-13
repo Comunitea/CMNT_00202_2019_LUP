@@ -18,4 +18,5 @@ access_tinted,acess_tinted,model_tinted,base.group_user,1,1,1,1
 access_oppi_type,acess_oppi_type,model_oppi_type,base.group_user,1,1,1,1
 access_group_production,acess_group_production,model_group_production,base.group_user,1,1,1,1
 access_group_material_line,acess_group_material_line,model_group_material_line,base.group_user,1,1,1,1
+access_group_register_line,acess_group_register_line,model_group_register_line,base.group_user,1,1,1,1
 access_repart_material_line,acess_repart_material_line,model_repart_material_line,base.group_user,1,1,1,1

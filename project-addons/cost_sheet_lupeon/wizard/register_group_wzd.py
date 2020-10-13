@@ -1,6 +1,7 @@
 
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
+from datetime import datetime, timedelta
 
 
 class RegistergroupWizard(models.TransientModel):
@@ -16,7 +17,9 @@ class RegistergroupWizard(models.TransientModel):
         res['qty_done_ids'] = []
 
         # Load qty
-        for wo in gp.workorder_ids:
+        # for wo in gp.workorder_ids:
+        for reg in gp.register_ids:
+            wo = reg.workorder_id
             vals = {
                 'workorder_id': wo.id,
                 'production_id': wo.production_id.id,
@@ -24,7 +27,7 @@ class RegistergroupWizard(models.TransientModel):
                 'product_qty': wo.qty_production,
                 'qty_produced': wo.qty_produced,
                 # 'qty_done': wo.planned_qty if wo.planned_qty else
-                'qty_done': wo.planned_qty,
+                'qty_done': reg.qty_done,
             }
             res['qty_done_ids'].append((0, 0, vals))
 
@@ -41,6 +44,7 @@ class RegistergroupWizard(models.TransientModel):
         return res
 
     machine_hours = fields.Float('Horas máquina')
+    user_hours = fields.Float('Horas usuario')
     qty_done_ids = fields.One2many(
         'group.done.line', 'wzd_id', 'Cantidades Producidas')
     consume_ids = fields.One2many(
@@ -52,6 +56,9 @@ class RegistergroupWizard(models.TransientModel):
 
         if not self.machine_hours:
             raise UserError('Es necesario indicar el tiempo máquina')
+
+        if not self.user_hours:
+            raise UserError('Es necesario indicar las horas de usuario')
 
         for consume in self.consume_ids:
             if not consume.lot_id:
@@ -70,7 +77,14 @@ class RegistergroupWizard(models.TransientModel):
             wo = line.workorder_id
             if not wo or wo.state not in ('ready', 'progress'):
                 continue
+            
             wo.button_start()
+            if wo.time_ids:
+                percent = wo.duration_expected / self.user_hours
+                h = self.user_hours * percent
+                next_date = wo.time_ids[0].date_start + timedelta(hours=h)
+                # wo.time_ids[0].duration = self.total_time * 60 * percent
+                wo.time_ids[0].date_end = next_date
 
             consume_ids = []
             for move in wo.active_move_line_ids:
@@ -101,10 +115,19 @@ class RegistergroupWizard(models.TransientModel):
                 active_id=wo.id).new(vals)
             reg.confirm()
 
-        if gp.workorder_ids.filtered(lambda x: x.state != 'done'):
-            gp.state = 'progress'
-        else:
-            gp.state = 'done'
+        # if gp.workorder_ids.filtered(lambda x: x.state != 'done'):
+        #     gp.state = 'progress'
+        # else:
+        #     gp.state = 'done'
+
+        # if time_expected and wo.time_ids:
+        #             percent = wo.duration_expected / time_expected
+        #             h = self.total_time *  percent
+        #             next_date = wo.time_ids[0].date_start + timedelta(hours=h)
+        #             # wo.time_ids[0].duration = self.total_time * 60 * percent
+        #             wo.time_ids[0].date_end = next_date
+
+        gp.state = 'done'
 
         if self.machine_hours:
             time = gp.total_time
@@ -117,7 +140,7 @@ class RegistergroupWizard(models.TransientModel):
                 consume.group_line_id.real_qty + consume.qty_done})
 
         # Vuelvo a dejar la cantidad planificada a 0
-        gp.workorder_ids.write({'planned_qty': 0})
+        # gp.workorder_ids.write({'planned_qty': 0})
         return
 
 

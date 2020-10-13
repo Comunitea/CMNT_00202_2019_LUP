@@ -18,6 +18,8 @@ class GroupProduction(models.Model):
     workorder_ids = fields.One2many(
         'mrp.workorder', 'group_mrp_id', 'Gropued Productions',
         readonly=False)
+    register_ids = fields.One2many(
+        'group.register.line', 'group_mrp_id', 'Registro Producciones')
 
     material_ids = fields.One2many(
         'group.material.line', 'group_mrp_id', 'Materials to consume',
@@ -32,7 +34,8 @@ class GroupProduction(models.Model):
         ('cancel', 'Cancelled')], string='Estado',
         copy=False, default='draft', track_visibility='onchange')
 
-    total_time = fields.Float('Total time', readonly=True)
+    total_user_time = fields.Float('Tiempo usuario total', readonly=True)
+    total_time = fields.Float('Tiempo máquina total', readonly=True)
 
     def action_confirm_group(self):
         """
@@ -41,11 +44,12 @@ class GroupProduction(models.Model):
         """
         self.ensure_one()
         product_qtys = {}
-        for prod in self.production_ids:
-            wo = prod.workorder_ids.filtered(lambda x: x.active_move_line_ids)
-            # if not wo or wo.state not in ('ready', 'progress'):
-            #     raise UserError('La producción %s no tiene orden de trabajo \
-            #         o no está en un estado de preparada o en proceso')
+        for reg in self.register_ids:
+            # wo = prod.workorder_ids.filtered(lambda x: x.active_move_line_ids)
+
+            wo = reg.workorder_id
+            if not wo:
+                raise UserError('La producción %s no tiene orden de trabajo')
 
             # Agrupo consumos
             for move in wo.active_move_line_ids:
@@ -53,7 +57,7 @@ class GroupProduction(models.Model):
                     product_qtys[move.product_id] = 0.0
                 product_qtys[move.product_id] += move.qty_done
 
-            wo.group_mrp_id = self.id
+            # wo.group_mrp_id = self.id
 
         for product in product_qtys:
             vals = {
@@ -66,8 +70,12 @@ class GroupProduction(models.Model):
 
     def action_plan_group(self):
         self.ensure_one()
-        for wo in self.workorder_ids:
-            if not wo.planned_qty:
+        # for wo in self.workorder_ids:
+        #     if not wo.planned_qty:
+        #         raise UserError(
+        #             _('Debes planificar las cantidades a realizar'))
+        for reg in self.register_ids:
+            if not reg.qty_done:
                 raise UserError(
                     _('Debes planificar las cantidades a realizar'))
         self.state = 'planned'
@@ -82,12 +90,39 @@ class GroupProduction(models.Model):
         self.ensure_one()
         self.state = 'draft'
 
-
     def unlink(self):
         for gr in self:
             gr.production_ids.write({'group_mrp_id': False})
             gr.workorder_ids.write({'group_mrp_id': False})
         return super().unlink()
+
+
+class GroupRegisterLine(models.Model):
+    _name = 'group.register.line'
+
+    group_mrp_id = fields.Many2one(
+        'group.production', 'Group', readonly=True, ondelete='cascade')
+    workorder_id = fields.Many2one(
+        'mrp.workorder', 'Orden de trabajo', readonly=True)
+    production_id = fields.Many2one(
+        'mrp.production', 'Producción Asociada',
+        related='workorder_id.production_id')
+    product_id = fields.Many2one(
+        'product.product', 'Producto',
+        related='workorder_id.product_id')
+    product_qty = fields.Float(
+        'Cantidad inicial',
+        related='workorder_id.production_id.product_qty')
+    qty_produced = fields.Float(
+        'Cantidad producida',
+        related='workorder_id.qty_produced')
+    qty_pending = fields.Float('Pendiente', compute='_compute_pending')
+    qty_done = fields.Float('Cantidad realizada')
+
+    @api.depends('product_qty', 'qty_produced')
+    def _compute_pending(self):
+        for line in self:
+            line.qty_pending = line.product_qty - line.qty_produced
 
 
 class GroupMaterialLine(models.Model):
