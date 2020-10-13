@@ -96,6 +96,21 @@ class GroupCostSheet(models.Model):
                 'operation_id': operation_id,
             }
             res.append((0, 0, vals))
+        
+        import ipdb; ipdb.set_trace()
+        # Añadir compras como consumo
+        for sh in self.sheet_ids.filtered(
+                lambda sh: sh.sheet_type == 'purchase'):
+            for line in sh.purchase_line_ids.filtered('product_id'):
+                if line.product_id.type != 'product':
+                    continue
+                vals = {
+                    'product_id': line.product_id.id,
+                    'product_qty': line.qty,
+                    'product_uom_id': line.product_id.uom_id.id,
+                    'operation_id': operation_id,
+                }
+                res.append((0,0, vals))
         return res
 
     def get_group_routing_on_fly(self):

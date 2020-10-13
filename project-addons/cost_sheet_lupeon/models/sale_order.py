@@ -37,6 +37,7 @@ class SaleOrder(models.Model):
 
     purchase_ids = fields.One2many(
         'purchase.order', 'dest_sale_id', 'Purchases')
+    name2 = fields.Char('Descripción pedido')
 
     @api.multi
     def action_design(self):

@@ -150,7 +150,7 @@
                                     <field name="outsorcing_total" widget='monetary'/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
-                            <group string="Costes Compras">
+                            <group string="Otros consumos">
                                 <field name="purchase_line_ids" nolabel="1">
                                     <tree editable="bottom">
                                         <field name="product_id"/>
@@ -254,7 +254,7 @@
                             </group>
                             <group></group>
                             <div style="border-bottom: 1px solid black;"></div>
-                            <group string="Costes Compras">
+                            <group string="Otros consumos">
                                 <field name="purchase_line_ids" nolabel="1">
                                     <tree editable="bottom">
                                         <field name="product_id"/>
@@ -346,7 +346,7 @@
                             </group>
                             <group></group>
                             <div style="border-bottom: 1px solid black;"></div>
-                            <group string="Costes Compras">
+                            <group string="Otros consumos">
                                 <field name="purchase_line_ids" nolabel="1">
                                     <tree editable="bottom">
                                         <field name="product_id"/>
@@ -436,7 +436,7 @@
                             </group>
                             <group></group>
                             <div style="border-bottom: 1px solid black;"></div>
-                            <group string="Costes Compras">
+                            <group string="Otros consumos">
                                 <field name="purchase_line_ids" nolabel="1">
                                     <tree editable="bottom">
                                         <field name="product_id"/>
@@ -526,7 +526,7 @@
                             </group>
                             <group></group>
                             <div style="border-bottom: 1px solid black;"></div>
-                            <group string="Costes Compras">
+                            <group string="Otros consumos">
                                 <field name="purchase_line_ids" nolabel="1">
                                     <tree editable="bottom">
                                         <field name="product_id"/>
@@ -620,7 +620,7 @@
                             </group>
                             <group></group>
                             <div style="border-bottom: 1px solid black;"></div>
-                            <group string="Costes Compras">
+                            <group string="Otros consumos">
                                 <field name="purchase_line_ids" nolabel="1">
                                     <tree editable="bottom">
                                         <field name="product_id"/>
@@ -673,7 +673,7 @@
                         </page>
 
                         <page string="Compras" attrs="{'invisible': [('sheet_type', '!=', 'purchase')]}">
-                            <group string="Costes Compras">
+                            <group string="Otros consumos">
                                 <field name="purchase_line_ids" nolabel="1">
                                     <tree editable="bottom">
                                         <field name="product_id"/>
@@ -1068,7 +1068,7 @@
                                     <field name="outsorcing_total" widget='monetary'/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
-                            <group string="Costes Compras">
+                            <group string="Otros consumos">
                                 <field name="purchase_line_ids" nolabel="1">
                                     <tree editable="bottom">
                                         <field name="product_id"/>
@@ -1172,7 +1172,7 @@
                             </group>
                             <group></group>
                             <div style="border-bottom: 1px solid black;"></div>
-                            <group string="Costes Compras">
+                            <group string="Otros consumos">
                                 <field name="purchase_line_ids" nolabel="1">
                                     <tree editable="bottom">
                                         <field name="product_id"/>
@@ -1264,7 +1264,7 @@
                             </group>
                             <group></group>
                             <div style="border-bottom: 1px solid black;"></div>
-                            <group string="Costes Compras">
+                            <group string="Otros consumos">
                                 <field name="purchase_line_ids" nolabel="1">
                                     <tree editable="bottom">
                                         <field name="product_id"/>
@@ -1354,7 +1354,7 @@
                             </group>
                             <group></group>
                             <div style="border-bottom: 1px solid black;"></div>
-                            <group string="Costes Compras">
+                            <group string="Otros consumos">
                                 <field name="purchase_line_ids" nolabel="1">
                                     <tree editable="bottom">
                                         <field name="product_id"/>
@@ -1444,7 +1444,7 @@
                             </group>
                             <group></group>
                             <div style="border-bottom: 1px solid black;"></div>
-                            <group string="Costes Compras">
+                            <group string="Otros consumos">
                                 <field name="purchase_line_ids" nolabel="1">
                                     <tree editable="bottom">
                                         <field name="product_id"/>
@@ -1538,7 +1538,7 @@
                             </group>
                             <group></group>
                             <div style="border-bottom: 1px solid black;"></div>
-                            <group string="Costes Compras">
+                            <group string="Otros consumos">
                                 <field name="purchase_line_ids" nolabel="1">
                                     <tree editable="bottom">
                                         <field name="product_id"/>
@@ -1592,7 +1592,7 @@
                         </page>
 
                         <page string="Compras" attrs="{'invisible': [('sheet_type', '!=', 'purchase')]}">
-                            <group string="Costes Compras">
+                            <group string="Otros consumos">
                                 <field name="purchase_line_ids" nolabel="1">
                                     <tree editable="bottom">
                                         <field name="product_id"/>

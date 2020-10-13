@@ -859,6 +859,18 @@ class MaterialCostLine(models.Model):
 
     can_edit = fields.Boolean(related='sheet_id.can_edit')
 
+    # @api.onchange('material_id')
+    # def onchange_material_id(self):
+    #     if self.material_id and self.sheet_id and \
+    #             self.sheet_id.printer_id and self.sheet_id == 'fdm':
+    #         if self.material_id.diameter != self.sheet_id.printer_id.diameter:
+    #             self.material_id = False
+    #             return {
+    #                 'warning': {
+    #                     'title': _('Error'),
+    #                     'message': 'El diametro no coincide conla impresora'},
+    #             }
+
     def get_sls_gr_tray(self):
         self.ensure_one()
         res = 0.0
@@ -1072,7 +1084,7 @@ class PurchaseCostLine(models.Model):
     name = fields.Char('Ref. / Descripción')
     qty = fields.Float('Unidades')
     partner_id = fields.Many2one(
-        'res.partner', 'Proveedor', required=True, domain=[('supplier', '=', True)])
+        'res.partner', 'Proveedor', domain=[('supplier', '=', True)])
     cost_ud = fields.Float('Coste Ud.')
     ports = fields.Float('Portes')
     margin = fields.Float('Margin (%)', default=30.0)

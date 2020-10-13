@@ -136,11 +136,38 @@
 
             <field name="payment_term_id" position="after">
                 <field name="project_id"/>
+                <field name="name2"/>
             </field>
 
             <!-- <field name="commitment_date" position="after">
                 <field name="production_date"/>
             </field> -->
+        </field>
+    </record>
+
+    <!-- sale.order inherit tree view -->
+    <record id="custom_sale_view_tree" model="ir.ui.view">
+        <field name="name">sale.order.inherit.view.tree</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_quotation_tree"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="company_id" invisible="1"/>
+                <field name="name2" attrs="{'invisible': [('company_id', '!=', 1)]}"/>
+            </field>
+            
+        </field>
+    </record>
+
+    <!-- sale.order inherit search view -->
+    <record id="custom_sale_view_serarch" model="ir.ui.view">
+        <field name="name">sale.order.inherit.view.search</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+        <field name="arch" type="xml">
+           <field name="name" position="after">
+                <field name="name2"/>
+            </field>     
         </field>
     </record>
 
