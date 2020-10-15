@@ -4,6 +4,8 @@
 from odoo import models, fields, api, _
 import math
 from datetime import datetime, timedelta
+from odoo.exceptions import UserError
+
 
 
 SHEET_TYPES = [
@@ -65,6 +67,7 @@ class CostSheet(models.Model):
         string="Tipo de inspeción", default="visual")
     price_unit = fields.Float('PVP unidad', compute='_get_cost_prices')
     price_total = fields.Float('PVP TOTAL', compute='_get_cost_prices')
+    sheet_imprevist = fields.Boolean('Hoja imprevista', readonly=True)
 
 
     # DATOS PIEZA
@@ -604,12 +607,12 @@ class CostSheet(models.Model):
             production_sheets.create_productions()
         return
 
-    @api.multi
     def manually_create_task_or_production(self):
         """
         Create a task if sheet type is design, or if exist oppi line
         or a production for each sheet.
         """
+        self.ensure_one()
         if self.production_id:
             self.production_id.action_cancel()
             self.production_id.unlink()
@@ -620,6 +623,54 @@ class CostSheet(models.Model):
 
         self.create_tasks()
         self.create_sale_productions()
+
+    @api.multi
+    def manually_add_consumes(self):
+        self.ensure_one()
+        # Añadir consumos a la principal
+        if self.sheet_type == 'purchase':
+            bom_vals = []
+
+            # Buscar producciones principales
+            # Añadir consumo al bom y actualizar producción
+            # boms = self.get_group_sheets().mapped('bom_id')
+            bom = self.group_id.mapped('bom_id')
+            if bom:
+                domain = [('bom_id', 'in', bom.ids)]
+                production = self.env['mrp.production'].search(domain)
+
+                operation_id = False
+                if production.routing_id and production.routing_id.\
+                        operation_ids:
+                    operation_id = production.routing_id.operation_ids[0].id
+
+                for line in self.purchase_line_ids.filtered('product_id'):
+                    if line.product_id.type != 'product':
+                        continue
+                    vals = {
+                        'product_id': line.product_id.id,
+                        'product_qty': line.qty,
+                        'product_uom_id': line.product_id.uom_id.id,
+                        'operation_id': operation_id,
+                    }
+                    bom_vals.append((0, 0, vals))
+
+                # Actualizo consumos producción
+                production.write({'bom_line_ids': bom_vals})
+                update_quantity_wizard = self.env['change.production.qty'].\
+                    create({
+                        'mo_id': production.id,
+                        'product_qty': production.product_qty,
+                    })
+                update_quantity_wizard.change_prod_qty()
+
+                if self.sale_id:
+                    p_lines = self.purchase_line_ids.\
+                        filtered(lambda x: x.partner_id)
+                    self.sale_id._create_purchases(p_lines)
+
+                self.sheet_imprevist = True
+
         return
 
     def create_design_tasks(self):
@@ -776,6 +827,8 @@ class CostSheet(models.Model):
                 'product_uom_id': sheet.product_id.uom_id.id,
                 'product_qty': sheet.cus_units,  # TODO get_qty,
                 'bom_id': bom.id,
+                'date_planned_start': datetime.now() + timedelta(days=1),
+                # 'line_ref': sheet.sale_line_id.ref,
                 'date_planned_finished': 
                 sheet.sale_line_id.order_id.production_date or False,
                 # 'line_ref': sheet.sale_line_id.ref,
@@ -1082,7 +1135,7 @@ class PurchaseCostLine(models.Model):
 
     product_id = fields.Many2one('product.product', 'Producto')
     name = fields.Char('Ref. / Descripción')
-    qty = fields.Float('Unidades')
+    qty = fields.Float('Unidades', required=True)
     partner_id = fields.Many2one(
         'res.partner', 'Proveedor', domain=[('supplier', '=', True)])
     cost_ud = fields.Float('Coste Ud.')
@@ -1107,6 +1160,13 @@ class PurchaseCostLine(models.Model):
     def onchange_product_id(self):
         if self.product_id:
             self.cost_ud = self.product_id.standard_price
+
+    @api.model
+    def create(self, vals):
+        if not vals.get('qty'):
+            raise UserError(
+                _('Debes especificar la cantidad de otros consumos')) 
+        return super().create(vals)
 
 
 class OppiCostLine(models.Model):

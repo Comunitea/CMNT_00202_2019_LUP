@@ -92,10 +92,8 @@ class SaleOrder(models.Model):
     @api.multi
     def _count_production_and_task(self):
         for order in self:
-            boms = order.get_group_sheets().mapped('bom_id')
-            domain = [('bom_id', 'in', boms.ids)]
             productions = order.get_sheet_lines().mapped('production_id')
-            productions |= self.env['mrp.production'].search(domain)
+            productions |= self.get_main_productions()
             # Buscar producciones imprevistas
             domain = [('add_sale_id', '=', self.id)]
             productions |= self.env['mrp.production'].search(domain)
@@ -170,7 +168,7 @@ class SaleOrder(models.Model):
         action = self.env.ref(
             'project.act_project_project_2_project_task_all').read()[0]
         if self.project_id and self.project_id.task_ids:
-            tasks = self.project_id.task_ids
+            # tasks = self.project_id.task_ids
             # action['domain'] = [('id', 'in', tasks.ids)]
             action['context'] = {
                 'search_default_project_id': [self.project_id.id],
@@ -180,6 +178,14 @@ class SaleOrder(models.Model):
             action = {'type': 'ir.actions.act_window_close'}
         return action
 
+    def get_main_productions(self):
+        self.ensure_one()
+        # Buscar producciones principales
+        boms = self.get_group_sheets().mapped('bom_id')
+        domain = [('bom_id', 'in', boms.ids)]
+        productions = self.env['mrp.production'].search(domain)
+        return productions
+
     @api.multi
     def view_productions(self):
         self.ensure_one()
@@ -188,9 +194,7 @@ class SaleOrder(models.Model):
         ).mapped('production_id')
 
         # Buscar produccion principal
-        boms = self.get_group_sheets().mapped('bom_id')
-        domain = [('bom_id', 'in', boms.ids)]
-        productions |= self.env['mrp.production'].search(domain)
+        productions |= self.get_main_productions()
 
         # Buscar producciones imprevistas
         domain = [('add_sale_id', '=', self.id)]
@@ -208,11 +212,10 @@ class SaleOrder(models.Model):
         action['context'] = "{}"
         return action
 
-    def create_sale_purchase(self):
+    def _create_purchases(self, lines):
         self.ensure_one()
+        suppliers = lines.mapped('partner_id')
         supplier_purchase = {}
-        sheet_lines = self.get_sheet_lines()
-        suppliers = sheet_lines.mapped('purchase_line_ids.partner_id')
         for partner in suppliers:
             vals = {
                 'partner_id': partner.id,
@@ -225,7 +228,7 @@ class SaleOrder(models.Model):
             po = self.env['purchase.order'].create(vals)
             supplier_purchase[partner.id] = po
 
-        for line in sheet_lines.mapped('purchase_line_ids'):
+        for line in lines:
             po = supplier_purchase[line.partner_id.id]
             taxes = line.product_id.supplier_taxes_id
             # fpos = po.fiscal_position_id
@@ -246,6 +249,14 @@ class SaleOrder(models.Model):
             }
             self.env['purchase.order.line'].create(vals)
 
+    def create_sale_purchase(self):
+        self.ensure_one()
+        sheet_lines = self.get_sheet_lines()
+        p_lines = sheet_lines.mapped('purchase_line_ids').\
+            filtered(lambda x: x.partner_id)
+        self._create_purchases(p_lines)
+
+
     @api.multi
     def action_confirm(self):
         """
@@ -265,6 +276,12 @@ class SaleOrder(models.Model):
             order.create_sale_purchase()
 
         res = super().action_confirm()
+
+        # Escribir información en las producciones generadas bajo pedido
+        main_productions = self.get_main_productions()
+        if main_productions:
+            main_productions.write(
+                {'date_planned_start': datetime.now() + timedelta(days=1)})
         return res
 
     def action_cancel(self):

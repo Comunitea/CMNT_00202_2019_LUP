@@ -4,704 +4,7 @@
     <!-- MAIN MENU -->
     <menuitem id="menu_costs_root" name="Hojas de coste" sequence="30"/>
 
-    <record id="simple_cost_sheet_view_form" model="ir.ui.view">
-        <field name="name">cost.sheet.view</field>
-        <field name="model">cost.sheet</field>
-        <field name="arch" type="xml">
-            <form create="false">
-                <sheet>
-                    <div class="oe_title">
-                        <h1>
-                            <field name="name"/>
-                        </h1>
-                    </div>
-                    <group>
-                        <group string="General">
-                            <field name="can_edit" invisible="1"/>
-                            <field name="sheet_type"/>
-                            <!-- <field name="increment"/>
-                            <field name="inspection_type"/> -->
-                            <field name="description"/>
-                        </group>
-                        <!-- <group string="Modelos asociados">
-                            <field name="sale_line_id"/>
-                            <field name="sale_id"/>
-                            <field name="group_id"/>
-                            <field name="product_id"/>
-                        </group> -->
-                    </group>
-                    <!-- <group string="Precios">
-                        <group>
-                                <field name="cost_init" attrs="{'invisible': [('sheet_type', 'in', ['fdm', 'dmls', 'unnplaned', 'meets'])]}"/>
-                                <field name="cost_init_computed"  attrs="{'invisible': [('sheet_type', 'not in', ['fdm', 'dmls'])]}"/>
-                                <field name="cost_ud" attrs="{'invisible': [('sheet_type', 'in', ['unnplaned', 'meets'])]}"/>
-                                <field name="admin_fact" attrs="{'invisible': [('sheet_type', 'in', ['unnplaned', 'meets'])]}" groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                <field name="use_disc_qty"  attrs="{'invisible': [('sheet_type', 'not in', ['fdm', 'sls', 'sls2', 'poly', 'sla', 'dmls'])]}"/> 
-
-                        </group>
-                        <group>
-                                <field name="disc_qty_computed" attrs="{'invisible': [('sheet_type', 'not in', ['fdm', 'sls', 'sls2', 'poly', 'sla', 'dmls'])]}"/>
-                                <field name="disc2" attrs="{'invisible': [('sheet_type', 'not in', ['design'])]}"/>
-                                <field name="increment" attrs="{'invisible': [('sheet_type', 'in', ['design', 'unnplaned', 'meets'])]}"/>
-                                <field name="price_unit"  attrs="{'invisible': [('sheet_type', 'in', ['design', 'unnplaned', 'meets'])]}"/>
-                                <field name="price_total"/>
-                        </group>
-                    </group> -->
-                    <notebook>
-                        <page string="Diseño" attrs="{'invisible': [('sheet_type', '!=', 'design')]}">
-                            <group>
-                                <group string="Datos pieza">
-                                    <field name="flat_ref"/>
-                                </group>
-                                <!-- <group string="Carcterísticas pieza">
-                                    <field name="feature_ids" nolabel="1" widget="many2many_checkboxes"/>
-                                </group> -->
-                                <group string="Legislación aplicable">
-                                    <field name="legislation_ids" nolabel="1" widget="many2many_checkboxes"/>
-                                </group>
-                            </group>
-                            <group string="Tiempos">
-                                <field name="time_line_ids" nolabel="1">
-                                    <tree editable="bottom">
-                                        <field name="software_id"/>
-                                        <field name="hours"/>
-                                        <!-- <field name="price_hour" groups="cost_sheet_lupeon.group_cs_advanced"/> -->
-                                        <!-- <field name="discount"/> -->
-                                        <!-- <field name="total"/> -->
-                                        <field name="task_id"/>
-                                    </tree>
-                                </field>
-                            </group>
-                            <!-- <group class="oe_subtotal_footer oe_right" colspan="2" name="design_total">
-                                <field name="hours_total" widget='time'/>
-                                <field name="amount_total" widget='monetary'/>
-                            </group> -->
-                        </page>
-
-                        <page string="FDM" attrs="{'invisible': [('sheet_type', '!=', 'fdm')]}">
-               
-                            <group cospan="4" col="8" string="Datos pieza">
-                                <field name="cus_units"/>
-                                <field name="cc_ud"/>
-                                <!-- <field name="euros_cc"/> -->
-                            </group>
-                            <div style="border-bottom: 1px solid black;"></div>
-                            <group string="Carcterísticas pieza">
-                                <field name="feature_ids" nolabel="1" widget="many2many_checkboxes"/>
-                            </group>
-                            <div style="border-bottom: 1px solid black;"></div>
-                            <group cospan="2" col="8" string="Parámetros impresión">
-                                <!-- <field name="printer_id" domain="[('type', '=', 'fdm')]"/> -->
-                                <field name="printer_id"/>
-                                <field name="perfil"/>
-                                <field name="tray_units"/>
-                                <field name="tray_hours"/>
-                                <field name="loops"/>
-                                <field name="infill"/>
-                                <field name="layer_height"/>
-                                <!-- <field name="euro_machine" groups="cost_sheet_lupeon.group_cs_advanced"/> -->
-                            </group>
-                            <div style="border-bottom: 1px solid black;"></div>
-
-                             <group colspan="4" string="Material Cost">
-                                 <field name="material_cost_ids" nolabel="1"/>
-                            </group>
-                            <!-- <group class="oe_subtotal_footer oe_right" colspan="2" name="material_total"  groups="cost_sheet_lupeon.group_cs_advanced">
-                                    <field name="total_euro_ud" widget='monetary'/>
-                                    <field name="total_material_cost" widget='monetary'/>
-                            </group> -->
-                            <group></group>
-                            <div style="border-bottom: 1px solid black;"></div>
-                            <!-- <group colspan="2" col="6" string="Coste Máquina">
-                                <field name="machine_hours"/>
-                                <field name="euro_machine_ud"  groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                <field name="euro_machine_total"  groups="cost_sheet_lupeon.group_cs_advanced"/>
-                            </group> -->
-                            <!-- <div style="border-bottom: 1px solid black;"></div> -->
-                            <!-- <group colspan="4" string="Coste mano de obra">
-                                <field name="workforce_cost_ids" nolabel="1">
-                                    <tree editable="bottom">
-                                        <field name="name"/>
-                                        <field name="hours"/>
-                                        <field name="minutes"/>
-                                        <field name="euro_unit"  groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                        <field name="total"  groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                    </tree>
-                                </field>
-                            </group>
-                             <group class="oe_subtotal_footer oe_right" colspan="2" name="wf_total"  groups="cost_sheet_lupeon.group_cs_advanced">
-                                    <field name="workforce_total_euro_ud" widget='monetary'/>
-                                    <field name="workforce_total" widget='monetary'/>
-                            </group>
-                            <group></group>
-                            <div style="border-bottom: 1px solid black;"></div> -->
-                             <!-- <group colspan="4" string="Coste externalizacion por pieza">
-                                <field name="outsorcing_cost_ids" nolabel="1">
-                                    <tree editable="bottom">
-                                        <field name="name"/>
-                                        <field name="cost"/>
-                                        <field name="margin"  groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                        <field name="pvp"  groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                    </tree>
-                                </field>
-                            </group>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="design_total"  groups="cost_sheet_lupeon.group_cs_advanced">
-                                    <field name="outsorcing_total_ud" widget='monetary'/>
-                                    <field name="outsorcing_total" widget='monetary'/>
-                            </group>
-                            <div style="border-bottom: 1px solid black;"></div>
-                            <group string="Otros consumos">
-                                <field name="purchase_line_ids" nolabel="1">
-                                    <tree editable="bottom">
-                                        <field name="product_id"/>
-                                        <field name="name"/>
-                                        <field name="qty"/>
-                                        <field name="partner_id"/>
-                                        <field name="cost_ud"/>
-                                        <field name="ports"/>
-                                        <field name="margin"/>
-                                        <field name="pvp_ud" groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                        <field name="pvp_total" groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                    </tree>
-                                </field>
-                            </group>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="meet_total" groups="cost_sheet_lupeon.group_cs_advanced">
-                                <field name="purchase_total" widget='monetary'/>
-                            </group>
-                            <div style="border-bottom: 1px solid black;"></div>
-                            <group colspan="4" string="Oppi">
-                                 <field name="oppi_line_ids" nolabel="1"/>
-                            </group>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="material_total">
-                                    <field name="total_oppi" widget='time'/>
-                            </group> -->
-                            
-                        </page>
-
-                        <!-- SLS P396 (ANTIGUO SLS)-->
-                        <page string="SLS P396" attrs="{'invisible': [('sheet_type', '!=', 'sls')]}">
-                            <group colspan="2" col="8" string="Datos pieza">
-                                <field name="cus_units"/>
-                                <field name="x_mm_sls"/>
-                                <field name="y_mm_sls"/>
-                                <field name="z_mm_sls"/>
-                                <field name="cc_ud"/>
-                                <field name="tinted_id"/>
-                                <field name="cm2_sls"/>
-                                <!-- <field name="e_cc_sls"/> -->
-                            </group>
-                             <div style="border-bottom: 1px solid black;"></div>
-                            <group colspan="2" col="8" string="Parámetros impresión">
-                                <field name="printer_id"/>
-                                <field name="tray_units"/>
-                                <field name="print_increment" attrs="{'invisible': [('sheet_type', 'in', ['poly'])], 'readonly': [('can_edit', '!=', True)]}"/>
-                                <field name="tray_hours_sls"/>
-                                <!-- <field name="euro_machine"  groups="cost_sheet_lupeon.group_cs_advanced"/> -->
-                            </group>
-                             <div style="border-bottom: 1px solid black;"></div>
-                             <!-- <group colspan="2" col="8" string="Configuración oferta">
-                                <field name="offer_type"/>
-                                <field name="solid_per_sls"/>
-                                <field name="bucket_height_sls"/>
-                                <field name="simulation_time_sls"/>
-                            </group>
-                             <div style="border-bottom: 1px solid black;"></div> -->
-                             <group colspan="4" string="Material Cost">
-                                 <field name="material_cost_ids" nolabel="1"/>
-                            </group>
-                             <!-- <group class="oe_subtotal_footer oe_right" colspan="2" name="material_total"  groups="cost_sheet_lupeon.group_cs_advanced">
-                                    <field name="total_euro_ud" widget='monetary'/>
-                                    <field name="total_material_cost" widget='monetary'/>
-                            </group> -->
-                            <group></group>
-                             <div style="border-bottom: 1px solid black;"></div>
-                             <!-- <group colspan="2" col="6" string="Coste Máquina">
-                                <field name="machine_hours"/>
-                                <field name="euro_machine_ud" groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                <field name="euro_machine_total" groups="cost_sheet_lupeon.group_cs_advanced"/>
-                            </group>
-                             <div style="border-bottom: 1px solid black;"></div>
-                            <group colspan="4" string="Coste mano de obra">
-                                <field name="workforce_cost_ids" nolabel="1">
-                                    <tree editable="bottom">
-                                        <field name="name"/>
-                                        <field name="hours"/>
-                                        <field name="minutes"/>
-                                        <field name="euro_unit"  groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                        <field name="total"  groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                    </tree>
-                                </field>
-                            </group>
-                             <group class="oe_subtotal_footer oe_right" colspan="2" name="wf_total"  groups="cost_sheet_lupeon.group_cs_advanced">
-                                    <field name="workforce_total_euro_ud" widget='monetary'/>
-                                    <field name="workforce_total" widget='monetary'/>
-                            </group>
-                            <group></group>
-                             <div style="border-bottom: 1px solid black;"></div>
-                            <group colspan="4" string="Coste externalizacion por pieza">
-                                <field name="outsorcing_cost_ids" nolabel="1">
-                                    <tree editable="bottom">
-                                        <field name="name"/>
-                                        <field name="cost"/>
-                                        <field name="margin"  groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                        <field name="pvp"  groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                    </tree>
-                                </field>
-                            </group>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="design_total"  groups="cost_sheet_lupeon.group_cs_advanced">
-                                    <field name="outsorcing_total_ud" widget='monetary'/>
-                                    <field name="outsorcing_total" widget='monetary'/>
-                            </group>
-                            <group></group>
-                            <div style="border-bottom: 1px solid black;"></div>
-                            <group string="Otros consumos">
-                                <field name="purchase_line_ids" nolabel="1">
-                                    <tree editable="bottom">
-                                        <field name="product_id"/>
-                                        <field name="name"/>
-                                        <field name="qty"/>
-                                        <field name="partner_id"/>
-                                        <field name="cost_ud"/>
-                                        <field name="ports"/>
-                                        <field name="margin"/>
-                                        <field name="pvp_ud" groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                        <field name="pvp_total" groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                    </tree>
-                                </field>
-                            </group>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="meet_total" groups="cost_sheet_lupeon.group_cs_advanced">
-                                <field name="purchase_total" widget='monetary'/>
-                            </group>
-                            <div style="border-bottom: 1px solid black;"></div>
-                            <group colspan="4" string="Oppi">
-                                 <field name="oppi_line_ids" nolabel="1"/>
-                            </group>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="material_total">
-                                    <field name="total_oppi" widget='time'/>
-                            </group> -->
-                        </page>
-                    
-
-                        <!-- POLY -->
-                         <page string="POLY" attrs="{'invisible': [('sheet_type', '!=', 'poly')]}">
-                            <group colspan="2" col="8" string="Datos pieza">
-                                <field name="cus_units"/>
-                                <field name="cc_ud"/>
-                                <!-- <field name="euros_cc"/> -->
-                            </group>
-                            <div style="border-bottom: 1px solid black;"></div>
-                            <group colspan="2" col="8" string="Parámetros impresión">
-                                <field name="printer_id"/>
-                                <field name="tray_units"/>
-                                <field name="finish_pol"/>
-                                <field name="tray_hours"/>
-                                <!-- <field name="euro_machine" groups="cost_sheet_lupeon.group_cs_advanced"/> -->
-                            </group>
-                            <div style="border-bottom: 1px solid black;"></div>
-                            <group colspan="4" string="Material Cost">
-                                 <field name="material_cost_ids" nolabel="1"/>
-                            </group>
-                            <!-- <group class="oe_subtotal_footer oe_right" colspan="2" name="material_total"  groups="cost_sheet_lupeon.group_cs_advanced">
-                                    <field name="total_euro_ud" widget='monetary'/>
-                                    <field name="total_material_cost" widget='monetary'/>
-                            </group> -->
-                            <group></group>
-                            <div style="border-bottom: 1px solid black;"></div>
-                             <!-- <group colspan="2" col="6" string="Coste Máquina">
-                                <field name="machine_hours"/>
-                                <field name="euro_machine_ud" groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                <field name="euro_machine_total" groups="cost_sheet_lupeon.group_cs_advanced"/>
-                            </group>
-                            <div style="border-bottom: 1px solid black;"></div>
-                            <group colspan="4" string="Coste mano de obra">
-                                <field name="workforce_cost_ids" nolabel="1">
-                                    <tree editable="bottom">
-                                        <field name="name"/>
-                                        <field name="hours"/>
-                                        <field name="minutes"/>
-                                        <field name="euro_unit"  groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                        <field name="total"  groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                    </tree>
-                                </field>
-                            </group>
-                             <group class="oe_subtotal_footer oe_right" colspan="2" name="wf_total"  groups="cost_sheet_lupeon.group_cs_advanced">
-                                    <field name="workforce_total_euro_ud" widget='monetary'/>
-                                    <field name="workforce_total" widget='monetary'/>
-                            </group>
-                            <group></group>
-                            <div style="border-bottom: 1px solid black;"></div>
-                            <group colspan="4" string="Coste externalizacion por pieza">
-                                <field name="outsorcing_cost_ids" nolabel="1">
-                                    <tree editable="bottom">
-                                        <field name="name"/>
-                                        <field name="cost"/>
-                                        <field name="margin"  groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                        <field name="pvp"  groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                    </tree>
-                                </field>
-                            </group>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="design_total"  groups="cost_sheet_lupeon.group_cs_advanced">
-                                    <field name="outsorcing_total_ud" widget='monetary'/>
-                                    <field name="outsorcing_total" widget='monetary'/>
-                            </group>
-                            <group></group>
-                            <div style="border-bottom: 1px solid black;"></div>
-                            <group string="Otros consumos">
-                                <field name="purchase_line_ids" nolabel="1">
-                                    <tree editable="bottom">
-                                        <field name="product_id"/>
-                                        <field name="name"/>
-                                        <field name="qty"/>
-                                        <field name="partner_id"/>
-                                        <field name="cost_ud"/>
-                                        <field name="ports"/>
-                                        <field name="margin"/>
-                                        <field name="pvp_ud" groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                        <field name="pvp_total" groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                    </tree>
-                                </field>
-                            </group>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="meet_total" groups="cost_sheet_lupeon.group_cs_advanced">
-                                <field name="purchase_total" widget='monetary'/>
-                            </group>
-                            <div style="border-bottom: 1px solid black;"></div>
-                            <group colspan="4" string="Oppi">
-                                 <field name="oppi_line_ids" nolabel="1"/>
-                            </group>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="material_total">
-                                    <field name="total_oppi" widget='time'/>
-                            </group> -->
-                        </page>
-
-                         <!-- SLA -->
-                         <page string="SLA" attrs="{'invisible': [('sheet_type', '!=', 'sla')]}">
-                            <group colspan="2" col="8" string="Datos pieza">
-                                <field name="cus_units"/>
-                                <field name="cc_ud"/>
-                                <!-- <field name="euros_cc"/> -->
-                            </group>
-                            <div style="border-bottom: 1px solid black;"></div>
-                            <group colspan="2" col="8" string="Parámetros impresión">
-                                <field name="printer_id"/>
-                                <field name="tray_units"/>
-                                <field name="tray_hours"/>
-                                <!-- <field name="euro_machine" groups="cost_sheet_lupeon.group_cs_advanced"/> -->
-                            </group>
-                            <div style="border-bottom: 1px solid black;"></div>
-                             <group colspan="4" string="Material Cost">
-                                 <field name="material_cost_ids" nolabel="1"/>
-                            </group>
-                             <!-- <group class="oe_subtotal_footer oe_right" colspan="2" name="material_total"  groups="cost_sheet_lupeon.group_cs_advanced">
-                                    <field name="total_euro_ud" widget='monetary'/>
-                                    <field name="total_material_cost" widget='monetary'/>
-                            </group> -->
-                            <group></group>
-                            <div style="border-bottom: 1px solid black;"></div>
-                             <!-- <group colspan="2" col="6" string="Coste Máquina">
-                                <field name="machine_hours"/>
-                                <field name="euro_machine_ud" groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                <field name="euro_machine_total" groups="cost_sheet_lupeon.group_cs_advanced"/>
-                            </group>
-                            <div style="border-bottom: 1px solid black;"></div>
-                            <group colspan="4" string="Coste mano de obra">
-                                <field name="workforce_cost_ids" nolabel="1">
-                                    <tree editable="bottom">
-                                        <field name="name"/>
-                                        <field name="hours"/>
-                                        <field name="minutes"/>
-                                        <field name="euro_unit"  groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                        <field name="total"  groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                    </tree>
-                                </field>
-                            </group>
-                             <group class="oe_subtotal_footer oe_right" colspan="2" name="wf_total"  groups="cost_sheet_lupeon.group_cs_advanced">
-                                    <field name="workforce_total_euro_ud" widget='monetary'/>
-                                    <field name="workforce_total" widget='monetary'/>
-                            </group>
-                            <group></group>
-                            <div style="border-bottom: 1px solid black;"></div>
-                            <group colspan="4" string="Coste externalizacion por pieza">
-                                <field name="outsorcing_cost_ids" nolabel="1">
-                                    <tree editable="bottom">
-                                        <field name="name"/>
-                                        <field name="cost"/>
-                                        <field name="margin"  groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                        <field name="pvp"  groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                    </tree>
-                                </field>
-                            </group>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="design_total"  groups="cost_sheet_lupeon.group_cs_advanced">
-                                    <field name="outsorcing_total_ud" widget='monetary'/>
-                                    <field name="outsorcing_total" widget='monetary'/>
-                            </group>
-                            <group></group>
-                            <div style="border-bottom: 1px solid black;"></div>
-                            <group string="Otros consumos">
-                                <field name="purchase_line_ids" nolabel="1">
-                                    <tree editable="bottom">
-                                        <field name="product_id"/>
-                                        <field name="name"/>
-                                        <field name="qty"/>
-                                        <field name="partner_id"/>
-                                        <field name="cost_ud"/>
-                                        <field name="ports"/>
-                                        <field name="margin"/>
-                                        <field name="pvp_ud" groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                        <field name="pvp_total" groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                    </tree>
-                                </field>
-                            </group>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="meet_total" groups="cost_sheet_lupeon.group_cs_advanced">
-                                <field name="purchase_total" widget='monetary'/>
-                            </group>
-                            <div style="border-bottom: 1px solid black;"></div>
-                            <group colspan="4" string="Oppi">
-                                 <field name="oppi_line_ids" nolabel="1"/>
-                            </group>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="material_total">
-                                    <field name="total_oppi" widget='time'/>
-                            </group> -->
-                        </page>
-
-                        <!-- SLS (igual a SLA, y el anterior SLS pasa a ser SLS P396) -->
-                         <page string="SLS" attrs="{'invisible': [('sheet_type', '!=', 'sls2')]}">
-                            <group colspan="2" col="8" string="Datos pieza">
-                                <field name="cus_units"/>
-                                <field name="cc_ud"/>
-                                <field name="euros_cc"/>
-                            </group>
-                            <div style="border-bottom: 1px solid black;"></div>
-                            <group colspan="2" col="8" string="Parámetros impresión">
-                                <field name="printer_id"/>
-                                <field name="tray_units"/>
-                                <field name="tray_hours"/>
-                                <!-- <field name="euro_machine" groups="cost_sheet_lupeon.group_cs_advanced"/> -->
-                            </group>
-                            <div style="border-bottom: 1px solid black;"></div>
-                             <group colspan="4" string="Material Cost">
-                                 <field name="material_cost_ids" nolabel="1"/>
-                            </group>
-                             <!-- <group class="oe_subtotal_footer oe_right" colspan="2" name="material_total"  groups="cost_sheet_lupeon.group_cs_advanced">
-                                    <field name="total_euro_ud" widget='monetary'/>
-                                    <field name="total_material_cost" widget='monetary'/>
-                            </group> -->
-                            <group></group>
-                            <div style="border-bottom: 1px solid black;"></div>
-                             <!-- <group colspan="2" col="6" string="Coste Máquina">
-                                <field name="machine_hours"/>
-                                <field name="euro_machine_ud" groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                <field name="euro_machine_total" groups="cost_sheet_lupeon.group_cs_advanced"/>
-                            </group>
-                            <div style="border-bottom: 1px solid black;"></div>
-                            <group colspan="4" string="Coste mano de obra">
-                                <field name="workforce_cost_ids" nolabel="1">
-                                    <tree editable="bottom">
-                                        <field name="name"/>
-                                        <field name="hours"/>
-                                        <field name="minutes"/>
-                                        <field name="euro_unit"  groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                        <field name="total"  groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                    </tree>
-                                </field>
-                            </group>
-                             <group class="oe_subtotal_footer oe_right" colspan="2" name="wf_total"  groups="cost_sheet_lupeon.group_cs_advanced">
-                                    <field name="workforce_total_euro_ud" widget='monetary'/>
-                                    <field name="workforce_total" widget='monetary'/>
-                            </group>
-                            <group></group>
-                            <div style="border-bottom: 1px solid black;"></div>
-                            <group colspan="4" string="Coste externalizacion por pieza">
-                                <field name="outsorcing_cost_ids" nolabel="1">
-                                    <tree editable="bottom">
-                                        <field name="name"/>
-                                        <field name="cost"/>
-                                        <field name="margin"  groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                        <field name="pvp"  groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                    </tree>
-                                </field>
-                            </group>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="design_total"  groups="cost_sheet_lupeon.group_cs_advanced">
-                                    <field name="outsorcing_total_ud" widget='monetary'/>
-                                    <field name="outsorcing_total" widget='monetary'/>
-                            </group>
-                            <group></group>
-                            <div style="border-bottom: 1px solid black;"></div>
-                            <group string="Otros consumos">
-                                <field name="purchase_line_ids" nolabel="1">
-                                    <tree editable="bottom">
-                                        <field name="product_id"/>
-                                        <field name="name"/>
-                                        <field name="qty"/>
-                                        <field name="partner_id"/>
-                                        <field name="cost_ud"/>
-                                        <field name="ports"/>
-                                        <field name="margin"/>
-                                        <field name="pvp_ud" groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                        <field name="pvp_total" groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                    </tree>
-                                </field>
-                            </group>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="meet_total" groups="cost_sheet_lupeon.group_cs_advanced">
-                                <field name="purchase_total" widget='monetary'/>
-                            </group>
-                            <div style="border-bottom: 1px solid black;"></div>
-                            <group colspan="4" string="Oppi">
-                                 <field name="oppi_line_ids" nolabel="1"/>
-                            </group>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="material_total">
-                                    <field name="total_oppi" widget='time'/>
-                            </group> -->
-                        </page>
-
-                         <!-- DMLS -->
-                        <page string="DMLS" attrs="{'invisible': [('sheet_type', '!=', 'dmls')]}">
-                            <group colspan="2" col="8" string="Datos pieza">
-                                <field name="cus_units"/>
-                                <field name="cc_ud"/>
-                                <field name="cc_soport_dmls"/>
-                                <field name="euros_cc"/>
-                            </group>
-                            <div style="border-bottom: 1px solid black;"></div>
-                            <group colspan="2" col="8" string="Parámetros impresión">
-                                <field name="printer_id"/>
-                                <field name="tray_units"/>
-                                <field name="tray_hours"/>
-                                <!-- <field name="euro_machine" groups="cost_sheet_lupeon.group_cs_advanced"/> -->
-                            </group>
-                            <div style="border-bottom: 1px solid black;"></div>
-                            <group colspan="4" string="Material Cost">
-                                 <field name="material_cost_ids" nolabel="1"/>
-                            </group>
-                            <!-- <group class="oe_subtotal_footer oe_right" colspan="2" name="material_total"  groups="cost_sheet_lupeon.group_cs_advanced">
-                                    <field name="total_euro_ud" widget='monetary'/>
-                                    <field name="total_material_cost" widget='monetary'/>
-                            </group> -->
-                            <group colspan="4">
-                                 <field name="use_treatment"/>
-                                 <field name="heat_treatment_cost"/>
-                            </group>
-                            <div style="border-bottom: 1px solid black;"></div>
-                            <!-- <group colspan="2" col="6" string="Coste Máquina">
-                                <field name="machine_hours"/>
-                                <field name="euro_machine_ud" groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                <field name="euro_machine_total" groups="cost_sheet_lupeon.group_cs_advanced"/>
-                            </group>
-                            <div style="border-bottom: 1px solid black;"></div>
-                            <group colspan="4" string="Coste mano de obra">
-                                <field name="workforce_cost_ids" nolabel="1">
-                                    <tree editable="bottom">
-                                        <field name="name"/>
-                                        <field name="hours"/>
-                                        <field name="minutes"/>
-                                        <field name="euro_unit"  groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                        <field name="total"  groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                    </tree>
-                                </field>
-                            </group>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="wf_total"  groups="cost_sheet_lupeon.group_cs_advanced">
-                                    <field name="workforce_total_euro_ud" widget='monetary'/>
-                                    <field name="workforce_total" widget='monetary'/>
-                            </group>
-                            <group></group>
-                            <div style="border-bottom: 1px solid black;"></div>
-                            <group colspan="4" string="Coste externalizacion por pieza">
-                                <field name="outsorcing_cost_ids" nolabel="1">
-                                    <tree editable="bottom">
-                                        <field name="name"/>
-                                        <field name="cost"/>
-                                        <field name="margin"  groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                        <field name="pvp"  groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                    </tree>
-                                </field>
-                            </group>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="out_total"  groups="cost_sheet_lupeon.group_cs_advanced">
-                                    <field name="outsorcing_total_ud" widget='monetary'/>
-                                    <field name="outsorcing_total" widget='monetary'/>
-                            </group>
-                            <group></group>
-                            <div style="border-bottom: 1px solid black;"></div>
-                            <group string="Otros consumos">
-                                <field name="purchase_line_ids" nolabel="1">
-                                    <tree editable="bottom">
-                                        <field name="product_id"/>
-                                        <field name="name"/>
-                                        <field name="qty"/>
-                                        <field name="partner_id"/>
-                                        <field name="cost_ud"/>
-                                        <field name="ports"/>
-                                        <field name="margin"/>
-                                        <field name="pvp_ud" groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                        <field name="pvp_total" groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                    </tree>
-                                </field>
-                            </group>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="meet_total" groups="cost_sheet_lupeon.group_cs_advanced">
-                                <field name="purchase_total" widget='monetary'/>
-                            </group>
-                            <div style="border-bottom: 1px solid black;"></div>
-                            <group colspan="4" string="Oppi">
-                                 <field name="oppi_line_ids" nolabel="1"/>
-                            </group>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="material_total">
-                                    <field name="total_oppi" widget='time'/>
-                            </group> -->
-                        </page>
-
-                        <page string="Imprevistos" attrs="{'invisible': [('sheet_type', '!=', 'unplanned')]}">
-                            <group>
-                                <field name="unplanned_cost"/>
-                            </group>
-                        </page>
-
-                        <page string="Reuniones" attrs="{'invisible': [('sheet_type', '!=', 'meets')]}">
-                            <group string="Reuniones">
-                                <field name="meet_line_ids" nolabel="1">
-                                    <tree editable="bottom">
-                                        <field name="name"/>
-                                        <field name="type"/>
-                                        <field name="num_people"/>
-                                        <field name="hours"/>
-                                        <field name="kms"/>
-                                        <!-- <field name="pvp" groups="cost_sheet_lupeon.group_cs_advanced"/> -->
-                                    </tree>
-                                </field>
-                            </group>
-                            <!-- <group class="oe_subtotal_footer oe_right" colspan="2" name="meet_total">
-                                <field name="meet_hours_total" widget='time'/>
-                                <field name="meet_total" widget='monetary' groups="cost_sheet_lupeon.group_cs_advanced"/>
-                            </group> -->
-                        </page>
-
-                        <page string="Compras" attrs="{'invisible': [('sheet_type', '!=', 'purchase')]}">
-                            <group string="Otros consumos">
-                                <field name="purchase_line_ids" nolabel="1">
-                                    <tree editable="bottom">
-                                        <field name="product_id"/>
-                                        <field name="name"/>
-                                        <field name="qty"/>
-                                        <field name="partner_id"/>
-                                        <!-- <field name="cost_ud"/> -->
-                                        <field name="ports"/>
-                                        <field name="margin"/>
-                                        <!-- <field name="pvp_ud" groups="cost_sheet_lupeon.group_cs_advanced"/> -->
-                                        <!-- <field name="pvp_total" groups="cost_sheet_lupeon.group_cs_advanced"/> -->
-                                    </tree>
-                                </field>
-                            </group>
-                            <!-- <group class="oe_subtotal_footer oe_right" colspan="2" name="meet_total" groups="cost_sheet_lupeon.group_cs_advanced">
-                                <field name="purchase_total" widget='monetary'/>
-                            </group> -->
-                        </page>
-
-
-
-                    </notebook>
-                   
-                   
-                </sheet>
-            </form>
-        </field>
-    </record>
+   
 
     <record id="cost_sheet_view_tree" model="ir.ui.view">
         <field name="name">cost.sheet.view</field>
@@ -905,7 +208,7 @@
                 <field name="time"/>
                 <!-- <field name="employee_id"/> -->
                 <!-- <field name="task_id"/> -->
-                <field name="time_real"/>
+                <field name="time_real" widget="float_time"/>
             </tree>
         </field>
     </record>
@@ -917,8 +220,9 @@
         <field name="arch" type="xml">
             <form create="false">
                 <header>
-                    <button name="manually_create_task_or_production" string="Generate production manually" type="object" attrs="{'invisible': ['|', '|', ('sheet_type', '=', 'design'), ('sale_state', 'in', ['draft']), ('production_state', 'in', ['progress', 'done'])]}"/>
-                    <button name="manually_create_task_or_production" string="Generate tasks manually" type="object" attrs="{'invisible': ['|', '|', ('sheet_type', '!=', 'design'), ('sale_state', 'in', ['draft']), ('production_state', 'in', ['progress', 'done'])]}"/>
+                    <button name="manually_create_task_or_production" string="Generate production manually" type="object" attrs="{'invisible': ['|', '|', ('sheet_type', 'in', ['design', 'purchase']), ('sale_state', 'in', ['draft']), ('production_state', 'in', ['progress', 'done'])]}"/>
+                    <button name="manually_create_task_or_production" string="Generate tasks manually" type="object" attrs="{'invisible': ['|', '|', ('sheet_type', 'in', ['design', 'purchase']), ('sale_state', 'in', ['draft']), ('production_state', 'in', ['progress', 'done'])]}"/>
+                    <button name="manually_add_consumes" string="Generar consumo manual" type="object" attrs="{'invisible': ['|', '|', ('sheet_type', '!=', 'purchase'), ('sale_state', 'in', ['draft']), ('sheet_imprevist', '=',  True)]}"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
@@ -933,6 +237,7 @@
                             <field name="increment"/>
                             <field name="inspection_type"/>
                             <field name="description"/>
+                            <field name="sheet_imprevist"/>
                         </group>
                         <group string="Modelos asociados">
                             <field name="sale_line_id"/>
@@ -1609,6 +914,251 @@
                             </group>
                             <group class="oe_subtotal_footer oe_right" colspan="2" name="meet_total" groups="cost_sheet_lupeon.group_cs_advanced">
                                 <field name="purchase_total" widget='monetary'/>
+                            </group>
+                        </page>
+
+
+
+                    </notebook>
+                   
+                   
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+     <record id="simple_cost_sheet_view_form" model="ir.ui.view">
+        <field name="name">cost.sheet.view</field>
+        <field name="model">cost.sheet</field>
+        <field name="arch" type="xml">
+            <form create="false">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="General">
+                            <field name="can_edit" invisible="1"/>
+                            <field name="sheet_type"/>
+                            <field name="description"/>
+                        </group>
+                    </group>
+                  
+                    <notebook>
+                        <page string="Diseño" attrs="{'invisible': [('sheet_type', '!=', 'design')]}">
+                            <group>
+                                <group string="Datos pieza">
+                                    <field name="flat_ref"/>
+                                </group>
+                              
+                                <group string="Legislación aplicable">
+                                    <field name="legislation_ids" nolabel="1" widget="many2many_checkboxes"/>
+                                </group>
+                            </group>
+                            <group string="Tiempos">
+                                <field name="time_line_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="software_id"/>
+                                        <field name="hours"/>
+                                      
+                                        <field name="task_id"/>
+                                    </tree>
+                                </field>
+                            </group>
+                          
+                        </page>
+
+                        <page string="FDM" attrs="{'invisible': [('sheet_type', '!=', 'fdm')]}">
+               
+                            <group cospan="4" col="8" string="Datos pieza">
+                                <field name="cus_units"/>
+                                <field name="cc_ud"/>
+                            </group>
+                            <div style="border-bottom: 1px solid black;"></div>
+                            <group string="Carcterísticas pieza">
+                                <field name="feature_ids" nolabel="1" widget="many2many_checkboxes"/>
+                            </group>
+                            <div style="border-bottom: 1px solid black;"></div>
+                            <group cospan="2" col="8" string="Parámetros impresión">
+                                <field name="printer_id"/>
+                                <field name="perfil"/>
+                                <field name="tray_units"/>
+                                <field name="tray_hours"/>
+                                <field name="loops"/>
+                                <field name="infill"/>
+                                <field name="layer_height"/>
+                            </group>
+                            <div style="border-bottom: 1px solid black;"></div>
+
+                             <group colspan="4" string="Material Cost">
+                                 <field name="material_cost_ids" nolabel="1"/>
+                            </group>
+                           
+                            <group></group>
+                            <div style="border-bottom: 1px solid black;"></div>
+                         
+                            
+                        </page>
+
+                        <!-- SLS P396 (ANTIGUO SLS)-->
+                        <page string="SLS P396" attrs="{'invisible': [('sheet_type', '!=', 'sls')]}">
+                            <group colspan="2" col="8" string="Datos pieza">
+                                <field name="cus_units"/>
+                                <field name="x_mm_sls"/>
+                                <field name="y_mm_sls"/>
+                                <field name="z_mm_sls"/>
+                                <field name="cc_ud"/>
+                                <field name="tinted_id"/>
+                                <field name="cm2_sls"/>
+                            </group>
+                             <div style="border-bottom: 1px solid black;"></div>
+                            <group colspan="2" col="8" string="Parámetros impresión">
+                                <field name="printer_id"/>
+                                <field name="tray_units"/>
+                                <field name="print_increment" attrs="{'invisible': [('sheet_type', 'in', ['poly'])], 'readonly': [('can_edit', '!=', True)]}"/>
+                                <field name="tray_hours_sls"/>
+                            </group>
+                             <div style="border-bottom: 1px solid black;"></div>
+                         
+                             <group colspan="4" string="Material Cost">
+                                 <field name="material_cost_ids" nolabel="1"/>
+                            </group>
+                          
+                            <group></group>
+                             <div style="border-bottom: 1px solid black;"></div>
+                             
+                        </page>
+                    
+
+                        <!-- POLY -->
+                         <page string="POLY" attrs="{'invisible': [('sheet_type', '!=', 'poly')]}">
+                            <group colspan="2" col="8" string="Datos pieza">
+                                <field name="cus_units"/>
+                                <field name="cc_ud"/>
+                            </group>
+                            <div style="border-bottom: 1px solid black;"></div>
+                            <group colspan="2" col="8" string="Parámetros impresión">
+                                <field name="printer_id"/>
+                                <field name="tray_units"/>
+                                <field name="finish_pol"/>
+                                <field name="tray_hours"/>
+                            </group>
+                            <div style="border-bottom: 1px solid black;"></div>
+                            <group colspan="4" string="Material Cost">
+                                 <field name="material_cost_ids" nolabel="1"/>
+                            </group>
+
+                            <group></group>
+                            <div style="border-bottom: 1px solid black;"></div>
+                        </page>
+
+                         <!-- SLA -->
+                         <page string="SLA" attrs="{'invisible': [('sheet_type', '!=', 'sla')]}">
+                            <group colspan="2" col="8" string="Datos pieza">
+                                <field name="cus_units"/>
+                                <field name="cc_ud"/>
+                            </group>
+                            <div style="border-bottom: 1px solid black;"></div>
+                            <group colspan="2" col="8" string="Parámetros impresión">
+                                <field name="printer_id"/>
+                                <field name="tray_units"/>
+                                <field name="tray_hours"/>
+                            </group>
+                            <div style="border-bottom: 1px solid black;"></div>
+                             <group colspan="4" string="Material Cost">
+                                 <field name="material_cost_ids" nolabel="1"/>
+                            </group>
+                            <group></group>
+                            <div style="border-bottom: 1px solid black;"></div>
+                           
+                        </page>
+
+                        <!-- SLS (igual a SLA, y el anterior SLS pasa a ser SLS P396) -->
+                         <page string="SLS" attrs="{'invisible': [('sheet_type', '!=', 'sls2')]}">
+                            <group colspan="2" col="8" string="Datos pieza">
+                                <field name="cus_units"/>
+                                <field name="cc_ud"/>
+                                <field name="euros_cc"/>
+                            </group>
+                            <div style="border-bottom: 1px solid black;"></div>
+                            <group colspan="2" col="8" string="Parámetros impresión">
+                                <field name="printer_id"/>
+                                <field name="tray_units"/>
+                                <field name="tray_hours"/>
+                            </group>
+                            <div style="border-bottom: 1px solid black;"></div>
+                             <group colspan="4" string="Material Cost">
+                                 <field name="material_cost_ids" nolabel="1"/>
+                            </group>
+                        
+                            <group></group>
+                            <div style="border-bottom: 1px solid black;"></div>
+                           
+                        </page>
+
+                         <!-- DMLS -->
+                        <page string="DMLS" attrs="{'invisible': [('sheet_type', '!=', 'dmls')]}">
+                            <group colspan="2" col="8" string="Datos pieza">
+                                <field name="cus_units"/>
+                                <field name="cc_ud"/>
+                                <field name="cc_soport_dmls"/>
+                                <field name="euros_cc"/>
+                            </group>
+                            <div style="border-bottom: 1px solid black;"></div>
+                            <group colspan="2" col="8" string="Parámetros impresión">
+                                <field name="printer_id"/>
+                                <field name="tray_units"/>
+                                <field name="tray_hours"/>
+                            </group>
+                            <div style="border-bottom: 1px solid black;"></div>
+                            <group colspan="4" string="Material Cost">
+                                 <field name="material_cost_ids" nolabel="1"/>
+                            </group>
+                          
+                            <group colspan="4">
+                                 <field name="use_treatment"/>
+                                 <field name="heat_treatment_cost"/>
+                            </group>
+                            <div style="border-bottom: 1px solid black;"></div>
+                           
+                        </page>
+
+                        <page string="Imprevistos" attrs="{'invisible': [('sheet_type', '!=', 'unplanned')]}">
+                            <group>
+                                <field name="unplanned_cost"/>
+                            </group>
+                        </page>
+
+                        <page string="Reuniones" attrs="{'invisible': [('sheet_type', '!=', 'meets')]}">
+                            <group string="Reuniones">
+                                <field name="meet_line_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="name"/>
+                                        <field name="type"/>
+                                        <field name="num_people"/>
+                                        <field name="hours"/>
+                                        <field name="kms"/>
+                                    </tree>
+                                </field>
+                            </group>
+                           
+                        </page>
+
+                        <page string="Compras" attrs="{'invisible': [('sheet_type', '!=', 'purchase')]}">
+                            <group string="Otros consumos">
+                                <field name="purchase_line_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="product_id"/>
+                                        <field name="name"/>
+                                        <field name="qty"/>
+                                        <field name="partner_id"/>
+                                        <field name="ports"/>
+                                        <field name="margin"/>
+                                      
+                                    </tree>
+                                </field>
                             </group>
                         </page>
 

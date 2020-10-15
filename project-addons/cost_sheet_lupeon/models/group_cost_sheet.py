@@ -97,7 +97,6 @@ class GroupCostSheet(models.Model):
             }
             res.append((0, 0, vals))
         
-        import ipdb; ipdb.set_trace()
         # Añadir compras como consumo
         for sh in self.sheet_ids.filtered(
                 lambda sh: sh.sheet_type == 'purchase'):

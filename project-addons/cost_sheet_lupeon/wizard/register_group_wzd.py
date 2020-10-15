@@ -68,6 +68,14 @@ class RegistergroupWizard(models.TransientModel):
                 raise UserError('Es necesario indicar na cantidad consumida \
                     para el producto %s' % consume.product_id.name)
 
+        total_user_hours = 0
+        for line in self.qty_done_ids:
+
+            wo = line.workorder_id
+            if not wo or wo.state not in ('ready', 'progress'):
+                continue
+            total_user_hours += (wo.duration_expected / 60)
+
         for line in self.qty_done_ids:
 
             if not line.qty_done:
@@ -79,10 +87,11 @@ class RegistergroupWizard(models.TransientModel):
                 continue
             
             wo.button_start()
-            if wo.time_ids:
-                percent = wo.duration_expected / self.user_hours
+            if wo.time_ids and wo.duration_expected:
+                percent = self.user_hours / total_user_hours
                 h = self.user_hours * percent
-                next_date = wo.time_ids[0].date_start + timedelta(hours=h)
+                t = wo.time_ids.filtered(lambda x: not x.date_end)
+                next_date = t.date_start + timedelta(hours=h)
                 # wo.time_ids[0].duration = self.total_time * 60 * percent
                 wo.time_ids[0].date_end = next_date
 
