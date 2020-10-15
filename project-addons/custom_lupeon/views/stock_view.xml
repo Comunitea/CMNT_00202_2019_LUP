@@ -31,7 +31,7 @@
         <field name="arch" type="xml">
             <field name="group_id" position="after">
                 <filter name="ready_to_pick" string="No proforma" domain="['|', ('sale_id', '=', False), ('sale_id.state','in', ['sale', 'done'])]" help="Pickings ready to execute"/>
-                <filter name="reserved" string="Reserved " domain="[('sale_id', '!=', False), ('sale_id.state','in', ['draft', 'sent'])]" help="Pickings with reserve from sales"/>
+                <filter name="reserved" string="Reserved " domain="[('sale_id', '!=', False), ('sale_id.state','in', ['draft', 'sent']), ('picking_type_id.code', '=', 'outgoing')]" help="Pickings with reserve from sales"/>
                 <separator/>
                 <filter name="not_blocked" string="Sin bloqueo" domain="['|', ('sale_id', '=', False), '&amp;', '|', ('sale_id.prestashop_state.pending_payment','!=', True), ('sale_id.prestashop_state', '=', False), ('delivery_blocked','!=', True)]" help="Pickings not blocked from sales"/>
             </field>
@@ -125,7 +125,7 @@
         <field name="inherit_id" ref="stock.view_picking_form"/>
         <field name="arch" type="xml">
             <field name="origin" position="after">
-                <field name="delivered"/>
+                <field name="delivered" attrs="{'invisible':[('picking_type_id.code', '!=', 'outgoing')]}"/>
             </field>
         </field>
     </record>
@@ -169,6 +169,7 @@
                 <field name="scheduled_date" readonly="1"/>
                 <field name="carrier_id" readonly="1"/>
                 <field name="carrier_tracking_ref" readonly="1"/>
+                <field name="carrier_tracking_url" widget="url" readonly="1"/>
                 <field name="origin" readonly="1"/>
                 <field name="state" readonly="1"/>
                 <field name="delivered"/> 
