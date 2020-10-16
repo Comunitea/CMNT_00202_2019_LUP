@@ -823,7 +823,7 @@ class CostSheet(models.Model):
             bom = sheet.create_bom_on_fly(product)
             vals = {
                 'sheet_id': sheet.id,
-                'sale_line_id': sheet.sale_line_id.order_id.id,
+                'sale_line_id': sheet.sale_line_id.id,
                 # 'sale_id': sheet.sale_line_id.order_id.id,
                 'product_id': sheet.product_id.id,
                 'product_uom_id': sheet.product_id.uom_id.id,
