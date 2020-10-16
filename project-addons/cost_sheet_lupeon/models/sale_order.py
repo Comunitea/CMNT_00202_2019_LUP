@@ -258,7 +258,6 @@ class SaleOrder(models.Model):
 
         res = super().action_confirm()
 
-        import ipdb; ipdb.set_trace()
         # Escribir información en las producciones generadas bajo pedido
         # main_productions = self.get_main_productions()
         for line in self.mapped('order_line'):
