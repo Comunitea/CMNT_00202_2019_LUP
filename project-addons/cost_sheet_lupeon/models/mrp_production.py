@@ -23,17 +23,13 @@ class MrpProduction(models.Model):
     sheet_id = fields.Many2one('cost.sheet', 'Cost Sheet', readonly=True)
     sheet_type = fields.Selection(SHEET_TYPES, string='Sheet type',
                                   related='sheet_id.sheet_type', store=True)
-    sale_id = fields.Many2one('sale.order', 'Sale Order',
-                              related='sheet_id.sale_id', readonly=True, 
-                              store=True)
-    add_sale_id = fields.Many2one(
-        'sale.order', 'Añadir a venta', readonly=True)
     imprevist = fields.Boolean(
         'Fabricación imprevista', readonly=True)
     sale_line_id = fields.Many2one('sale.order.line', 'Sale Order Line',
-                                   related='sheet_id.sale_line_id',
-                                   readonly=True,
-                                   store=True)
+                                   readonly=True)
+    sale_id = fields.Many2one('sale.order', 'Sale Order',
+                              related='sale_line_id.order_id', readonly=True, 
+                              store=True)
     line_ref = fields.Char('Referencia')
     line_name = fields.Char('Descripción')
     ok_tech = fields.Boolean('OK tech', copy=False, readonly=True)

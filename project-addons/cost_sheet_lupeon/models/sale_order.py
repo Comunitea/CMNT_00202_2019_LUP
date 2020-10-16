@@ -92,11 +92,8 @@ class SaleOrder(models.Model):
     @api.multi
     def _count_production_and_task(self):
         for order in self:
-            productions = order.get_sheet_lines().mapped('production_id')
-            productions |= self.get_main_productions()
-            # Buscar producciones imprevistas
-            domain = [('add_sale_id', '=', self.id)]
-            productions |= self.env['mrp.production'].search(domain)
+            domain = [('sale_id', '=', self.id)]
+            productions = self.env['mrp.production'].search(domain)
             order.production_count = len(productions)
             order.count_task = \
                 len(
@@ -178,27 +175,12 @@ class SaleOrder(models.Model):
             action = {'type': 'ir.actions.act_window_close'}
         return action
 
-    def get_main_productions(self):
-        self.ensure_one()
-        # Buscar producciones principales
-        boms = self.get_group_sheets().mapped('bom_id')
-        domain = [('bom_id', 'in', boms.ids)]
-        productions = self.env['mrp.production'].search(domain)
-        return productions
-
     @api.multi
     def view_productions(self):
         self.ensure_one()
-        productions = self.get_sheet_lines().filtered(
-            lambda s: s.sheet_type != 'design'
-        ).mapped('production_id')
-
-        # Buscar produccion principal
-        productions |= self.get_main_productions()
-
         # Buscar producciones imprevistas
-        domain = [('add_sale_id', '=', self.id)]
-        productions |= self.env['mrp.production'].search(domain)
+        domain = [('sale_id', '=', self.id)]
+        productions = self.env['mrp.production'].search(domain)
 
         if productions:
             action = self.env.ref(
@@ -256,7 +238,6 @@ class SaleOrder(models.Model):
             filtered(lambda x: x.partner_id)
         self._create_purchases(p_lines)
 
-
     @api.multi
     def action_confirm(self):
         """
@@ -277,11 +258,18 @@ class SaleOrder(models.Model):
 
         res = super().action_confirm()
 
+        import ipdb; ipdb.set_trace()
         # Escribir información en las producciones generadas bajo pedido
-        main_productions = self.get_main_productions()
-        if main_productions:
-            main_productions.write(
-                {'date_planned_start': datetime.now() + timedelta(days=1)})
+        # main_productions = self.get_main_productions()
+        for line in self.mapped('order_line'):
+            main_production = line.get_main_line_production()
+            main_production.write({
+                'date_planned_start': datetime.now() + timedelta(days=1),
+                'sale_line_id': line.id,
+                # 'sale_id': line.order_id.id
+            })
+            if main_production.routing_id:
+                main_production.button_plan()
         return res
 
     def action_cancel(self):
@@ -382,3 +370,11 @@ class SaleOrderLine(models.Model):
                 self.product_uom_qty and not self.sample:
             res = self.group_sheet_id.line_pvp / self.product_uom_qty
         return res
+
+    def get_main_line_production(self):
+        self.ensure_one()
+        # Buscar produccion principal asociada a la línea de venta
+        if self.group_sheet_id and self.group_sheet_id.bom_id:
+            domain = [('bom_id', 'in', self.group_sheet_id.bom_id.ids)]
+            production = self.env['mrp.production'].search(domain)
+        return production

@@ -19,7 +19,7 @@ class AssignProdctionWzd(models.TransientModel):
                 raise UserError('La producción ya está asociadada a una venta')
 
             productions.write({
-                'add_sale_id': self.sale_id.id,
+                'sale_id': self.sale_id.id,
                 'imprevist': True,
             })
         return

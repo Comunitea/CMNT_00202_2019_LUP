@@ -35,7 +35,6 @@
                 <field name="line_ref"/>
                 <field name="line_name"/>
                 <field name="imprevist"/>
-                <field name="add_sale_id" attrs="{'invisible': [('imprevist', '=', False)]}"/>
             </field>
 
              <field name="company_id" position="after">
