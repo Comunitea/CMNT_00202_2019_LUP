@@ -35,8 +35,8 @@ class StockPicking(models.Model):
         ])
 
     def action_quality(self):
-        self.state = 'draft'
-        self.action_confirm()
+        self.state = 'assigned'
+        # self.action_confirm()
 
 
 class StockLocation(models.Model):
