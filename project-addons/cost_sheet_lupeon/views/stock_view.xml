@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record id="view_picking_custom" model="ir.ui.view">
+        <field name="name">view.picking.custom</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <button name="action_confirm" position="before">
+                <!-- <button name="action_quality" string="Ok calidad" type="object" class="oe_highlight"/> -->
+                <button name="action_quality" states="quality" string="Ok calidad" type="object" class="oe_highlight" groups="cost_sheet_lupeon.group_ok_quality"/>
+            </button>
+            
+        </field>
+    </record>
+
+
+</odoo>
+
