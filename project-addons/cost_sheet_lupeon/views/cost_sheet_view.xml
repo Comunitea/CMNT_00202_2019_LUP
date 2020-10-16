@@ -205,7 +205,7 @@
             <tree editable="bottom">
                 <field name="name"/>
                 <field name="e_partner_id" domain="[('supplier', '=', True)]"/>
-                <field name="type" options="{'no_create_edit': True, 'no_quick_create'}"/>
+                <field name="type" options="{'no_create_edit': True, 'no_quick_create': True}"/>
                 <field name="time"/>
                 <!-- <field name="employee_id"/> -->
                 <!-- <field name="task_id"/> -->

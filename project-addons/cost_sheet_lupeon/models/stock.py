@@ -25,6 +25,20 @@ class StockMove(models.Model):
             })
         return values
 
+
+class StockPicking(models.Model):
+    _inherit = 'stock.picking'
+
+    state = fields.Selection(
+        selection_add=[
+            ('quality', 'Pendiente Calidad'),
+        ])
+
+    def action_quality(self):
+        self.state = 'draft'
+        self.action_confirm()
+
+
 class StockLocation(models.Model):
     _inherit = 'stock.location'
 
@@ -33,7 +47,6 @@ class StockLocation(models.Model):
 
 class StockRule(models.Model):
     _inherit = 'stock.rule'
-
 
     def _prepare_mo_vals(self, product_id, product_qty, product_uom, location_id, name, origin, values, bom):
         """

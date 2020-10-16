@@ -99,7 +99,9 @@ class MrpWorkorder(models.Model):
             out_pick, prod_loc, e_loc, move_in.id)
         self.env['stock.move'].create(move_out_vals)
         out_pick.action_confirm()
-        in_pick.action_confirm()
+
+        out_pick.state = 'quality'
+        # in_pick.action_confirm()
 
         self.write({
             'in_pick_id': in_pick.id,

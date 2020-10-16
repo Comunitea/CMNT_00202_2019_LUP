@@ -27,7 +27,7 @@
     </record>
 
     <record id="group_ok_quality" model="res.groups">
-        <field name="name">Manjar Ok Calidad</field>
+        <field name="name">Ok Calidad</field>
         <field name="category_id" ref="base.module_category_hidden"/>
     </record>
     <record id="group_ok_tech" model="res.groups">
