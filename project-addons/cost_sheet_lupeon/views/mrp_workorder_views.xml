@@ -72,4 +72,36 @@
         </field>
     </record>
 
+    <record id="custom_mrp_production_workorder_tree_view_inherit" model="ir.ui.view">
+        <field name="name">mrp.production.work.order.tree</field>
+        <field name="model">mrp.workorder</field>
+        <field name="inherit_id" ref="mrp.mrp_production_workorder_tree_view_inherit"/>
+        <field name="arch" type="xml">
+            
+                <field name="date_planned_start" position="after">
+                    <field name="date_planned_finished"/>
+                    <field name="date_start"/>
+                    <field name="date_finished"/>
+                </field>
+
+        </field>
+    </record>
+
+
+    <!-- mrp.workorder inherit form view -->
+    <record id="mrp_worcenter_custom_view" model="ir.ui.view">
+        <field name="name">mrp.workcenter.view.kanban.inherit.mrp.workorder.custom</field>
+        <field name="model">mrp.workcenter</field>
+        <field name="inherit_id" ref="mrp_workorder.mrp_workcenter_view_kanban_inherit_workorder"/>
+        <field name="arch" type="xml">
+            
+            <!-- Volver a poner la vista lista -->
+            <xpath expr="//button[hasclass('btn', 'btn-primary')]" position="attributes">
+                <attribute name="name">mrp.action_work_orders</attribute>
+            </xpath>
+
+            
+        </field>
+    </record>
+
 </odoo>

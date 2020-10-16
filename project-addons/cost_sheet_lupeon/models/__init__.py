@@ -15,6 +15,7 @@ from . import project
 from . import mrp_production
 from . import mrp_workorder
 from . import stock_quant
+from . import stock_scrap
 from . import group_production
 from . import purchase
 from . import mrp_bom

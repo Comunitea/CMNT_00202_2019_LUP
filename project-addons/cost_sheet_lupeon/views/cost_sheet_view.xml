@@ -159,7 +159,8 @@
             <tree editable="bottom">
                 <field name="can_edit" invisible="1"/>
                 <field name="name"/>
-                <field name="material_id" domain="[('is_material', '=', True), ('material_type', '=', parent.sheet_type)]"/>
+                <field name="material_id" domain="[('is_material', '=', True), ('material_type', '=', parent.sheet_type)]" attrs="{'column_invisible': [('parent.sheet_type', '=', 'fdm')]}"/>
+                <field name="material_id" domain="[('is_material', '=', True), ('material_type', '=', parent.sheet_type), ('diameter', '=', diameter)]" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
                 <!-- FDM FIELDS -->
                 <field name="diameter" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
                 <!-- <field name="color" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/> -->
@@ -204,7 +205,7 @@
             <tree editable="bottom">
                 <field name="name"/>
                 <field name="e_partner_id" domain="[('supplier', '=', True)]"/>
-                <field name="type"/>
+                <field name="type" options="{'no_create_edit': True, 'no_quick_create'}"/>
                 <field name="time"/>
                 <!-- <field name="employee_id"/> -->
                 <!-- <field name="task_id"/> -->

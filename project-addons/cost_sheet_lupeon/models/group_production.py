@@ -11,6 +11,7 @@ class GroupProduction(models.Model):
     _name = "group.production"
 
     name = fields.Char('Name')
+    note = fields.Text('Notas')
     production_ids = fields.One2many(
         'mrp.production', 'group_mrp_id', 'Gropued Productions',
         readonly=True)

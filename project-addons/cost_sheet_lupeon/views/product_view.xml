@@ -27,6 +27,7 @@
                         <field name="gr_cc"/>
                         <field name="euro_kg"/>
                         <field name="factor_hour"/>
+                        <field name="diameter"/>
                     </group>
                     <!-- SLS P396 -->
                     <group attrs="{'invisible': [('material_type', '!=', 'sls')]}">

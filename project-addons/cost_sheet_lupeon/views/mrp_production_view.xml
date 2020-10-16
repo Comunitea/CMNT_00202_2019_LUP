@@ -8,8 +8,8 @@
         <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
         <field name="arch" type="xml">
             <header position="inside">
-               <button name="%(action_quality_wizard)d" type="action" context="{'mode': 'ok_tech'}" string="OK TECH" class="btn-success" attrs="{'invisible': ['|', ('state', '!=', 'done'), ('ok_tech', '=', True)]}"/>
-               <button name="%(action_quality_wizard)d" type="action" context="{'mode': 'ok_quality'}" string="OK QUALITY" class="btn-success" attrs="{'invisible': ['|', '|', ('state', '!=', 'done'), ('ok_tech', '=', False), ('ok_quality', '=', True)]}"/>
+               <button name="%(action_quality_wizard)d" type="action" context="{'mode': 'ok_tech'}" string="OK TECH" class="btn-success" attrs="{'invisible': ['|', ('state', '!=', 'done'), ('ok_tech', '=', True)]}" groups="cost_sheet_lupeon.group_ok_tech"/>
+               <button name="%(action_quality_wizard)d" type="action" context="{'mode': 'ok_quality'}" string="OK QUALITY" class="btn-success" attrs="{'invisible': ['|', '|', ('state', '!=', 'done'), ('ok_tech', '=', False), ('ok_quality', '=', True)]}" groups="cost_sheet_lupeon.group_ok_quality"/>
                <!-- <button name="block_stock" string="block" type="object"/> -->
             </header>
 

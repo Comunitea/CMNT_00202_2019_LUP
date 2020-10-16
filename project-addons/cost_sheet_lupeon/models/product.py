@@ -25,6 +25,7 @@ class ProductTemplate(models.Model):
     gr_cc = fields.Float('Gr/cc')
     euro_kg = fields.Float('€/kg')
     factor_hour = fields.Float('Factor hora')
+    diameter = fields.Float('Diametro')
 
     #SLS p396
     dens_cc = fields.Float('Densidad impreso gr/cc')

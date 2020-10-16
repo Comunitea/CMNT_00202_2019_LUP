@@ -17,7 +17,7 @@ class RegisterWorkorderWizard(models.TransientModel):
             vals = {
                 'product_id': move.product_id.id,
                 'lot_id': move.lot_id.id,
-                'qty_done': move.qty_done,
+                'qty_done': 0,
                 'move_line_id': move.id,
             }
             res['consume_ids'].append((0, 0, vals))
@@ -32,13 +32,15 @@ class RegisterWorkorderWizard(models.TransientModel):
         wo.button_pending()
         wo.qty_producing = self.qty
 
-        if self.machine_hours:
-            vals = {
-                'workorder_id': wo.id,
-                'time': self.machine_hours
-            }
-            self.env['machine.time'].create(vals)
-        
+        if not self.machine_hours:
+            raise UserError('Es necesario indicar el tiempo máquina')
+
+        vals = {
+            'workorder_id': wo.id,
+            'time': self.machine_hours
+        }
+        self.env['machine.time'].create(vals)
+
         # Write consumes on workorrder
         for line in self.consume_ids:
             line.move_line_id.write({

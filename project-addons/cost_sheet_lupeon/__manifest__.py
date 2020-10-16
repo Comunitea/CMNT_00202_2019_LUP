@@ -44,6 +44,7 @@
         'views/group_production_view.xml',
         'views/mrp_workorder_views.xml',
         'views/res_company_view.xml',
+        'views/stock_scrap_view.xml',
     ],
     "installable": True,
     'application': False,

@@ -64,6 +64,12 @@
                                 </field>
                             </group>
                         </page>
+                        <page string="Notas">
+                            <group string="Notas">
+                                <field name="note" nolabel="1">
+                                </field>
+                            </group>
+                        </page>
                         <!-- <page string="Producciones">
                             <group string="Producciones agrupadas">
                                 <field name="production_ids" nolabel="1">
