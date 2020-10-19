@@ -9,22 +9,22 @@
 
 
     <template id="external_layout_boxed_custom" inherit_id="web.external_layout_boxed">
-        <!-- Logo mas pequeño -->
-      	<xpath expr="//div[@class='col-6']/img" position="attributes">
-        	<div class="col-3">
-          		<attribute name="height">70px;</attribute>
-          		<attribute name="width">200px;</attribute>
-        	</div>
-      	</xpath>
+        <!-- Logo mas pequeño. Posteriormente solicitado más grande en modelo ejemplo. Descomentar para revertir -->
+<!--      	<xpath expr="//div[@class='col-6']/img" position="attributes">-->
+<!--        	<div class="col-3">-->
+<!--          		<attribute name="height">70px;</attribute>-->
+<!--          		<attribute name="width">200px;</attribute>-->
+<!--        	</div>-->
+<!--      	</xpath>-->
 
         <!-- Parte dirección custom -->
         <xpath expr="//div[@name='company_address']" position="replace">
-        	<div style="font-size: 10px">
+        	<div id="header_company_address" class="text-left">
                 <div>
                     <strong><span itemprop="name" t-esc="company.partner_id.name"/></strong> 
                 </div>
                 <div t-if="company.partner_id.vat">
-                    CIF: <span t-esc="company.partner_id.vat"/>
+                    <span>CIF: </span><span t-esc="company.partner_id.vat"/>
                 </div>
                 <div t-if="company.partner_id.street">
                     <span t-esc="company.partner_id.street"/>
@@ -33,11 +33,11 @@
                     <span t-esc="company.partner_id.zip"/> 
                     <span t-esc="company.partner_id.city"/> 
                     <t t-if="company.partner_id.state_id">
-                     (  <span t-esc="company.partner_id.state_id.name"/>  )
+                     (<span t-esc="company.partner_id.state_id.name"/>)
                     </t>
                 </div>
                 <div t-if="company.partner_id.phone">
-                    Tel.: <span t-esc="company.partner_id.phone"/> 
+                    <span>Tel:</span><span t-esc="company.partner_id.phone"/>
                 </div>
                 <div t-if="company.partner_id.email">
                     <span t-esc="company.partner_id.email"/> 
@@ -47,18 +47,20 @@
 
         <xpath expr="//div[@class='footer o_boxed_footer']" position="replace">
             <div class="footer o_boxed_footer">
-                <div class="text-center">
+                <div class="text-center mt16">
                     <ul class="list-inline">
                         <li t-if="company.phone" class="list-inline-item">Tel: <span t-field="company.phone"/></li>
                         <li t-if="company.email" class="list-inline-item">Mail: <span t-field="company.email"/></li>
                         <li t-if="company.website" class="list-inline-item">Web: <span t-field="company.website"/></li>
-                        <li t-if="company.vat" class="list-inline-item"><t t-esc="(company.country_id.vat_label or 'Tax ID').replace(' ','\N{NO-BREAK SPACE}')"/>: <span t-esc="company.vat.replace(' ','\N{NO-BREAK SPACE}')"/></li>
+                        <li t-if="company.vat" class="list-inline-item">
+                            <t t-esc="(company.country_id.vat_label or 'Tax ID').replace(' ','\N{NO-BREAK SPACE}')"/>: <span t-esc="company.vat.replace(' ','\N{NO-BREAK SPACE}')"/>
+                        </li>
                     </ul>
-                    <div t-field="company.report_footer"/>
+                    <div t-field="company.report_footer" t-if="company.report_footer"/>
                 </div>
                 <br/>
                 <div class="text-right">
-                    <div t-if="report_type == 'pdf'">
+                    <div t-if="report_type == 'pdf'" id="footer_paginator">
                         Page: <span class="page"/> / <span class="topage"/>
                     </div>
                 </div>

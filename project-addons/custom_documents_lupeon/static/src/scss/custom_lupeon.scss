@@ -5,3 +5,95 @@ table[class="table table-sm o_main_table"] tbody tr:nth-child(even) {
 table[name="invoice_line_table"] tbody tr:nth-child(even) {
     background-color: #dcdfe4;
 }
+
+// Header
+.o_boxed_header {
+    border-bottom: none;
+}
+
+// Header - Company Address
+#header_company_address {
+    font-size: 13px;
+    border-left: 6px solid darken(#8cd4d8, 20%);
+    float: right;
+    min-width: 58%;
+    & div {
+        padding-left: 10px;
+        & span {
+            text-align: left;
+        }
+    }
+}
+
+// Address
+#invoice_address {
+    & #invoice_address_title {
+        background-color: gray('200');
+        padding: 5px 10px;
+        font-size: 14px;
+    }
+    & #invoice_address_content {
+        padding-left: 10px;
+    }
+}
+
+#shipping_address {
+    & #shipping_address_title {
+        background-color: gray('200');
+        padding: 5px 10px;
+        font-size: 14px;
+    }
+    & #shipping_address_content {
+        padding-left: 10px;
+    }
+}
+
+// Doc Type name
+#doc_type_name {
+    color: darken(#8cd4d8, 20%);
+    padding-left: 10px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+// Informations section
+#informations {
+    padding-left: 20px;
+}
+
+// Table section
+.o_report_layout_boxed {
+    table {
+        thead {
+            border-bottom: 1px solid gray('700');
+        }
+    }
+}
+
+// Total section
+.o_subtotal {
+    background-color: gray('200');
+}
+
+.o_subtotal.o_tax {
+    background-color: transparent;
+    & .o_price_total {
+        background-color: transparent;
+    }
+}
+
+// Pay details and Doc Note
+#pay_details, #doc_note {
+    background-color: gray('200');
+    padding: 5px 10px;
+    font-size: 14px;
+    margin-top: 32px;
+}
+
+// Footer
+.o_boxed_footer {
+    border-top: 3px solid gray('200');
+}
+// #footer_paginator {
+//     font-size: 14px;
+// }

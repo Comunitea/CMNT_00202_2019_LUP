@@ -9,94 +9,123 @@
         <xpath expr="//t[@t-set='address']" position="replace"/>
 
         <xpath expr="//h2" position="before">
-        	<div class="row">
+            <div class="row">
                 <t t-set="ia" t-value="o.partner_id"/>
                 <t t-set="sa" t-value="o.partner_shipping_id"/>
 
-                <div class="col-6">
-                    <strong>Invoice Address:</strong>
-                    <hr style="width:50%; margin:1px;"/>
-                    <div>
-                        <span itemprop="name" t-esc="ia.name"/>
+                <div class="col-6" id="invoice_address">
+                    <div class="col-12" id="invoice_address_title">
+                        <strong>Invoice Address:</strong>
                     </div>
-                    <div>
-                        <span t-esc="ia.street"/>
-                    </div>
-                    <div>
-                        <span t-esc="ia.zip"/> 
-                        <span t-esc="ia.city"/> 
-                        <t t-if="ia.state_id.name">
-                            (  <span t-esc="sa.state_id.name"/>  )
-                        </t>
-                    </div>
-                    <div t-if="ia.vat">
-                        CIF: <span t-esc="ia.vat"/>
-                    </div>
-                </div>
-                <div class="col-6">
-                    <strong>Shipping Adress:</strong>
-                    <hr style="width:50%; margin:1px;"/>
-                    <div>
-                        <span itemprop="name" t-esc="sa.name"/>
-                    </div>
-                    <div>
-                        <span t-esc="sa.street"/>
-                    </div>
-                    <div>
-                        <span t-esc="sa.zip"/> 
-                        <span t-esc="sa.city"/>
-                        <t t-if="sa.state_id.name">
-                            (  <span t-esc="sa.state_id.name"/>  )
-                        </t>
-                    </div>
-                    <div t-if="sa.vat">
-                        CIF: <span t-esc="sa.vat"/>
+                    <div class="row mt8" id="invoice_address_content">
+                        <div class="col-12">
+                            <div>
+                                <span itemprop="name" t-esc="ia.name"/>
+                            </div>
+                            <div>
+                                <span t-esc="ia.street"/>
+                            </div>
+                            <div>
+                                <span t-esc="ia.zip"/>
+                                <span t-esc="ia.city"/>
+                                <t t-if="ia.state_id.name">
+                                    (  <span t-esc="sa.state_id.name"/>  )
+                                </t>
+                            </div>
+                            <div t-if="ia.vat">
+                                CIF: <span t-esc="ia.vat"/>
+                            </div>
+                        </div>
                     </div>
                 </div>
-        	</div>
+                <div class="col-6" id="shipping_address">
+                    <div class="col-12" id="shipping_address_title">
+                        <strong>Shipping Adress:</strong>
+                    </div>
+                    <div class="row mt8" id="shipping_address_content">
+                        <div class="col-12">
+                            <div>
+                                <span itemprop="name" t-esc="sa.name"/>
+                            </div>
+                            <div>
+                                <span t-esc="sa.street"/>
+                            </div>
+                            <div>
+                                <span t-esc="sa.zip"/>
+                                <span t-esc="sa.city"/>
+                                <t t-if="sa.state_id.name">
+                                    (  <span t-esc="sa.state_id.name"/>  )
+                                </t>
+                            </div>
+                            <div t-if="sa.vat">
+                                CIF: <span t-esc="sa.vat"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="row">
                 <br/>
             </div>
-      	</xpath>
-         
+        </xpath>
+
+        <xpath expr="//h2" position="attributes">
+            <attribute name="class">mt16</attribute>
+            <attribute name="id">doc_type_name</attribute>
+        </xpath>
+
         <!--  -->
         <xpath expr="//div[@id='informations']" position="replace">
             <div class="row mt32 mb32" id="informations">
-                <div t-if="o.number" class="col-auto mw-100 mb-2">
+                <div t-if="o.number" class="col-auto mw-100 mb-2 text-center">
                     <strong>Number:</strong>
                     <p class="m-0" t-field="o.number"/>
                 </div>
-                 <div class="col-auto mw-100 mb-2" t-if="o.date_invoice" name="invoice_date">
+                <div class="col-auto mw-100 mb-2 text-center" t-if="o.date_invoice" name="invoice_date">
                     <strong>Invoice Date:</strong>
                     <p class="m-0" t-field="o.date_invoice"/>
                 </div>
-                <div class="col-auto mw-100 mb-2" t-if="o.origin" name="origin">
+                <div class="col-auto mw-100 mb-2 text-center" t-if="o.origin" name="origin">
                     <strong>Nº Order:</strong>
                     <p class="m-0" t-field="o.origin"/>
                 </div>
-               <div name="reference" class="col-auto mw-100 mb-2" t-if="o.name">
+                <div name="reference" class="col-auto mw-100 mb-2 text-center" t-if="o.name">
                     <strong>Nº Customer Order:</strong>
                     <p class="m-0" t-field="o.name"/>
                 </div>
-                <div t-if="o.partner_id and o.partner_id.supplier_number" class="col-auto mw-100 mb-2">
+                <div t-if="o.partner_id and o.partner_id.supplier_number" class="col-auto mw-100 mb-2 text-center">
                     <strong>Nº Supplier:</strong>
                     <p class="m-0" t-field="o.partner_id.supplier_number"/>
                 </div>
-                <div t-if="o.num_line" class="col-auto mw-100 mb-2">
+                <div t-if="o.num_line" class="col-auto mw-100 mb-2 text-center">
                     <strong>Nº Line:</strong>
                     <p class="m-0" t-field="o.num_line"/>
                 </div>
-                <div class="col-auto mw-100 mb-2" t-if="o.date_due and o.type == 'out_invoice' and o.state in ('open', 'in_payment')" name="due_date">
+                <div class="col-auto mw-100 mb-2 text-center" t-if="o.date_due and o.type == 'out_invoice' and o.state in ('open', 'in_payment')" name="due_date">
                     <strong>Date Due:</strong>
                     <p class="m-0" t-field="o.date_due"/>
                 </div>
             </div>
-      	</xpath>
+        </xpath>
+
+        <!-- Amount cell -->
+        <xpath expr="//table[@class='table table-sm o_main_table']//tbody//t[@t-foreach='o.invoice_line_ids']//tr//td[hasclass('text-right', 'o_price_total')]"  position="attributes">
+            <attribute name="class">text-right</attribute>
+        </xpath>
+
+        <!-- TAX on total table -->
+        <xpath expr="//div[@id='total']//t[@t-foreach='o.amount_by_group']//tr" position="attributes">
+            <attribute name="class">border-black o_subtotal o_tax</attribute>
+        </xpath>
 
         <xpath expr="//p[@t-if='o.reference']" position="replace">
         </xpath>
 
         <xpath expr="//p[@t-if='o.payment_term_id']" position="replace">
+            <div class="col-12" id="pay_details" t-if="o.payment_term_id.note or o.payment_mode_id.note or (o.expiration_dates_str and o.state not in ('paid', 'in_payment'))">
+                <span>Detalles del Pago</span>
+            </div>
+            <br/>
             <p t-if="o.payment_term_id" name="payment_term">
                 <strong>Payment Term:</strong>
                 <span t-field="o.payment_term_id.note"/>
@@ -114,10 +143,10 @@
         <!-- Cantidad sin decimales -->
         <xpath expr="//table[@class='table table-sm o_main_table']/tbody/t[@t-foreach='o.invoice_line_ids']/tr/t[1]/td[3]"
                position="replace">
-                 <td class="text-right">
-                    <span t-esc="int(line.quantity)"/>
-                    <!-- <span t-field="line.uom_id"  groups="uom.group_uom"/> -->
-                </td>
+            <td class="text-right">
+                <span t-esc="int(line.quantity)"/>
+                <!-- <span t-field="line.uom_id"  groups="uom.group_uom"/> -->
+            </td>
         </xpath>
 
         <!-- Impuestos bien -->
@@ -132,45 +161,45 @@
         <!--    MODIFICACIONES INFORME LUPEÓN -->
 
 
-         <xpath expr="//table[@name='invoice_line_table']/thead/tr/th[1]" position="before">
-                <t t-if="lupeon_report">
-                     <th class="text-left">Model</th>
-                     <th class="text-left">Reference</th>
-                </t>
+        <xpath expr="//table[@name='invoice_line_table']/thead/tr/th[1]" position="before">
+            <t t-if="lupeon_report">
+                <th class="text-left">Model</th>
+                <th class="text-left">Reference</th>
+            </t>
         </xpath>
-      
-         <xpath expr="//table[@name='invoice_line_table']/tbody/t[@t-foreach='o.invoice_line_ids']/tr/t[1]/td[1]" position="before">
-                <t t-if="lupeon_report">
-                    <td>
-                        <img t-att-src="'data:image/png;base64,%s' % to_text(line.model_image)" style="max-height: 50px;"/>
-                    </td>
-                    <td>
-                         <span t-field="line.ref"/>
-                    </td>
-                </t>
+
+        <xpath expr="//table[@name='invoice_line_table']/tbody/t[@t-foreach='o.invoice_line_ids']/tr/t[1]/td[1]" position="before">
+            <t t-if="lupeon_report">
+                <td>
+                    <img t-att-src="'data:image/png;base64,%s' % to_text(line.model_image)" style="max-height: 50px;"/>
+                </td>
+                <td>
+                    <span t-field="line.ref"/>
+                </td>
+            </t>
         </xpath>
-         <xpath expr="//table[@name='invoice_line_table']/tbody/t[@t-foreach='o.invoice_line_ids']/tr" position="after">
-                <t t-if="lupeon_report">
-                    <tr>
-                        <td colspan="2" style="border:none;">
-                            Technologia: <span t-field="line.report_tech"/>
-                        </td>
-                        <td colspan="2" style="border:none;">
-                            Material: <span t-field="line.report_material"/>
-                        </td>
-                        <td colspan="2" style="border:none;">
-                            Finish: <span t-field="line.report_finish"/>
-                        </td>
-                        <td style="border:none;">
-                    
-                        </td>
-                    </tr>
-                </t>
+        <xpath expr="//table[@name='invoice_line_table']/tbody/t[@t-foreach='o.invoice_line_ids']/tr" position="after">
+            <t t-if="lupeon_report">
+                <tr>
+                    <td colspan="2" style="border:none;">
+                        Technologia: <span t-field="line.report_tech"/>
+                    </td>
+                    <td colspan="2" style="border:none;">
+                        Material: <span t-field="line.report_material"/>
+                    </td>
+                    <td colspan="2" style="border:none;">
+                        Finish: <span t-field="line.report_finish"/>
+                    </td>
+                    <td style="border:none;">
+
+                    </td>
+                </tr>
+            </t>
         </xpath>
 
     </template>
 
-     <template id="report_invoice_lupeon">
+    <template id="report_invoice_lupeon">
         <t t-call="web.html_container">
             <t t-set="lupeon_report" t-value="True"/>
             <t t-foreach="docs" t-as="o">

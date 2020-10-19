@@ -15,44 +15,54 @@
                 <t t-set="ia" t-value="doc.partner_invoice_id"/>
                 <t t-set="sa" t-value="doc.partner_shipping_id"/>
 
-                <div class="col-6">
-                    <strong>Invoice Address:</strong>
-                    <hr style="width:50%; margin:1px;"/>
-                    <div>
-                        <span itemprop="name" t-esc="ia.name"/>
+                <div class="col-6" id="invoice_address">
+                    <div class="col-12" id="invoice_address_title">
+                        <strong>Invoice Address:</strong>
                     </div>
-                    <div>
-                        <span t-esc="ia.street"/>
-                    </div>
-                    <div>
-                        <span t-esc="ia.zip"/> 
-                        <span t-esc="ia.city"/> 
-                        <t t-if="ia.state_id.name">
-                            (  <span t-esc="sa.state_id.name"/>  )
-                        </t>
-                    </div>
-                    <div t-if="ia.vat">
-                        CIF: <span t-esc="ia.vat"/>
+                    <div class="row mt8" id="invoice_address_content">
+                        <div class="col-12">
+                            <div>
+                                <span itemprop="name" t-esc="ia.name"/>
+                            </div>
+                            <div>
+                                <span t-esc="ia.street"/>
+                            </div>
+                            <div>
+                                <span t-esc="ia.zip"/>
+                                <span t-esc="ia.city"/>
+                                <t t-if="ia.state_id.name">
+                                    (  <span t-esc="sa.state_id.name"/>  )
+                                </t>
+                            </div>
+                            <div t-if="ia.vat">
+                                CIF: <span t-esc="ia.vat"/>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-6">
-                    <strong>Shipping Adress:</strong>
-                    <hr style="width:50%; margin:1px;"/>
-                    <div>
-                        <span itemprop="name" t-esc="sa.name"/>
+                <div class="col-6" id="shipping_address">
+                    <div class="col-12" id="shipping_address_title">
+                        <strong>Shipping Adress:</strong>
                     </div>
-                    <div>
-                        <span t-esc="sa.street"/>
-                    </div>
-                    <div>
-                        <span t-esc="sa.zip"/> 
-                        <span t-esc="sa.city"/>
-                        <t t-if="sa.state_id.name">
-                            (  <span t-esc="sa.state_id.name"/>  )
-                        </t>
-                    </div>
-                    <div t-if="sa.vat">
+                    <div class="row mt8" id="shipping_address_content">
+                        <div class="col-12">
+                            <div>
+                                <span itemprop="name" t-esc="sa.name"/>
+                            </div>
+                            <div>
+                                <span t-esc="sa.street"/>
+                            </div>
+                            <div>
+                                <span t-esc="sa.zip"/>
+                                <span t-esc="sa.city"/>
+                                <t t-if="sa.state_id.name">
+                                    (  <span t-esc="sa.state_id.name"/>  )
+                                </t>
+                            </div>
+                            <div t-if="sa.vat">
                         CIF: <span t-esc="sa.vat"/>
+                    </div>
+                        </div>
                     </div>
                 </div>
         	</div>
@@ -63,7 +73,7 @@
 
         <!-- Quitar los # y que salga PROFORMA -->
         <xpath expr="//h2" position="replace">
-             <h2>
+             <h2 class="mt16" id="doc_type_name">
                 <t t-if="not (env.context.get('proforma', False) or is_pro_forma)">
                     <span t-if="doc.state not in ['draft','sent']">Order </span>
                     <span t-if="doc.state in ['draft','sent']">Quotation </span>
@@ -77,33 +87,33 @@
 
       	<xpath expr="//div[@id='informations']" position="replace">
             <div class="row mt32 mb32" id="informations">
-                <div t-if="doc.name" class="col-auto mw-100 mb-2">
+                <div t-if="doc.name" class="col-auto mw-100 mb-2 text-center">
                     <strong>Number:</strong>
                     <p class="m-0" t-field="doc.name"/>
                 </div>
-                <div t-if="doc.confirmation_date and doc.state not in ['draft','sent']" class="col-auto mw-100 mb-2">
+                <div t-if="doc.confirmation_date and doc.state not in ['draft','sent']" class="col-auto mw-100 mb-2 text-center">
                     <strong>Order Date:</strong>
-                    <p class="m-0" t-field="doc.confirmation_date"/>
+                    <p class="m-0" t-esc="doc.confirmation_date.strftime('%Y-%m-%d')"/>
                 </div>
-                <div t-if="doc.date_order and doc.state in ['draft','sent']" class="col-auto mw-100 mb-2">
+                <div t-if="doc.date_order and doc.state in ['draft','sent']" class="col-auto mw-100 mb-2 text-center">
                     <strong>Quotation Date:</strong>
-                    <p class="m-0" t-field="doc.date_order"/>
+                    <p class="m-0" t-esc="doc.date_order.strftime('%Y-%m-%d')"/>
                 </div>
-                <div t-if="doc.client_order_ref" class="col-auto mw-100 mb-2">
+                <div t-if="doc.client_order_ref" class="col-auto mw-100 mb-2 text-center">
                     <strong>Nº Customer Order:</strong>
                     <p class="m-0" t-field="doc.client_order_ref"/>
                 </div>
-                <div t-if="doc.partner_id and doc.partner_id.supplier_number" class="col-auto mw-100 mb-2">
+                <div t-if="doc.partner_id and doc.partner_id.supplier_number" class="col-auto mw-100 mb-2 text-center">
                     <strong>Nº Supplier:</strong>
                     <p class="m-0" t-field="doc.partner_id.supplier_number"/>
                 </div>
-                <div t-if="doc.num_line" class="col-auto mw-100 mb-2">
+                <div t-if="doc.num_line" class="col-auto mw-100 mb-2 text-center">
                     <strong>Nº Line:</strong>
                     <p class="m-0" t-field="doc.num_line"/>
                 </div>
-                <div t-if="doc.validity_date and env.context.get('proforma', False) or is_pro_forma" class="col-auto mw-100 mb-2">
+                <div t-if="doc.validity_date and env.context.get('proforma', False) or is_pro_forma" class="col-auto mw-100 mb-2 text-center">
                     <strong>Expiration Date:</strong>
-                    <p class="m-0" t-field="doc.validity_date"/>
+                    <p class="m-0" t-esc="doc.validity_date.strftime('%Y-%m-%d')"/>
                 </div>
             </div>
       	</xpath>
@@ -116,6 +126,7 @@
                     <!-- <span t-field="line.product_uom" groups="uom.group_uom"/> -->
                 </td>
         </xpath>
+
         <!-- Mostrar nombre bien en el impuesto -->
         <xpath expr="//table[@class='table table-sm o_main_table']/tbody/t[@t-foreach='doc.order_line']/tr/t[1]/td[5]"
                position="replace">
@@ -124,18 +135,20 @@
                 </td>
         </xpath>
 
+        <!-- Amount cell -->
+        <xpath expr="//table[@class='table table-sm o_main_table']//tbody//t[@t-foreach='doc.order_line']//tr//td[hasclass('text-right', 'o_price_total')]"  position="attributes">
+            <attribute name="class">text-right</attribute>
+        </xpath>
+
         <!-- Etiqueta plazo de pago -->
         <xpath expr="//p[@t-if='doc.payment_term_id.note']" position="replace">
             <p t-if="doc.payment_term_id.note" name="payment_term">
                 <strong>Payment Term:</strong>
                 <span t-field="doc.payment_term_id.note"/>
-                <span t-field="doc.payment_term_id.note"/>
             </p>
         </xpath>
 
         <!--    MODIFICACIONES INFORME LUPEÓN -->
-
-
          <xpath expr="//table[@class='table table-sm o_main_table']/thead/tr/th[1]" position="before">
                 <t t-if="lupeon_report">
                      <th class="text-left">Model</th>
@@ -153,7 +166,8 @@
                     </td>
                 </t>
         </xpath>
-         <xpath expr="//table[@class='table table-sm o_main_table']/tbody/t[@t-foreach='doc.order_line']/tr" position="after">
+
+        <xpath expr="//table[@class='table table-sm o_main_table']/tbody/t[@t-foreach='doc.order_line']/tr" position="after">
                 <t t-if="lupeon_report">
                     <tr>
                         <td colspan="2" style="border:none;">
@@ -171,6 +185,7 @@
                     </tr>
                 </t>
         </xpath>
+
         <xpath expr="//div[@class='page']" position="after">
             <t t-if="lupeon_report">
                 <div class="page" style="page-break-before:always;">
@@ -243,6 +258,30 @@
                     </t>
                 </div>
             </t>
+        </xpath>
+
+        <!-- TAX on total table -->
+        <xpath expr="//div[@id='total']//t[@t-foreach='doc.amount_by_group']//tr" position="attributes">
+            <attribute name="class">border-black o_subtotal o_tax</attribute>
+        </xpath>
+
+        <!-- Pay details after total table -->
+        <xpath expr="//p[@t-field='doc.note']" position="before">
+            <div class="col-12" id="doc_note" t-if="doc.note">
+                <span>Nota</span>
+            </div>
+            <br/>
+        </xpath>
+
+        <xpath expr="//p[@t-if='doc.payment_term_id.note']" position="before">
+            <div class="col-12" id="pay_details" t-if="doc.confirmation_date or doc.payment_mode_id.note or (doc.fiscal_position_id and doc.fiscal_position_id.sudo().note)">
+                <span>Detalles del Pago</span>
+            </div>
+            <br/>
+            <p t-if="doc.confirmation_date">
+                <strong>Pagado el:</strong>
+                <span t-esc="doc.confirmation_date.strftime('%Y-%m-%d')"/>
+            </p>
         </xpath>
   	</template>
 
