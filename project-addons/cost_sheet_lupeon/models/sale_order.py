@@ -262,13 +262,14 @@ class SaleOrder(models.Model):
         # main_productions = self.get_main_productions()
         for line in self.mapped('order_line'):
             main_production = line.get_main_line_production()
-            main_production.write({
-                'date_planned_start': datetime.now() + timedelta(days=1),
-                'sale_line_id': line.id,
-                # 'sale_id': line.order_id.id
-            })
-            if main_production.routing_id:
-                main_production.button_plan()
+            if main_production:
+                main_production.write({
+                    'date_planned_start': datetime.now() + timedelta(days=1),
+                    'sale_line_id': line.id,
+                    # 'sale_id': line.order_id.id
+                })
+                if main_production.routing_id:
+                    main_production.button_plan()
         return res
 
     def action_cancel(self):
@@ -373,6 +374,7 @@ class SaleOrderLine(models.Model):
     def get_main_line_production(self):
         self.ensure_one()
         # Buscar produccion principal asociada a la línea de venta
+        production = self.env['mrp.production']
         if self.group_sheet_id and self.group_sheet_id.bom_id:
             domain = [('bom_id', 'in', self.group_sheet_id.bom_id.ids)]
             production = self.env['mrp.production'].search(domain)
