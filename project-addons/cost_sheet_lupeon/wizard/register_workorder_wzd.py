@@ -10,8 +10,7 @@ class RegisterWorkorderWizard(models.TransientModel):
     def default_get(self, default_fields):
         wo = self.env['mrp.workorder'].browse(self._context.get('active_id'))
         res = super().default_get(default_fields)
-        res['qty'] = wo.qty_producing
-
+        res['qty'] = 0
         res['consume_ids'] = []
         for move in wo.active_move_line_ids:
             vals = {
@@ -32,7 +31,7 @@ class RegisterWorkorderWizard(models.TransientModel):
         wo.button_pending()
         wo.qty_producing = self.qty
 
-        if not self.machine_hours:
+        if self.consume_ids and not self.machine_hours:
             raise UserError('Es necesario indicar el tiempo máquina')
 
         vals = {

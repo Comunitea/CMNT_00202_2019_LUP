@@ -85,9 +85,9 @@ class RegistergroupWizard(models.TransientModel):
             wo = line.workorder_id
             if not wo or wo.state not in ('ready', 'progress'):
                 continue
-            
+
             wo.button_start()
-            if wo.time_ids and wo.duration_expected:
+            if wo.time_ids and total_user_hours:
                 percent = self.user_hours / total_user_hours
                 h = self.user_hours * percent
                 t = wo.time_ids.filtered(lambda x: not x.date_end)
@@ -123,18 +123,6 @@ class RegistergroupWizard(models.TransientModel):
             reg = self.env['register.workorder.wizard'].with_context(
                 active_id=wo.id).new(vals)
             reg.confirm()
-
-        # if gp.workorder_ids.filtered(lambda x: x.state != 'done'):
-        #     gp.state = 'progress'
-        # else:
-        #     gp.state = 'done'
-
-        # if time_expected and wo.time_ids:
-        #             percent = wo.duration_expected / time_expected
-        #             h = self.total_time *  percent
-        #             next_date = wo.time_ids[0].date_start + timedelta(hours=h)
-        #             # wo.time_ids[0].duration = self.total_time * 60 * percent
-        #             wo.time_ids[0].date_end = next_date
 
         gp.state = 'done'
 

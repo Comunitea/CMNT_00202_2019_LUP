@@ -11,7 +11,7 @@
                         </p>
                         <group>
                             <field name="qty" required="1"/>
-                            <field name="machine_hours" widget="float_time"/>
+                            <field name="machine_hours" widget="float_time" attrs="{'invisible': [('consume_ids', '=', [])]}"/>
                         </group>
                         <group string="Consumos" attrs="{'invisible': [('consume_ids', '=', [])]}">
                             <field name="consume_ids" nolabel="1">

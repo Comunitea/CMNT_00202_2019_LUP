@@ -17,31 +17,16 @@ class GroupMrpWizard(models.TransientModel):
                 raise UserError(
                     _('No puedes agrupar distintos tipos de hojas'))
 
-            # if mrp.group_mrp_id:
-            #     raise UserError(
-            #         _('Production %s already in a group') % mrp.name)
-
-            # if mrp.state != 'planned':
-            #     raise UserError(
-            #         _('Production %s must be planned without nothing done')
-            #         % mrp.name)
-
         group = self.env['group.production'].create({
             'name': self.name
         })
-        
-        # production_ids.write({'group_mrp_id': group.id})
+
         for prod in production_ids:
             wo = prod.workorder_ids.filtered(lambda x: x.active_move_line_ids)
             vals = {
                 'group_mrp_id': group.id,
                 'workorder_id': wo.id,
-                # 'production_id': wo.production_id.id,
-                # 'product_id': wo.product_id.id,
-                # 'product_qty': wo.qty_production,
-                # 'qty_produced': wo.qty_produced,
-                # 'qty_done': wo.planned_qty if wo.planned_qty else
-                'qty_done':0,
+                'qty_done': 0,
             }
             self.env['group.register.line'].create(vals)
 

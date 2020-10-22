@@ -802,7 +802,7 @@ class CostSheet(models.Model):
                 lambda o: wo.name == o.name)
             if oppi:
                 duration = oppi.time
-                vals = {
+            vals = {
                     'duration_expected': duration * 60,
                     'date_planned_finished':
                     self.sale_line_id.order_id.production_date,
@@ -810,10 +810,12 @@ class CostSheet(models.Model):
                     self.sale_line_id.order_id.production_date -
                     timedelta(hours=duration),
                     'employee_id': oppi.employee_id.id
-                }
-                if oppi.e_partner_id:
-                    vals.update(e_partner_id= oppi.e_partner_id.id)
-                wo.write(vals)
+            }
+
+            if oppi and oppi.e_partner_id:
+                vals.update(
+                    e_partner_id=oppi.e_partner_id.id,)
+            wo.write(vals)
         self.write({'production_id': prod.id})
 
     def create_productions(self):
@@ -1046,7 +1048,6 @@ class WorkforceCostLine(models.Model):
     euro_unit = fields.Float('€ ud', compute="compute_workforce_totals")
     total = fields.Float('€ Total', compute="compute_workforce_totals")
 
-    @api.depends('hours')
     def compute_workforce_totals(self):
         for wcl in self:
             sh = wcl.sheet_id
