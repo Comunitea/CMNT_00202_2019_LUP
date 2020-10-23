@@ -11,6 +11,9 @@ class MrpWorkorder(models.Model):
 
     sheet_id = fields.Many2one(
         'cost.sheet', 'Cost Sheet', related='production_id.sheet_id')
+    th_machine_hours = fields.Float(
+       'Horas máquina estimadas',
+       related='production_id.sheet_id.machine_hours')
     e_partner_id = fields.Many2one(
         'res.partner', 'Proveedor Externalización', readonly=True)
     out_pick_id = fields.Many2one('stock.picking', 'Albarán salida',
@@ -21,15 +24,32 @@ class MrpWorkorder(models.Model):
                                        'Machine times')
     machine_time = fields.Float(
         'Horas máquina total', compute="_get_machine_time")
-    # planned_qty = fields.Float(
-    #     'Cantidad planificada')
+    th_user_hours = fields.Float(
+        'Horas técnico estimafas', compute="_get_th_user_time")
     employee_id = fields.Many2one('hr.employee', 'Asignado a')
     group_mrp_id = fields.Many2one('group.production', 'Group', readonly=True)
+
+    duration_expected_hours = fields.Float(
+        'Duración esperada horas',
+        compute="_get_duration_hours")
+
+    @api.depends('duration_expected')
+    def _get_duration_hours(self):
+        for wo in self:
+            wo.duration_expected_hours = wo.duration_expected / 60
 
     @api.depends('machine_time_ids.time')
     def _get_machine_time(self):
         for wo in self:
             wo.machine_time = sum([x.time for x in wo.machine_time_ids])
+
+    def _get_th_user_time(self):
+        for wo in self:
+            tech_line = wo.sheet_id.workforce_cost_ids.filtered(
+                lambda x: x.name == 'Horas Técnico'
+            )
+            duration = tech_line.hours if tech_line else 0
+            wo.th_user_hours = duration
 
     # No quiero que cree checks de calidad
     def _create_checks(self):
@@ -116,3 +136,17 @@ class MachineTime(models.Model):
 
     workorder_id = fields.Many2one('mrp.workorder')
     time = fields.Float('Horas máquina')
+
+
+class MrpWorkcenterProductivity(models.Model):
+
+    _inherit = "mrp.workcenter.productivity"
+
+    duration_hours = fields.Float(
+        'Duración esperada horas',
+        compute="_get_duration_hours")
+
+    @api.depends('duration')
+    def _get_duration_hours(self):
+        for line in self:
+            line.duration_hours = line.duration / 60

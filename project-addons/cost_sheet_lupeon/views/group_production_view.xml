@@ -23,26 +23,13 @@
                         <field name="create_date"/>
                         <field name="total_time" widget="float_time"/>
                     </group>
-                    <!-- <group string="Órdenes de trabajo agrupadas">
-                        <field name="workorder_ids" nolabel="1">
-                            <tree editable="bottom" create="0" delete="0">
-                                <field name="name" readonly="1"/>
-                                <field name="production_id" readonly="1"/>
-                                <field name="product_id" readonly="1"/>
-                                <field name="workcenter_id" readonly="1"/>
-                                <field name="qty_produced" string="Producido" readonly="1"/>
-                                <field name="qty_production" string="Total a producir" readonly="1"/>
-                                <field name="qty_producing" string="Pendiente" readonly="1"/>
-                                <field name="state" readonly="1"/>
-                                <field name="planned_qty"/>
-                            </tree>
-                        </field>
-                    </group> -->
                     <group string="Órdenes de trabajo agrupadas">
                         <field name="register_ids" nolabel="1">
                             <tree editable="bottom" create="0" delete="0">
                                     <field name="production_id"/>
                                     <field name="workorder_id"/>
+                                    <field name="th_machine_hours" force_save="1" required="0"/>
+                                    <field name="th_user_hours" force_save="1" required="0"/>
                                     <field name="product_id"/>
                                     <field name="qty_produced" string="Producido"  />
                                     <field name="product_qty" string="Total a producir"  />

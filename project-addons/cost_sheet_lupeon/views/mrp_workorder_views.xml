@@ -42,6 +42,9 @@
                     </field>
                 </page>
                 <page string="Tiempo máqina">
+                    <!-- <group>
+                        <field name="th_machine_hours">
+                    </group> -->
                     <group  string="Tiempo máqina">
                         <field name="machine_time_ids" readonly="1" nolabel="1">
                             <tree>
@@ -65,10 +68,25 @@
 
             <field name="is_produced" position="after">
                 <field name="sheet_id" context="{'form_view_ref': 'cost_sheet_lupeon.simple_cost_sheet_view_form'}" />
+                <field name="th_machine_hours"/>
+                <field name="th_user_hours"/>
                 <field name="employee_id"/>
                 <field name="group_mrp_id"/>
                 <!-- <field name="planned_qty" attrs="{'invisible': [('group_mrp_id', '=', False)]}"/> -->
             </field>
+
+            <xpath expr="//page[3]/group/group[2]//div[1]" position="after">
+                <label for="duration_expected_hours"/>
+                <div>
+                    <field name="duration_expected_hours" widget="float_time" class="oe_inline"/> horas
+                </div>
+            </xpath>
+            <xpath expr="//field[@name='time_ids']/tree/field[@name='duration']" position="after">
+                <field name="duration_hours" widget="float_time"/>
+            </xpath>
+            <xpath expr="//field[@name='time_ids']/form//field[@name='duration']" position="after">
+                <field name="duration_hours" widget="float_time"/>
+            </xpath>
         </field>
     </record>
 

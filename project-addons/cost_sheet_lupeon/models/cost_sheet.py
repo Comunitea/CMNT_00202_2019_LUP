@@ -251,13 +251,36 @@ class CostSheet(models.Model):
         res = super().create(vals)
         res.group_id.update_sale_line_price()
         res.update_workforce_cost()
+        res.update_tech_hours()
         return res
 
     def write(self, vals):
         res = super().write(vals)
         self.mapped('group_id').update_sale_line_price()
         self.update_workforce_cost()
+        self.update_tech_hours()
         return res
+
+    def update_tech_hours(self):
+        self.ensure_one()
+        tech_line = self.workforce_cost_ids.filtered(
+                lambda x: x.name == 'Horas Técnico'
+            )
+        if self.material_cost_ids:
+            material = self.material_cost_ids[0].material_id
+            # material = self.calc_material_id
+            tray_hours = self.tray_hours
+            if self.sheet_type == 'sls':
+                tray_hours = self.tray_hours_sls
+            if self.cus_units:
+                maq_hours = self.machine_hours
+                maq_hours = (tray_hours / self.tray_units) * self.cus_units
+        hours = 0
+        if self.sheet_type == 'fdm' and material:
+            hours = (5/60) + (maq_hours * self.printer_id.machine_hour * material.factor_hour)
+        if self.sheet_type in ['sls', 'poly', 'sla', 'sls2', 'dmls']:
+            hours = (5/60) + (maq_hours * self.printer_id.machine_hour)
+        tech_line.hours = hours
 
     @api.onchange('price_unit', 'cus_units')
     def change_inspection_type(self):
@@ -788,14 +811,15 @@ class CostSheet(models.Model):
     def update_workorders(self, prod):
         """
         PLANIFICACIÓN TIEMPOS
-        Horas técnico a la orden de trabajo de impresión y
+        Horas máquina a la orden de trabajo de impresión y
         las oppis cogen su propia duración
         """
         self.ensure_one()
-        tech_line = self.workforce_cost_ids.filtered(
-                lambda x: x.name == 'Horas Técnico'
-            )
-        duration = tech_line.hours if tech_line else 0
+        # tech_line = self.workforce_cost_ids.filtered(
+        #         lambda x: x.name == 'Horas Técnico'
+        #     )
+        # duration = tech_line.hours if tech_line else 0
+        duration = self.machine_hours
 
         for wo in prod.workorder_ids:
             oppi = self.oppi_line_ids.filtered(

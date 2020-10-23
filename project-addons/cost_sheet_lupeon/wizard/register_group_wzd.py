@@ -44,7 +44,7 @@ class RegistergroupWizard(models.TransientModel):
         return res
 
     machine_hours = fields.Float('Horas máquina')
-    user_hours = fields.Float('Horas usuario')
+    user_hours = fields.Float('Horas técnico')
     qty_done_ids = fields.One2many(
         'group.done.line', 'wzd_id', 'Cantidades Producidas')
     consume_ids = fields.One2many(
@@ -69,12 +69,27 @@ class RegistergroupWizard(models.TransientModel):
                     para el producto %s' % consume.product_id.name)
 
         total_user_hours = 0
+        total_machine_hours = 0
         for line in self.qty_done_ids:
 
             wo = line.workorder_id
             if not wo or wo.state not in ('ready', 'progress'):
                 continue
-            total_user_hours += (wo.duration_expected / 60)
+            h_ud = wo.th_user_hours / line.product_qty
+            h_qty = h_ud * line.qty_done
+            total_user_hours += h_qty
+
+            h_ud = wo.th_machine_hours / line.product_qty
+            h_qty = h_ud * line.qty_done
+            total_machine_hours += h_qty
+
+        total_gr = 0
+        for move in self.qty_done_ids.mapped('workorder_id.active_move_line_ids'):
+            if line.product_qty:
+                qty_gr_unit = move.qty_done / move.production_id.product_qty
+                done_qty = line.qty_done * qty_gr_unit
+                total_gr += done_qty
+
 
         for line in self.qty_done_ids:
 
@@ -87,8 +102,10 @@ class RegistergroupWizard(models.TransientModel):
                 continue
 
             wo.button_start()
-            if wo.time_ids and total_user_hours:
-                percent = self.user_hours / total_user_hours
+            if wo.time_ids and line.product_qty and total_user_hours:
+                h_ud = wo.th_user_hours / line.product_qty
+                h_qty = h_ud * line.qty_done
+                percent = h_qty / total_user_hours
                 h = self.user_hours * percent
                 t = wo.time_ids.filtered(lambda x: not x.date_end)
                 next_date = t.date_start + timedelta(hours=h)
@@ -101,10 +118,11 @@ class RegistergroupWizard(models.TransientModel):
                 # Reparto proporcional consumos
                 grouped_line = self.consume_ids.filtered(
                     lambda x: x.product_id == move.product_id)
-                total_qty = grouped_line.qty_consume
                 prop_qty = 0
-                if total_qty:
-                    percent = move.qty_done / total_qty
+                if total_gr and line.product_qty:
+                    qty_gr_unit = move.qty_done / line.product_qty
+                    done_qty = line.qty_done * qty_gr_unit
+                    percent = done_qty / total_gr
                     prop_qty = grouped_line.qty_done * percent
 
                 consume_vals = {
@@ -115,14 +133,19 @@ class RegistergroupWizard(models.TransientModel):
                 }
                 consume_ids.append((0, 0, consume_vals))
 
-            vals = {
-                'qty': line.qty_done,
-                'machine_hours': self.machine_hours / len(self.qty_done_ids),
-                'consume_ids': consume_ids
-            }
-            reg = self.env['register.workorder.wizard'].with_context(
-                active_id=wo.id).new(vals)
-            reg.confirm()
+            if line.product_qty and total_machine_hours:
+                h_ud = wo.th_machine_hours / line.product_qty
+                h_qty = h_ud * line.qty_done
+                percent = h_qty / total_machine_hours
+                h = self.machine_hours * percent
+                vals = {
+                    'qty': line.qty_done,
+                    'machine_hours': h,
+                    'consume_ids': consume_ids
+                }
+                reg = self.env['register.workorder.wizard'].with_context(
+                    active_id=wo.id).new(vals)
+                reg.confirm()
 
         gp.state = 'done'
 

@@ -105,6 +105,12 @@ class GroupRegisterLine(models.Model):
         'group.production', 'Group', readonly=True, ondelete='cascade')
     workorder_id = fields.Many2one(
         'mrp.workorder', 'Orden de trabajo', readonly=True)
+    th_machine_hours = fields.Float(
+       'Horas máquina estimadas',
+       related='workorder_id.th_machine_hours')
+    th_user_hours = fields.Float(
+       'Horas técnico estimadas',
+       related='workorder_id.th_user_hours')
     production_id = fields.Many2one(
         'mrp.production', 'Producción Asociada',
         related='workorder_id.production_id')
