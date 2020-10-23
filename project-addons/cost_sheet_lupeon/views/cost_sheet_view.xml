@@ -404,7 +404,7 @@
                                     <tree editable="bottom">
                                         <field name="can_edit" invisible="1"/>
                                         <field name="name"/>
-                                        <field name="material_id" domain="[('is_material', '=', True), ('material_type', '=', parent.sheet_type), ('diameter', =, 'diameter')]"/>
+                                        <field name="material_id" domain="[('is_material', '=', True), ('material_type', '=', parent.sheet_type), ('diameter', '=', diameter)]"/>
                                         <!-- FDM FIELDS -->
                                         <field name="diameter" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
                                         <!-- <field name="color" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/> -->
