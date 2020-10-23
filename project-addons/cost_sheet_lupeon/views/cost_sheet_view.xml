@@ -156,7 +156,7 @@
         <field name="name">cost_materual_line_view_tree</field>
         <field name="model">material.cost.line</field>
         <field name="arch" type="xml">
-            <tree>
+            <tree editable="bottom">
                 <field name="can_edit" invisible="1"/>
                 <field name="name"/>
                 <field name="material_id" domain="[('is_material', '=', True), ('material_type', '=', parent.sheet_type)]"/>
@@ -402,41 +402,41 @@
                             <group colspan="4" string="Material Cost">
                                 <field name="material_cost_ids" nolabel="1">
                                     <tree editable="bottom">
-                                    <field name="can_edit" invisible="1"/>
-                                    <field name="name"/>
-                                    <field name="material_id" domain="[('is_material', '=', True), ('material_type', '=', parent.sheet_type)]"/>
-                                    <!-- FDM FIELDS -->
-                                    <field name="diameter" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
-                                    <!-- <field name="color" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/> -->
-                                    <field name="tray_meters" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
-                                    <field name="gr_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
-                                    <field name="gr_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
+                                        <field name="can_edit" invisible="1"/>
+                                        <field name="name"/>
+                                        <field name="material_id" domain="[('is_material', '=', True), ('material_type', '=', parent.sheet_type), ('diameter', =, 'diameter')]"/>
+                                        <!-- FDM FIELDS -->
+                                        <field name="diameter" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
+                                        <!-- <field name="color" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/> -->
+                                        <field name="tray_meters" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
+                                        <field name="gr_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
+                                        <field name="gr_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
 
-                                    <!-- SLS P396 fields -->
-                                    <field name="sls_gr_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls')]}"/>
-                                    <field name="sls_gr_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls')]}"/>
+                                        <!-- SLS P396 fields -->
+                                        <field name="sls_gr_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls')]}"/>
+                                        <field name="sls_gr_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls')]}"/>
 
-                                    <!--Poly fields -->
-                                    <field name="pol_gr_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'poly')]}"/>
-                                    <!--SLA fields -->
-                                    <field name="sla_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sla')]}"/>
-                                    <!--SLS fields -->
-                                    <field name="sls2_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls2')]}"/>
-                                    <!--DMLS fields -->
-                                    <field name="dmls_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'dmls')]}"/>
-                                    
-                                    <field name="desviation" attrs="{'column_invisible': [('parent.sheet_type', 'not in', ['poly', 'sla', 'sls2', 'dmls'])], 'readonly': [('can_edit', '!=', True)]}"/>
-                                    <!--Poly fields -->
-                                    <field name="pol_gr_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'poly')]}"/>
-                                    <!--SLA fields -->
-                                    <field name="sla_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sla')]}"/>
-                                    <!--SLS fields -->
-                                    <field name="sls2_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls2')]}"/>
-                                    <!--DMLS fields -->
-                                    <field name="dmls_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'dmls')]}"/>
+                                        <!--Poly fields -->
+                                        <field name="pol_gr_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'poly')]}"/>
+                                        <!--SLA fields -->
+                                        <field name="sla_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sla')]}"/>
+                                        <!--SLS fields -->
+                                        <field name="sls2_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls2')]}"/>
+                                        <!--DMLS fields -->
+                                        <field name="dmls_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'dmls')]}"/>
+                                        
+                                        <field name="desviation" attrs="{'column_invisible': [('parent.sheet_type', 'not in', ['poly', 'sla', 'sls2', 'dmls'])], 'readonly': [('can_edit', '!=', True)]}"/>
+                                        <!--Poly fields -->
+                                        <field name="pol_gr_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'poly')]}"/>
+                                        <!--SLA fields -->
+                                        <field name="sla_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sla')]}"/>
+                                        <!--SLS fields -->
+                                        <field name="sls2_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls2')]}"/>
+                                        <!--DMLS fields -->
+                                        <field name="dmls_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'dmls')]}"/>
 
-                                    <field name="euro_material"  groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                    <field name="total" attrs="{'column_invisible': [('parent.sheet_type', '=', 'fdm')]}"  groups="cost_sheet_lupeon.group_cs_advanced"/>
+                                        <field name="euro_material"  groups="cost_sheet_lupeon.group_cs_advanced"/>
+                                        <field name="total" attrs="{'column_invisible': [('parent.sheet_type', '=', 'fdm')]}"  groups="cost_sheet_lupeon.group_cs_advanced"/>
                                     </tree>
                                 </field>
                             </group>
