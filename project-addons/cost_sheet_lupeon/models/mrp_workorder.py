@@ -25,7 +25,7 @@ class MrpWorkorder(models.Model):
     machine_time = fields.Float(
         'Horas máquina total', compute="_get_machine_time")
     th_user_hours = fields.Float(
-        'Horas técnico estimafas', compute="_get_th_user_time")
+        'Horas técnico estimadas', compute="_get_th_user_time")
     employee_id = fields.Many2one('hr.employee', 'Asignado a')
     group_mrp_id = fields.Many2one('group.production', 'Group', readonly=True)
 

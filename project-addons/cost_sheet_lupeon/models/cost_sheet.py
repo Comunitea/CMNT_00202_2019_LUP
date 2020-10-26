@@ -905,6 +905,7 @@ class MaterialCostLine(models.Model):
     # COMUN
     name = fields.Char('Nombre', required=True)
     material_id = fields.Many2one('product.product', 'Material')
+    material_id2 = fields.Many2one('product.product', 'Material')
 
     euro_material = fields.Float('Euros Mat ud', compute='_compute_cost')
     total = fields.Float('Total', compute='_compute_cost')
@@ -1043,21 +1044,38 @@ class MaterialCostLine(models.Model):
         sh = self.sheet_id
         res = 1.0
         if sh.sheet_type == 'fdm':
-            res = self.gr_cc_tray
+            res = self.gr_cc_total
         elif sh.sheet_type == 'sls':
-            res = self.sls_gr_tray
+            res = self.sls_gr_total
 
         elif sh.sheet_type == 'poly':
-            res = self.pol_gr_tray
+            res = self.pol_gr_total
 
         elif sh.sheet_type == 'sla':
-            res = self.sla_cc_tray
+            res = self.sla_cc_total
 
         elif sh.sheet_type == 'sls2':
-            res = self.sls2_cc_tray
+            res = self.sls2_cc_total
 
         elif sh.sheet_type == 'dmls':
-           res = self.dmls_cc_tray
+            res = self.dmls_cc_total
+        return res
+
+    def update_material_cost_id(self):
+        for mat in self:
+            if self.material_id2 and \
+                    self.material_id2.id != self.material_id.id:
+                mat.material_id = mat.material_id2.id
+
+    @api.model
+    def create(self, vals):
+        res = super().create(vals)
+        res.update_material_cost_id()
+        return res
+
+    def write(self, vals):
+        res = super().write(vals)
+        self.update_material_cost_id()
         return res
 
 

@@ -223,7 +223,7 @@ class SaleOrder(models.Model):
                 'product_qty': line.qty,
                 'product_id': line.product_id.id,
                 'product_uom': line.product_id.uom_po_id.id,
-                'price_unit': line.pvp_ud,
+                'price_unit': line.cost_ud,
                 'date_planned': fields.Datetime.now(),
                 # 'taxes_id': [(6, 0, taxes_id.ids)],
                 'taxes_id': [(6, 0, taxes.ids)],

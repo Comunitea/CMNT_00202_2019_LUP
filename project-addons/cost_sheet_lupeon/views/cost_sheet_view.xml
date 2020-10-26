@@ -151,96 +151,6 @@
 
     <menuitem id="menu_product_cost_sheets" action="action_product_cost_sheets"  name="Grupos de costes" parent="menu_cost_sheets" sequence="1"/>
 
-    <!-- Vistas de campos One2many -->
-    <record id="cost_material_line_view_tree" model="ir.ui.view">
-        <field name="name">cost_materual_line_view_tree</field>
-        <field name="model">material.cost.line</field>
-        <field name="arch" type="xml">
-            <tree editable="bottom">
-                <field name="can_edit" invisible="1"/>
-                <field name="name"/>
-                <field name="material_id" domain="[('is_material', '=', True), ('material_type', '=', parent.sheet_type)]"/>
-                <!-- FDM FIELDS -->
-                <field name="diameter" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
-                <!-- <field name="color" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/> -->
-                <field name="tray_meters" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
-                <field name="gr_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
-                <field name="gr_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
-
-                <!-- SLS P396 fields -->
-                <field name="sls_gr_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls')]}"/>
-                <field name="sls_gr_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls')]}"/>
-
-                <!--Poly fields -->
-                <field name="pol_gr_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'poly')]}"/>
-                <!--SLA fields -->
-                <field name="sla_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sla')]}"/>
-                <!--SLS fields -->
-                <field name="sls2_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls2')]}"/>
-                <!--DMLS fields -->
-                <field name="dmls_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'dmls')]}"/>
-                
-                <field name="desviation" attrs="{'column_invisible': [('parent.sheet_type', 'not in', ['poly', 'sla', 'sls2', 'dmls'])], 'readonly': [('can_edit', '!=', True)]}"/>
-                <!--Poly fields -->
-                <field name="pol_gr_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'poly')]}"/>
-                <!--SLA fields -->
-                <field name="sla_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sla')]}"/>
-                <!--SLS fields -->
-                <field name="sls2_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls2')]}"/>
-                <!--DMLS fields -->
-                <field name="dmls_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'dmls')]}"/>
-
-                <field name="euro_material"  groups="cost_sheet_lupeon.group_cs_advanced"/>
-                <field name="total" attrs="{'column_invisible': [('parent.sheet_type', '=', 'fdm')]}"  groups="cost_sheet_lupeon.group_cs_advanced"/>
-            </tree>
-        </field>
-    </record>
-
-    <record id="cost_material_line_view_form" model="ir.ui.view">
-        <field name="name">cost_materual_line_view_form</field>
-        <field name="model">material.cost.line</field>
-        <field name="arch" type="xml">
-            <form>
-                <group col="2">
-                    <field name="can_edit" invisible="1"/>
-                    <field name="name"/>
-                    <field name="material_id" domain="[('is_material', '=', True), ('material_type', '=', parent.sheet_type)]"/>
-                    <!-- FDM FIELDS -->
-                    <field name="diameter" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
-                    <!-- <field name="color" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/> -->
-                    <field name="tray_meters" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
-                    <field name="gr_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
-                    <field name="gr_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
-
-                    <!-- SLS P396 fields -->
-                    <field name="sls_gr_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls')]}"/>
-                    <field name="sls_gr_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls')]}"/>
-
-                    <!--Poly fields -->
-                    <field name="pol_gr_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'poly')]}"/>
-                    <!--SLA fields -->
-                    <field name="sla_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sla')]}"/>
-                    <!--SLS fields -->
-                    <field name="sls2_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls2')]}"/>
-                    <!--DMLS fields -->
-                    <field name="dmls_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'dmls')]}"/>
-                    
-                    <field name="desviation" attrs="{'column_invisible': [('parent.sheet_type', 'not in', ['poly', 'sla', 'sls2', 'dmls'])], 'readonly': [('can_edit', '!=', True)]}"/>
-                    <!--Poly fields -->
-                    <field name="pol_gr_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'poly')]}"/>
-                    <!--SLA fields -->
-                    <field name="sla_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sla')]}"/>
-                    <!--SLS fields -->
-                    <field name="sls2_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls2')]}"/>
-                    <!--DMLS fields -->
-                    <field name="dmls_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'dmls')]}"/>
-
-                    <field name="euro_material"  groups="cost_sheet_lupeon.group_cs_advanced"/>
-                    <field name="total" attrs="{'column_invisible': [('parent.sheet_type', '=', 'fdm')]}"  groups="cost_sheet_lupeon.group_cs_advanced"/>
-                </group>
-            </form>
-        </field>
-    </record>
 
         <!-- Vistas de campos One2many -->
     <record id="oppi_line_view_tree" model="ir.ui.view">
@@ -400,45 +310,7 @@
 
                             <!-- Vista custom tree por el nuevo filtro diametro en el campo matertial id -->
                             <group colspan="4" string="Material Cost">
-                                <field name="material_cost_ids" nolabel="1">
-                                    <tree editable="bottom">
-                                        <field name="can_edit" invisible="1"/>
-                                        <field name="name"/>
-                                        <field name="material_id" domain="[('is_material', '=', True), ('material_type', '=', parent.sheet_type), ('diameter', '=', diameter)]"/>
-                                        <!-- FDM FIELDS -->
-                                        <field name="diameter" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
-                                        <!-- <field name="color" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/> -->
-                                        <field name="tray_meters" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
-                                        <field name="gr_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
-                                        <field name="gr_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
-
-                                        <!-- SLS P396 fields -->
-                                        <field name="sls_gr_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls')]}"/>
-                                        <field name="sls_gr_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls')]}"/>
-
-                                        <!--Poly fields -->
-                                        <field name="pol_gr_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'poly')]}"/>
-                                        <!--SLA fields -->
-                                        <field name="sla_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sla')]}"/>
-                                        <!--SLS fields -->
-                                        <field name="sls2_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls2')]}"/>
-                                        <!--DMLS fields -->
-                                        <field name="dmls_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'dmls')]}"/>
-                                        
-                                        <field name="desviation" attrs="{'column_invisible': [('parent.sheet_type', 'not in', ['poly', 'sla', 'sls2', 'dmls'])], 'readonly': [('can_edit', '!=', True)]}"/>
-                                        <!--Poly fields -->
-                                        <field name="pol_gr_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'poly')]}"/>
-                                        <!--SLA fields -->
-                                        <field name="sla_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sla')]}"/>
-                                        <!--SLS fields -->
-                                        <field name="sls2_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls2')]}"/>
-                                        <!--DMLS fields -->
-                                        <field name="dmls_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'dmls')]}"/>
-
-                                        <field name="euro_material"  groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                        <field name="total" attrs="{'column_invisible': [('parent.sheet_type', '=', 'fdm')]}"  groups="cost_sheet_lupeon.group_cs_advanced"/>
-                                    </tree>
-                                </field>
+                                <field name="material_cost_ids" nolabel="1" context="{'tree_view_ref': 'cost_sheet_lupeon.view_material_fdm'}"/>
                             </group>
                             <group class="oe_subtotal_footer oe_right" colspan="2" name="material_total"  groups="cost_sheet_lupeon.group_cs_advanced">
                                     <field name="total_euro_ud" widget='monetary'/>
@@ -1234,5 +1106,144 @@
             </form>
         </field>
     </record>
+
+     <!-- Vistas de campos One2many -->
+    <record id="view_material_fdm" model="ir.ui.view">
+        <field name="name">cost_materual_line_view_tree</field>
+        <field name="model">material.cost.line</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="can_edit" invisible="1"/>
+                <field name="name"/>
+                <field name="material_id" domain="[('is_material', '=', True), ('material_type', '=', parent.sheet_type), ('diameter', '=', diameter)]"/>
+                <!-- FDM FIELDS -->
+                <field name="diameter" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
+                <!-- <field name="color" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/> -->
+                <field name="tray_meters" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
+                <field name="gr_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
+                <field name="gr_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
+
+                <!-- SLS P396 fields -->
+                <field name="sls_gr_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls')]}"/>
+                <field name="sls_gr_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls')]}"/>
+
+                <!--Poly fields -->
+                <field name="pol_gr_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'poly')]}"/>
+                <!--SLA fields -->
+                <field name="sla_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sla')]}"/>
+                <!--SLS fields -->
+                <field name="sls2_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls2')]}"/>
+                <!--DMLS fields -->
+                <field name="dmls_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'dmls')]}"/>
+                
+                <field name="desviation" attrs="{'column_invisible': [('parent.sheet_type', 'not in', ['poly', 'sla', 'sls2', 'dmls'])], 'readonly': [('can_edit', '!=', True)]}"/>
+                <!--Poly fields -->
+                <field name="pol_gr_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'poly')]}"/>
+                <!--SLA fields -->
+                <field name="sla_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sla')]}"/>
+                <!--SLS fields -->
+                <field name="sls2_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls2')]}"/>
+                <!--DMLS fields -->
+                <field name="dmls_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'dmls')]}"/>
+
+                <field name="euro_material"  groups="cost_sheet_lupeon.group_cs_advanced"/>
+                <field name="total" attrs="{'column_invisible': [('parent.sheet_type', '=', 'fdm')]}"  groups="cost_sheet_lupeon.group_cs_advanced"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="cost_material_line_view_tree" model="ir.ui.view">
+        <field name="name">cost_materual_line_view_tree</field>
+        <field name="model">material.cost.line</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="can_edit" invisible="1"/>
+                <field name="name"/>
+                <field name="material_id" attrs="{'column_invisible': [('parent.sheet_type', '=', 'fdm')]}" domain="[('is_material', '=', True), ('material_type', '=', parent.sheet_type)]"/>
+                    <field name="material_id2" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}" domain="[('is_material', '=', True), ('material_type', '=', parent.sheet_type), ('diameter', '=', diameter)]"/>
+                <!-- FDM FIELDS -->
+                <field name="diameter" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
+                <!-- <field name="color" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/> -->
+                <field name="tray_meters" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
+                <field name="gr_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
+                <field name="gr_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
+
+                <!-- SLS P396 fields -->
+                <field name="sls_gr_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls')]}"/>
+                <field name="sls_gr_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls')]}"/>
+
+                <!--Poly fields -->
+                <field name="pol_gr_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'poly')]}"/>
+                <!--SLA fields -->
+                <field name="sla_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sla')]}"/>
+                <!--SLS fields -->
+                <field name="sls2_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls2')]}"/>
+                <!--DMLS fields -->
+                <field name="dmls_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'dmls')]}"/>
+                
+                <field name="desviation" attrs="{'column_invisible': [('parent.sheet_type', 'not in', ['poly', 'sla', 'sls2', 'dmls'])], 'readonly': [('can_edit', '!=', True)]}"/>
+                <!--Poly fields -->
+                <field name="pol_gr_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'poly')]}"/>
+                <!--SLA fields -->
+                <field name="sla_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sla')]}"/>
+                <!--SLS fields -->
+                <field name="sls2_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls2')]}"/>
+                <!--DMLS fields -->
+                <field name="dmls_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'dmls')]}"/>
+
+                <field name="euro_material"  groups="cost_sheet_lupeon.group_cs_advanced"/>
+                <field name="total" attrs="{'column_invisible': [('parent.sheet_type', '=', 'fdm')]}"  groups="cost_sheet_lupeon.group_cs_advanced"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="cost_material_line_view_form" model="ir.ui.view">
+        <field name="name">cost_materual_line_view_form</field>
+        <field name="model">material.cost.line</field>
+        <field name="arch" type="xml">
+            <form>
+                <group col="2">
+                    <field name="can_edit" invisible="1"/>
+                    <field name="name"/>
+                    <field name="material_id" attrs="{'column_invisible': [('parent.sheet_type', '=', 'fdm')]}" domain="[('is_material', '=', True), ('material_type', '=', parent.sheet_type)]"/>
+                    <field name="material_id2" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}" domain="[('is_material', '=', True), ('material_type', '=', parent.sheet_type), ('diameter', '=', diameter)]"/>
+                    <!-- FDM FIELDS -->
+                    <field name="diameter" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
+                    <!-- <field name="color" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/> -->
+                    <field name="tray_meters" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
+                    <field name="gr_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
+                    <field name="gr_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
+
+                    <!-- SLS P396 fields -->
+                    <field name="sls_gr_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls')]}"/>
+                    <field name="sls_gr_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls')]}"/>
+
+                    <!--Poly fields -->
+                    <field name="pol_gr_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'poly')]}"/>
+                    <!--SLA fields -->
+                    <field name="sla_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sla')]}"/>
+                    <!--SLS fields -->
+                    <field name="sls2_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls2')]}"/>
+                    <!--DMLS fields -->
+                    <field name="dmls_cc_tray" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'dmls')]}"/>
+                    
+                    <field name="desviation" attrs="{'column_invisible': [('parent.sheet_type', 'not in', ['poly', 'sla', 'sls2', 'dmls'])], 'readonly': [('can_edit', '!=', True)]}"/>
+                    <!--Poly fields -->
+                    <field name="pol_gr_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'poly')]}"/>
+                    <!--SLA fields -->
+                    <field name="sla_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sla')]}"/>
+                    <!--SLS fields -->
+                    <field name="sls2_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'sls2')]}"/>
+                    <!--DMLS fields -->
+                    <field name="dmls_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'dmls')]}"/>
+
+                    <field name="euro_material"  groups="cost_sheet_lupeon.group_cs_advanced"/>
+                    <field name="total" attrs="{'column_invisible': [('parent.sheet_type', '=', 'fdm')]}"  groups="cost_sheet_lupeon.group_cs_advanced"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+
 
 </odoo>
