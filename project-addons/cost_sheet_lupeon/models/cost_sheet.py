@@ -539,7 +539,7 @@ class CostSheet(models.Model):
         if self.sheet_type == 'fdm':
             return  # Está en el onchange print id
         elif self.sheet_type == 'sls':
-            options = ['PA2200']
+            options = ['PA2200 Mezclada']
             material = self.env['product.product'].search(
                 [('name', '=', options[0])])
         elif self.sheet_type == 'poly':

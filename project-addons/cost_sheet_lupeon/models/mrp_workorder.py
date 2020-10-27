@@ -30,7 +30,7 @@ class MrpWorkorder(models.Model):
     group_mrp_id = fields.Many2one('group.production', 'Group', readonly=True)
 
     duration_expected_hours = fields.Float(
-        'Duración esperada horas',
+        'Duración horas',
         compute="_get_duration_hours")
 
     @api.depends('duration_expected')
@@ -143,7 +143,7 @@ class MrpWorkcenterProductivity(models.Model):
     _inherit = "mrp.workcenter.productivity"
 
     duration_hours = fields.Float(
-        'Duración esperada horas',
+        'Duración horas',
         compute="_get_duration_hours")
 
     @api.depends('duration')
