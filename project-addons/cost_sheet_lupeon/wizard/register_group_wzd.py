@@ -70,6 +70,7 @@ class RegistergroupWizard(models.TransientModel):
 
         total_user_hours = 0
         total_machine_hours = 0
+        total_gr = 0
         for line in self.qty_done_ids:
 
             wo = line.workorder_id
@@ -83,13 +84,11 @@ class RegistergroupWizard(models.TransientModel):
             h_qty = h_ud * line.qty_done
             total_machine_hours += h_qty
 
-        total_gr = 0
-        for move in self.qty_done_ids.mapped('workorder_id.active_move_line_ids'):
-            if line.product_qty:
-                qty_gr_unit = move.qty_done / move.production_id.product_qty
-                done_qty = line.qty_done * qty_gr_unit
-                total_gr += done_qty
-
+            for move in line.mapped('workorder_id.active_move_line_ids'):
+                if line.product_qty:
+                    qty_gr_unit = move.qty_done / move.production_id.product_qty
+                    done_qty = line.qty_done * qty_gr_unit
+                    total_gr += done_qty
 
         for line in self.qty_done_ids:
 
