@@ -1,5 +1,5 @@
 -- Limpiado de lupeon
-delete from sale_order where company_id = 1 and id;
+delete from sale_order where company_id = 1;
 delete from stock_picking where company_id = 1;
 delete from stock_move where company_id = 1;
 
