@@ -7,7 +7,7 @@ delete from stock_move where company_id = 1;
 delete from stock_move_line where picking_id is null;
 
 delete from stock_move_line where id in (
-    select sml.id, from stock_move_line sml
+    select sml.id from stock_move_line sml
     inner join stock_move sm on sml.move_id = sm.id where sml.picking_id is null and sm.company_id = 1);
 
 
