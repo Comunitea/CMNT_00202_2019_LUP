@@ -266,6 +266,9 @@ class CostSheet(models.Model):
         tech_line = self.workforce_cost_ids.filtered(
                 lambda x: x.name == 'Horas Técnico'
             )
+
+        if not tech_line:
+            return
         material = False
         maq_hours = 0
         if self.material_cost_ids:
