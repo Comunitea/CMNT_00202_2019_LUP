@@ -86,8 +86,8 @@ class StockPicking(models.Model):
     def action_done(self):
         res = super().action_done()
         # Search all confirmed stock_moves and try to assign them
-        domain = self.env['procurement.group']._get_moves_to_assign_domain()
-        domain.append(('company_id', '=', self.company_id.id))
+        domain = self.env['procurement.group']._get_moves_to_assign_domain(self.company_id.id)
+        #domain.append(('company_id', '=', self.company_id.id))
         moves_to_assign = self.env['stock.move'].search(domain, limit=None,
             order='priority desc, date_expected asc')
         for moves_chunk in split_every(100, moves_to_assign.ids):
@@ -101,7 +101,7 @@ class StockPicking(models.Model):
     def button_validate(self):
         if self.delivery_blocked:
             raise ValidationError(_(
-                    'The piclkig i blocking form Sale Order %s') % self.sale_id.name)
+                    'The picking is blocked form Sale Order %s') % self.sale_id.name)
         res = super().button_validate()
         return res
     
