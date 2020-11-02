@@ -14,7 +14,8 @@
         "sale"
     ],
     "data": [
+        "security/groups.xml",
         "views/res_partner_views.xml",
-        "security/groups.xml"
+        
     ],
 }
