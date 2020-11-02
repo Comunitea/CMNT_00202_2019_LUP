@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="partner_view_validate_button">
+        <field name="name">partner.view.validate.button</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="priority" eval="11"/>
+        <field name="groups_id" eval="[(4, ref('partner_validate.group_sale_partner_validate'))]"/>
+        <field name="arch" type="xml">
+            <button name="toggle_active" position="before">
+                <button name="toggle_validated" type="object"
+                        class="oe_stat_button" icon="fa-check-circle">
+                    <field name="validated" widget="boolean_button"
+                    options='{"terminology": {
+                        "string_true": "Validado",
+                        "hover_true": "A Borrador",
+                        "string_false": "Sin validar",
+                        "hover_false": "Validar"
+                    }}'/>
+                </button>
+            </button>
+
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+
+        <record model="res.groups" id="group_sale_partner_validate">
+            <field name="name">Partner validate</field>
+        </record>
+
+    </data>
+</odoo>
