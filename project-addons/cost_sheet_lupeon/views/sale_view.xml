@@ -115,7 +115,7 @@
                 <field name="sample" groups="cost_sheet_lupeon.group_cs_manager"/>
                 <field name="group_sheet_id" readonly="True"/>
             </xpath>
-            <xpath expr="//field[@name='order_line']/form//field[@name='price_unit']" position="attributes">
+            <!--xpath expr="//field[@name='order_line']/form//field[@name='price_unit']" position="attributes">
                 <attribute name="attrs">{'readonly': [('state', 'in', ('sale', 'done'))]}</attribute>
             </xpath>
             <xpath expr="//field[@name='order_line']/form//field[@name='product_uom_qty']" position="attributes">
@@ -132,7 +132,7 @@
             </xpath>
             <xpath expr="//field[@name='order_line']/tree//field[@name='discount']" position="attributes">
                 <attribute name="attrs">{'readonly': [('state', 'in', ('sale', 'done'))]}</attribute>
-            </xpath>
+            </xpath-->
 
             <xpath expr="//field[@name='order_line']/tree//field[@name='product_id']" position="after">
                 <field name="ref"/>
@@ -191,4 +191,3 @@
     </record>
 
 </odoo>
-
