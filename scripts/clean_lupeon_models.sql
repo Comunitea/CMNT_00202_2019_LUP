@@ -2,6 +2,7 @@
 delete from sale_order where company_id = 1;
 delete from stock_picking where company_id = 1;
 delete from stock_move where company_id = 1;
+delete from stock_quant where company_id = 1;
 
 
 delete from stock_move_line where picking_id is null;
