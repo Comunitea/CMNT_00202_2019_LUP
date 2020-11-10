@@ -426,11 +426,12 @@ class CostSheet(models.Model):
                 num1 = (ci + sh.heat_treatment_cost) if \
                     sh.sheet_type == 'dmls' else ci
                 if sh.cus_units:
+                    purchase_total_ud = sh.purchase_total / sh.cus_units
                     cost = (
                         (num1 / sh.cus_units) +
                         (sh.total_euro_ud + sh.euro_machine_ud)*(1 - dqc) +
                         (sh.workforce_total_euro_ud + sh.outsorcing_total_ud +
-                        sh.purchase_total))
+                        purchase_total_ud)
 
                 pu = cost * (1 + fa) * (1 + inc)
                 pvp = pu * sh.cus_units
