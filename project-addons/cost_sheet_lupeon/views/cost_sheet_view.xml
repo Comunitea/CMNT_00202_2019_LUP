@@ -821,6 +821,7 @@
                                         <field name="num_people"/>
                                         <field name="hours"/>
                                         <field name="kms"/>
+                                        <field name="diets"/>
                                         <field name="pvp" groups="cost_sheet_lupeon.group_cs_advanced"/>
                                     </tree>
                                 </field>

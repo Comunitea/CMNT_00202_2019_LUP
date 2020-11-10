@@ -1139,11 +1139,14 @@ class MeetCostLine(models.Model):
     sheet_id = fields.Many2one(
         'cost.sheet', 'Hoja de coste', ondelete="cascade")
     type = fields.Selection([('visit', 'Visita'), ('meets', 'Reunión'),
-                             ('call', 'Conferencia')], 'Tipo', default='visit')
+                             ('call', 'Conferencia'),
+                             ('run', 'Puesta en marcha')
+                             ], 'Tipo', default='visit')
     name = fields.Char('Nombre')
     num_people = fields.Float('Nº personas')
     hours = fields.Float('Tiempo')
     kms = fields.Float('Kms', default=0.0)
+    diets = fields.Float('Dietas')
     pvp = fields.Float('PVP ud', compute="_get_pvp")
     task_id = fields.Many2one('project.task', 'Task', readonly=True,
                               copy=False)
@@ -1152,10 +1155,14 @@ class MeetCostLine(models.Model):
     def _get_pvp(self):
         for mcl in self:
             ing_hours = mcl.sheet_id.group_id.ing_hours
+            tech_hours = mcl.sheet_id.group_id.tech_hours
             km_cost = mcl.sheet_id.group_id.km_cost
-            pvp = (mcl.num_people * mcl.hours * ing_hours)
-            if mcl.type == 'visit':
-                pvp += (mcl.kms * km_cost)
+            x_hours = ing_hours
+            if mcl.type == 'run':
+                x_hours = tech_hours
+            pvp = (mcl.num_people * mcl.hours * x_hours)
+            pvp += (mcl.kms * km_cost)
+            pvp += mcl.diets
             mcl.pvp = pvp
 
     def create_meet_tasks(self, project):
