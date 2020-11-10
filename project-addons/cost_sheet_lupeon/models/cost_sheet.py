@@ -524,10 +524,10 @@ class CostSheet(models.Model):
                 sum([x.pvp for x in sh.outsorcing_cost_ids])
             sh.outsorcing_total = sh.outsorcing_total_ud * sh.cus_units
 
-    @api.onchange('cus_units')
-    def onchange_units_sls(self):
-        for sh in self:
-            sh.tray_units = sh.cus_units
+    # @api.onchange('cus_units')
+    # def onchange_units_sls(self):
+    #     for sh in self:
+    #         sh.tray_units = sh.cus_units
 
     @api.depends('price_unit', 'cc_ud')
     def _get_e_cc_sls(self):
