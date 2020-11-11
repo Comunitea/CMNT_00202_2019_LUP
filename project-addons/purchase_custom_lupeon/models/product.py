@@ -11,31 +11,50 @@ class ProductProduct(models.Model):
     twelve_months_ago = fields.Float()
     six_months_ago = fields.Float() 
     last_month_ago = fields.Float() 
-    main_supplier_id = fields.Many2one('Mai Supplier ', compute="_compute_supplier_info")
-    supplier_min_qty = fields.Float('Supplier min qty', compute="_compute_supplier_info")
-    supplier_price = fields.Float('Supplier Price', compute="_compute_supplier_info")
-    supplier_delay =fields.Integer('Supplier Delay', compute="_compute_supplier_info")
+    main_supplier_id = fields.Many2one('res.partner', 'Main Supplier',
+                                       compute="_compute_supplier_info",
+                                       store=True)
+    supplier_min_qty = fields.Float('Supplier min qty',
+                                    compute="_compute_supplier_info")
+    supplier_price = fields.Float('Supplier Price',
+                                  compute="_compute_supplier_info")
+    supplier_delay =fields.Integer('Supplier Delay',
+                                   compute="_compute_supplier_info")
+    purchase_qty = fields.Float('Purchase',
+                                compute="_compute_supplier_info",
+                                readonly=True)
+    actual_po_id = fields.Many2one('purchase.order', 'Actual Purchase',
+                                       compute="_compute_supplier_info",
+                                    ) 
     
     
+    @api.depends('seller_ids', 'seller_ids.name', 'seller_ids.price')
     def _compute_supplier_info(self):
-        read_group_res = self.env['product.supplierinfo'].read_group(
-            [('product_id', 'in', self.ids)],
-            ['product_id', 'name', 'min_qty', 'price','delay'],
-            ['product_id'])
-        res = {i: {} for i in self.ids}
-        for data in read_group_res:
-            res[data['product_id'][0]]['name'] = data['name']
-            res[data['product_id'][0]]['nbr_suppliers'] = int(data['product_id_count'])
-            res[data['product_id'][0]]['min_qty'] = data['min_qty']
-            res[data['product_id'][0]]['price'] = data['price']
-            res[data['product_id'][0]]['delay'] = data['delay']
+       
         for product in self:
-            product.nbr_suppliers = res[product.id].get('nbr_suppliers', 0)
-            product.supplier_min_qty = res[product.id].get('min_qty', 0)
-            product.supplier_price = res[product.id].get('price', 0)
-            product.supplier_delay = res[product.id].get('delay', 0)
-            product.main_supplier_id =res[product.id].get('name', False)
-    
+            if product.seller_ids:
+                product.nbr_suppliers = len(product.seller_ids)
+                product.supplier_min_qty = product.seller_ids[0].min_qty
+                product.supplier_price = product.seller_ids[0].price
+                product.supplier_delay = product.seller_ids[0].delay
+                product.main_supplier_id = product.seller_ids[0].name
+            else:
+                product.nbr_suppliers = 0
+                product.supplier_min_qty = 0
+                product.supplier_price = 0
+                product.supplier_delay = 0
+                product.main_supplier_id = False
+            pol = self.env['purchase.order.line'].search([
+                ('product_id', '=', product.id),
+                ('state','not in',['purchase','cancel','done'])])
+            if pol:
+                product.purchase_qty = sum(pol.mapped("product_qty"))
+                product.actual_po_id = pol.order_id
+            else:
+                product.purchase_qty = 0
+                product.actual_po_id = False
+                
+           
     
     @api.model
     def compute_last_sales(self, products=False):
@@ -73,7 +92,7 @@ class ProductProduct(models.Model):
             product.six_months_ago = sum(
                 sale_lines_6.mapped("product_uom_qty")
             )
-            product.twelve_months_ago = sum(
+            product.last_month_ago = sum(
                 sale_lines_1.mapped("product_uom_qty")
             )
 

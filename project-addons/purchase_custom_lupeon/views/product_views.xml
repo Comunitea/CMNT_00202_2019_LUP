@@ -10,7 +10,8 @@
                <tree string="Purchase prducts" create="false" >
                   
                    <field name="default_code" readonly="True"/>
-                   <field name="name" readonly="True" string ="Proveedor" />
+                   <field name="name" readonly="True"  />
+                   <field name="attribute_value_ids" widget="many2many_tags" groups="product.group_product_variant"/>
                    <field name="categ_id" readonly="True"/>
                    <field name="twelve_months_ago"  readonly="True"/>
                    <field name="six_months_ago"  readonly="True"/>
@@ -24,6 +25,8 @@
                    <field name="supplier_min_qty"/>
                    <field name="supplier_price"/>
                    <field name="supplier_delay"/>
+                   <field name="purchase_qty"/>
+                   <field name="actual_po_id"/>
                    <field name="uom_id" groups="uom.group_uom" />
                </tree>
            </field>
