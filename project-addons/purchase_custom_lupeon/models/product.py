@@ -49,7 +49,7 @@ class ProductProduct(models.Model):
                 ('state','not in',['purchase','cancel','done'])])
             if pol:
                 product.purchase_qty = sum(pol.mapped("product_qty"))
-                product.actual_po_id = pol.order_id
+                product.actual_po_id = pol[0].order_id
             else:
                 product.purchase_qty = 0
                 product.actual_po_id = False
