@@ -4,22 +4,15 @@
     // Para más información, visite: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-    {
-        "name": "Attach",
-        "port": 9229,
-        "request": "attach",
-        "skipFiles": [
-            "<node_internals>/**"
-        ],
-        "type": "pwa-node"
-    },
+    
         {
             "name": "Python: Odoo",
             "type": "python",
             "request": "launch",
             "program": "bin/start_odoo",
+            //"args": ["-u", "purchase_custom_lupeon"],
             "console": "integratedTerminal"
-        }
+        },
 
         {
             "name": "Python: FIX taxes",

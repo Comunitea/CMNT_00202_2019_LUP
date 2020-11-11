@@ -74,3 +74,4 @@ target/
 eggs-custom
 
 .idea/
+.vscode/
