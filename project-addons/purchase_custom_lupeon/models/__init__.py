@@ -3,5 +3,6 @@
 from . import purchase
 #from . import res_partner
 from . import product
+from . import orderpoint
 #from . import sale_order
 #from . import stock
