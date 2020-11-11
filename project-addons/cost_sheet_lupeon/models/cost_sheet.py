@@ -112,7 +112,7 @@ class CostSheet(models.Model):
 
     # FDM PARÁMETROS IMPRESIÓN
 
-    tray_units = fields.Integer('Uds. Bandeja')
+    tray_units = fields.Integer('Uds. Bandeja', default=1)
     infill = fields.Float('Infill')  # Model or selection?
     loops = fields.Integer('Loops') # Model or selection?
     layer_height = fields.Float('Altura de Capa') # Model or selection?
