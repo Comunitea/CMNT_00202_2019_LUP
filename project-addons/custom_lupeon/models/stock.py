@@ -8,6 +8,13 @@ from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 
 
+class StockScrap(models.Model):
+    _inherit = 'stock.scrap'
+
+    company_id = fields.Many2one('res.company', 'Company',
+                                 related='location_id.company_id',
+                                 store=True)
+
 class StockMove(models.Model):
 
     _inherit = "stock.move"
