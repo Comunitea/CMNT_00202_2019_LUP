@@ -3,6 +3,7 @@
 
 from odoo import models, fields, api, _
 
+
 SHEET_TYPES = [
     ('design', 'Design'),
     ('fdm', 'FDM'),
@@ -16,6 +17,7 @@ SHEET_TYPES = [
     ('purchase', 'Compras'),
 ]
 
+
 class MrpProduction(models.Model):
 
     _inherit = "mrp.production"
@@ -28,7 +30,7 @@ class MrpProduction(models.Model):
     sale_line_id = fields.Many2one('sale.order.line', 'Sale Order Line',
                                    readonly=True)
     sale_id = fields.Many2one('sale.order', 'Sale Order',
-                              related='sale_line_id.order_id', readonly=True, 
+                              related='sale_line_id.order_id', readonly=True,
                               store=True)
     line_ref = fields.Char('Referencia')
     line_name = fields.Char('Descripción')

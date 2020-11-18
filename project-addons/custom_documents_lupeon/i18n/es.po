@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-03 16:17+0000\n"
-"PO-Revision-Date: 2020-08-03 16:17+0000\n"
+"POT-Creation-Date: 2020-11-18 13:08+0000\n"
+"PO-Revision-Date: 2020-11-18 13:08+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,8 +16,62 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.document_production_label
+msgid "<br/>\n"
+"            <span>Material principal:  </span>"
+msgstr ""
+
+#. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.document_production_label
+msgid "<br/>\n"
+"            <span>Pedido:  </span>"
+msgstr ""
+
+#. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.document_production_label
+msgid "<br/>\n"
+"            <span>Tecnología:  </span>"
+msgstr ""
+
+#. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.external_layout_boxed_custom
+msgid "<span>CIF: </span>"
+msgstr ""
+
+#. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_invoice_document
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
+msgid "<span>Detalles del Pago</span>"
+msgstr ""
+
+#. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.document_production_label
+msgid "<span>Fecha fin:  </span>"
+msgstr ""
+
+#. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
+msgid "<span>Nota</span>"
+msgstr ""
+
+#. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
 msgid "<span>Proforma</span>"
+msgstr ""
+
+#. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.document_production_label
+msgid "<span>Ref. pieza:  </span>"
+msgstr ""
+
+#. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.external_layout_boxed_custom
+msgid "<span>Tel:</span>"
+msgstr ""
+
+#. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.document_production_label
+msgid "<span>Tintado:  </span>"
 msgstr ""
 
 #. module: custom_documents_lupeon
@@ -95,6 +149,11 @@ msgid "<strong>Order Date:</strong>"
 msgstr "<strong>Fecha orden:</strong>"
 
 #. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
+msgid "<strong>Pagado el:</strong>"
+msgstr ""
+
+#. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_invoice_document
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
 msgid "<strong>Payment Term:</strong>"
@@ -132,7 +191,6 @@ msgid "Automoción"
 msgstr ""
 
 #. module: custom_documents_lupeon
-#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.external_layout_boxed_custom
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_invoice_document
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
 msgid "CIF:"
@@ -229,6 +287,11 @@ msgid "Nota: cualquier tipo de requisito legislativo que deban cumplir los compo
 msgstr ""
 
 #. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.document_production_label
+msgid "ORDEN DE PRODUCCIÓN"
+msgstr ""
+
+#. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
 msgid "Order"
 msgstr "Pedido"
@@ -242,6 +305,16 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.external_layout_boxed_custom
 msgid "Page: <span class=\"page\"/> / <span class=\"topage\"/>"
 msgstr "Página: <span class=\"page\"/>/<span class=\"topage\"/>"
+
+#. module: custom_documents_lupeon
+#: model:ir.actions.report,name:custom_documents_lupeon.report_production_label
+msgid "Production Label"
+msgstr "Etiqueta de producción"
+
+#. module: custom_documents_lupeon
+#: model:ir.model,name:custom_documents_lupeon.model_mrp_production
+msgid "Production Order"
+msgstr "Orden de producción"
 
 #. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
@@ -306,11 +379,6 @@ msgstr "Tecnología"
 #: model:ir.model.fields,field_description:custom_documents_lupeon.field_sale_order_line__report_tech
 msgid "Technology"
 msgstr "Tecnología"
-
-#. module: custom_documents_lupeon
-#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.external_layout_boxed_custom
-msgid "Tel.:"
-msgstr ""
 
 #. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.external_layout_boxed_custom

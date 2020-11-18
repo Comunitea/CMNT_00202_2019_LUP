@@ -26,6 +26,7 @@
         'views/report_invoice.xml',
         'views/report_stock.xml',
         'views/report_templates.xml',
+        'views/report_production_label.xml',
     ],
     'installable': True,
 }

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <template id="document_production_label">
+        <style>
+            .label-container {
+                position: relative;
+                width: 70mm;
+                height:75mm;
+                border: 1px solid black;
+                padding: 2px;
+            }
+            .label-header {
+                width: 100%;
+                position: relative;
+                background-color: black;
+                color: white;
+                border: 0px solid black;
+                padding: 0px;
+            }
+            .label-row {
+                font-weight: bold;
+                height: 40%;
+                position: relative;
+            }
+            .label-row2 {
+                height: 60%;
+                border: 0px solid black;
+                position: relative;
+            }
+            .square1{
+                font-size: 12px;
+
+            }
+            .square2{
+                font-size: 9px;
+
+            }
+     </style>
+    <div class="label-container">
+        <div class="label-row square1">
+            <div class="label-header" style="text-align:center">
+                ORDEN DE PRODUCCIÓN
+            </div>
+            <span>Ref. pieza:  </span><span style="margin-left: 3px" t-field="prod.sheet_id.name"/>
+            <br/>
+            <span>Pedido:  </span><span style="margin-left: 3px" t-field="prod.sale_id.name" />
+            <br/>
+            <span>Tecnología:  </span><span style="margin-left: 3px" t-field="prod.sheet_id.sheet_type" />
+            <br/>
+            <span>Material principal:  </span><span style="margin-left: 3px" t-field="prod.sheet_id.material_cost_ids[0].material_id.name" />
+            <br/>
+            <t t-if="prod.sheet_id.tinted_id">
+                <span>Tintado:  </span><span style="margin-left: 3px" t-field="prod.sheet_id.tinted_id.name" />
+                <br/>
+            </t>
+            <span>Fecha fin:  </span><span style="margin-left: 3px" t-esc="prod.date_planned_finished_wo.strftime('%d/%m/%Y')"/>
+            <br/>
+        </div>
+        <div class="label-row2">
+                <div class="col-12" style="text-align:center">
+                    <t t-set="url" t-value="prod.get_label_url()"/>
+                    <img class="barcode"
+                        style="width:40mm;height:40mm"
+                        t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;humanreadable=0'%('QR',url, 600, 600)" />
+                </div>
+                <!-- <div class="col-xs-12 square2" style="text-align:center">
+                    <span t-esc="prod.get_label_url()" />
+                </div>    -->
+        </div>
+    </div>
+
+    </template>
+
+    <template id="production_label">
+        <t t-call="web.basic_layout">
+            <t t-foreach="docs" t-as="prod">
+                <div class="page">
+                    <t t-call="custom_documents_lupeon.document_production_label">
+                        <t t-set="prod" t-value="prod"/>
+                    </t>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <record id="paperformat_production_label" model="report.paperformat">
+        <field name="name">Production label</field>
+        <field name="default" eval="True" />
+        <field name="format">custom</field>
+        <field name="page_height">70</field>
+        <field name="page_width">70</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">1</field>
+        <field name="margin_bottom">1</field>
+        <field name="margin_left">1</field>
+        <field name="margin_right">1</field>
+        <field name="header_line" eval="False" />
+        <field name="header_spacing">0</field>
+        <field name="dpi">90</field>
+    </record>
+       
+    <report id="report_production_label" 
+            model="mrp.production"
+            string="Production Label"
+            report_type="qweb-pdf"
+            name="custom_documents_lupeon.production_label"
+            file="custom_documents_lupeon.production_label"
+            print_report_name="'Label: %s' % (object.display_name)"
+            paperformat="custom_documents_lupeon.paperformat_production_label"
+            menu="True"
+    />
+
+
+</odoo>
