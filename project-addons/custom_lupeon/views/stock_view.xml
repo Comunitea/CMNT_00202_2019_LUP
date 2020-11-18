@@ -173,6 +173,8 @@
                 <field name="origin" readonly="1"/>
                 <field name="state" readonly="1"/>
                 <field name="delivered"/> 
+                <field string="Incidents" name="incident_reports_count" widget="statinfo" readonly="1"/>
+                <button name="action_incident_reports_view" type="object"  icon="fa-file-text" attrs="{'invisible': [('incident_reports_count', '=', 0)]}"/>
                 <field name="priority" invisible="1"/>
                 <field name="picking_type_id" invisible="1"/>
             </tree>
@@ -228,4 +230,3 @@
 
 
 </odoo>
-

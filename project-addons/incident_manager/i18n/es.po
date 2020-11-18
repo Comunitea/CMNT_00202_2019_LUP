@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-08 14:52+0000\n"
-"PO-Revision-Date: 2020-10-08 14:52+0000\n"
+"POT-Creation-Date: 2020-11-18 18:47+0000\n"
+"PO-Revision-Date: 2020-11-18 18:47+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,11 +16,11 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: incident_manager
-#: model:ir.model.fields,field_description:incident_manager.field_incident_report__attachment_ids
-#: model:ir.model.fields,field_description:incident_manager.field_incident_report_type__attachment_ids
-#: model:ir.model.fields,field_description:incident_manager.field_incident_report_wzd__attachment_ids
-msgid "Attachments"
-msgstr "Adjuntos"
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__assigned_attachment_ids
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report_type__assigned_attachment_ids
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report_wzd__assigned_attachment_ids
+msgid "Assigned Attachments"
+msgstr "Adjuntos asignados"
 
 #. module: incident_manager
 #: model_terms:ir.ui.view,arch_db:incident_manager.incident_report_wzd_view
@@ -54,6 +54,18 @@ msgid "Created on"
 msgstr "Creado el"
 
 #. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__date
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report_wzd__date
+msgid "Date"
+msgstr "Fecha"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__description
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report_wzd__description
+msgid "Description"
+msgstr "Descripción"
+
+#. module: incident_manager
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report__display_name
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report_type__display_name
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report_wzd__display_name
@@ -78,11 +90,11 @@ msgid "Incident Manager"
 msgstr "Incidencias"
 
 #. module: incident_manager
-#: code:addons/incident_manager/wizard/incident_report_wzd.py:26
+#: code:addons/incident_manager/wizard/incident_report_wzd.py:39
 #: model:ir.model,name:incident_manager.model_incident_report
 #, python-format
 msgid "Incident Report"
-msgstr "Informe de incidencia"
+msgstr "Informe de incidencias"
 
 #. module: incident_manager
 #: model:ir.model,name:incident_manager.model_incident_report_type
@@ -92,7 +104,7 @@ msgstr "Tipo de incidencia"
 #. module: incident_manager
 #: model:ir.model,name:incident_manager.model_incident_report_wzd
 msgid "Incident Report Wizard"
-msgstr "Asistente informe incidencia"
+msgstr "Asistente incidencia"
 
 #. module: incident_manager
 #: model:ir.model.fields,field_description:incident_manager.field_purchase_order__incident_reports_count
@@ -155,7 +167,7 @@ msgstr "Nombre"
 #: model:ir.actions.act_window,name:incident_manager.action_create_incident_report_wzd_form
 #: model_terms:ir.ui.view,arch_db:incident_manager.incident_report_wzd_view
 msgid "New Incident Report"
-msgstr "Nuevo informe de incidencia"
+msgstr "Nueva incidencia"
 
 #. module: incident_manager
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report__model_id
@@ -164,7 +176,7 @@ msgid "Object"
 msgstr "Objeto"
 
 #. module: incident_manager
-#: code:addons/incident_manager/models/incident_report.py:29
+#: code:addons/incident_manager/models/incident_report.py:39
 #: model_terms:ir.ui.view,arch_db:incident_manager.incident_report_form
 #, python-format
 msgid "Origin document"
@@ -194,12 +206,19 @@ msgid "Reports"
 msgstr "Informes"
 
 #. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__user_id
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report_wzd__user_id
+#: model_terms:ir.ui.view,arch_db:incident_manager.incident_report_search
+msgid "Responsible"
+msgstr "Responsable"
+
+#. module: incident_manager
 #: model:ir.model,name:incident_manager.model_sale_order
 msgid "Sale Order"
 msgstr "Pedido de venta"
 
 #. module: incident_manager
-#: code:addons/incident_manager/models/incident_report.py:38
+#: code:addons/incident_manager/models/incident_report.py:48
 #, python-format
 msgid "There is no origin document for this incident report."
 msgstr "No existe un documento de origen para esta informe de incidencia."
@@ -223,3 +242,4 @@ msgstr "Usuario"
 #: model_terms:ir.ui.view,arch_db:incident_manager.incident_report_wzd_view
 msgid "or"
 msgstr "o"
+

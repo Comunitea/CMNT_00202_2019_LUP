@@ -8,7 +8,7 @@ class StockPicking(models.Model):
     def _compute_incident_reports_count(self):
         for picking in self:
             incident_report_ids = self.env['incident.report'].search([
-                ('res_id', '=', self.id),
+                ('res_id', '=', picking.id),
                 ('model_id', '=', self.env['ir.model'].search([('model', '=', self._name)]).id)
             ])
             picking.incident_reports_count = len(incident_report_ids)

@@ -9,7 +9,14 @@
             <form string="New Incident Report">
                 <group>
                     <field name="name"/>
+                    <field name="date"/>
                     <field name="incident_type"/>
+                    <field name="user_id"/>
+                </group>
+                <group colspan="4">
+                    <field name="description"/>
+                </group>
+                <group>
                     <field name="model_id" readonly="1"/>
                     <field name="res_id" readonly="1"/>
                 </group>
