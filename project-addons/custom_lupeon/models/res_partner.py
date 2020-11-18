@@ -11,3 +11,10 @@ class ResPartner(models.Model):
     admin_fact = fields.Float('Factor administrativo (%)')
     require_num_order = fields.Boolean('Requires num order')
     supplier_number = fields.Char('Supplier Number')
+    
+    @api.multi
+    def _get_admin_fact(self):
+        if self.parent_id and self.parent_id.admin_fact:
+            return self.parent_id.admin_fact
+        else:
+            return self.commercial_partner_id.admin_fact

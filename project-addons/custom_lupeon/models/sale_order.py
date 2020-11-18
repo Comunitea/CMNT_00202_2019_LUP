@@ -222,12 +222,11 @@ class SaleOrderLine(models.Model):
     def _get_display_price(self, product):
         
         price = super()._get_display_price(product)
-        if self.order_id.partner_id.\
-            commercial_partner_id.admin_fact:
+        if self.order_id.partner_id._get_admin_fact():
             price_precision = self.env['decimal.precision'].precision_get(
             'Product Price')
             price = float_round(price * (1 + self.order_id.partner_id.\
-                commercial_partner_id.admin_fact/100), price_precision)
+                _get_admin_fact()/100), price_precision)
         return price
     
 class SaleOrderState(models.Model):

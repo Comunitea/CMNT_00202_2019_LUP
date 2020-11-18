@@ -13,7 +13,7 @@ class DeliverCarrier(models.Model):
     
     def gls_get_tracking_link(self, picking):
         return (
-            'https://m.gls-spain.es/e/%s' % (
+            'https://www.gls-spain.es/es/ayuda/seguimiento-envio/?match=%s' % (
                 picking.carrier_tracking_ref
             )
         )
