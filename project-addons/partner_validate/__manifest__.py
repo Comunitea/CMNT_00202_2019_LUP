@@ -15,6 +15,7 @@
     ],
     "data": [
         "security/groups.xml",
+        "security/res_partner_security.xml",
         "views/res_partner_views.xml",
         
     ],

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="res_partner_validator_rule" model="ir.rule">
+            <field name="name">res.partner.rule.validated.groupe</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="groups" eval="[(4, ref('partner_validate.group_sale_partner_validate'))]"/>
+            <field name="domain_force">['|' , ('validated', '=', True), ('validated', '=', False)]</field>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+        <record id="res_partner_no_validator_rule_false" model="ir.rule">
+            <field name="name">res.partner.rule.no_validated.groups_1</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+            <field name="domain_force">[('validated', '=', False)]</field>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+        <record id="res_partner_no_validator_rule_true" model="ir.rule">
+            <field name="name">res.partner.rule.validated.groups_no</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+            <field name="domain_force">[('validated', '=', True)]</field>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+    </data>
+
+</odoo>
