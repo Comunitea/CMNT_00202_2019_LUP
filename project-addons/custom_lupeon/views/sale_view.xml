@@ -16,11 +16,14 @@
                 <field name="qty_reserved"/>
             </xpath>
             <xpath expr="//field[@name='order_line']" position="before">
-                <button name="create_procurements_all" align="right"
-                        type="object"
-                        icon="fa-truck"
-                        states="draft"
-                />
+                <div class="oe_right oe_button_box" name="button_proc">
+                    <button name="create_procurements_all" 
+                        align="right" 
+                        type="object" 
+                        icon="fa-truck" 
+                        states="draft,sent" 
+                        string = "Reservar todo"/>
+                    </div>
             </xpath>
             <field name="partner_shipping_id" position="after">
                 <field name="ship_cost"/>
@@ -54,6 +57,16 @@
             <field name="partner_shipping_id" position="after">
                 <field name="delivered"/>
                 <field name="delivery_blocked"/>
+            </field>
+            <field name="partner_invoice_id" position="attributes">
+                <attribute name="widget">res_partner_many2one</attribute>
+                <attribute name="context">{'default_type':'invoice',
+                     'show_address': 1}</attribute>
+            </field>
+            <field name="partner_shipping_id" position="attributes">
+                <attribute name="widget">res_partner_many2one</attribute>
+                <attribute name="context">{'default_type':'delivery',
+                     'show_address': 1}</attribute>
             </field>
 
         </field>
@@ -90,9 +103,9 @@
                 <attribute name="groups"></attribute> <!-- Remove the res.group on the group and set it on the field directly-->
             </xpath>
             <xpath expr="//field[@name='expected_date']" position="before">
-                <field name="warehouse_id" options="{'no_create': True}" groups="stock.group_stock_multi_locations"/>
+                <!--field name="warehouse_id" options="{'no_create': True}" groups="stock.group_stock_multi_locations"/>
                 <field name="incoterm" widget="selection" groups="sale_stock.group_display_incoterm"/>
-                <field name="picking_policy" required="True"/>
+                <field name="picking_policy" required="True"/-->
             </xpath>
         </field>
     </record>
@@ -223,4 +236,3 @@
         </record>
 
 </odoo>
-
