@@ -8,30 +8,14 @@
             <th t-if="o.origin"><strong>Picking</strong></th>
         </xpath>
 
-        <!-- Add Incoterm -->
-        <xpath expr="//div[hasclass('page')]//table//th[@name='td_sched_date_h']" position="after">
-            <th t-if="o.sale_id.incoterm" groups="sale_stock.group_display_incoterm"><strong>Incoterm</strong></th>
-        </xpath>
-        <xpath expr="//div[hasclass('page')]//table//td[@name='td_sched_date']" position="after">
-            <td t-if="o.sale_id.incoterm" groups="sale_stock.group_display_incoterm">
-                <span t-esc="o.partner_id.sale_incoterm_id.code or o.incoterm.code"/> (<span t-esc="o.partner_id.sale_incoterm_id.name or o.incoterm.name"/>)
-            </td>
-        </xpath>
-
-        <!-- Dates without time -->
-        <xpath expr="//span[@t-field='o.date_done']" position="replace">
-            <span t-esc="o.date_done.strftime('%Y-%m-%d')"/>
-        </xpath>
-        <xpath expr="//span[@t-field='o.scheduled_date']" position="replace">
-             <span t-esc="o.scheduled_date.strftime('%Y-%m-%d')"/>
-        </xpath>
-
         <!-- Replace partner address. Add invoice and shipping address -->
         <xpath expr="//t[@t-if='partner']" position="replace"/>
         <xpath expr="//div[hasclass('page')]//h2" position="before">
-            <br/> <!-- Avoid no row margin -->
+            <!-- Avoid no row margin -->
             <div class="row">
-
+                <br/>
+            </div>
+            <div class="row">
                 <t t-set="ia" t-value="o.sale_id.partner_invoice_id"/>
                 <t t-set="sa" t-value="o.sale_id.partner_shipping_id"/>
 
@@ -60,6 +44,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="col-6" id="shipping_address">
                     <div class="col-12" id="shipping_address_title">
                         <strong>Shipping Adress:</strong>
@@ -91,6 +76,24 @@
             </div>
         </xpath>
 
+        <!-- Add Incoterm -->
+        <xpath expr="//div[hasclass('page')]//table//th[@name='td_sched_date_h']" position="after">
+            <th t-if="o.sale_id.incoterm" groups="sale_stock.group_display_incoterm"><strong>Incoterm</strong></th>
+        </xpath>
+        <xpath expr="//div[hasclass('page')]//table//td[@name='td_sched_date']" position="after">
+            <td t-if="o.sale_id.incoterm" groups="sale_stock.group_display_incoterm">
+                <span t-esc="o.partner_id.sale_incoterm_id.code or o.incoterm.code"/> (<span t-esc="o.partner_id.sale_incoterm_id.name or o.incoterm.name"/>)
+            </td>
+        </xpath>
+
+        <!-- Dates without time -->
+        <xpath expr="//span[@t-field='o.date_done']" position="replace">
+            <span t-esc="o.date_done.strftime('%Y-%m-%d')"/>
+        </xpath>
+        <xpath expr="//span[@t-field='o.scheduled_date']" position="replace">
+             <span t-esc="o.scheduled_date.strftime('%Y-%m-%d')"/>
+        </xpath>
+
         <!-- Picking Name -->
         <xpath expr="//h2" position="replace">
              <h2 class="mt16 mb32" id="doc_type_name">
@@ -98,6 +101,18 @@
             </h2>
         </xpath>
 
+        <!-- Center Qty -->
+        <xpath expr="//table[@t-if=&quot;o.state!=&apos;done&apos;&quot;]//th[last()]" position="attributes">
+            <attribute name="class">text-center</attribute>
+        </xpath>
+        <xpath expr="//table[@t-if=&quot;o.move_line_ids and o.state==&apos;done&apos;&quot;]//th[last()]" position="attributes">
+            <attribute name="class">text-center</attribute>
+        </xpath>
+        <xpath expr="//table[@t-if=&quot;o.state!=&apos;done&apos;&quot;]//td[last()]" position="attributes">
+            <attribute name="class">text-center</attribute>
+        </xpath>
+
+        <!-- Avoid default background and keep css styles with diferent color by rows -->
         <xpath expr="//table[@t-if=&quot;o.state!=&apos;done&apos;&quot;]/tbody/tr/td[last()]" position="attributes">
             <attribute name="style">background-color: inherit !important;</attribute>
         </xpath>

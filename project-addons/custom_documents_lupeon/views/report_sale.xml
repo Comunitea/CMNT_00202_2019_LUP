@@ -8,6 +8,10 @@
         <xpath expr="//t[@t-set='information_block']" position="replace"/>
 
         <xpath expr="//h2" position="before">
+            <!-- Avoid no row margin -->
+            <div class="row">
+                <br/>
+            </div>
         	<div class="row">
                 <t t-set="ia" t-value="doc.partner_invoice_id"/>
                 <t t-set="sa" t-value="doc.partner_shipping_id"/>

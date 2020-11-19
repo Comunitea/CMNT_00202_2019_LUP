@@ -1,6 +1,9 @@
 `12.0.1.0.2`
 ------------
 - **[FIX]** Currency on Sale Report
+- **[FIX]** Height between company and partner address
+- **[FIX]** Company address min-width to keep it in online
+- **[FIX]** Center qty on picking
 
 `12.0.1.0.1`
 ------------
