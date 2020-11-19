@@ -1,3 +1,7 @@
+`12.0.1.1.3`
+------------
+- **[DEL]** Comment Purchase Custom Lupeon by unused at this moment
+
 `12.0.1.1.2`
 ------------
 - **[FIX]** Avoid fa-phone when not phone or mobile on purchase reports
