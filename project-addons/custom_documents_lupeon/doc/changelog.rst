@@ -1,3 +1,7 @@
+`12.0.1.1.1`
+------------
+- **[ADD]** Incoterm modules dependencies
+
 `12.0.1.1.0`
 ------------
 - **[ADD]** Purchase report with same styles and spanish translations

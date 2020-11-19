@@ -26,6 +26,8 @@
         'account_due_dates_str',
         'stock_picking_report_valued',
         'web_gantt',
+        'sale_partner_incoterm',
+        'sale_order_incoterm_place',
         'purchase',
         'purchase_stock',  # Have to replace Shipping address before
     ],
