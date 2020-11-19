@@ -42,7 +42,18 @@ msgstr "<strong>Vencimientos:</strong>\n"
 #. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
 msgid "<strong>Expiration Date:</strong>"
-msgstr "<strong>Fecha de caducidad:</strong>"
+msgstr "<strong>Validez:</strong>"
+
+#. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_invoice_document
+msgid "<strong>Incoterm:</strong>"
+msgstr "<strong>Incoterm:</strong>"
+
+#. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_delivery_document_custom
+msgid "<strong>Incoterm</strong>"
+msgstr "<strong>Incoterm</strong>""
 
 #. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_invoice_document
@@ -53,7 +64,7 @@ msgstr "<strong>Dirección de facturación:</strong>"
 #. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_invoice_document
 msgid "<strong>Invoice Date:</strong>"
-msgstr "<strong>Fecha de factura:</strong>"
+msgstr "<strong>Fecha:</strong>"
 
 #. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
@@ -92,7 +103,7 @@ msgstr "<strong>Nº Proveedor:</strong>"
 #. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
 msgid "<strong>Order Date:</strong>"
-msgstr "<strong>Fecha orden:</strong>"
+msgstr "<strong>Fecha:</strong>"
 
 #. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_invoice_document
@@ -103,7 +114,7 @@ msgstr "<strong>Plazo de pago:</strong>"
 #. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
 msgid "<strong>Quotation Date:</strong>"
-msgstr "<strong>Fecha de presupuesto:</strong>"
+msgstr "<strong>Fecha:</strong>"
 
 #. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_invoice_document
@@ -298,6 +309,11 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
 msgid "Technologia:"
 msgstr "Tecnología"
+
+#. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_delivery_document_custom
+msgid "Picking"
+msgstr "Albarán"
 
 #. module: custom_documents_lupeon
 #: model:ir.model.fields,field_description:custom_documents_lupeon.field_account_invoice_line__report_tech

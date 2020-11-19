@@ -1,8 +1,15 @@
+// Sale/Proforma report alternate row colors
 table[class="table table-sm o_main_table"] tbody tr:nth-child(even) {
     background-color: #dcdfe4;
 }
 
+// Invoice report alternate row colors
 table[name="invoice_line_table"] tbody tr:nth-child(even) {
+    background-color: #dcdfe4;
+}
+
+// Picking report alternate row colors
+table[class="table table-sm mt48"] tbody tr:nth-child(even) {
     background-color: #dcdfe4;
 }
 
@@ -16,7 +23,7 @@ table[name="invoice_line_table"] tbody tr:nth-child(even) {
     font-size: 13px;
     border-left: 6px solid darken(#8cd4d8, 20%);
     float: right;
-    min-width: 58%;
+    min-width: 60%;
     & div {
         padding-left: 10px;
         & span {

@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-
-
     <template id="report_saleorder_document_custom_lupeon" inherit_id="sale.report_saleorder_document">
 
         <!-- Aquí va la direción -->
         <xpath expr="//t[@t-set='address']" position="replace"/>
         <xpath expr="//t[@t-set='information_block']" position="replace"/>
-
 
         <xpath expr="//h2" position="before">
         	<div class="row">
@@ -115,24 +112,43 @@
                     <strong>Expiration Date:</strong>
                     <p class="m-0" t-esc="doc.validity_date.strftime('%Y-%m-%d')"/>
                 </div>
+                <div t-if="doc.incoterm" class="col-auto mw-100 mb-2 text-center" name="incoterm" groups="sale_stock.group_display_incoterm">
+                    <strong>Incoterm:</strong>
+                    <p class="m-0"><span t-esc="doc.partner_id.sale_incoterm_id.code or doc.incoterm.code"/> (<span t-esc="doc.partner_id.sale_incoterm_id.name or doc.incoterm.name"/>)</p>
+                </div>
             </div>
       	</xpath>
-        
+
+        <!-- Center Head Qty -->
+        <xpath expr="//table[@class='table table-sm o_main_table']/thead/tr/th[1]" position="attributes">
+            <attribute name="class">text-center</attribute>
+        </xpath>
+
         <!-- Cantidad sin decimales -->
-        <xpath expr="//table[@class='table table-sm o_main_table']/tbody/t[@t-foreach='doc.order_line']/tr/t[1]/td[2]"
-               position="replace">
-                 <td class="text-right">
-                    <span t-esc="int(line.product_uom_qty)"/>
-                    <!-- <span t-field="line.product_uom" groups="uom.group_uom"/> -->
-                </td>
+        <xpath expr="//table[@class='table table-sm o_main_table']/tbody/t[@t-foreach='doc.order_line']/tr/t[1]/td[2]" position="replace">
+            <!-- Center Cell Qty -->
+             <td class="text-center">
+                <span t-esc="int(line.product_uom_qty)"/>
+                <!-- <span t-field="line.product_uom" groups="uom.group_uom"/> -->
+            </td>
+        </xpath>
+
+        <!-- Center Head taxes -->
+        <xpath expr="//table[@class='table table-sm o_main_table']/thead/tr//th[last()-1]" position="attributes">
+            <attribute name="class">text-center</attribute>
         </xpath>
 
         <!-- Mostrar nombre bien en el impuesto -->
-        <xpath expr="//table[@class='table table-sm o_main_table']/tbody/t[@t-foreach='doc.order_line']/tr/t[1]/td[5]"
-               position="replace">
-                <td class="text-right">
-                    <span t-esc="', '.join(map(lambda x: (x.name), line.tax_id))"/>
-                </td>
+        <xpath expr="//table[@class='table table-sm o_main_table']/tbody/t[@t-foreach='doc.order_line']/tr/t[1]/td[5]" position="replace">
+            <!-- Center taxes -->
+            <td class="text-center">
+                <span t-esc="', '.join(map(lambda x: (x.name), line.tax_id))"/>
+            </td>
+        </xpath>
+
+        <!-- Add currency to price unit -->
+        <xpath expr="//table[@class='table table-sm o_main_table']//tbody//t[@t-foreach='doc.order_line']//tr//t[@t-if='not line.display_type']/td[2]/span"  position="attributes">
+            <attribute name="t-options">{'widget': 'monetary', 'display_currency': doc.pricelist_id.currency_id}</attribute>
         </xpath>
 
         <!-- Amount cell -->
@@ -150,46 +166,43 @@
 
         <!--    MODIFICACIONES INFORME LUPEÓN -->
          <xpath expr="//table[@class='table table-sm o_main_table']/thead/tr/th[1]" position="before">
-                <t t-if="lupeon_report">
-                     <th class="text-left">Model</th>
-                     <th class="text-left">Reference</th>
-                </t>
+            <t t-if="lupeon_report">
+                 <th class="text-left">Model</th>
+                 <th class="text-left">Reference</th>
+            </t>
         </xpath>
       
          <xpath expr="//table[@class='table table-sm o_main_table']/tbody/t[@t-foreach='doc.order_line']/tr/t[1]/td[1]" position="before">
-                <t t-if="lupeon_report">
-                    <td>
-                        <img t-att-src="'data:image/png;base64,%s' % to_text(line.model_image)" style="max-height: 50px;"/>
-                    </td>
-                    <td>
-                         <span t-field="line.ref"/>
-                    </td>
-                </t>
+            <t t-if="lupeon_report">
+                <td>
+                    <img t-att-src="'data:image/png;base64,%s' % to_text(line.model_image)" style="max-height: 50px;"/>
+                </td>
+                <td>
+                     <span t-field="line.ref"/>
+                </td>
+            </t>
         </xpath>
 
         <xpath expr="//table[@class='table table-sm o_main_table']/tbody/t[@t-foreach='doc.order_line']/tr" position="after">
-                <t t-if="lupeon_report">
-                    <tr>
-                        <td colspan="2" style="border:none;">
-                            Technologia: <span t-field="line.report_tech"/>
-                        </td>
-                        <td colspan="2" style="border:none;">
-                            Material: <span t-field="line.report_material"/>
-                        </td>
-                        <td colspan="2" style="border:none;">
-                            Finish: <span t-field="line.report_finish"/>
-                        </td>
-                        <td style="border:none;">
-                    
-                        </td>
-                    </tr>
-                </t>
+            <t t-if="lupeon_report">
+                <tr>
+                    <td colspan="2" style="border:none;">
+                        Technologia: <span t-field="line.report_tech"/>
+                    </td>
+                    <td colspan="2" style="border:none;">
+                        Material: <span t-field="line.report_material"/>
+                    </td>
+                    <td colspan="2" style="border:none;">
+                        Finish: <span t-field="line.report_finish"/>
+                    </td>
+                    <td style="border:none;"/>
+                </tr>
+            </t>
         </xpath>
 
         <xpath expr="//div[@class='page']" position="after">
             <t t-if="lupeon_report">
                 <div class="page" style="page-break-before:always;">
-                    
                     <div>
                         <table class="table" border="1" width="700px" height="300px;">
                             <tr width="100%">
@@ -213,9 +226,7 @@
                                 <td style="border:1px solid black;text-align:center;vertical-align:middle"><input type="checkbox" name="cb-autos"/></td>
                             </tr>
                             <tr>
-                                <td width="40%" rowspan="2">
-                                Firmado
-                                </td>
+                                <td width="40%" rowspan="2">Firmado</td>
                                 <td style="border:1px solid black; vertical-align:middle">Alimentación</td>
                                 <td style="border:1px solid black;"></td>
                                 <td style="border:1px solid black;text-align:center;vertical-align:middle"><input type="checkbox" name="cb-autos"/></td>
@@ -226,9 +237,7 @@
                                 <td style="border:1px solid black;text-align:center;vertical-align:middle"><input type="checkbox" name="cb-autos"/></td>
                             </tr>
                             <tr>
-                                <td width="40%" rowspan="2">
-                                Fecha
-                                </td>
+                                <td width="40%" rowspan="2">Fecha</td>
                                 <td style="border:1px solid black; vertical-align:middle">Aeronáutico</td>
                                 <td style="border:1px solid black;"></td>
                                 <td style="border:1px solid black;text-align:center;vertical-align:middle"><input type="checkbox" name="cb-autos"/></td>
@@ -240,10 +249,10 @@
                             </tr>
                         </table>
                     </div>
-
                     <div>
                         <p>
-                        Nota: cualquier tipo de requisito legislativo que deban cumplir los componentes solicitados debe ser comunicado por el clienta a Lupeon durante la fase de oferta. En caso de no comunicarse dichos requisitos, Lupeon no se hace responsable de cualquier perjuicio que puedan causar los componentes fabricados.                    </p>
+                        Nota: cualquier tipo de requisito legislativo que deban cumplir los componentes solicitados debe ser comunicado por el clienta a Lupeon durante la fase de oferta. En caso de no comunicarse dichos requisitos, Lupeon no se hace responsable de cualquier perjuicio que puedan causar los componentes fabricados.
+                        </p>
                     </div>
                     <div>
                         <h2>Gracias por confiar en nosotros</h2>
@@ -253,7 +262,7 @@
                     </div>
                     <t t-if="doc.report_image">
                         <div style="text-align:center;">
-                                <img t-att-src="'data:image/png;base64,%s' % to_text(doc.report_image)" style="max-height: 500px;"/>
+                            <img t-att-src="'data:image/png;base64,%s' % to_text(doc.report_image)" style="max-height: 500px;"/>
                         </div>
                     </t>
                 </div>
@@ -285,7 +294,6 @@
         </xpath>
   	</template>
 
-    
      <template id="report_saleorder_lupeon">
         <t t-call="web.html_container">
             <t t-set="lupeon_report" t-value="True"/>

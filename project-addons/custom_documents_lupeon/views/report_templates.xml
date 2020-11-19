@@ -10,12 +10,11 @@
 
     <template id="external_layout_boxed_custom" inherit_id="web.external_layout_boxed">
         <!-- Logo mas pequeño. Posteriormente solicitado más grande en modelo ejemplo. Descomentar para revertir -->
-<!--      	<xpath expr="//div[@class='col-6']/img" position="attributes">-->
-<!--        	<div class="col-3">-->
-<!--          		<attribute name="height">70px;</attribute>-->
-<!--          		<attribute name="width">200px;</attribute>-->
-<!--        	</div>-->
-<!--      	</xpath>-->
+      	<xpath expr="//div[@class='col-6']/img" position="attributes">
+            <attribute name="height">86px;</attribute>
+            <attribute name="width">300px;</attribute>
+            <attribute name="class">img-responsive</attribute>
+      	</xpath>
 
         <!-- Parte dirección custom -->
         <xpath expr="//div[@name='company_address']" position="replace">
