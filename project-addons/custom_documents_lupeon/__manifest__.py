@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 {
     'name': 'Custom Documents Lupeon',
-    'version': '12.0.1.1.0',
+    'version': '12.0.1.1.2',
     'summary': 'Reports Customization',
     'category': 'Document Management',
     'author': 'Coumnitea',

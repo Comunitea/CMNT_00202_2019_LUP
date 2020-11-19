@@ -1,3 +1,7 @@
+`12.0.1.1.2`
+------------
+- **[FIX]** Avoid fa-phone when not phone or mobile on purchase reports
+
 `12.0.1.1.1`
 ------------
 - **[ADD]** Incoterm modules dependencies

@@ -41,7 +41,7 @@
                             <div>
                                 <span t-esc="sa.country_id.name"/>
                             </div>
-                            <div>
+                            <div t-if="sa.phone or sa.mobile">
                                 <i class='fa fa-phone fa-fw' role="img" aria-label="Phone" title="Phone"/>
                                 <span t-esc="sa.phone or sa.mobile"/>
                             </div>
