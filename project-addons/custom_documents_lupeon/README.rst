@@ -20,7 +20,7 @@ Reports Customization
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
 
-Reports Customization for Invoice, Sale, Picking and Purchase (coming soon).
+Reports Customization for Invoice, Sale, Picking and Purchase.
 
 **Table of contents**
 

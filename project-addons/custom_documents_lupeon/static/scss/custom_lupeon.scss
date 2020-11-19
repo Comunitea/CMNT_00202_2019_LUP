@@ -13,6 +13,11 @@ table[class="table table-sm mt48"] tbody tr:nth-child(even) {
     background-color: #dcdfe4;
 }
 
+// Purchase report alternate row colors
+table[class="table table-sm o_table_purchase_quotation"] tbody tr:nth-child(even) {
+    background-color: #dcdfe4;
+}
+
 // Header
 .o_boxed_header {
     border-bottom: none;
@@ -32,18 +37,19 @@ table[class="table table-sm mt48"] tbody tr:nth-child(even) {
     }
 }
 
-// Address
-#invoice_address {
-    & #invoice_address_title {
+// Address (Invoice and Purchase)
+#invoice_address, #supplier_address {
+    & #invoice_address_title, #supplier_address_title {
         background-color: gray('200');
         padding: 5px 10px;
         font-size: 14px;
     }
-    & #invoice_address_content {
+    & #invoice_address_content, #supplier_address_content {
         padding-left: 10px;
     }
 }
 
+// Address (Only Shipping for all reports)
 #shipping_address {
     & #shipping_address_title {
         background-color: gray('200');
@@ -56,7 +62,7 @@ table[class="table table-sm mt48"] tbody tr:nth-child(even) {
 }
 
 // Doc Type name
-#doc_type_name {
+#doc_type_name, .doc_type_name {
     color: darken(#8cd4d8, 20%);
     padding-left: 10px;
     font-size: 24px;
