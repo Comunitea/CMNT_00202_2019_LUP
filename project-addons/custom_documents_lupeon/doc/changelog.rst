@@ -1,3 +1,7 @@
+`12.0.1.0.2`
+------------
+- **[FIX]** Currency on Sale Report
+
 `12.0.1.0.1`
 ------------
 - **[ADD]** Module doc

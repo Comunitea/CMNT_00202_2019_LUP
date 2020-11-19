@@ -147,7 +147,7 @@
         </xpath>
 
         <!-- Add currency to price unit -->
-        <xpath expr="//table[@class='table table-sm o_main_table']//tbody//t[@t-foreach='doc.order_line']//tr//t[@t-if='not line.display_type']/td[2]/span"  position="attributes">
+        <xpath expr="//table[@class='table table-sm o_main_table']//tbody//t[@t-foreach='doc.order_line']//tr//t[@t-if='not line.display_type']/td[3]/span"  position="attributes">
             <attribute name="t-options">{'widget': 'monetary', 'display_currency': doc.pricelist_id.currency_id}</attribute>
         </xpath>
 
