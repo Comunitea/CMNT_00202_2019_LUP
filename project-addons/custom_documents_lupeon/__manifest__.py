@@ -2,11 +2,19 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 {
     'name': 'Custom documents lupeon',
-    'version': '12.0.1.0.0',
-    'category': '',
+    'version': '12.0.1.0.1',
+    'summary': 'Reports Customization',
+    'category': 'Document Management',
     'author': 'Coumnitea',
+    'contributors': [
+        'Javier Colmenero <javier@comunitea.com>',
+        'Rubén Seijas <ruben@comunitea.com>',
+    ],
+    'website': 'http://www.comunitea.com',
+    "support": "info@comunitea.com",
     'license': 'AGPL-3',
-    'license': '',
+    "price": 0,
+    "currency": "EUR",
     'depends': [
         'account',
         'sale',
@@ -27,5 +35,10 @@
         'views/report_stock.xml',
         'views/report_templates.xml',
     ],
+    'images': [
+        '/static/description/icon.png',
+    ],
     'installable': True,
+    'auto_install': True,
+    'application': False,
 }

@@ -3,7 +3,7 @@
     
      <template id="asset_common" name="custom_documents_lupeon pdf assets" inherit_id="web.report_assets_common">
         <xpath expr="." position="inside">
-            <link rel="stylesheet" type="text/scss" href="/custom_documents_lupeon/static/src/scss/custom_lupeon.scss"/>
+            <link rel="stylesheet" type="text/scss" href="/custom_documents_lupeon/static/scss/custom_lupeon.scss"/>
         </xpath>
     </template>
 
