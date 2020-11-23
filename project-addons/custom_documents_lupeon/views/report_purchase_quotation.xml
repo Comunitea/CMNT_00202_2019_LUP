@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_purchasequotation_document_custom_lupeon" inherit_id="purchase.report_purchasequotation_document">
+
+        <!-- Aquí va la direción -->
+        <xpath expr="//t[@t-set='address']" position="replace"/>
+        <xpath expr="//t[@t-set='information_block']" position="replace"/>
+
+        <xpath expr="//h2" position="before">
+            <!-- Avoid no row margin -->
+            <div class="row">
+                <br/>
+            </div>
+        	<div class="row">
+                <t t-set="ia" t-value="o.partner_id"/>
+                <t t-set="sa" t-value="o.dest_address_id"/>
+                <t t-if="o.picking_type_id and o.picking_type_id.warehouse_id">
+                    <t t-set="sa" t-value="o.picking_type_id.warehouse_id.partner_id"/>
+                </t>
+
+                <div class="col-6" id="shipping_address">
+                    <div class="col-12" id="shipping_address_title">
+                        <strong>Shipping Adress:</strong>
+                    </div>
+                    <div class="row mt8" id="shipping_address_content">
+                        <div class="col-12">
+                            <div>
+                                <span itemprop="name" t-esc="sa.name"/>
+                            </div>
+                            <div>
+                                <span t-esc="sa.street"/>
+                            </div>
+                            <div>
+                                <span t-esc="sa.zip"/>
+                                <span t-esc="sa.city"/>
+                                <t t-if="sa.state_id.name">
+                                    (  <span t-esc="sa.state_id.name"/>  )
+                                </t>
+                            </div>
+                            <div>
+                                <span t-esc="sa.country_id.name"/>
+                            </div>
+                            <div>
+                                <i class='fa fa-phone fa-fw' role="img" aria-label="Phone" title="Phone"/>
+                                <span t-esc="sa.phone or sa.mobile"/>
+                            </div>
+                            <div t-if="sa.vat">
+                                CIF: <span t-esc="sa.vat"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-6" id="supplier_address">
+                    <div class="col-12" id="supplier_address_title">
+                        <strong>Supplier Address:</strong>
+                    </div>
+                    <div class="row mt8" id="supplier_address_content">
+                        <div class="col-12">
+                            <div>
+                                <span itemprop="name" t-esc="ia.name"/>
+                            </div>
+                            <div>
+                                <span t-esc="ia.street"/>
+                            </div>
+                            <div>
+                                <span t-esc="ia.zip"/>
+                                <span t-esc="ia.city"/>
+                                <t t-if="ia.state_id.name">
+                                    (  <span t-esc="sa.state_id.name"/>  )
+                                </t>
+                            </div>
+                            <div>
+                                <span t-esc="ia.country_id.name"/>
+                            </div>
+                            <div t-if="ia.phone or sa.mobile">
+                                <i class='fa fa-phone fa-fw' role="img" aria-label="Phone" title="Phone"/>
+                                <span t-esc="ia.phone or sa.mobile"/>
+                            </div>
+                            <div t-if="ia.vat">
+                                CIF: <span t-esc="ia.vat"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        	</div>
+            <div class="row">
+                <br/>
+            </div>
+      	</xpath>
+
+        <!-- Doc name -->
+        <xpath expr="//div[hasclass('page')]//h2" position="replace">
+            <h2 class="doc_type_name"><span t-field="o.name"/></h2>
+        </xpath>
+
+        <!-- Informations -->
+        <xpath expr="//div[hasclass('page')]//h2" position="after">
+            <div class="row mt32 mb32" id="informations">
+                <div t-if="o.name" class="col-auto mw-100 mb-2 text-center">
+                    <strong>Our Reference:</strong>
+                    <p class="m-0" t-field="o.name"/>
+                </div>
+                <div t-if="o.partner_ref" class="col-auto mw-100 mb-2 text-center">
+                    <strong>Your Reference:</strong>
+                    <p class="m-0" t-field="o.partner_ref"/>
+                </div>
+                <div t-if="o.date_order" class="col-auto mw-100 mb-2 text-center">
+                    <strong>Date:</strong>
+                    <p class="m-0" t-esc="o.date_order.strftime('%Y-%m-%d')"/>
+                </div>
+                <!-- No groups for purchase -->
+                <div t-if="o.partner_id.sale_incoterm_id or o.incoterm_id" class="col-auto mw-100 mb-2 text-center" name="incoterm_id">
+                    <strong>Incoterm:</strong>
+                    <p class="m-0"><span t-esc="o.partner_id.sale_incoterm_id.code or o.incoterm_id.code"/> (<span t-esc="o.partner_id.sale_incoterm_id.name or o.incoterm_id.name"/>)</p>
+                </div>
+            </div>
+        </xpath>
+
+        <!-- Alternate row colors -->
+        <xpath expr="//table[hasclass('table', 'table-sm')]" position="attributes">
+            <attribute name="class">table table-sm o_table_purchase_quotation</attribute>
+        </xpath>
+
+        <!-- Format expected date -->
+        <xpath expr="//table[hasclass('table', 'table-sm', 'o_table_purchase_quotation')]//td[2]/span" position="replace">
+            <span t-esc="order_line.date_planned.strftime('%Y-%m-%d')"/>
+        </xpath>
+
+        <!-- Change Qty and center -->
+        <xpath expr="//table[hasclass('table', 'table-sm', 'o_table_purchase_quotation')]//th[3]" position="replace">
+            <th class="text-center"><strong>Quantity</strong></th>
+        </xpath>
+        <xpath expr="//table[hasclass('table', 'table-sm', 'o_table_purchase_quotation')]//td[3]" position="attributes">
+            <attribute name="class">text-center</attribute>
+            <attribute name="style">background-color: inherit !important;</attribute>
+        </xpath>
+
+    </template>
+
+    <template id="report_purchasequotation_lupeon">
+        <t t-call="web.html_container">
+            <!--    MODIFICACIONES INFORME LUPEÓN -->
+            <t t-set="lupeon_report" t-value="True"/>
+            <t t-foreach="docs" t-as="o">
+                <t t-call="purchase.report_urchasequotation_document" t-lang="o.partner_id.lang"/>
+            </t>
+        </t>
+    </template>
+</odoo>

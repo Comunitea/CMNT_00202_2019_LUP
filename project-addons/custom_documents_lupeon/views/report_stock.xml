@@ -1,10 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-
-
     <template id="report_delivery_document_custom" inherit_id="stock.report_delivery_document">
 
+        <!-- Replace Order by Picking -->
+        <xpath expr="//div[hasclass('page')]//table//th[@t-if='o.origin']" position="replace">
+            <th t-if="o.origin"><strong>Picking</strong></th>
+        </xpath>
+
+        <!-- Replace partner address. Add invoice and shipping address -->
+        <xpath expr="//t[@t-if='partner']" position="replace"/>
+        <xpath expr="//div[hasclass('page')]//h2" position="before">
+            <!-- Avoid no row margin -->
+            <div class="row">
+                <br/>
+            </div>
+            <div class="row">
+                <t t-set="ia" t-value="o.sale_id.partner_invoice_id"/>
+                <t t-set="sa" t-value="o.sale_id.partner_shipping_id"/>
+
+                <div class="col-6" id="invoice_address">
+                    <div class="col-12" id="invoice_address_title">
+                        <strong>Invoice Address:</strong>
+                    </div>
+                    <div class="row mt8" id="invoice_address_content">
+                        <div class="col-12">
+                            <div>
+                                <span itemprop="name" t-esc="ia.name"/>
+                            </div>
+                            <div>
+                                <span t-esc="ia.street"/>
+                            </div>
+                            <div>
+                                <span t-esc="ia.zip"/>
+                                <span t-esc="ia.city"/>
+                                <t t-if="ia.state_id.name">
+                                    (  <span t-esc="sa.state_id.name"/>  )
+                                </t>
+                            </div>
+                            <div t-if="ia.vat">
+                                CIF: <span t-esc="ia.vat"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-6" id="shipping_address">
+                    <div class="col-12" id="shipping_address_title">
+                        <strong>Shipping Adress:</strong>
+                    </div>
+                    <div class="row mt8" id="shipping_address_content">
+                        <div class="col-12">
+                            <div>
+                                <span itemprop="name" t-esc="sa.name"/>
+                            </div>
+                            <div>
+                                <span t-esc="sa.street"/>
+                            </div>
+                            <div>
+                                <span t-esc="sa.zip"/>
+                                <span t-esc="sa.city"/>
+                                <t t-if="sa.state_id.name">
+                                    (  <span t-esc="sa.state_id.name"/>  )
+                                </t>
+                            </div>
+                            <div t-if="sa.vat">
+                        CIF: <span t-esc="sa.vat"/>
+                    </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <br/>
+            </div>
+        </xpath>
+
+        <!-- Add Incoterm -->
+        <xpath expr="//div[hasclass('page')]//table//th[@name='td_sched_date_h']" position="after">
+            <th t-if="o.sale_id.incoterm" groups="sale_stock.group_display_incoterm"><strong>Incoterm</strong></th>
+        </xpath>
+        <xpath expr="//div[hasclass('page')]//table//td[@name='td_sched_date']" position="after">
+            <td t-if="o.sale_id.incoterm" groups="sale_stock.group_display_incoterm">
+                <span t-esc="o.partner_id.sale_incoterm_id.code or o.incoterm.code"/> (<span t-esc="o.partner_id.sale_incoterm_id.name or o.incoterm.name"/>)
+            </td>
+        </xpath>
+
+        <!-- Dates without time -->
+        <xpath expr="//span[@t-field='o.date_done']" position="replace">
+            <span t-esc="o.date_done.strftime('%Y-%m-%d')"/>
+        </xpath>
+        <xpath expr="//span[@t-field='o.scheduled_date']" position="replace">
+             <span t-esc="o.scheduled_date.strftime('%Y-%m-%d')"/>
+        </xpath>
+
+        <!-- Picking Name -->
+        <xpath expr="//h2" position="replace">
+             <h2 class="mt16 mb32" id="doc_type_name">
+                <span t-field="o.name"/>
+            </h2>
+        </xpath>
+
+        <!-- Center Qty -->
+        <xpath expr="//table[@t-if=&quot;o.state!=&apos;done&apos;&quot;]//th[last()]" position="attributes">
+            <attribute name="class">text-center</attribute>
+        </xpath>
+        <xpath expr="//table[@t-if=&quot;o.move_line_ids and o.state==&apos;done&apos;&quot;]//th[last()]" position="attributes">
+            <attribute name="class">text-center</attribute>
+        </xpath>
+        <xpath expr="//table[@t-if=&quot;o.state!=&apos;done&apos;&quot;]//td[last()]" position="attributes">
+            <attribute name="class">text-center</attribute>
+        </xpath>
+
+        <!-- Avoid default background and keep css styles with diferent color by rows -->
+        <xpath expr="//table[@t-if=&quot;o.state!=&apos;done&apos;&quot;]/tbody/tr/td[last()]" position="attributes">
+            <attribute name="style">background-color: inherit !important;</attribute>
+        </xpath>
 
 
         <!--    MODIFICACIONES INFORME LUPEÓN -->
@@ -27,72 +138,69 @@
                     </td>
                 </t>
         </xpath> -->
-         <xpath expr="//table[@t-if=&quot;o.move_line_ids and o.state==&apos;done&apos;&quot;]/tbody/tr[@t-foreach='o.move_line_ids']" position="replace">
-               <t t-foreach="o.move_line_ids" t-as="move_line">
-                    <tr>
-                        <td>
-                            <img t-att-src="'data:image/png;base64,%s' % to_text(move_line.move_id.sale_line_id and move_line.move_id.sale_line_id.model_image or '')" style="max-height: 50px;"/>
-                        </td>
-                        <td>
-                            <span t-field="move_line.move_id.sale_line_id and move_line.move_id.sale_line_id.ref"/>
-                        </td>
-                        <td>
-                            <span t-field="move_line.product_id"/>
-                            <p t-if="o.picking_type_code == 'outgoing'">
-                                <span t-field="move_line.product_id.sudo().description_pickingout"/>
-                            </p>
-                            <p t-if="o.picking_type_code == 'incoming'">
-                                <span t-field="move_line.product_id.sudo().description_pickingin"/>
-                            </p>
-                        </td>
-                        <td t-if="has_serial_number and move_line.lot_name" groups="stock.group_lot_on_delivery_slip">
-                            <span t-field="move_line.lot_name"/>
-                        </td>
-                        <td t-elif="has_serial_number" groups="stock.group_lot_on_delivery_slip">
-                            <span t-field="move_line.lot_id.name"/>
-                        </td>
 
-
-                        <td class="text-center">
-                            <span t-field="move_line.qty_done"/>
-                            <span t-field="move_line.product_uom_id"/>
-                        </td>
-                        <t t-if="o.valued and o.sale_id and o.move_line_ids">
-                            <t t-if="move_line.picking_id.state != 'done'">
-                                <td class="text-right">
-                                    <span t-field="move_line.product_uom_qty"/>
-                                    <span t-field="move_line.product_uom_id"/></td>
-                            </t>
-                            <td class="text-right"><span
-                                    t-field="move_line.sale_price_unit" /></td>
-                            <td class="text-right" groups="sale.group_discount_per_so_line">
-                                <span t-field="move_line.sale_discount" />
-                            </td>
-                            <td class="text-right"><span
-                                    t-field="move_line.sale_price_subtotal" /></td>
-                            <td class="text-right"><span
-                                    t-field="move_line.sale_tax_description"/></td>
-                        </t>
-                    </tr>
-                    <t t-if="lupeon_report">
-                        <tr  style="border-top:1px solid black;background-color:#F0F8FF">
-                            <td colspan="2" style="border:none;">
-                                Technologia: <span t-field="move_line.move_id.sale_line_id and move_line.move_id.sale_line_id.report_tech"/>
-                            </td>
-                            <td colspan="3" style="border:none;background-color:#F0F8FF">
-                                Material: <span t-field="move_line.move_id.sale_line_id and move_line.move_id.sale_line_id.report_material"/>
-                            </td>
-                            <td colspan="3" style="border:none; background-color:#F0F8FF">
-                                Finish: <span t-field="move_line.move_id.sale_line_id and move_line.move_id.sale_line_id.report_finish"/>
-                            </td>
-                            <!-- <td style="border:none;">
-                        
-                            </td> -->
-                        </tr>
-                    </t>
-               </t>
+        <!-- Center Head taxes -->
+        <xpath expr="//table[@t-if=&quot;o.move_line_ids and o.state==&apos;done&apos;&quot;]/thead/tr/t/th[last()]" position="attributes">
+            <attribute name="class">text-center</attribute>
         </xpath>
 
+        <xpath expr="//table[@t-if=&quot;o.move_line_ids and o.state==&apos;done&apos;&quot;]/tbody/tr[@t-foreach='o.move_line_ids']" position="replace">
+            <t t-foreach="o.move_line_ids" t-as="move_line">
+                <tr>
+                    <td>
+                        <img t-att-src="'data:image/png;base64,%s' % to_text(move_line.move_id.sale_line_id and move_line.move_id.sale_line_id.model_image or '')" style="max-height: 50px;"/>
+                    </td>
+                    <td>
+                        <span t-field="move_line.move_id.sale_line_id and move_line.move_id.sale_line_id.ref"/>
+                    </td>
+                    <td>
+                        <span t-field="move_line.product_id"/>
+                        <p t-if="o.picking_type_code == 'outgoing'">
+                            <span t-field="move_line.product_id.sudo().description_pickingout"/>
+                        </p>
+                        <p t-if="o.picking_type_code == 'incoming'">
+                            <span t-field="move_line.product_id.sudo().description_pickingin"/>
+                        </p>
+                    </td>
+                    <td t-if="has_serial_number and move_line.lot_name" groups="stock.group_lot_on_delivery_slip">
+                        <span t-field="move_line.lot_name"/>
+                    </td>
+                    <td t-elif="has_serial_number" groups="stock.group_lot_on_delivery_slip">
+                        <span t-field="move_line.lot_id.name"/>
+                    </td>
+                    <td class="text-center">
+                        <span t-field="move_line.qty_done"/>
+                        <span t-field="move_line.product_uom_id"/>
+                    </td>
+                    <t t-if="o.valued and o.sale_id and o.move_line_ids">
+                        <t t-if="move_line.picking_id.state != 'done'">
+                            <td class="text-right">
+                                <span t-field="move_line.product_uom_qty"/>
+                                <span t-field="move_line.product_uom_id"/></td>
+                        </t>
+                        <!-- Add currency to price unit -->
+                        <td class="text-right"><span t-field="move_line.sale_price_unit" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                        <td class="text-right" groups="sale.group_discount_per_so_line"><span t-field="move_line.sale_discount" /></td>
+                        <td class="text-right"><span t-field="move_line.sale_price_subtotal" /></td>
+                        <td class="text-center" style="background-color: inherit !important;"><span t-field="move_line.sale_tax_description"/></td>
+                    </t>
+                </tr>
+                <t t-if="lupeon_report">
+                    <tr  style="border-top:1px solid black;background-color:#F0F8FF">
+                        <td colspan="2" style="border:none;">
+                            Technologia: <span t-field="move_line.move_id.sale_line_id and move_line.move_id.sale_line_id.report_tech"/>
+                        </td>
+                        <td colspan="3" style="border:none;background-color:#F0F8FF">
+                            Material: <span t-field="move_line.move_id.sale_line_id and move_line.move_id.sale_line_id.report_material"/>
+                        </td>
+                        <td colspan="3" style="border:none; background-color:#F0F8FF">
+                            Finish: <span t-field="move_line.move_id.sale_line_id and move_line.move_id.sale_line_id.report_finish"/>
+                        </td>
+                        <!-- <td style="border:none;"/> -->
+                    </tr>
+                </t>
+            </t>
+        </xpath>
     </template>
 
      <template id="report_deliveryslip_lupeon">

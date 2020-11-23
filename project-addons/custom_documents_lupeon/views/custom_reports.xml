@@ -32,4 +32,26 @@
         file="custom_documents_lupeon.report_deliveryslip_lupeon"
         print_report_name="'Delivery Slip - %s - %s' % (object.partner_id.name or '', object.name)"
     />
+
+<!--    <report-->
+<!--            string="Purchase Order Lupeon"-->
+<!--            id="action_report_purchase_order_lupeon"-->
+<!--            model="purchase.order"-->
+<!--            report_type="qweb-pdf"-->
+<!--            name="custom_documents_lupeon.report_purchaseorder_lupeon"-->
+<!--            file="custom_documents_lupeon.report_purchaseorder_lupeon"-->
+<!--            print_report_name="-->
+<!--                (object.state in ('draft', 'sent') and 'Request for Quotation - %s' % (object.name) or-->
+<!--                'Purchase Order - %s - %s' % (object.partner_id.name or '', object.name)"-->
+<!--        />-->
+
+<!--        <report-->
+<!--            string="Request for Quotation Lupeon"-->
+<!--            id="report_purchase_quotation_lupeon"-->
+<!--            model="purchase.order"-->
+<!--            report_type="qweb-pdf"-->
+<!--            name="custom_documents_lupeon.report_purchasequotation_lupeon"-->
+<!--            file="custom_documents_lupeon.report_purchasequotation_lupeon"-->
+<!--            print_report_name="'Request for Quotation - %s - %s' % (object.partner_id.name or '', object.name)"-->
+<!--        />-->
 </odoo>

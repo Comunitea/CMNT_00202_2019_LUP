@@ -11,7 +11,7 @@
     "depends": ["product", "sale_stock", "delivery", "account_payment", 
                 "sale_margin", "sale_order_margin_percent", "stock_barcode",
                 "stock", "account", "custom_prestashop", "l10n_es_facturae",
-                "cost_sheet_lupeon"],
+                "cost_sheet_lupeon","incident_manager"],
     "data": [
         'views/partner_view.xml',
         'views/sale_view.xml',

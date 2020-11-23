@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_purchaseorder_document_custom_lupeon" inherit_id="purchase.report_purchaseorder_document">
+
+        <!-- Aquí va la direción -->
+        <xpath expr="//t[@t-set='address']" position="replace"/>
+        <xpath expr="//t[@t-set='information_block']" position="replace"/>
+
+        <xpath expr="//h2" position="before">
+            <!-- Avoid no row margin -->
+            <div class="row">
+                <br/>
+            </div>
+        	<div class="row">
+                <t t-set="ia" t-value="o.partner_id"/>
+                <t t-set="sa" t-value="o.dest_address_id"/>
+                <t t-if="o.picking_type_id and o.picking_type_id.warehouse_id">
+                    <t t-set="sa" t-value="o.picking_type_id.warehouse_id.partner_id"/>
+                </t>
+
+                <div class="col-6" id="shipping_address">
+                    <div class="col-12" id="shipping_address_title">
+                        <strong>Shipping Adress:</strong>
+                    </div>
+                    <div class="row mt8" id="shipping_address_content">
+                        <div class="col-12">
+                            <div>
+                                <span itemprop="name" t-esc="sa.name"/>
+                            </div>
+                            <div>
+                                <span t-esc="sa.street"/>
+                            </div>
+                            <div>
+                                <span t-esc="sa.zip"/>
+                                <span t-esc="sa.city"/>
+                                <t t-if="sa.state_id.name">
+                                    (  <span t-esc="sa.state_id.name"/>  )
+                                </t>
+                            </div>
+                            <div>
+                                <span t-esc="sa.country_id.name"/>
+                            </div>
+                            <div t-if="sa.phone or sa.mobile">
+                                <i class='fa fa-phone fa-fw' role="img" aria-label="Phone" title="Phone"/>
+                                <span t-esc="sa.phone or sa.mobile"/>
+                            </div>
+                            <div t-if="sa.vat">
+                                CIF: <span t-esc="sa.vat"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-6" id="supplier_address">
+                    <div class="col-12" id="supplier_address_title">
+                        <strong>Supplier Address:</strong>
+                    </div>
+                    <div class="row mt8" id="supplier_address_content">
+                        <div class="col-12">
+                            <div>
+                                <span itemprop="name" t-esc="ia.name"/>
+                            </div>
+                            <div>
+                                <span t-esc="ia.street"/>
+                            </div>
+                            <div>
+                                <span t-esc="ia.zip"/>
+                                <span t-esc="ia.city"/>
+                                <t t-if="ia.state_id.name">
+                                    (  <span t-esc="sa.state_id.name"/>  )
+                                </t>
+                            </div>
+                            <div>
+                                <span t-esc="sa.country_id.name"/>
+                            </div>
+                            <div>
+                                <i class='fa fa-phone fa-fw' role="img" aria-label="Phone" title="Phone"/>
+                                <span t-esc="sa.phone or sa.mobile"/>
+                            </div>
+                            <div t-if="ia.vat">
+                                CIF: <span t-esc="ia.vat"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        	</div>
+            <div class="row">
+                <br/>
+            </div>
+      	</xpath>
+
+        <!-- Doc name -->
+        <xpath expr="//div[hasclass('page')]//h2[@t-if=&quot;o.state == &apos;draft&apos;&quot;]" position="replace">
+            <h2 t-if="o.state == 'draft'" class="doc_type_name"><span t-field="o.name"/></h2>
+        </xpath>
+        <xpath expr="//div[hasclass('page')]//h2[@t-if=&quot;o.state in [&apos;sent&apos;, &apos;to approve&apos;]&quot;]" position="attributes">
+            <attribute name="class">doc_type_name</attribute>
+        </xpath>
+        <xpath expr="//div[hasclass('page')]//h2[@t-if=&quot;o.state in [&apos;purchase&apos;, &apos;done&apos;]&quot;]" position="attributes">
+            <attribute name="class">doc_type_name</attribute>
+        </xpath>
+        <xpath expr="//div[hasclass('page')]//h2[@t-if=&quot;o.state == &apos;cancel&apos;&quot;]" position="attributes">
+            <attribute name="class">doc_type_name</attribute>
+        </xpath>
+
+        <!-- Informations -->
+        <xpath expr="//div[hasclass('page')]//div[@id='informations']" position="replace">
+            <div class="row mt32 mb32" id="informations">
+                <div t-if="o.name" class="col-auto mw-100 mb-2 text-center">
+                    <strong>Our Reference:</strong>
+                    <p class="m-0" t-field="o.name"/>
+                </div>
+                <div t-if="o.partner_ref" class="col-auto mw-100 mb-2 text-center">
+                    <strong>Your Reference:</strong>
+                    <p class="m-0" t-field="o.partner_ref"/>
+                </div>
+                <div t-if="o.date_order" class="col-auto mw-100 mb-2 text-center">
+                    <strong>Date:</strong>
+                    <p class="m-0" t-esc="o.date_order.strftime('%Y-%m-%d')"/>
+                </div>
+                <!-- No groups for purchase -->
+                <div t-if="o.partner_id.sale_incoterm_id or o.incoterm_id" class="col-auto mw-100 mb-2 text-center" name="incoterm_id">
+                    <strong>Incoterm:</strong>
+                    <p class="m-0"><span t-esc="o.partner_id.sale_incoterm_id.code or o.incoterm_id.code"/> (<span t-esc="o.partner_id.sale_incoterm_id.name or o.incoterm_id.name"/>)</p>
+                </div>
+            </div>
+        </xpath>
+
+        <!-- Change Qty and center -->
+        <xpath expr="//table[hasclass('table', 'table-sm', 'o_main_table')]//th[4]" position="replace">
+            <th class="text-center"><strong>Quantity</strong></th>
+        </xpath>
+        <xpath expr="//table[hasclass('table', 'table-sm', 'o_main_table')]//td[4]" position="attributes">
+            <attribute name="class">text-center</attribute>
+        </xpath>
+
+        <!-- Format date planned -->
+        <xpath expr="//table[hasclass('table', 'table-sm', 'o_main_table')]//td[3]/span" position="replace">
+            <span t-esc="line.date_planned.strftime('%Y-%m-%d')"/>
+        </xpath>
+
+        <!-- Price unit concurrency -->
+        <xpath expr="//table[hasclass('table', 'table-sm', 'o_main_table')]//td[5]/span" position="attributes">
+            <attribute name="t-options">{'widget': 'monetary', 'display_currency': o.currency_id}</attribute>
+        </xpath>
+
+        <!-- Hide taxes -->
+        <xpath expr="//table[hasclass('table', 'table-sm', 'o_main_table')]//th[2]" position="attributes">
+            <attribute name="class">d-none</attribute>
+        </xpath>
+        <xpath expr="//table[hasclass('table', 'table-sm', 'o_main_table')]//td[2]" position="attributes">
+            <attribute name="class">d-none</attribute>
+        </xpath>
+
+        <!-- Subtotal styles -->
+        <xpath expr="//div[@id='total']//table[hasclass('table', 'table-sm')]//tr[1]" position="attributes">
+            <attribute name="class">border-black o_subtotal</attribute>
+        </xpath>
+
+        <!-- Hide total taxes or add styles if not hidden -->
+        <xpath expr="//div[@id='total']//table[hasclass('table', 'table-sm')]//tr[2]" position="attributes">
+            <attribute name="class">border-black o_subtotal o_tax</attribute>
+        </xpath>
+<!--        <xpath expr="//div[@id='total']//table[hasclass('table', 'table-sm')]//tr[2]" position="attributes">-->
+<!--            <attribute name="class">d-none</attribute>-->
+<!--        </xpath>-->
+
+    </template>
+
+    <template id="report_purchaseorder_lupeon">
+        <t t-call="web.html_container">
+            <!--    MODIFICACIONES INFORME LUPEÓN -->
+            <t t-set="lupeon_report" t-value="True"/>
+            <t t-foreach="docs" t-as="o">
+                <t t-call="purchase.report_purchaseorder_document" t-lang="o.partner_id.lang"/>
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -12,8 +12,18 @@ class IncidentReport(models.Model):
     _name = "incident.report"
     _description = "Incident Report"
 
-    name = fields.Char('Incident title')
+    name = fields.Text('Incident title')
+    date = fields.Date('Date',
+                       required=True,
+                       default=fields.Date.context_today)
     incident_type = fields.Many2one(comodel_name='incident.report.type', string='Incident type')
+    description = fields.Char('Description')
+    user_id = fields.Many2one(
+        comodel_name='res.users',
+        string='Responsible',
+        index=True,
+        default=lambda self: self.env.user,
+    )
     model_id = fields.Many2one(
         'ir.model', string='Object'
     )

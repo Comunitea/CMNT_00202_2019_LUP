@@ -13,11 +13,24 @@ class FarmTreatment(models.TransientModel):
         'ir.model', string='Object', readonly=True
     )
     res_id = fields.Integer(string='Record ID', readonly=True)
+    date = fields.Date('Date',
+                       required=True,
+                       default=fields.Date.context_today)
+    description = fields.Text('Description')
+    user_id = fields.Many2one(
+        comodel_name='res.users',
+        string='Responsible',
+        index=True,
+        default=lambda self: self.env.user,
+    )
 
     def create_report(self):
         report = self.env['incident.report'].create({
             'name': self.name,
             'incident_type': self.incident_type.id,
+            'user_id': self.user_id and self.user_id.id or False,
+            'date': self.date,
+            'description': self.description,
             'model_id': self.model_id.id,
             'res_id': self.res_id
         })

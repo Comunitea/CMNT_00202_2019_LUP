@@ -13,6 +13,7 @@ class SaleOrder(models.Model):
     _inherit = "sale.order"
 
     ship_cost = fields.Monetary(string='Ship Cost', default=0.0)
+    ship_price = fields.Monetary(string='Ship Price', compute="_compute_ship_price")
     num_line = fields.Char(string='Nº Line')
     rejected = fields.Boolean('Rejected')
     rejected_reason = fields.Text('Rejected Reason')
@@ -25,6 +26,16 @@ class SaleOrder(models.Model):
                                 store=True)
     delivery_blocked = fields.Boolean("Entrega bloqueada", default=False)
 
+
+    def _compute_ship_price(self):
+        for order in self:
+            
+            ship_line =  order.order_line.filtered(lambda line: line.product_id.default_code=='SHIP')
+            if ship_line:
+                order.ship_price = ship_line[0].price_subtotal
+            else:
+                order.ship_price = 0
+            
 
     @api.depends('picking_ids.delivered')
     def _compute_delivered(self):
