@@ -6,20 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-18 13:08+0000\n"
-"PO-Revision-Date: 2020-11-18 13:08+0000\n"
+"POT-Creation-Date: 2020-11-30 17:10+0000\n"
+"PO-Revision-Date: 2020-11-30 17:10+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
-
-#. module: custom_documents_lupeon
-#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.document_production_label
-msgid "<br/>\n"
-"            <span>Material principal:  </span>"
-msgstr ""
 
 #. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.document_production_label
@@ -31,6 +25,12 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.document_production_label
 msgid "<br/>\n"
 "            <span>Tecnología:  </span>"
+msgstr ""
+
+#. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchaseorder_document_custom_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchasequotation_document_custom_lupeon
+msgid "<i class=\"fa fa-phone fa-fw\" role=\"img\" aria-label=\"Phone\" title=\"Phone\"/>"
 msgstr ""
 
 #. module: custom_documents_lupeon
@@ -47,6 +47,11 @@ msgstr ""
 #. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.document_production_label
 msgid "<span>Fecha fin:  </span>"
+msgstr ""
+
+#. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.document_production_label
+msgid "<span>Material principal:  </span>"
 msgstr ""
 
 #. module: custom_documents_lupeon
@@ -87,6 +92,12 @@ msgid "<strong>Date Due:</strong>"
 msgstr "<strong>Fecha vencimiento:</strong>"
 
 #. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchaseorder_document_custom_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchasequotation_document_custom_lupeon
+msgid "<strong>Date:</strong>"
+msgstr "<strong>Fecha:</strong>"
+
+#. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_invoice_document
 msgid "<strong>Due Dates:</strong>\n"
 "                <br/>"
@@ -96,20 +107,27 @@ msgstr "<strong>Vencimientos:</strong>\n"
 #. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
 msgid "<strong>Expiration Date:</strong>"
-msgstr "<strong>Validez:</strong>"
+msgstr "<strong>Fecha de caducidad:</strong>"
 
 #. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchaseorder_document_custom_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchasequotation_document_custom_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
-#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_invoice_document
 msgid "<strong>Incoterm:</strong>"
-msgstr "<strong>Incoterm:</strong>"
+msgstr ""
 
 #. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_delivery_document_custom
 msgid "<strong>Incoterm</strong>"
-msgstr "<strong>Incoterm</strong>""
+msgstr "<strong>Incoterm</strong>\""
 
 #. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_invoice_document
+msgid "<strong>Incoterms:</strong>"
+msgstr ""
+
+#. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_delivery_document_custom
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_invoice_document
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
 msgid "<strong>Invoice Address:</strong>"
@@ -118,7 +136,7 @@ msgstr "<strong>Dirección de facturación:</strong>"
 #. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_invoice_document
 msgid "<strong>Invoice Date:</strong>"
-msgstr "<strong>Fecha:</strong>"
+msgstr "<strong>Fecha de factura:</strong>"
 
 #. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
@@ -157,7 +175,13 @@ msgstr "<strong>Nº Proveedor:</strong>"
 #. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
 msgid "<strong>Order Date:</strong>"
-msgstr "<strong>Fecha:</strong>"
+msgstr "<strong>Fecha orden:</strong>"
+
+#. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchaseorder_document_custom_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchasequotation_document_custom_lupeon
+msgid "<strong>Our Reference:</strong>"
+msgstr "<strong>Nuestra Referencia:</strong>"
 
 #. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
@@ -171,15 +195,41 @@ msgid "<strong>Payment Term:</strong>"
 msgstr "<strong>Plazo de pago:</strong>"
 
 #. module: custom_documents_lupeon
-#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
-msgid "<strong>Quotation Date:</strong>"
-msgstr "<strong>Fecha:</strong>"
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_delivery_document_custom
+msgid "<strong>Picking</strong>"
+msgstr ""
 
 #. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchaseorder_document_custom_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchasequotation_document_custom_lupeon
+msgid "<strong>Quantity</strong>"
+msgstr "<strong>Cantidad</strong>"
+
+#. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
+msgid "<strong>Quotation Date:</strong>"
+msgstr "<strong>Fecha de presupuesto:</strong>"
+
+#. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_delivery_document_custom
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_invoice_document
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchaseorder_document_custom_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchasequotation_document_custom_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
 msgid "<strong>Shipping Adress:</strong>"
 msgstr "<strong>Dirección de entrega:</strong>"
+
+#. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchaseorder_document_custom_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchasequotation_document_custom_lupeon
+msgid "<strong>Supplier Address:</strong>"
+msgstr "<strong>Dirección Proveedor:</strong>"
+
+#. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchaseorder_document_custom_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchasequotation_document_custom_lupeon
+msgid "<strong>Your Reference:</strong>"
+msgstr "<strong>Su Referencia:</strong>"
 
 #. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
@@ -202,7 +252,10 @@ msgid "Automoción"
 msgstr ""
 
 #. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_delivery_document_custom
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_invoice_document
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchaseorder_document_custom_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchasequotation_document_custom_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
 msgid "CIF:"
 msgstr ""
@@ -251,6 +304,11 @@ msgstr "Linea de Factura"
 #: model:ir.actions.report,name:custom_documents_lupeon.action_report_invoice_lupeon
 msgid "Invoice Lupeon"
 msgstr "Factura Lupeón"
+
+#. module: custom_documents_lupeon
+#: model:ir.model.fields,field_description:custom_documents_lupeon.field_mrp_production__label_printed
+msgid "Label printed"
+msgstr "Etiqueta impresa"
 
 #. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.external_layout_boxed_custom
@@ -318,6 +376,11 @@ msgid "Page: <span class=\"page\"/> / <span class=\"topage\"/>"
 msgstr "Página: <span class=\"page\"/>/<span class=\"topage\"/>"
 
 #. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.mrp_production_form_print_label
+msgid "Print label"
+msgstr "Imprimir etiqueta"
+
+#. module: custom_documents_lupeon
 #: model:ir.actions.report,name:custom_documents_lupeon.report_production_label
 msgid "Production Label"
 msgstr "Etiqueta de producción"
@@ -325,7 +388,7 @@ msgstr "Etiqueta de producción"
 #. module: custom_documents_lupeon
 #: model:ir.model,name:custom_documents_lupeon.model_mrp_production
 msgid "Production Order"
-msgstr "Orden de producción"
+msgstr "Orden de fabricación"
 
 #. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
@@ -350,6 +413,11 @@ msgstr "Referencia"
 #: model:ir.model.fields,field_description:custom_documents_lupeon.field_sale_order__report_image
 msgid "Report image"
 msgstr "Imagen informe"
+
+#. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.mrp_production_form_print_label
+msgid "Reprint label"
+msgstr "Reimprimir etiqueta"
 
 #. module: custom_documents_lupeon
 #: model:ir.model,name:custom_documents_lupeon.model_sale_order
@@ -384,11 +452,6 @@ msgid "Technologia:"
 msgstr "Tecnología"
 
 #. module: custom_documents_lupeon
-#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_delivery_document_custom
-msgid "Picking"
-msgstr "Albarán"
-
-#. module: custom_documents_lupeon
 #: model:ir.model.fields,field_description:custom_documents_lupeon.field_account_invoice_line__report_tech
 #: model:ir.model.fields,field_description:custom_documents_lupeon.field_prestashop_sale_order_line__report_tech
 #: model:ir.model.fields,field_description:custom_documents_lupeon.field_prestashop_sale_order_line_discount__report_tech
@@ -406,56 +469,3 @@ msgstr "Tel.:"
 msgid "Web:"
 msgstr ""
 
-#. module: custom_documents_lupeon
-#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchaseorder_document_custom_lupeon
-#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchasequotation_document_custom_lupeon
-msgid "<strong>Date:</strong>"
-msgstr "<strong>Fecha:</strong>"
-
-#. module: custom_documents_lupeon
-#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchaseorder_document_custom_lupeon
-#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchasequotation_document_custom_lupeon
-msgid "<strong>Incoterm:</strong>"
-msgstr "<strong>Incoterm:</strong>"
-
-#. module: custom_documents_lupeon
-#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchaseorder_document_custom_lupeon
-#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchasequotation_document_custom_lupeon
-msgid "<strong>Our Reference:</strong>"
-msgstr "<strong>Nuestra Referencia:</strong>"
-
-#. module: custom_documents_lupeon
-#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchaseorder_document_custom_lupeon
-#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchasequotation_document_custom_lupeon
-msgid "<strong>Quantity</strong>"
-msgstr "<strong>Cantidad</strong>"
-
-#. module: custom_documents_lupeon
-#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchaseorder_document_custom_lupeon
-#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchasequotation_document_custom_lupeon
-msgid "<strong>Shipping Adress:</strong>"
-msgstr "<strong>Dirección Entrega:</strong>"
-
-#. module: custom_documents_lupeon
-#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchaseorder_document_custom_lupeon
-#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchasequotation_document_custom_lupeon
-msgid "<strong>Supplier Address:</strong>"
-msgstr "<strong>Dirección Proveedor:</strong>"
-
-#. module: custom_documents_lupeon
-#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchaseorder_document_custom_lupeon
-#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchasequotation_document_custom_lupeon
-msgid "<strong>Your Reference:</strong>"
-msgstr "<strong>Su Referencia:</strong>"
-
-#. module: custom_documents_lupeon
-#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchaseorder_document_custom_lupeon
-#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchasequotation_document_custom_lupeon
-msgid "CIF:"
-msgstr "CIF:"
-
-#. module: custom_documents_lupeon
-#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchaseorder_document_custom_lupeon
-#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchasequotation_document_custom_lupeon
-msgid "<i class=\"fa fa-phone fa-fw\" role=\"img\" aria-label=\"Phone\" title=\"Phone\"/>"
-msgstr "<i class=\"fa fa-phone fa-fw\" role=\"img\" aria-label=\"Teléfono\" title=\"Teléfono\"/>"

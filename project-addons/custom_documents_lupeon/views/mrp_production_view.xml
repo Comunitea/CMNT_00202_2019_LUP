@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record id="mrp_production_form_print_label" model="ir.ui.view">
+        <field name="name">mrp_production.form.print.label</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+               <field name="label_printed" invisible="1"/>
+               <button name="print_label" type="object" string="Print label" class="btn-success" attrs="{'invisible': [('label_printed', '=', True)]}"/>
+               <button name="print_label" type="object" string="Reprint label"  attrs="{'invisible': [('label_printed', '!=', True)]}"/>
+            </header>
+        </field>          
+    </record>
+
+
+
+</odoo>
+

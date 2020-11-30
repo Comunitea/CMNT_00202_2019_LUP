@@ -23,7 +23,7 @@ class ProductProduct(models.Model):
         # Aunque por barcode ya se busca, no se hace caracter a caracter
         # Añado pues la busqueda
         if name and operator in ["=", "ilike", "=ilike", "like", "=like"]:
-            my_domain = [
+            my_domain = args + [
                 '|',
                 ("seller_ids.product_name", operator, name),
                 ("barcode", operator, name),

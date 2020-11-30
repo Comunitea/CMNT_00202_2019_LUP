@@ -7,7 +7,7 @@
         </record>
 
          <record id="leg_feeding" model="applicable.legislation">
-            <field name="name">Feeding</field>
+            <field name="name">Food Industry</field>
         </record>
 
         <record id="leg_sanitary" model="applicable.legislation">

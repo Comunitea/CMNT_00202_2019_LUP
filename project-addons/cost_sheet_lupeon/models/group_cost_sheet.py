@@ -182,7 +182,7 @@ class AssemblyCostLine(models.Model):
     name = fields.Char('Descripción', required=True)
     type = fields.Many2one('oppi.type', 'Tipo', required=True)
     time = fields.Float('Tiempo')
-    total = fields.Float('Tiempo', compute="_get_total")
+    total = fields.Float('PVP €', compute="_get_total")
 
     def _get_total(self):
         for line in self:

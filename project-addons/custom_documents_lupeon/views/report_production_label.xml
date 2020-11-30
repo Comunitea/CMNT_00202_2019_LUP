@@ -49,14 +49,18 @@
             <br/>
             <span>Tecnología:  </span><span style="margin-left: 3px" t-field="prod.sheet_id.sheet_type" />
             <br/>
-            <span>Material principal:  </span><span style="margin-left: 3px" t-field="prod.sheet_id.material_cost_ids[0].material_id.name" />
+            <t t-if="prod.sheet_id.material_cost_ids">
+                <span>Material principal:  </span><span style="margin-left: 3px" t-field="prod.sheet_id.material_cost_ids[0].material_id.name" />
+            </t>
             <br/>
             <t t-if="prod.sheet_id.tinted_id">
                 <span>Tintado:  </span><span style="margin-left: 3px" t-field="prod.sheet_id.tinted_id.name" />
                 <br/>
             </t>
-            <span>Fecha fin:  </span><span style="margin-left: 3px" t-esc="prod.date_planned_finished_wo.strftime('%d/%m/%Y')"/>
-            <br/>
+             <t t-if="prod.date_planned_finished_wo">
+                <span>Fecha fin:  </span><span style="margin-left: 3px" t-esc="prod.date_planned_finished_wo.strftime('%d/%m/%Y')"/>
+                <br/>
+            </t>
         </div>
         <div class="label-row2">
                 <div class="col-12" style="text-align:center">
