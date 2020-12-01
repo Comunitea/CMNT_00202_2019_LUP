@@ -38,6 +38,16 @@ class GroupProduction(models.Model):
     total_user_time = fields.Float('Tiempo usuario total', readonly=True)
     total_time = fields.Float('Tiempo máquina total', readonly=True)
 
+    total_done = fields.Float('Total realizado', compute="_get_total_done")
+
+    def _get_total_done(self):
+        for gr in self:
+            total = 0
+            for reg in gr.register_ids:
+                total += reg.qty_done
+            gr.total_done = total
+
+
     def action_confirm_group(self):
         """
         Creo las líneas on los consumos agrtupados y enlazo las órdenes de

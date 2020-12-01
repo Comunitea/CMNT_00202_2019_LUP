@@ -38,6 +38,9 @@
                             </tree>
                         </field>
                     </group>
+                    <group class="oe_subtotal_footer oe_right" colspan="2" name="total_done">
+                        <field name="total_done"/>
+                    </group>
                     <notebook>
                         <page string="Materials to consume">
                             <group string="Materials to consume">
