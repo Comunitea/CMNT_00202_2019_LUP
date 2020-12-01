@@ -26,7 +26,7 @@ class GroupMrpWizard(models.TransientModel):
             vals = {
                 'group_mrp_id': group.id,
                 'workorder_id': wo.id,
-                'qty_done': 0,
+                'qty_done': wo.qty_production,
             }
             self.env['group.register.line'].create(vals)
 

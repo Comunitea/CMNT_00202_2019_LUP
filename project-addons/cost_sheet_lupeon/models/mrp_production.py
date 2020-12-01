@@ -85,8 +85,8 @@ class MrpProduction(models.Model):
             'production_id': self.id,
             'origin': self.name + ' (%s)' % mode
         }
-        scrap = self.env['stock.scrap'].with_context(no_blocked=True).\
-            create(vals)
+        scrap = self.env['stock.scrap'].with_context(
+            no_blocked=True, ok_check=True).create(vals)
         scrap.action_validate()
 
     @api.multi
