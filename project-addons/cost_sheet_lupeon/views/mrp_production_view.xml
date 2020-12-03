@@ -73,20 +73,26 @@
                 <field name="sheet_id"/>
                 <field name="sheet_type"/>
                 <field name="sale_id"/>
-                <field name="sale_line_id"/>
+                <!-- <field name="sale_line_id"/> -->
                 <field name="line_ref"/>
-                <field name="line_name"/>
+                <!-- <field name="line_name"/> -->
             </field>
 
             <field name="product_qty" position="attributes">
                 <attribute name="invisible">1</attribute>
             </field>
+            <field name="origin" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="routing_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
 
             <field name="state" position="after">
                 <field name="ok_tech"/>
-                <field name="no_ok_tech"/>
+                <!-- <field name="no_ok_tech"/> -->
                 <field name="ok_quality"/>
-                <field name="no_ok_quality"/>
+                <!-- <field name="no_ok_quality"/> -->
                 <field name="product_qty"/>
                 <field name="qty_printed"/>
                 <field name="qty_produced"/>
