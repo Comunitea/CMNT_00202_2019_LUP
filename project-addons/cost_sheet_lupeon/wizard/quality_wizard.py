@@ -31,9 +31,11 @@ class QualityWizard(models.TransientModel):
 
         if self.mode == 'ok_tech':
             mrp.ok_tech = True
+            mrp.message_post(body=_('OK Técnico'))
             mrp.no_ok_tech = self.qty
         else:
             mrp.ok_quality = True
+            mrp.message_post(body=_('OK Calidad'))
             mrp.no_ok_quality = self.qty
 
         if self.qty > 0:

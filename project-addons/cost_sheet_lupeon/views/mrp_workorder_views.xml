@@ -24,6 +24,9 @@
                     <field name="state" widget="statusbar" statusbar_visible="pending,ready,progress,done"/>
                 </header>
             </xpath> -->
+            <field name="product_id" position="before">
+                <field name="display_name" string="Descripción"/>
+            </field>
             <xpath expr="//header" position="before">
                 <field name="check_ids" invisible="1"/>
                 <field name="quality_check_fail" invisible="1"/>
