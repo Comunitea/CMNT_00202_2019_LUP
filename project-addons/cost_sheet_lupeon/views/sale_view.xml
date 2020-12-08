@@ -140,9 +140,13 @@
                 <field name="group_sheet_id" readonly="True"/>
             </xpath>
 
-            <field name="payment_term_id" position="after">
+            <field name="company_id" position="after">
                 <field name="project_id"/>
-                <field name="name2"/>
+            </field >
+
+            <field name="payment_term_id" position="after">
+                <field name="cost_sheet_sale" invisible="1"/>
+                <field name="name2" attrs="{'invisible': [('cost_sheet_sale','=',True)]}"/>
             </field>
 
             <!-- <field name="commitment_date" position="after">
@@ -159,7 +163,8 @@
         <field name="arch" type="xml">
             <field name="name" position="after">
                 <field name="company_id" invisible="1"/>
-                <field name="name2" attrs="{'invisible': [('company_id', '!=', 1)]}"/>
+                <field name="cost_sheet_sale" invisible="1"/>
+                <field name="name2" attrs="{'invisible': [('cost_sheet_sale','=',True)]}"/>
             </field>
             
         </field>

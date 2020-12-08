@@ -18,5 +18,6 @@
         'views/invoice_view.xml',
         'views/stock_view.xml',
         'views/payment_mode_view.xml',
-        'views/report_facturae.xml'],
+        'views/report_facturae.xml',
+        'views/account_menus.xml'],
 }

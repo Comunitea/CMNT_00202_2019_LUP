@@ -26,10 +26,12 @@
                     </div>
             </xpath>
             <field name="partner_shipping_id" position="after">
-                <field name="ship_cost"/>
-                <field name="num_line"/>
                 <field name="rejected" states="cancel"/>
                 <field name="rejected_reason" attrs="{'invisible': [('rejected', '=', False)]}"/>
+            </field>
+            <field name="company_id" position="after">
+                <field name="ship_cost"/>
+                <field name="num_line"/>
             </field>
 
             <field name="commitment_date" position="replace">
@@ -42,8 +44,12 @@
 
             <field name="confirmation_date" position="after">
                 <field name="commitment_date" attrs="{'readonly': [('state', 'not in', ('draft', 'design', 'sent'))]}"/>
-                <field name="production_date" attrs="{'invisible': [('company_id', '!=', 1)], 'readonly': [('state', 'not in', ('draft', 'design', 'sent'))]}"/>
+                <field name="production_date" attrs="{'invisible': [('cost_sheet_sale','=',True)], 'readonly': [('state', 'not in', ('draft', 'design', 'sent'))]}"/>
                 <field name="client_order_ref"/>
+            </field>
+
+            <field name="carrier_id" position="attributes">
+               <attribute name="required">1</attribute>
             </field>
 
         </field>
@@ -54,14 +60,16 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
-            <field name="partner_shipping_id" position="after">
-                <field name="delivered"/>
+            <field name="name2" position="after">
                 <field name="delivery_blocked"/>
+            </field>
+            <field name="company_id" position="after">
+                <field name="delivered"/>
             </field>
             <field name="partner_invoice_id" position="attributes">
                 <attribute name="widget">res_partner_many2one</attribute>
                 <attribute name="context">{'default_type':'invoice',
-                     'show_address': 1}</attribute>
+                     'show_address': 1, 'show_email': 1, 'show_phone': 1}</attribute>
             </field>
             <field name="partner_shipping_id" position="attributes">
                 <attribute name="widget">res_partner_many2one</attribute>

@@ -46,6 +46,7 @@
         'views/res_company_view.xml',
         'views/stock_scrap_view.xml',
         'views/stock_view.xml',
+        'views/res_config_settings_views.xml',
     ],
     "installable": True,
     'application': False,

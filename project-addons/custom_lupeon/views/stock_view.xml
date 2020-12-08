@@ -31,7 +31,7 @@
         <field name="arch" type="xml">
             <field name="group_id" position="after">
                 <filter name="ready_to_pick" string="No proforma" domain="['|', ('sale_id', '=', False), ('sale_id.state','in', ['sale', 'done'])]" help="Pickings ready to execute"/>
-                <filter name="reserved" string="Reserved " domain="[('sale_id', '!=', False), ('sale_id.state','in', ['draft', 'sent']), ('picking_type_id.code', '=', 'outgoing')]" help="Pickings with reserve from sales"/>
+                <filter name="reserved" string="Reserved " domain="[('state', '!=', 'cancel'), ('sale_id', '!=', False), ('sale_id.state','in', ['draft', 'sent']), ('picking_type_id.code', '=', 'outgoing')]" help="Pickings with reserve from sales"/>
                 <separator/>
                 <filter name="not_blocked" string="Sin bloqueo" domain="['|', ('sale_id', '=', False), '&amp;', '|', ('sale_id.prestashop_state.pending_payment','!=', True), ('sale_id.prestashop_state', '=', False), ('delivery_blocked','!=', True)]" help="Pickings not blocked from sales"/>
             </field>
@@ -44,7 +44,7 @@
         <field name="inherit_id" ref="stock.vpicktree"/>
         <field name="arch" type="xml">
             <field name="backorder_id" position="after">
-                <field name="sale_id"/>
+                <!--field name="sale_id"/-->
                 <field name="delivery_blocked"/>
             </field>
         </field>
@@ -162,7 +162,7 @@
         <field name="model">stock.picking</field>
         <field name="priority" eval="20"/>
         <field name="arch" type="xml">
-            <tree editable="top" create="false" edit="false" delete="false">
+            <tree create="false" edit="false" delete="false">
                 <field name="name" readonly="1"/>
                 <field name="partner_id" readonly="1"/>
                 <field name="date" invisible="1"/>
@@ -175,6 +175,7 @@
                 <field name="delivered"/> 
                 <field string="Incidents" name="incident_reports_count" widget="statinfo" readonly="1"/>
                 <button name="action_incident_reports_view" type="object"  icon="fa-file-text" attrs="{'invisible': [('incident_reports_count', '=', 0)]}"/>
+                <button name="create_incident_report" type="object"  icon="fa-file-text" string="Create Inncident"/>
                 <field name="priority" invisible="1"/>
                 <field name="picking_type_id" invisible="1"/>
             </tree>
@@ -186,7 +187,7 @@
             <field name="res_model">stock.picking</field>
             <field name="type">ir.actions.act_window</field>
             <field name="view_type">form</field>
-            <field name="view_mode">tree,kanban,form,calendar</field>
+            <field name="view_mode">tree,form,kanban,calendar</field>
             <field name="domain">[('picking_type_id.code', '=', 'outgoing')]</field>
             <field name="context">{
                 'search_default_done': True,
@@ -220,10 +221,10 @@
             </div>
 
             <field name="partner_id" position="replace">
-                <field name="partner_id" context="{'show_address': 1}" options="{'always_reload': True}" />
-                <field name="partner_phone"/>
+                <field name="partner_id" context="{'show_address': 1, 'show_email': 1, 'show_phone': 1}" options="{'always_reload': True}" />
+                <!--field name="partner_phone"/>
                 <field name="partner_mobile"/>
-                <field name="partner_email"/>
+                <field name="partner_email"/-->
             </field>
         </field>
     </record>

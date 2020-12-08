@@ -47,6 +47,18 @@
     </record>
 
  
+    <record id="product_main_seller_search" model="ir.ui.view">
+        <field name="name">product.main.seller.search</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_search_form_view"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="main_supplier_id"/>
+            </field>
+            
+        </field>
+    </record>
+
     <record id="action_product_purchase_custom_all" model="ir.actions.act_window">
         <field name="name">Product Purchase Info</field>
         <field name="res_model">product.product</field>

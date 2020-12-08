@@ -14,8 +14,10 @@ class SaleOrder(models.Model):
         """
         for order in self:
             # Solo lupeon (al menos inicialmente para controlar lso pedidos de PS)
-            if (order.company_id.id == 1 and not order.partner_id.commercial_partner_id.validated):
-                raise UserError(_('Es necesario validar el cliente antes de aprobar el pedido.'))
+            if (order.company_id.id == 1 and 
+                (not order.partner_id.commercial_partner_id.validated or 
+                 not order.partner_invoice_id.validated)):
+                raise UserError(_('Es necesario validar el cliente y la direccion de factura  antes de aprobar el pedido.'))
 
         res = super().action_confirm()
         return res    

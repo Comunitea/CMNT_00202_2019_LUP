@@ -59,7 +59,11 @@
                 <field name="date"/>
                 <field name="incident_type"/>
                 <field name="user_id"/>
-                <field name="model_id"/>
+                <field name="model_id" invisible="1"/>
+                <field name="carrier_id"/>
+                <field name="carrier_tracking_ref"/>
+                <field name="origin"/>
+                <field name="state"/>
             </tree>
         </field>
     </record>
@@ -76,16 +80,23 @@
                         name="open_origin_document"
                         string="Origin document"
                         type="object" class="oe_start_button" icon="fa-file-text"/>
+                    <field name="state" widget="statusbar" clickable="True"/>
                 </header>
                 <sheet>
                     <group>
                         <field name="name"/>
                         <field name="date"/>
                         <field name="incident_type"/>
+                        <field name="claimed_amount"/>
                         <field name="user_id"/>
                     </group>
                     <group colspan="4">
                         <field name="description"/>
+                    </group>
+                    <group>
+                        <field name="carrier_id"/>
+                        <field name="carrier_tracking_ref"/>
+                        <field name="origin"/>
                     </group>
                     <group>
                         <field name="create_uid" readonly="1"/>
@@ -94,6 +105,11 @@
                         <field name="res_id" readonly="1"/>
                     </group>
                 </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
             </form>
         </field>
     </record>
@@ -109,12 +125,14 @@
                 <field name="date"/>
                 <field name="res_id"/>
                 <field name="model_id"/>
+                <field name="state"/>
                 <separator/>
                 <group expand="0" name="group_by" string="Group By">
                     <filter name="group_model_id" string="Model" context="{'group_by': 'model_id'}"/>
                     <filter name="group_create_uid" string="User" context="{'group_by': 'create_uid'}"/>
                     <filter name="group_incident_type" string="Type" context="{'group_by': 'incident_type'}"/>
                     <filter name="group_user_id" string="Responsible" context="{'group_by': 'user_id'}"/>
+                    <filter name="group_state" string="State" context="{'group_by': 'state'}"/>
                 </group>
             </search>
         </field>
@@ -130,19 +148,19 @@
     </record>
 
     <!-- Menus -->
-    <menuitem id="menu_incident_manager_root" name="Incident Manager"
+    <!--menuitem id="menu_incident_manager_root" name="Incident Manager"
         sequence="30"
-        web_icon="incident_manager,static/description/icon.png"/>
+        web_icon="incident_manager,static/description/icon.png"/-->
 
     <menuitem id="master_incident_report_menu" 
         name="Reports" 
-        parent="incident_manager.menu_incident_manager_root"
+        parent="stock.menu_stock_warehouse_mgmt"
         action="action_incident_report_form" 
         sequence="10"/>
     
     <menuitem id="master_incident_report_type_menu" 
         name="Report Types" 
-        parent="incident_manager.menu_incident_manager_root"
+        parent="stock.menu_stock_config_settings"
         action="action_incident_report_type_form" 
         sequence="20"/>
 

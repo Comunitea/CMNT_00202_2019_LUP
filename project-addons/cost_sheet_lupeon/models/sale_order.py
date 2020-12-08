@@ -38,6 +38,7 @@ class SaleOrder(models.Model):
     purchase_ids = fields.One2many(
         'purchase.order', 'dest_sale_id', 'Purchases')
     name2 = fields.Char('Descripción pedido')
+    cost_sheet_sale = fields.Boolean(related='company_id.cost_sheet_sale')
 
     @api.multi
     def action_design(self):

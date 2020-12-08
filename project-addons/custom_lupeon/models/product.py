@@ -24,8 +24,9 @@ class ProductProduct(models.Model):
         # Añado pues la busqueda
         if name and operator in ["=", "ilike", "=ilike", "like", "=like"]:
             my_domain = args + [
-                '|',
+                '|', '|',
                 ("seller_ids.product_name", operator, name),
+                ("seller_ids.product_code", operator, name),
                 ("barcode", operator, name),
             ]
         if my_domain:

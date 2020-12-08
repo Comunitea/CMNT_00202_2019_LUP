@@ -11,7 +11,15 @@ class ProductPurchaseLineWizard(models.TransientModel):
     product_id = fields.Many2one('product.product')
     product_qty = fields.Float("Quantity", default=0.00)
     product_purchase_wzd_id = fields.Many2one('product.purchase.wizard')
-
+    twelve_months_ago = fields.Float('12', readonly=True)
+    six_months_ago = fields.Float('6', readonly=True) 
+    last_month_ago = fields.Float('1', readonly=True) 
+    virtual_available = fields.Float('Previsto', readonly=True)
+    qty_available = fields.Float('A mano', readonly=True)
+    reordering_min_qty = fields.Float('Max', readonly=True)
+    reordering_max_qty = fields.Float('Min', readonly=True)
+    
+    
 class ProductPurchaseWizard(models.TransientModel):
 
     _name = "product.purchase.wizard"
@@ -58,6 +66,7 @@ class ProductPurchaseWizard(models.TransientModel):
    
         res = super(ProductPurchaseWizard, self).default_get(fields)
         products = self.env['product.product'].browse(product_ids)
+        
         lines =  []
         if not product_ids:
             return res
@@ -67,7 +76,14 @@ class ProductPurchaseWizard(models.TransientModel):
                 0,
                 {
                     'product_id': product.id,
-                    'product_qty': product.purchase_qty
+                    'product_qty': product.purchase_qty,
+                    'twelve_months_ago': product.twelve_months_ago,
+                    'six_months_ago': product.six_months_ago,
+                    'last_month_ago': product.last_month_ago,
+                    'virtual_available': product.virtual_available,
+                    'qty_available': product.qty_available,
+                    'reordering_min_qty': product.reordering_min_qty,
+                    'reordering_max_qty': product.reordering_max_qty
                 },
             )
             for product in products

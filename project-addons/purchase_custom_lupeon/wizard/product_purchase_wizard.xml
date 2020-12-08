@@ -21,6 +21,13 @@
                         <field name="line_ids" nolabel="1">
                             <tree string="Order lines" editable="top" delete="1" create="1">
                                 <field name="product_id"/>
+                                <field name="twelve_months_ago"/>
+                                <field name="six_months_ago"/>
+                                <field name="last_month_ago"/>
+                                <field name="virtual_available"/>
+                                <field name="qty_available"/>
+                                <field name="reordering_min_qty"/>
+                                <field name="reordering_max_qty"/>
                                 <field name="product_qty"/>
                             </tree>
                         </field>
