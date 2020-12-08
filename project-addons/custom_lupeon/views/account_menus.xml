@@ -13,6 +13,4 @@
         <field name="parent_id" ref="account_accountant.menu_accounting"/>
     </record>
 
-    account_admin_tools_importer.menu_action_account_admin_tools
-
 </odoo>
