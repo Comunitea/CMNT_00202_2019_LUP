@@ -94,8 +94,11 @@ class MrpProduction(models.Model):
     def _get_produced_qty(self):
         res = super()._get_produced_qty()
         for production in self:
-            production.qty_produced = production.qty_produced - \
-                production.no_ok_tech - production.no_ok_quality
+            # Solo en compañía lupeon, davitic deberia tener este check a True
+            # y lupeon a false
+            if not production.company_id.cost_sheet_sale:
+                production.qty_produced = production.qty_produced - \
+                    production.no_ok_tech - production.no_ok_quality
         return res
 
     def block_stock(self):
@@ -108,5 +111,8 @@ class MrpProduction(models.Model):
     @api.multi
     def button_mark_done(self):
         res = super().button_mark_done()
-        self.block_stock()
+        # Solo en compañía lupeon, davitic deberia tener este check a True
+        # y lupeon a false
+        if not self.company_id.cost_sheet_sale:
+            self.block_stock()
         return res

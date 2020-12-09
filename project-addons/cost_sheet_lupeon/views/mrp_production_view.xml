@@ -8,8 +8,8 @@
         <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
         <field name="arch" type="xml">
             <header position="inside">
-               <button name="%(action_quality_wizard)d" type="action" context="{'mode': 'ok_tech'}" string="OK TECH" class="btn-success" attrs="{'invisible': ['|', ('state', '!=', 'done'), ('ok_tech', '=', True)]}" groups="cost_sheet_lupeon.group_ok_tech"/>
-               <button name="%(action_quality_wizard)d" type="action" context="{'mode': 'ok_quality'}" string="OK QUALITY" class="btn-success" attrs="{'invisible': ['|', '|', ('state', '!=', 'done'), ('ok_tech', '=', False), ('ok_quality', '=', True)]}" groups="cost_sheet_lupeon.group_ok_quality"/>
+               <button name="%(action_quality_wizard)d" type="action" context="{'mode': 'ok_tech'}" string="OK TECH" class="btn-success" attrs="{'invisible': ['|', '|', ('company_id', '!=', 1), ('state', '!=', 'done'), ('ok_tech', '=', True)]}" groups="cost_sheet_lupeon.group_ok_tech"/>
+               <button name="%(action_quality_wizard)d" type="action" context="{'mode': 'ok_quality'}" string="OK QUALITY" class="btn-success" attrs="{'invisible': ['|', '|', '|', ('company_id', '!=', 1), ('state', '!=', 'done'), ('ok_tech', '=', False), ('ok_quality', '=', True)]}" groups="cost_sheet_lupeon.group_ok_quality"/>
                <!-- <button name="block_stock" string="block" type="object"/> -->
             </header>
 
@@ -28,28 +28,28 @@
             </xpath>
 
             <field name="product_id" position="after">
-                <field name="sheet_id" context="{'form_view_ref': 'cost_sheet_lupeon.simple_cost_sheet_view_form'}" />
-                <field name="sheet_type"/>
-                <field name="sale_id"/>
-                <field name="sale_line_id"/>
-                <field name="line_ref"/>
-                <field name="line_name"/>
-                <field name="imprevist"/>
+                <field name="sheet_id" context="{'form_view_ref': 'cost_sheet_lupeon.simple_cost_sheet_view_form'}"   attrs="{'invisible': [('company_id', '!=', 1)]}"/>
+                <field name="sheet_type"  attrs="{'invisible': [('company_id', '!=', 1)]}"/>
+                <field name="sale_id"  attrs="{'invisible': [('company_id', '!=', 1)]}"/>
+                <field name="sale_line_id"  attrs="{'invisible': [('company_id', '!=', 1)]}"/>
+                <field name="line_ref"  attrs="{'invisible': [('company_id', '!=', 1)]}"/>
+                <field name="line_name"  attrs="{'invisible': [('company_id', '!=', 1)]}"/>
+                <field name="imprevist"  attrs="{'invisible': [('company_id', '!=', 1)]}"/>
             </field>
 
              <field name="company_id" position="after">
-                <field name="ok_tech"/>
-                <field name="no_ok_tech"/>
-                <field name="ok_quality"/>
-                <field name="no_ok_quality"/>
-                <field name="origin_production_id"/>
-                <field name="qty_produced"/>
-                <field name="group_mrp_id"/>
+                <field name="ok_tech" attrs="{'invisible': [('company_id', '!=', 1)]}"/>
+                <field name="no_ok_tech" attrs="{'invisible': [('company_id', '!=', 1)]}"/>
+                <field name="ok_quality" attrs="{'invisible': [('company_id', '!=', 1)]}"/>
+                <field name="no_ok_quality" attrs="{'invisible': [('company_id', '!=', 1)]}"/>
+                <field name="origin_production_id"  attrs="{'invisible': [('company_id', '!=', 1)]}"/>
+                <field name="qty_produced" attrs="{'invisible': [('company_id', '!=', 1)]}"/>
+                <field name="group_mrp_id" attrs="{'invisible': [('company_id', '!=', 1)]}"/>
             </field>
 
             <notebook position="inside">
                 <page string="Repeated Producions">
-                    <group string="Repeated productions">
+                    <group string="Repeated productions"  attrs="{'invisible': [('company_id', '!=', 1)]}">
                         <field name="repeated_production_ids" nolabel="1">
                             <tree>
                                 <field name="name"/>
@@ -70,11 +70,12 @@
         <field name="inherit_id" ref="mrp.mrp_production_tree_view"/>
         <field name="arch" type="xml">
             <field name="product_id" position="after">
-                <field name="sheet_id"/>
-                <field name="sheet_type"/>
-                <field name="sale_id"/>
+                <field name="company_id" invisible="1"/>
+                <field name="sheet_id" attrs="{'column_invisible': [('company_id', '!=', 1)]}"/>
+                <field name="sheet_type" attrs="{'column_invisible': [('company_id', '!=', 1)]}"/>
+                <field name="sale_id" attrs="{'column_invisible': [('company_id', '!=', 1)]}"/>
                 <!-- <field name="sale_line_id"/> -->
-                <field name="line_ref"/>
+                <field name="line_ref" attrs="{'column_invisible': [('company_id', '!=', 1)]}"/>
                 <!-- <field name="line_name"/> -->
             </field>
 
@@ -89,13 +90,13 @@
             </field>
 
             <field name="state" position="after">
-                <field name="ok_tech"/>
+                <field name="ok_tech" attrs="{'column_invisible': [('company_id', '!=', 1)]}"/>
                 <!-- <field name="no_ok_tech"/> -->
-                <field name="ok_quality"/>
+                <field name="ok_quality" attrs="{'column_invisible': [('company_id', '!=', 1)]}" />
                 <!-- <field name="no_ok_quality"/> -->
-                <field name="product_qty"/>
-                <field name="qty_printed"/>
-                <field name="qty_produced"/>
+                <field name="product_qty" attrs="{'column_invisible': [('company_id', '!=', 1)]}"/>
+                <field name="qty_printed" attrs="{'column_invisible': [('company_id', '!=', 1)]}"/>
+                <field name="qty_produced" attrs="{'column_invisible': [('company_id', '!=', 1)]}"/>
             </field>
             
         </field>
