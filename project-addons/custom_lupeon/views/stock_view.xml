@@ -162,7 +162,7 @@
         <field name="model">stock.picking</field>
         <field name="priority" eval="20"/>
         <field name="arch" type="xml">
-            <tree create="false" edit="false" delete="false">
+            <tree editable="top" create="false" edit="false" delete="false">
                 <field name="name" readonly="1"/>
                 <field name="partner_id" readonly="1"/>
                 <field name="date" invisible="1"/>
@@ -174,10 +174,11 @@
                 <field name="state" readonly="1"/>
                 <field name="delivered"/> 
                 <field string="Incidents" name="incident_reports_count" widget="statinfo" readonly="1"/>
-                <button name="action_incident_reports_view" type="object"  icon="fa-file-text" attrs="{'invisible': [('incident_reports_count', '=', 0)]}"/>
-                <button name="create_incident_report" type="object"  icon="fa-file-text" string="Create Inncident"/>
+                <button name="action_incident_reports_view" type="object"  icon="fa-bug" attrs="{'invisible': [('incident_reports_count', '=', 0)]}"/>
+                <button name="create_incident_report" type="object"  icon="fa-file-text" string="Create Incident"/>
                 <field name="priority" invisible="1"/>
                 <field name="picking_type_id" invisible="1"/>
+                <button name="action_open_form" type="object"  icon="fa-table" string="View Picking"/>
             </tree>
         </field>
     </record>

@@ -8,7 +8,15 @@ class DeliverCarrier(models.Model):
     _inherit = 'delivery.carrier'
 
     delivery_type = fields.Selection(selection_add=[('gls', 'GLS'),('correos_express', 'Correos Express'), ('dhl', 'DHL')])
+    ps_sync = fields.Boolean('Sincro PS', compute="_compute_ps", store=True)
     
+    @api.depends('prestashop_bind_ids')
+    def _compute_ps(self):
+        for dc in self:
+            if len(dc.prestashop_bind_ids) > 0:
+                dc.ps_sync = True
+            else:
+                dc.ps_sync = False
     
     
     def gls_get_tracking_link(self, picking):

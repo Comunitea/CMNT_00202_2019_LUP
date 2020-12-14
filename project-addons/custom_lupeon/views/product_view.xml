@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record id="product_product_variant_lst_price_view" model="ir.ui.view">
+        <field name="name">product.product.vaiant_lst_price.tree</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_variant_easy_edit_view" />
+        <field name="arch" type="xml">
+            <field name="lst_price" position="after">
+                <field name="impact_price"/>
+            </field>
+        </field>
+    </record>
+
+    
+</odoo>
