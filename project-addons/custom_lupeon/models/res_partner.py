@@ -27,8 +27,17 @@ class ResPartner(models.Model):
         """ Utility method to allow name_get to be overrided without re-browse the partner """
         partner = self
         name = super()._get_name()
-
+        print(name)
         if self._context.get('show_phone') :
             if partner.mobile or partner.phone:
                 name = "%s \n %s  %s" % (name, partner.mobile or "", partner.phone or "")
+        for cat in self.category_id:
+            print(cat.name)
+            if cat.name == 'Web F2P':
+                name_arr = name.split('\n', 1)
+                if len(name_arr) > 1:
+                    name = "%s *\n%s" % (name_arr[0], name_arr[1])
+                else:
+                    name = "%s *" % (name)
+        print(name)
         return name

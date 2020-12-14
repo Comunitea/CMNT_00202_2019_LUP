@@ -159,3 +159,17 @@ class StockPicking(models.Model):
             return res
         raise UserError(_('No pickings in assigned state to open'))
         return
+    
+    @api.multi
+    def action_open_form(self):
+        
+        action = self.env.ref('stock.action_picking_tree_all').read()[0]
+
+        
+        form_view = [(self.env.ref('stock.view_picking_form').id, 'form')]
+        if 'views' in action:
+            action['views'] = form_view + [(state,view) for state,view in action['views'] if view != 'form']
+        else:
+            action['views'] = form_view
+        action['res_id'] = self.id
+        return action
