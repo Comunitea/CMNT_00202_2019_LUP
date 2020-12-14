@@ -870,6 +870,7 @@ class CostSheet(models.Model):
             }
             prod = self.env['mrp.production'].create(vals)
             prod.onchange_product_id()
+            prod.action_assign()
             prod.button_plan()
             sheet.update_workorders(prod)
         return

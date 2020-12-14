@@ -5,7 +5,7 @@ from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 from odoo.tools.misc import split_every
 
 from odoo import models, fields, api, _
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError, UserError
 
 
 class StockScrap(models.Model):
@@ -76,42 +76,61 @@ class StockPicking(models.Model):
     partner_phone = fields.Char('Phone', related='partner_id.phone')
     partner_mobile = fields.Char('Mobile', related='partner_id.mobile')
     partner_email = fields.Char('Email', related='partner_id.email')
-    
-    
+
+
     @api.multi
     def do_print_picking(self):
         self.write({'printed': True})
         return self.env.ref('stock.action_report_delivery').report_action(self)
-    
+
     @api.depends('sale_id.prestashop_state')
     def _compute_delivered(self):
         for picking in self:
             if picking.delivered != True and picking.sale_id.prestashop_state.trigger_delivered == True:
                 picking.delivered = True
-            
+
     @api.multi
     def action_done(self):
         res = super().action_done()
         # Search all confirmed stock_moves and try to assign them
-        domain = self.env['procurement.group']._get_moves_to_assign_domain(self.company_id.id)
-        #domain.append(('company_id', '=', self.company_id.id))
+        domain = self.env['procurement.group']._get_moves_to_assign_domain(
+            self.company_id.id)
+
+        domain.append(('raw_material_production_id', '!=', False))
         moves_to_assign = self.env['stock.move'].search(domain, limit=None,
             order='priority desc, date_expected asc')
         for moves_chunk in split_every(100, moves_to_assign.ids):
             self.env['stock.move'].browse(moves_chunk)._action_assign()
-            
+
+        # COMPUTE LAUNCH ACTION ASSIGN FOR PRODUCTION MOVES ONLY LUPEON COMPANY:
+        # No es necesario porque ya se hace globalmente, pero esto sería el código
+        # para hacer la busqueda de movimientos de producciones, producto a producto
+        # if self.company_id and not self.company_id.cost_sheet_sale:
+        #     for product in self.move_line_ids.mapped('product_id'):
+        #         domain = [
+        #             ('product_id', '=', product.id),
+        #             ('company_id', '=', self.company_id.id),
+        #             ('state', 'in', ['confirmed', 'partially_available']),
+        #             ('product_uom_qty', '!=', 0.0),
+        #             ('raw_material_production_id', '!=', False)
+        #         ]
+        #         moves_to_assign = self.env['stock.move'].search(domain, limit=None,
+        #             order='priority desc, date_expected asc')
+        #         for moves_chunk in split_every(100, moves_to_assign.ids):
+        #             self.env['stock.move'].browse(moves_chunk)._action_assign()
+
         # Merge duplicated quants
         self.env['stock.quant']._merge_quants()
         self.env['stock.quant']._unlink_zero_quants()
         return res
-    
+
     def button_validate(self):
         if self.delivery_blocked:
             raise ValidationError(_(
                     'The picking is blocked form Sale Order %s') % self.sale_id.name)
         res = super().button_validate()
         return res
-    
+
     @api.multi
     def action_barcode_delivery(self):
         '''
@@ -119,7 +138,7 @@ class StockPicking(models.Model):
         of given sales order ids. It can either be a in a list or in a form
         view, if there is only one delivery order to show.
         '''
-        
+
         if len(self) == 1:
             return self.open_picking_client_action()
         else:
