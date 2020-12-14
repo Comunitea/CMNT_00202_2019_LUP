@@ -286,7 +286,7 @@
 
                         <page string="FDM" attrs="{'invisible': [('sheet_type', '!=', 'fdm')]}">
                
-                            <group cospan="4" col="8" string="Datos pieza">
+                            <group cospan="4" col="6" string="Datos pieza">
                                 <field name="cus_units"/>
                                 <field name="cc_ud"/>
                                 <field name="euros_cc"/>
@@ -296,7 +296,7 @@
                                 <field name="feature_ids" nolabel="1" widget="many2many_checkboxes"/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
-                            <group cospan="2" col="8" string="Parámetros impresión">
+                            <group cospan="2" col="6" string="Parámetros impresión">
                                 <field name="printer_id" domain="[('type', '=', sheet_type)]"/>
                                 <field name="perfil"/>
                                 <field name="tray_units"/>
@@ -378,7 +378,7 @@
 
                         <!-- SLS P396 (ANTIGUO SLS)-->
                         <page string="SLS P396" attrs="{'invisible': [('sheet_type', '!=', 'sls')]}">
-                            <group colspan="2" col="8" string="Datos pieza">
+                            <group colspan="2" col="6" string="Datos pieza">
                                 <field name="cus_units"/>
                                 <field name="x_mm_sls"/>
                                 <field name="y_mm_sls"/>
@@ -389,7 +389,7 @@
                                 <field name="e_cc_sls"/>
                             </group>
                              <div style="border-bottom: 1px solid black;"></div>
-                            <group colspan="2" col="8" string="Parámetros impresión">
+                            <group colspan="2" col="6" string="Parámetros impresión">
                                 <field name="printer_id"/>
                                 <field name="tray_units"/>
                                 <field name="print_increment" attrs="{'invisible': [('sheet_type', 'in', ['poly'])], 'readonly': [('can_edit', '!=', True)]}"/>
@@ -397,7 +397,7 @@
                                 <field name="euro_machine"  groups="cost_sheet_lupeon.group_cs_advanced"/>
                             </group>
                              <div style="border-bottom: 1px solid black;"></div>
-                             <group colspan="2" col="8" string="Configuración oferta">
+                             <group colspan="2" col="6" string="Configuración oferta">
                                 <field name="offer_type"/>
                                 <field name="solid_per_sls"/>
                                 <field name="bucket_height_sls"/>
@@ -474,13 +474,13 @@
 
                         <!-- POLY -->
                          <page string="POLY" attrs="{'invisible': [('sheet_type', '!=', 'poly')]}">
-                            <group colspan="2" col="8" string="Datos pieza">
+                            <group colspan="2" col="6" string="Datos pieza">
                                 <field name="cus_units"/>
                                 <field name="cc_ud"/>
                                 <field name="euros_cc"/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
-                            <group colspan="2" col="8" string="Parámetros impresión">
+                            <group colspan="2" col="6" string="Parámetros impresión">
                                 <field name="printer_id"/>
                                 <field name="tray_units"/>
                                 <field name="finish_pol"/>
@@ -557,13 +557,13 @@
 
                          <!-- SLA -->
                          <page string="SLA" attrs="{'invisible': [('sheet_type', '!=', 'sla')]}">
-                            <group colspan="2" col="8" string="Datos pieza">
+                            <group colspan="2" col="6" string="Datos pieza">
                                 <field name="cus_units"/>
                                 <field name="cc_ud"/>
                                 <field name="euros_cc"/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
-                            <group colspan="2" col="8" string="Parámetros impresión">
+                            <group colspan="2" col="6" string="Parámetros impresión">
                                 <field name="printer_id"/>
                                 <field name="tray_units"/>
                                 <field name="tray_hours"/>
@@ -639,13 +639,13 @@
 
                         <!-- SLS (igual a SLA, y el anterior SLS pasa a ser SLS P396) -->
                          <page string="SLS" attrs="{'invisible': [('sheet_type', '!=', 'sls2')]}">
-                            <group colspan="2" col="8" string="Datos pieza">
+                            <group colspan="2" col="6" string="Datos pieza">
                                 <field name="cus_units"/>
                                 <field name="cc_ud"/>
                                 <field name="euros_cc"/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
-                            <group colspan="2" col="8" string="Parámetros impresión">
+                            <group colspan="2" col="6" string="Parámetros impresión">
                                 <field name="printer_id"/>
                                 <field name="tray_units"/>
                                 <field name="tray_hours"/>
@@ -721,14 +721,14 @@
 
                          <!-- DMLS -->
                         <page string="DMLS" attrs="{'invisible': [('sheet_type', '!=', 'dmls')]}">
-                            <group colspan="2" col="8" string="Datos pieza">
+                            <group colspan="2" col="6" string="Datos pieza">
                                 <field name="cus_units"/>
                                 <field name="cc_ud"/>
                                 <field name="cc_soport_dmls"/>
                                 <field name="euros_cc"/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
-                            <group colspan="2" col="8" string="Parámetros impresión">
+                            <group colspan="2" col="6" string="Parámetros impresión">
                                 <field name="printer_id"/>
                                 <field name="tray_units"/>
                                 <field name="tray_hours"/>
@@ -908,7 +908,7 @@
 
                         <page string="FDM" attrs="{'invisible': [('sheet_type', '!=', 'fdm')]}">
                
-                            <group cospan="4" col="8" string="Datos pieza">
+                            <group cospan="4" col="6" string="Datos pieza">
                                 <field name="cus_units"/>
                                 <field name="cc_ud"/>
                             </group>
@@ -917,7 +917,7 @@
                                 <field name="feature_ids" nolabel="1" widget="many2many_checkboxes"/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
-                            <group cospan="2" col="8" string="Parámetros impresión">
+                            <group cospan="2" col="6" string="Parámetros impresión">
                                 <field name="printer_id"/>
                                 <field name="perfil"/>
                                 <field name="tray_units"/>
@@ -940,7 +940,7 @@
 
                         <!-- SLS P396 (ANTIGUO SLS)-->
                         <page string="SLS P396" attrs="{'invisible': [('sheet_type', '!=', 'sls')]}">
-                            <group colspan="2" col="8" string="Datos pieza">
+                            <group colspan="2" col="6" string="Datos pieza">
                                 <field name="cus_units"/>
                                 <field name="x_mm_sls"/>
                                 <field name="y_mm_sls"/>
@@ -950,7 +950,7 @@
                                 <field name="cm2_sls"/>
                             </group>
                              <div style="border-bottom: 1px solid black;"></div>
-                            <group colspan="2" col="8" string="Parámetros impresión">
+                            <group colspan="2" col="6" string="Parámetros impresión">
                                 <field name="printer_id"/>
                                 <field name="tray_units"/>
                                 <field name="print_increment" attrs="{'invisible': [('sheet_type', 'in', ['poly'])], 'readonly': [('can_edit', '!=', True)]}"/>
@@ -970,12 +970,12 @@
 
                         <!-- POLY -->
                          <page string="POLY" attrs="{'invisible': [('sheet_type', '!=', 'poly')]}">
-                            <group colspan="2" col="8" string="Datos pieza">
+                            <group colspan="2" col="6" string="Datos pieza">
                                 <field name="cus_units"/>
                                 <field name="cc_ud"/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
-                            <group colspan="2" col="8" string="Parámetros impresión">
+                            <group colspan="2" col="6" string="Parámetros impresión">
                                 <field name="printer_id"/>
                                 <field name="tray_units"/>
                                 <field name="finish_pol"/>
@@ -992,12 +992,12 @@
 
                          <!-- SLA -->
                          <page string="SLA" attrs="{'invisible': [('sheet_type', '!=', 'sla')]}">
-                            <group colspan="2" col="8" string="Datos pieza">
+                            <group colspan="2" col="6" string="Datos pieza">
                                 <field name="cus_units"/>
                                 <field name="cc_ud"/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
-                            <group colspan="2" col="8" string="Parámetros impresión">
+                            <group colspan="2" col="6" string="Parámetros impresión">
                                 <field name="printer_id"/>
                                 <field name="tray_units"/>
                                 <field name="tray_hours"/>
@@ -1013,13 +1013,13 @@
 
                         <!-- SLS (igual a SLA, y el anterior SLS pasa a ser SLS P396) -->
                          <page string="SLS" attrs="{'invisible': [('sheet_type', '!=', 'sls2')]}">
-                            <group colspan="2" col="8" string="Datos pieza">
+                            <group colspan="2" col="6" string="Datos pieza">
                                 <field name="cus_units"/>
                                 <field name="cc_ud"/>
                                 <field name="euros_cc"/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
-                            <group colspan="2" col="8" string="Parámetros impresión">
+                            <group colspan="2" col="6" string="Parámetros impresión">
                                 <field name="printer_id"/>
                                 <field name="tray_units"/>
                                 <field name="tray_hours"/>
@@ -1036,14 +1036,14 @@
 
                          <!-- DMLS -->
                         <page string="DMLS" attrs="{'invisible': [('sheet_type', '!=', 'dmls')]}">
-                            <group colspan="2" col="8" string="Datos pieza">
+                            <group colspan="2" col="6" string="Datos pieza">
                                 <field name="cus_units"/>
                                 <field name="cc_ud"/>
                                 <field name="cc_soport_dmls"/>
                                 <field name="euros_cc"/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
-                            <group colspan="2" col="8" string="Parámetros impresión">
+                            <group colspan="2" col="6" string="Parámetros impresión">
                                 <field name="printer_id"/>
                                 <field name="tray_units"/>
                                 <field name="tray_hours"/>
