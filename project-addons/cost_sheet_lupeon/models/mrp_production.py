@@ -46,7 +46,7 @@ class MrpProduction(models.Model):
 
     group_mrp_id = fields.Many2one('group.production', 'Group', readonly=True)
 
-    qty_printed = fields.Float('CAntidad impresa', compute='get_printed_qty')
+    qty_printed = fields.Float('Cantidad impresa', compute='get_printed_qty')
 
     def get_printed_qty(self):
         for prod in self:

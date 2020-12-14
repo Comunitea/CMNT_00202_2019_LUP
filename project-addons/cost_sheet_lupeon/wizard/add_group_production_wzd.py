@@ -1,0 +1,70 @@
+
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError
+
+
+SHEET_TYPES = [
+    ('design', 'Design'),
+    ('fdm', 'FDM'),
+    ('sls', 'SLS P396'),  # Renombrado
+    ('poly', 'Poly'),
+    ('sla', 'SLA'),
+    ('sls2', 'SLS'),  # Copia de sla, nuevo SLS
+    ('dmls', 'DMLS'),
+    ('unplanned', 'Imprevistos'),
+    ('meets', 'Reuniones'),
+    ('purchase', 'Compras'),
+]
+
+
+class AddGroupProductionWzd(models.TransientModel):
+    _name = "add.group.production.wzd"
+
+    @api.model
+    def default_get(self, default_fields):
+        """ Compute default partner_bank_id field for 'out_invoice' type,
+        using the default values computed for the other fields.
+        """
+        res = super().default_get(default_fields)
+        group = self.env['group.production'].browse(
+            self._context.get('active_ids', []))
+        if not group.register_ids:
+            return res
+        sheet_type_ref = group.register_ids[0].production_id.sheet_type
+        res['sheet_type_ref'] = sheet_type_ref
+        return res
+
+    sheet_type_ref = fields.Selection(SHEET_TYPES, 'Tipo de hoja')
+    production_ids = fields.Many2many('mrp.production')
+
+    def confirm(self):
+        group = self.env['group.production'].browse(
+            self._context.get('active_ids', []))
+
+        production_ids = self.production_ids
+        # sheet_type_ref = group.register_ids[0].production_id.sheet_type
+        sheet_type_ref = self.sheet_type_ref
+
+        for mrp in production_ids:
+            if mrp.sheet_type != sheet_type_ref:
+                raise UserError(
+                    _('No puedes agrupar distintos tipos de hojas'))
+
+        for prod in self.production_ids:
+            wo = prod.workorder_ids.filtered(lambda x: x.active_move_line_ids)
+            vals = {
+                'group_mrp_id': group.id,
+                'workorder_id': wo.id,
+                'qty_done': wo.qty_production,
+            }
+            self.env['group.register.line'].create(vals)
+
+        view = self.env.ref(
+            'cost_sheet_lupeon.group_production_view_form'
+        )
+        action = self.env.ref(
+            'cost_sheet_lupeon.action_group_productions').read()[0]
+        action['views'] = [(view.id, 'form')]
+        action['res_id'] = group.id
+        return action
+        
