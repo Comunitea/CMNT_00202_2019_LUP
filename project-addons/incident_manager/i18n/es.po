@@ -6,14 +6,39 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-18 18:47+0000\n"
-"PO-Revision-Date: 2020-11-18 18:47+0000\n"
+"POT-Creation-Date: 2020-12-14 15:54+0000\n"
+"PO-Revision-Date: 2020-12-14 15:54+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: incident_manager
+#: selection:incident.report,state:0
+msgid "Abierta"
+msgstr ""
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__access_warning
+msgid "Access warning"
+msgstr "Alerta de acceso"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__message_needaction
+msgid "Action Needed"
+msgstr "Acción Necesaria"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__activity_ids
+msgid "Activities"
+msgstr "Actividades"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__activity_state
+msgid "Activity State"
+msgstr "Estado de la actividad"
 
 #. module: incident_manager
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report__assigned_attachment_ids
@@ -23,9 +48,29 @@ msgid "Assigned Attachments"
 msgstr "Adjuntos asignados"
 
 #. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__message_attachment_count
+msgid "Attachment Count"
+msgstr "Conteo de archivos adjuntos"
+
+#. module: incident_manager
 #: model_terms:ir.ui.view,arch_db:incident_manager.incident_report_wzd_view
 msgid "Cancel"
 msgstr "Cancelar"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__carrier_id
+msgid "Carrier"
+msgstr "Transportista"
+
+#. module: incident_manager
+#: selection:incident.report,state:0
+msgid "Cerrada"
+msgstr ""
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__claimed_amount
+msgid "Claimed Amount)"
+msgstr "Importe reclamado"
 
 #. module: incident_manager
 #: model_terms:ir.ui.view,arch_db:incident_manager.purchase_order_form
@@ -54,6 +99,11 @@ msgid "Created on"
 msgstr "Creado el"
 
 #. module: incident_manager
+#: model:ir.model.fields,help:incident_manager.field_incident_report__access_url
+msgid "Customer Portal URL"
+msgstr "URL para portal"
+
+#. module: incident_manager
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report__date
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report_wzd__date
 msgid "Date"
@@ -73,6 +123,21 @@ msgid "Display Name"
 msgstr "Nombre mostrado"
 
 #. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__message_follower_ids
+msgid "Followers"
+msgstr "Seguidores"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__message_channel_ids
+msgid "Followers (Channels)"
+msgstr "Seguidores (Canales)"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "Seguidores (Empresas)"
+
+#. module: incident_manager
 #: model_terms:ir.ui.view,arch_db:incident_manager.incident_report_search
 msgid "Group By"
 msgstr "Agrupar por"
@@ -85,16 +150,26 @@ msgid "ID"
 msgstr ""
 
 #. module: incident_manager
-#: model:ir.ui.menu,name:incident_manager.menu_incident_manager_root
-msgid "Incident Manager"
-msgstr "Incidencias"
+#: model:ir.model.fields,help:incident_manager.field_incident_report__message_unread
+msgid "If checked new messages require your attention."
+msgstr "Si está marcado, hay nuevos mensajes que requieren su atención"
+
+#. module: incident_manager
+#: model:ir.model.fields,help:incident_manager.field_incident_report__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "Si está marcado, hay nuevos mensajes que requieren su atención."
+
+#. module: incident_manager
+#: model:ir.model.fields,help:incident_manager.field_incident_report__message_has_error
+msgid "If checked, some messages have a delivery error."
+msgstr "Si se encuentra marcado, algunos mensajes tienen error de envío."
 
 #. module: incident_manager
 #: code:addons/incident_manager/wizard/incident_report_wzd.py:39
 #: model:ir.model,name:incident_manager.model_incident_report
 #, python-format
 msgid "Incident Report"
-msgstr "Informe de incidencias"
+msgstr "Informe de incidencia"
 
 #. module: incident_manager
 #: model:ir.model,name:incident_manager.model_incident_report_type
@@ -104,7 +179,7 @@ msgstr "Tipo de incidencia"
 #. module: incident_manager
 #: model:ir.model,name:incident_manager.model_incident_report_wzd
 msgid "Incident Report Wizard"
-msgstr "Asistente incidencia"
+msgstr "Asistente informe incidencia"
 
 #. module: incident_manager
 #: model:ir.model.fields,field_description:incident_manager.field_purchase_order__incident_reports_count
@@ -133,6 +208,11 @@ msgid "Incidents"
 msgstr "Incidencias"
 
 #. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__message_is_follower
+msgid "Is Follower"
+msgstr "Es un seguidor"
+
+#. module: incident_manager
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report____last_update
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report_type____last_update
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report_wzd____last_update
@@ -154,6 +234,21 @@ msgid "Last Updated on"
 msgstr "Última actualización el"
 
 #. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__message_main_attachment_id
+msgid "Main Attachment"
+msgstr "Adjuntos principales"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__message_has_error
+msgid "Message Delivery error"
+msgstr "Error de Envío de Mensaje"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__message_ids
+msgid "Messages"
+msgstr "Mensajes"
+
+#. module: incident_manager
 #: model_terms:ir.ui.view,arch_db:incident_manager.incident_report_search
 msgid "Model"
 msgstr "Modelo"
@@ -167,7 +262,47 @@ msgstr "Nombre"
 #: model:ir.actions.act_window,name:incident_manager.action_create_incident_report_wzd_form
 #: model_terms:ir.ui.view,arch_db:incident_manager.incident_report_wzd_view
 msgid "New Incident Report"
-msgstr "Nueva incidencia"
+msgstr "Nuevo informe de incidencia"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr "Siguiente plazo de actividad"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__activity_summary
+msgid "Next Activity Summary"
+msgstr "Resumen de la siguiente actividad"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__activity_type_id
+msgid "Next Activity Type"
+msgstr "Siguiente tipo de actividad"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__message_needaction_counter
+msgid "Number of Actions"
+msgstr "Número de acciones"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__message_has_error_counter
+msgid "Number of error"
+msgstr "Número de error"
+
+#. module: incident_manager
+#: model:ir.model.fields,help:incident_manager.field_incident_report__message_needaction_counter
+msgid "Number of messages which requires an action"
+msgstr "Número de mensajes que requieren una acción"
+
+#. module: incident_manager
+#: model:ir.model.fields,help:incident_manager.field_incident_report__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "Número de mensajes con error de envío"
+
+#. module: incident_manager
+#: model:ir.model.fields,help:incident_manager.field_incident_report__message_unread_counter
+msgid "Number of unread messages"
+msgstr "Número de mensajes no leidos"
 
 #. module: incident_manager
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report__model_id
@@ -176,11 +311,31 @@ msgid "Object"
 msgstr "Objeto"
 
 #. module: incident_manager
-#: code:addons/incident_manager/models/incident_report.py:39
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__origin
+msgid "Origin Document"
+msgstr "Documento origen"
+
+#. module: incident_manager
+#: code:addons/incident_manager/models/incident_report.py:69
 #: model_terms:ir.ui.view,arch_db:incident_manager.incident_report_form
 #, python-format
 msgid "Origin document"
 msgstr "Documento origen"
+
+#. module: incident_manager
+#: selection:incident.report,activity_state:0
+msgid "Overdue"
+msgstr "Atrasado"
+
+#. module: incident_manager
+#: selection:incident.report,activity_state:0
+msgid "Planned"
+msgstr "Planificado"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__access_url
+msgid "Portal Access URL"
+msgstr "URL de acceso al portal"
 
 #. module: incident_manager
 #: model:ir.model,name:incident_manager.model_purchase_order
@@ -194,6 +349,11 @@ msgid "Record ID"
 msgstr "ID de registro"
 
 #. module: incident_manager
+#: selection:incident.report,state:0
+msgid "Reembolso pendiente"
+msgstr ""
+
+#. module: incident_manager
 #: model:ir.actions.act_window,name:incident_manager.action_incident_report_type_form
 #: model:ir.ui.menu,name:incident_manager.master_incident_report_type_menu
 msgid "Report Types"
@@ -203,7 +363,7 @@ msgstr "Tipos de incidencia"
 #: model:ir.actions.act_window,name:incident_manager.action_incident_report_form
 #: model:ir.ui.menu,name:incident_manager.master_incident_report_menu
 msgid "Reports"
-msgstr "Informes"
+msgstr "Incidencias envío"
 
 #. module: incident_manager
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report__user_id
@@ -213,15 +373,52 @@ msgid "Responsible"
 msgstr "Responsable"
 
 #. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__activity_user_id
+msgid "Responsible User"
+msgstr "Usuario responsable"
+
+#. module: incident_manager
 #: model:ir.model,name:incident_manager.model_sale_order
 msgid "Sale Order"
 msgstr "Pedido de venta"
 
 #. module: incident_manager
-#: code:addons/incident_manager/models/incident_report.py:48
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__access_token
+msgid "Security Token"
+msgstr "Token de seguridad"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__state
+#: model_terms:ir.ui.view,arch_db:incident_manager.incident_report_search
+msgid "State"
+msgstr "Provincia"
+
+#. module: incident_manager
+#: model:ir.model.fields,help:incident_manager.field_incident_report__activity_state
+msgid "Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr "Estado basado en actividades\n"
+"Vencida: la fecha tope ya ha pasado\n"
+"Hoy: La fecha tope es hoy\n"
+"Planificada: futuras actividades."
+
+#. module: incident_manager
+#: code:addons/incident_manager/models/incident_report.py:78
 #, python-format
 msgid "There is no origin document for this incident report."
 msgstr "No existe un documento de origen para esta informe de incidencia."
+
+#. module: incident_manager
+#: selection:incident.report,activity_state:0
+msgid "Today"
+msgstr "Hoy"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__carrier_tracking_ref
+msgid "Tracking ref"
+msgstr ""
 
 #. module: incident_manager
 #: model:ir.model,name:incident_manager.model_stock_picking
@@ -234,9 +431,29 @@ msgid "Type"
 msgstr "Tipo"
 
 #. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__message_unread
+msgid "Unread Messages"
+msgstr "Mensajes por leer"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__message_unread_counter
+msgid "Unread Messages Counter"
+msgstr "Contador de mensajes sin leer"
+
+#. module: incident_manager
 #: model_terms:ir.ui.view,arch_db:incident_manager.incident_report_search
 msgid "User"
 msgstr "Usuario"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__website_message_ids
+msgid "Website Messages"
+msgstr "Mensajes del sitio web"
+
+#. module: incident_manager
+#: model:ir.model.fields,help:incident_manager.field_incident_report__website_message_ids
+msgid "Website communication history"
+msgstr "Historial de comunicaciones del sitio web"
 
 #. module: incident_manager
 #: model_terms:ir.ui.view,arch_db:incident_manager.incident_report_wzd_view
