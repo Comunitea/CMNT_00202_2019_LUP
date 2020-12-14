@@ -35,7 +35,7 @@ class GroupCostSheet(models.Model):
         default=lambda self: self.env.user.company_id.help_hours)
     km_cost = fields.Float(
         'Coste Km',
-        default=lambda self: self.env.user.company_id.help_hours
+        default=lambda self: self.env.user.company_id.km_cost
     )
     sheet_ids = fields.One2many(
         'cost.sheet', 'group_id', string='Cost Sheets', copy=True)
