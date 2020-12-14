@@ -49,6 +49,10 @@ class MrpWorkorder(models.Model):
                 lambda x: x.name == 'Horas Técnico'
             )
             duration = tech_line.hours if tech_line else 0
+            oppi = wo.sheet_id.oppi_line_ids.filtered(
+                lambda o: wo.name == o.name)
+            if oppi:
+                duration = oppi.time
             wo.th_user_hours = duration
 
     # No quiero que cree checks de calidad
