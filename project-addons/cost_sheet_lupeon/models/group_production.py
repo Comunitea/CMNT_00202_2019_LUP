@@ -141,6 +141,12 @@ class GroupRegisterLine(models.Model):
         for line in self:
             line.qty_pending = line.product_qty - line.qty_produced
 
+    def unlink(self):
+        self.mapped('workorder_id').write({'group_mrp_id': False})
+        self.mapped('production_id').write({'group_mrp_id': False})
+        res = super().unlink()
+        return res
+
 
 class GroupMaterialLine(models.Model):
 

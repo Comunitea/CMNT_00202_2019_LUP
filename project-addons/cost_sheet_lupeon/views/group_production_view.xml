@@ -11,6 +11,7 @@
                     <button name="action_confirm_group" type="object" string="Confirm Group" states="draft" class="btn-success"/>
                     <button name="action_plan_group" type="object" string="Planificar cantidades" states="confirmed,progress" class="btn-primary"/>
                     <button name="%(action_register_group_wizard)d" type="action" class="btn-success" states="planned,progress" string="Registrar Producción agrupada"/>
+                    <button name="%(action_add_group_wizard)d" type="action" string="Añadir a grupo" states="draft"/>
 
                     <button name="action_cancel_group" type="object" string="Cancel Group" states="draft,planned,confirmed" class="btn-danger"/>
                     <button name="action_draft_group" type="object" string="Back to draft Group" states="cancel" class="btn-warning"/>
@@ -25,7 +26,7 @@
                     </group>
                     <group string="Órdenes de trabajo agrupadas">
                         <field name="register_ids" nolabel="1">
-                            <tree editable="bottom" create="0" delete="0">
+                            <tree editable="bottom" create="0" delete="1">
                                     <field name="production_id"/>
                                     <field name="workorder_id"/>
                                     <field name="th_machine_hours" force_save="1" required="0"/>

@@ -27,6 +27,7 @@
         'wizard/group_mrp_wizard_view.xml',
         'wizard/register_workorder_view.xml',
         'wizard/register_group_view.xml',
+        'wizard/add_group_production_wzd_view.xml',
         'wizard/assign_production_wzd_view.xml',
         'data/sheet_data.xml',
         'data/stock_data.xml',
