@@ -51,6 +51,10 @@ class MrpProduction(models.Model):
         # import ipdb; ipdb.set_trace()
         for prod in self:
             wo = prod.workorder_ids.filtered(lambda x: x.active_move_line_ids)
+            if not wo:
+                wo = prod.workorder_ids.filtered(lambda x: x.state == 'done')
+                if wo:
+                    wo = wo[0]
             if wo:
                 domain = [
                     ('workorder_id', '=', wo.id),

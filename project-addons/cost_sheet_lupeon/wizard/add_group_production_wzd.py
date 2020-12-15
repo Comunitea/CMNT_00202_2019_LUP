@@ -52,6 +52,13 @@ class AddGroupProductionWzd(models.TransientModel):
 
         for prod in self.production_ids:
             wo = prod.workorder_ids.filtered(lambda x: x.active_move_line_ids)
+            if not wo:
+                wo = prod.workorder_ids.filtered(lambda x: x.state == 'done')
+                if wo:
+                    wo = wo[0]
+            
+            if not wo:
+                raise UserError('No se encontro orden de trabajo de impresión')
             vals = {
                 'group_mrp_id': group.id,
                 'workorder_id': wo.id,
