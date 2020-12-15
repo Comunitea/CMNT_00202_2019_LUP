@@ -44,15 +44,21 @@ class MrpProduction(models.Model):
     origin_production_id = fields.Many2one(
         'mrp.production', 'Producción origen', readonly=True)
 
-    group_mrp_id = fields.Many2one('group.production', 'Group', readonly=True)
-
-    qty_printed = fields.Float('Cantidad impresa', compute='get_printed_qty')
+    qty_printed = fields.Float('Cant. impresa planificada',
+                               compute='get_printed_qty')
 
     def get_printed_qty(self):
+        # import ipdb; ipdb.set_trace()
         for prod in self:
             wo = prod.workorder_ids.filtered(lambda x: x.active_move_line_ids)
             if wo:
-                prod.qty_printed = wo.qty_produced
+                domain = [
+                    ('workorder_id', '=', wo.id),
+                ]
+                lines = self.env['group.register.line'].search(domain)
+                if lines:
+                    prod.qty_printed = sum(
+                        [x.qty_done for x in lines if x.group_mrp_id.state in ['planned', 'progress', 'done']])
 
     #  TODO FECHA
     def create_partial_mrp(self, qty, mode):

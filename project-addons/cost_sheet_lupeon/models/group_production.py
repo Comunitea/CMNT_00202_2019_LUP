@@ -12,9 +12,6 @@ class GroupProduction(models.Model):
 
     name = fields.Char('Name')
     note = fields.Text('Notas')
-    production_ids = fields.One2many(
-        'mrp.production', 'group_mrp_id', 'Gropued Productions',
-        readonly=True)
 
     workorder_ids = fields.One2many(
         'mrp.workorder', 'group_mrp_id', 'Gropued Productions',
@@ -103,7 +100,6 @@ class GroupProduction(models.Model):
 
     def unlink(self):
         for gr in self:
-            gr.production_ids.write({'group_mrp_id': False})
             gr.workorder_ids.write({'group_mrp_id': False})
         return super().unlink()
 
@@ -143,7 +139,6 @@ class GroupRegisterLine(models.Model):
 
     def unlink(self):
         self.mapped('workorder_id').write({'group_mrp_id': False})
-        self.mapped('production_id').write({'group_mrp_id': False})
         res = super().unlink()
         return res
 

@@ -7,7 +7,7 @@
                 <form>
                     <group>
                         <field name="sheet_type_ref" readonly="1" force_save="1"/>
-                        <field name="production_ids" widget="many2many_tags" domain="[('group_mrp_id', '=', False), ('sheet_type', '=', sheet_type_ref)]"/>
+                        <field name="production_ids" widget="many2many_tags" domain="[('state', 'not in', ['done', 'cancel']), ('sheet_type', '=', sheet_type_ref)]"/>
                     </group>
                     <footer>
                         <button name="confirm" string="Confirm" type="object" class="btn-primary"/>

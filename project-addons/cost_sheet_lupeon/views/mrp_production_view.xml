@@ -44,7 +44,6 @@
                 <field name="no_ok_quality" attrs="{'invisible': [('company_id', '!=', 1)]}"/>
                 <field name="origin_production_id"  attrs="{'invisible': [('company_id', '!=', 1)]}"/>
                 <field name="qty_produced" attrs="{'invisible': [('company_id', '!=', 1)]}"/>
-                <field name="group_mrp_id" attrs="{'invisible': [('company_id', '!=', 1)]}"/>
             </field>
 
             <notebook position="inside">
@@ -71,11 +70,11 @@
         <field name="arch" type="xml">
             <field name="product_id" position="after">
                 <field name="company_id" invisible="1"/>
-                <field name="sheet_id" attrs="{'column_invisible': [('company_id', '!=', 1)]}"/>
-                <field name="sheet_type" attrs="{'column_invisible': [('company_id', '!=', 1)]}"/>
-                <field name="sale_id" attrs="{'column_invisible': [('company_id', '!=', 1)]}"/>
+                <field name="sheet_id"/>
+                <field name="sheet_type"/>
+                <field name="sale_id"/>
                 <!-- <field name="sale_line_id"/> -->
-                <field name="line_ref" attrs="{'column_invisible': [('company_id', '!=', 1)]}"/>
+                <field name="line_ref"/>
                 <!-- <field name="line_name"/> -->
             </field>
 
@@ -90,13 +89,13 @@
             </field>
 
             <field name="state" position="after">
-                <field name="ok_tech" attrs="{'column_invisible': [('company_id', '!=', 1)]}"/>
+                <field name="ok_tech"/>
                 <!-- <field name="no_ok_tech"/> -->
-                <field name="ok_quality" attrs="{'column_invisible': [('company_id', '!=', 1)]}" />
+                <field name="ok_quality"/>
                 <!-- <field name="no_ok_quality"/> -->
-                <field name="product_qty" attrs="{'column_invisible': [('company_id', '!=', 1)]}"/>
-                <field name="qty_printed" attrs="{'column_invisible': [('company_id', '!=', 1)]}"/>
-                <field name="qty_produced" attrs="{'column_invisible': [('company_id', '!=', 1)]}"/>
+                <field name="product_qty"/>
+                <field name="qty_printed"/>
+                <field name="qty_produced"/>
             </field>
             
         </field>
