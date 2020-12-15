@@ -58,8 +58,8 @@
     </record>
 
 
-    <record id="sale_order_custom_reserve" model="ir.ui.view" >
-        <field name="name">sale.order.custom.reserve</field>
+    <record id="sale_order_custom_carrier" model="ir.ui.view" >
+        <field name="name">sale.order.custom.carrier</field>
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="delivery.view_order_form_with_carrier"/>
         <field name="arch" type="xml">
