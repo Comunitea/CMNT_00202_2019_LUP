@@ -622,6 +622,12 @@ class CostSheet(models.Model):
             #         lambda x: not x.task_id)
             #     oppi_lines.create_oppi_tasks(project)
             if project:
+                domain = [('name', 'in', ['[LUP] Oficina Técnica (responsable)','[LUP] Oficina Técnica (básico)'])]
+                groups = self.env['res.groups'].search(domain)
+                if groups:
+                    partners = groups.mapped('users.partner_id')
+                    if partners:
+                        project.message_subscribe(partners.ids)
                 meet_lines = self.mapped('meet_line_ids').filtered(
                     lambda x: not x.task_id)
                 meet_lines.create_meet_tasks(project)
