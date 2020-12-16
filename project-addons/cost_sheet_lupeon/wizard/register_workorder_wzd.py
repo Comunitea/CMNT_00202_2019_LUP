@@ -42,7 +42,7 @@ class RegisterWorkorderWizard(models.TransientModel):
 
         # Write consumes on workorrder
         for line in self.consume_ids:
-            line.move_line_id.write({
+            line.move_line_id.with_context(bypass_reservation_update=True).write({
                 # 'product_id': line.product_id.id,
                 'lot_id': line.lot_id.id,
                 'qty_done': line.qty_done,
