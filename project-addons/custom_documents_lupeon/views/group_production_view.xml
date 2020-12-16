@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<odoo>
+    <!-- group.production inherit form view -->
+    <record id="group_production_view_form_print" model="ir.ui.view">
+        <field name="name">group.production.inherit.view.form.print</field>
+        <field name="model">group.production</field>
+        <field name="inherit_id" ref="cost_sheet_lupeon.group_production_view_form"/>
+        <field name="arch" type="xml">
+           <header position="inside">
+                <button name="print_labels" string="Imprimir Etiquetas" type="object" class="o_sale_print"/>
+            </header>
+            
+        </field>
+    </record>
+  
+</odoo>

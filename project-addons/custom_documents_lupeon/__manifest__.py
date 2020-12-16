@@ -42,6 +42,7 @@
         'views/report_stock.xml',
         'views/report_templates.xml',
         'views/report_production_label.xml',
+        'views/group_production_view.xml',
         'views/mrp_production_view.xml',
     ],
     'images': [
