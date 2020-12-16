@@ -146,7 +146,7 @@
 
             <field name="payment_term_id" position="after">
                 <field name="cost_sheet_sale" invisible="1"/>
-                <field name="name2" attrs="{'invisible': [('cost_sheet_sale','=',True)]}"/>
+                <field name="name2" attrs="{'invisible': [('cost_sheet_sale','=',True)], 'required': [('cost_sheet_sale','!=',True)] }"/>
             </field>
 
             <!-- <field name="commitment_date" position="after">
