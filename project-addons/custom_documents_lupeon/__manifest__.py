@@ -18,6 +18,7 @@
     'depends': [
         'account',
         'sale',
+        'sale_management',
         'sale_stock',
         'stock',
         'cost_sheet_lupeon',

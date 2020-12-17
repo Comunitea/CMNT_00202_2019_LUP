@@ -24,11 +24,17 @@
                             <div>
                                 <span t-esc="ia.street"/>
                             </div>
+                            <div t-if="ia.street2">
+                                <span t-esc="ia.street2"/>
+                            </div>
                             <div>
                                 <span t-esc="ia.zip"/>
                                 <span t-esc="ia.city"/>
                                 <t t-if="ia.state_id.name">
-                                    (  <span t-esc="sa.state_id.name"/>  )
+                                    (  <span t-esc="ia.state_id.name"/>  )
+                                </t>
+                                <t t-if="ia.country_id.name">
+                                    (  <span t-esc="ia.country_id.name"/>  )
                                 </t>
                             </div>
                             <div t-if="ia.vat">
@@ -49,11 +55,17 @@
                             <div>
                                 <span t-esc="sa.street"/>
                             </div>
+                            <div t-if="sa.street2">
+                                <span t-esc="sa.street2"/>
+                            </div>
                             <div>
                                 <span t-esc="sa.zip"/>
                                 <span t-esc="sa.city"/>
                                 <t t-if="sa.state_id.name">
                                     (  <span t-esc="sa.state_id.name"/>  )
+                                </t>
+                                <t t-if="ia.country_id.name">
+                                    (  <span t-esc="ia.country_id.name"/>  )
                                 </t>
                             </div>
                             <div t-if="sa.vat">
@@ -71,6 +83,19 @@
         <xpath expr="//h2" position="attributes">
             <attribute name="class">mt16</attribute>
             <attribute name="id">doc_type_name</attribute>
+        </xpath>
+        
+
+        <xpath expr="//div[@id='informations']" position="before">
+            <div class="row" t-if="o.partner_id.state_id and o.partner_id.state_id.code in ['GC', 'CE', 'ME']">
+                <div class="col-3">
+                </div>
+                <div class="col-6" style="text-align:center;background-color:yellow;">
+                    T2LF MERCANCÍA SIN DECLARACIÓN DE EXPEDICIÓN
+                </div>
+                <div class="col-3">
+                </div>
+            </div>
         </xpath>
 
         <!--  -->
@@ -129,6 +154,12 @@
                 <!-- <span t-field="line.uom_id"  groups="uom.group_uom"/> -->
             </td>
         </xpath>
+        <!-- Hs code -->
+        <xpath expr="//table[@class='table table-sm o_main_table']/tbody/t[@t-foreach='o.invoice_line_ids']/tr/t[1]/td[1]" position="replace">
+             <td>
+                <span t-field="line.name"/><span t-if="line.product_id.hs_code_id" style="font-size:8px;" t-esc="' - ' + line.product_id.hs_code_id.local_code"/>
+            </td>
+        </xpath>
 
         <!-- Add currency to Cell price unit -->
         <xpath expr="//table[@class='table table-sm o_main_table']//tbody//t[@t-foreach='o.invoice_line_ids']/tr/t/td[4]/span" position="attributes">
@@ -158,7 +189,7 @@
 
         <xpath expr="//p[@t-if='o.payment_term_id']" position="replace">
             <div class="col-12" id="pay_details" t-if="o.expiration_dates_str and o.state not in ('paid', 'in_payment')">
-                <span>Detalles del Pago</span>
+                <span>Payment details</span>
             </div>
             <br/>
             <p t-if="o.payment_term_id or (o.expiration_dates_str and o.state not in ('paid', 'in_payment'))" name="payment_term">

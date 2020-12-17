@@ -28,11 +28,17 @@
                 <div t-if="company.partner_id.street">
                     <span t-esc="company.partner_id.street"/>
                 </div>
+                <div t-if="company.partner_id.street2">
+                    <span t-esc="company.partner_id.street2"/>
+                </div>
                 <div>
                     <span t-esc="company.partner_id.zip"/> 
                     <span t-esc="company.partner_id.city"/> 
                     <t t-if="company.partner_id.state_id">
                      (<span t-esc="company.partner_id.state_id.name"/>)
+                    </t>
+                    <t t-if="company.partner_id.country_id">
+                     (<span t-esc="company.partner_id.country_id.name"/>)
                     </t>
                 </div>
                 <div t-if="company.partner_id.phone">

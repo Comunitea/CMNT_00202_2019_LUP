@@ -31,11 +31,17 @@
                             <div>
                                 <span t-esc="ia.street"/>
                             </div>
+                            <div t-if="ia.street2">
+                                <span t-esc="ia.street2"/>
+                            </div>
                             <div>
                                 <span t-esc="ia.zip"/>
                                 <span t-esc="ia.city"/>
                                 <t t-if="ia.state_id.name">
-                                    (  <span t-esc="sa.state_id.name"/>  )
+                                    (  <span t-esc="ia.state_id.name"/>  )
+                                </t>
+                                <t t-if="ia.country_id.name">
+                                    (  <span t-esc="ia.country_id.name"/>  )
                                 </t>
                             </div>
                             <div t-if="ia.vat">
@@ -57,11 +63,17 @@
                             <div>
                                 <span t-esc="sa.street"/>
                             </div>
+                            <div t-if="sa.street2">
+                                <span t-esc="sa.street2"/>
+                            </div>
                             <div>
                                 <span t-esc="sa.zip"/>
                                 <span t-esc="sa.city"/>
                                 <t t-if="sa.state_id.name">
                                     (  <span t-esc="sa.state_id.name"/>  )
+                                </t>
+                                <t t-if="sa.country_id.name">
+                                    (  <span t-esc="sa.country_id.name"/>  )
                                 </t>
                             </div>
                             <div t-if="sa.vat">
@@ -119,26 +131,13 @@
 
 
         <!--    MODIFICACIONES INFORME LUPEÓN -->
-
-
          <xpath expr="//table[@t-if=&quot;o.move_line_ids and o.state==&apos;done&apos;&quot;]/thead/tr/th[1]" position="before">
-                <!-- <t t-if="lupeon_report"> -->
+                <t t-if="lupeon_report">
                      <th class="text-left">Model</th>
                      <th class="text-left">Reference</th>
-                <!-- </t> -->
+                </t>
         </xpath>
       
-         <!-- <xpath expr="//table[@t-if=&quot;o.move_line_ids and o.state==&apos;done&apos;&quot;]/tbody/tr[@t-foreach='o.move_line_ids']/td[1]" position="before">
-                <t t-if="lupeon_report">
-                    <td>
-                        <img t-att-src="'data:image/png;base64,%s' % to_text(move_line.move_id.sale_line_id and move_line.move_id.sale_line_id.model_image or '')" style="max-height: 50px;"/>
-                    </td>
-                    <td>
-                         <span t-field="move_line.move_id.sale_line_id and move_line.move_id.sale_line_id.ref"/>
-                    </td>
-                </t>
-        </xpath> -->
-
         <!-- Center Head taxes -->
         <xpath expr="//table[@t-if=&quot;o.move_line_ids and o.state==&apos;done&apos;&quot;]/thead/tr/t/th[last()]" position="attributes">
             <attribute name="class">text-center</attribute>
@@ -147,19 +146,19 @@
         <xpath expr="//table[@t-if=&quot;o.move_line_ids and o.state==&apos;done&apos;&quot;]/tbody/tr[@t-foreach='o.move_line_ids']" position="replace">
             <t t-foreach="o.move_line_ids" t-as="move_line">
                 <tr>
-                    <td>
+                    <td t-if="lupeon_report">
                         <img t-att-src="'data:image/png;base64,%s' % to_text(move_line.move_id.sale_line_id and move_line.move_id.sale_line_id.model_image or '')" style="max-height: 50px;"/>
                     </td>
-                    <td>
+                    <td t-if="lupeon_report">
                         <span t-field="move_line.move_id.sale_line_id and move_line.move_id.sale_line_id.ref"/>
                     </td>
                     <td>
-                        <span t-field="move_line.product_id"/>
+                        <span t-field="move_line.product_id"/><span t-if="move_line.product_id.hs_code_id" style="font-size:8px;" t-esc="' - ' + move_line.product_id.hs_code_id.local_code"/>
                         <p t-if="o.picking_type_code == 'outgoing'">
-                            <span t-field="move_line.product_id.sudo().description_pickingout"/>
+                            <span t-field="move_line.product_id.sudo().description_pickingout"/><span t-if="move_line.product_id.hs_code_id" style="font-size:8px;" t-esc="' - ' + move_line.product_id.hs_code_id.local_code"/>
                         </p>
                         <p t-if="o.picking_type_code == 'incoming'">
-                            <span t-field="move_line.product_id.sudo().description_pickingin"/>
+                            <span t-field="move_line.product_id.sudo().description_pickingin"/><span t-if="move_line.product_id.hs_code_id" style="font-size:8px;" t-esc="' - ' + move_line.product_id.hs_code_id.local_code"/>
                         </p>
                     </td>
                     <td t-if="has_serial_number and move_line.lot_name" groups="stock.group_lot_on_delivery_slip">
@@ -200,6 +199,47 @@
                     </tr>
                 </t>
             </t>
+        </xpath>
+    </template>
+    
+
+    <template id="valued_report_picking" inherit_id="stock_picking_report_valued.valued_report_picking">
+        
+         <!-- No doy heredado, buscar traducción dto y ponerle el % -->
+         <!-- <xpath expr="//table[@t-if=&quot;o.move_line_ids and o.state==&apos;done&apos;&quot;]/thead/tr/th[5]" position="replace">
+                <th class="text-right" groups="sale.group_discount_per_so_line">
+                    <strong> sDisc. (%)</strong>
+                </th>     
+        </xpath> -->
+
+        <xpath expr="//table[@class='table table-condensed mt32']" position="replace">
+         <div class="clearfix">
+                <div id="total" class="row" name="total">
+                    <div t-attf-class="#{'col-4' if report_type != 'html' else 'col-sm-7 col-md-5'} ml-auto">
+                        <table class="table table-sm">
+                            <tr class="border-black o_subtotal" style="">
+                                <td name="td_amount_untaxed_label"><strong>Untaxed Amount</strong></td>
+                                <td name="td_amount_untaxed" class="text-right">
+                                    <span t-field="o.amount_untaxed"/>
+                                </td>
+                            </tr>
+                            <tr style="" class="border-black o_subtotal">
+                                <td name="td_amount_untaxed_label"><strong>Taxes</strong></td>
+                                <td class="text-right">
+                                    <span t-field="o.amount_tax"/>
+                                </td>
+                            </tr>
+                            <tr class="border-black o_total">
+                                <td name="td_amount_total_label"><strong>Total</strong></td>
+                                <td name="td_amount_total" class="text-right">
+                                    <span t-field="o.amount_total"/>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
         </xpath>
     </template>
 

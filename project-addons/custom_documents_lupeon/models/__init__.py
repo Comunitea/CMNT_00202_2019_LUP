@@ -4,3 +4,4 @@ from . import sale
 from . import invoice
 from . import mrp_production
 from . import group_production
+from . import purchase

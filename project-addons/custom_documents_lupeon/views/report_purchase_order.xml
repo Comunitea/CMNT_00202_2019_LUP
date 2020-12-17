@@ -37,6 +37,9 @@
                                 <t t-if="sa.state_id.name">
                                     (  <span t-esc="sa.state_id.name"/>  )
                                 </t>
+                                <t t-if="ia.country_id.name">
+                                    (  <span t-esc="ia.country_id.name"/>  )
+                                </t>
                             </div>
                             <div>
                                 <span t-esc="sa.country_id.name"/>
@@ -68,7 +71,10 @@
                                 <span t-esc="ia.zip"/>
                                 <span t-esc="ia.city"/>
                                 <t t-if="ia.state_id.name">
-                                    (  <span t-esc="sa.state_id.name"/>  )
+                                    (  <span t-esc="ia.state_id.name"/>  )
+                                </t>
+                                <t t-if="ia.country_id.name">
+                                    (  <span t-esc="ia.country_id.name"/>  )
                                 </t>
                             </div>
                             <div>
@@ -88,6 +94,12 @@
             <div class="row">
                 <br/>
             </div>
+      	</xpath>
+
+        <xpath expr="//table[@class='table table-sm o_main_table']/tbody/tr/td[1]" position="replace">
+            <td>
+                <span t-field="line.name"/><span t-if="line.product_id.hs_code_id" style="font-size:8px;" t-esc="' - ' + line.product_id.hs_code_id.local_code"/>
+            </td>
       	</xpath>
 
         <!-- Doc name -->

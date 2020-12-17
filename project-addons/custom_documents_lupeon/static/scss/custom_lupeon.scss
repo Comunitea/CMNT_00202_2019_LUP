@@ -96,7 +96,7 @@ table[class="table table-sm o_table_purchase_quotation"] tbody tr:nth-child(even
 }
 
 // Pay details and Doc Note
-#pay_details, #doc_note {
+#pay_details, #doc_note, #optional_products{
     background-color: gray('200');
     padding: 5px 10px;
     font-size: 14px;

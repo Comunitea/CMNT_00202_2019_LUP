@@ -28,11 +28,17 @@
                             <div>
                                 <span t-esc="ia.street"/>
                             </div>
+                            <div t-if="ia.street2">
+                                <span t-esc="ia.street2"/>
+                            </div>
                             <div>
                                 <span t-esc="ia.zip"/>
                                 <span t-esc="ia.city"/>
                                 <t t-if="ia.state_id.name">
-                                    (  <span t-esc="sa.state_id.name"/>  )
+                                    (  <span t-esc="ia.state_id.name"/>  )
+                                </t>
+                                <t t-if="ia.country_id.name">
+                                    (  <span t-esc="ia.country_id.name"/>  )
                                 </t>
                             </div>
                             <div t-if="ia.vat">
@@ -53,11 +59,17 @@
                             <div>
                                 <span t-esc="sa.street"/>
                             </div>
+                            <div t-if="sa.street2">
+                                <span t-esc="sa.street2"/>
+                            </div>
                             <div>
                                 <span t-esc="sa.zip"/>
                                 <span t-esc="sa.city"/>
                                 <t t-if="sa.state_id.name">
                                     (  <span t-esc="sa.state_id.name"/>  )
+                                </t>
+                                <t t-if="sa.country_id.name">
+                                    (  <span t-esc="sa.country_id.name"/>  )
                                 </t>
                             </div>
                             <div t-if="sa.vat">
@@ -126,6 +138,13 @@
         <!-- Center Head Qty -->
         <xpath expr="//table[@class='table table-sm o_main_table']/thead/tr/th[1]" position="attributes">
             <attribute name="class">text-center</attribute>
+        </xpath>
+
+        <!-- hs code -->
+        <xpath expr="//table[@class='table table-sm o_main_table']/tbody/t[@t-foreach='doc.order_line']/tr/t[1]/td[1]" position="replace">
+            <td>
+                <span t-field="line.name"/><span t-if="line.product_id.hs_code_id" style="font-size:8px;" t-esc="' - ' + line.product_id.hs_code_id.local_code"/>
+            </td>
         </xpath>
 
         <!-- Cantidad sin decimales -->
@@ -204,6 +223,30 @@
             </t>
         </xpath>
 
+        <!-- TAX on total table -->
+        <xpath expr="//div[@id='total']//t[@t-foreach='doc.amount_by_group']//tr" position="attributes">
+            <attribute name="class">border-black o_subtotal o_tax</attribute>
+        </xpath>
+
+        <!-- Pay details after total table -->
+        <xpath expr="//p[@t-field='doc.note']" position="before">
+            <div class="col-12" id="doc_note" t-if="doc.note">
+                <span>Nota</span>
+            </div>
+            <br/>
+        </xpath>
+
+        <xpath expr="//p[@t-if='doc.payment_term_id.note']" position="before">
+            <div class="col-12" id="pay_details" t-if="doc.confirmation_date or doc.payment_mode_id.note or (doc.fiscal_position_id and doc.fiscal_position_id.sudo().note)">
+                <span>Payment details</span>
+            </div>
+            <br/>
+            <p t-if="doc.confirmation_date">
+                <strong>Payed on:</strong>
+                <span t-esc="doc.confirmation_date.strftime('%Y-%m-%d')"/>
+            </p>
+        </xpath>
+
         <xpath expr="//div[@class='page']" position="after">
             <t t-if="lupeon_report">
                 <div class="page" style="page-break-before:always;">
@@ -273,30 +316,55 @@
             </t>
         </xpath>
 
-        <!-- TAX on total table -->
-        <xpath expr="//div[@id='total']//t[@t-foreach='doc.amount_by_group']//tr" position="attributes">
-            <attribute name="class">border-black o_subtotal o_tax</attribute>
-        </xpath>
-
-        <!-- Pay details after total table -->
-        <xpath expr="//p[@t-field='doc.note']" position="before">
-            <div class="col-12" id="doc_note" t-if="doc.note">
-                <span>Nota</span>
-            </div>
-            <br/>
-        </xpath>
-
-        <xpath expr="//p[@t-if='doc.payment_term_id.note']" position="before">
-            <div class="col-12" id="pay_details" t-if="doc.confirmation_date or doc.payment_mode_id.note or (doc.fiscal_position_id and doc.fiscal_position_id.sudo().note)">
-                <span>Detalles del Pago</span>
-            </div>
-            <br/>
-            <p t-if="doc.confirmation_date">
-                <strong>Pagado el:</strong>
-                <span t-esc="doc.confirmation_date.strftime('%Y-%m-%d')"/>
-            </p>
-        </xpath>
   	</template>
+
+    <!-- OPTIONAL PRODUCTS CUSTOM:
+    Título igual que "Detalles de pago"; falta título columa "DESC."; cambiar título "PRECIO (sin IVA)";
+    formato tabla con fondos alternos igual que a superior; mover para antes de detalles de pago 
+     -->
+    <template id="sale_management.report_saleorder_document_inherit_sale_management" inherit_id="sale.report_saleorder_document">
+        <xpath expr="//div[@id='total']" position="after">
+            <div t-if="doc.sale_order_option_ids and doc.state in ['draft', 'sent']">
+                <t t-set="has_option_discount" t-value="any(doc.sale_order_option_ids.filtered(lambda o: o.discount != 0.0))" />
+                <div class="col-12" id="optional_products">
+                    <span>Optional products</span>
+                    <br/>
+                </div>
+                <table name="table_optional_products" class="table table-sm o_main_table" style="margin-top:20px;">
+                    <thead>
+                        <tr>
+                            <th name="th_option_name" class="text-left">Description</th>
+                            <th t-if="has_option_discount" name="th_option_discount" groups="sale.group_discount_per_so_line" class="text-left">DISC.</th>
+                            <th name="th_option_price_unit" class="text-right">Price (whithout IVA)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="sale_tbody">
+                        <tr t-foreach="doc.sale_order_option_ids" t-as="option">
+                            <td name="td_option_name">
+                                <span t-field="option.name"/>
+                            </td>
+                            <td t-if="has_option_discount" name="td_option_discount" groups="sale.group_discount_per_so_line">
+                                <strong t-if="option.discount != 0.0" class="text-info">
+                                    <t t-esc="((option.discount % 1) and '%s' or '%d') % option.discount"/>% discount
+                                </strong>
+                            </td>
+                            <td name="td_option_price_unit">
+                                <strong class="text-right">
+                                    <div t-field="option.price_unit"
+                                        t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'
+                                        t-att-style="option.discount and 'text-decoration: line-through' or None"
+                                        t-att-class="option.discount and 'text-danger' or None"/>
+                                    <div t-if="option.discount">
+                                        <t t-esc="'%.2f' % ((1-option.discount / 100.0) * option.price_unit)"/>
+                                    </div>
+                                </strong>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </xpath>
+    </template>
 
      <template id="report_saleorder_lupeon">
         <t t-call="web.html_container">

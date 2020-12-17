@@ -31,11 +31,17 @@
                             <div>
                                 <span t-esc="sa.street"/>
                             </div>
+                            <div t-if="sa.street2">
+                                <span t-esc="sa.street2"/>
+                            </div>
                             <div>
                                 <span t-esc="sa.zip"/>
                                 <span t-esc="sa.city"/>
                                 <t t-if="sa.state_id.name">
                                     (  <span t-esc="sa.state_id.name"/>  )
+                                </t>
+                                <t t-if="sa.country_id.name">
+                                    (  <span t-esc="sa.country_id.name"/>  )
                                 </t>
                             </div>
                             <div>
@@ -64,11 +70,17 @@
                             <div>
                                 <span t-esc="ia.street"/>
                             </div>
+                            <div t-if="ia.street2">
+                                <span t-esc="ia.street2"/>
+                            </div>
                             <div>
                                 <span t-esc="ia.zip"/>
                                 <span t-esc="ia.city"/>
                                 <t t-if="ia.state_id.name">
-                                    (  <span t-esc="sa.state_id.name"/>  )
+                                    (  <span t-esc="ia.state_id.name"/>  )
+                                </t>
+                                <t t-if="ia.country_id.name">
+                                    (  <span t-esc="ia.country_id.name"/>  )
                                 </t>
                             </div>
                             <div>
@@ -88,6 +100,12 @@
             <div class="row">
                 <br/>
             </div>
+      	</xpath>
+
+        <xpath expr="//table[@class='table table-sm']/tbody/tr/td[1]" position="replace">
+            <td>
+                <span t-field="order_line.name"/><span t-if="order_line.product_id.hs_code_id" style="font-size:8px;" t-esc="' - ' + order_line.product_id.hs_code_id.local_code"/>
+            </td>
       	</xpath>
 
         <!-- Doc name -->
