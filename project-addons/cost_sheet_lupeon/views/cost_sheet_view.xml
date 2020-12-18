@@ -224,6 +224,7 @@
                             <field name="inspection_type"/>
                             <field name="description"/>
                             <field name="sheet_imprevist"/>
+                            <field name="auto_ok_quality"/>
                         </group>
                         <group string="Modelos asociados">
                             <field name="sale_line_id"/>

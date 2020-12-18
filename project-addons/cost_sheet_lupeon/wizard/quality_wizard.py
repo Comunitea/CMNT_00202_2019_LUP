@@ -29,16 +29,18 @@ class QualityWizard(models.TransientModel):
                 _('Cannot reject %s units because you only produce %s') %
                 (self.qty, mrp.qty_produced))
 
+        auto_mode_done = False
         if self.mode == 'ok_tech':
             mrp.ok_tech = True
             mrp.message_post(body=_('OK Técnico'))
             mrp.no_ok_tech = self.qty
             # AUTO OK CALIDAD SI FABRICACIÓN HIJA Y NO HAY CANTIDAD NO OK
             # TODO definirlos en código??
-            if mrp.sheet_id and not self.qty:
+            if mrp.sheet_id and mrp.sheet_id.auto_ok_quality not self.qty:
                 mrp.ok_quality = True
                 mrp.message_post(body=_('OK Calidad AUTO'))
                 mrp.no_ok_quality = 0
+                auto_mode_done
         else:
             mrp.ok_quality = True
             mrp.message_post(body=_('OK Calidad'))
@@ -47,7 +49,7 @@ class QualityWizard(models.TransientModel):
         if self.qty > 0:
             mrp.create_partial_mrp(self.qty, self.mode)
 
-        if self. mode == 'ok_quality':
+        if self.mode == 'ok_quality' or auto_mode_done:
             quants = self.env['stock.quant'].with_context(no_blocked=True).\
                 _gather(mrp.product_id, mrp.location_dest_id)
             if quants:

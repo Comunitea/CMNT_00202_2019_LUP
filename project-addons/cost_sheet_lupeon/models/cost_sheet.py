@@ -68,6 +68,7 @@ class CostSheet(models.Model):
     price_unit = fields.Float('PVP unidad', compute='_get_cost_prices')
     price_total = fields.Float('PVP TOTAL', compute='_get_cost_prices')
     sheet_imprevist = fields.Boolean('Hoja imprevista', readonly=True)
+    auto_ok_quality = fields.Boolean('OK calidad auto', default=True)
 
 
     # DATOS PIEZA
@@ -653,8 +654,8 @@ class CostSheet(models.Model):
             self.production_id.unlink()
 
         if self.sale_id.project_id:
-            self.mapped('project_id.task_ids').unlink()
-            self.mapped('project_id').unlink()
+            self.mapped('sale_id.project_id.task_ids').unlink()
+            self.mapped('sale_id.project_id').unlink()
 
         self.create_tasks()
         self.create_sale_productions()

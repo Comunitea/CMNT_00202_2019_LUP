@@ -20,3 +20,12 @@ access_group_production,acess_group_production,model_group_production,base.group
 access_group_material_line,acess_group_material_line,model_group_material_line,base.group_user,1,1,1,1
 access_group_register_line,acess_group_register_line,model_group_register_line,base.group_user,1,1,1,1
 access_repart_material_line,acess_repart_material_line,model_repart_material_line,base.group_user,1,1,1,1
+access_project_project,acess_project_project,project.model_project_project,cost_sheet_lupeon.group_cs_user,1,1,1,1
+access_mrp_routing,acess_mrp_routing,mrp.model_mrp_routing,cost_sheet_lupeon.group_cs_user,1,1,1,1
+access_mrp_routing_workcenter,mrp.routing.workcenter,mrp.model_mrp_routing_workcenter,group_cs_user,1,1,1,1
+access_mrp_workcenter,acess_mrp_workcenter,mrp.model_mrp_workcenter,group_cs_user,1,1,1,1
+access_mrp_workcenter_productivity,acess_mrp_workcenter_productivity,mrp.model_mrp_workcenter_productivity,group_cs_user,1,1,1,1
+access_mrp_workorder,acess_mrp_workorder,mrp.model_mrp_workorder,group_cs_user,1,1,1,1
+access_mrp_bom,acess_mrp_bom,mrp.model_mrp_bom,group_cs_user,1,1,1,1
+access_mrp_bom_line,acess_mrp_bom_line,mrp.model_mrp_bom_line,group_cs_user,1,1,1,1
+access_mrp_production,acess_mrp_production,mrp.model_mrp_production,mrp.group_mrp_user,1,1,1,1
