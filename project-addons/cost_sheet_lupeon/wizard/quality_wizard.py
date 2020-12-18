@@ -36,7 +36,7 @@ class QualityWizard(models.TransientModel):
             mrp.no_ok_tech = self.qty
             # AUTO OK CALIDAD SI FABRICACIÓN HIJA Y NO HAY CANTIDAD NO OK
             # TODO definirlos en código??
-            if mrp.sheet_id and mrp.sheet_id.auto_ok_quality not self.qty:
+            if mrp.sheet_id and mrp.sheet_id.auto_ok_quality and not self.qty:
                 mrp.ok_quality = True
                 mrp.message_post(body=_('OK Calidad AUTO'))
                 mrp.no_ok_quality = 0
