@@ -37,7 +37,7 @@
     </record>
 
     <record id="module_category_office" model="ir.module.category" >
-        <field name="name">Oficina técnoca</field>
+        <field name="name">Oficina técnica</field>
         <field name="sequence">5</field>
     </record>
     <record id="basic_office" model="res.groups">
