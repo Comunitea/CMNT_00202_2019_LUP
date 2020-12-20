@@ -623,8 +623,10 @@ class CostSheet(models.Model):
             #         lambda x: not x.task_id)
             #     oppi_lines.create_oppi_tasks(project)
             if project:
-                domain = [('name', 'in', ['[LUP] Oficina Técnica (responsable)','[LUP] Oficina Técnica (básico)'])]
-                groups = self.env['res.groups'].search(domain)
+                # domain = [('name', 'in', ['[LUP] Oficina Técnica (responsable)','[LUP] Oficina Técnica (básico)'])]
+                # groups = self.env['res.groups'].search(domain)
+                groups = self.env.ref('cost_sheet_lupeon.basic_office')
+                groups |= self.env.ref('cost_sheet_lupeon.manager_office')
                 if groups:
                     partners = groups.mapped('users.partner_id')
                     if partners:
