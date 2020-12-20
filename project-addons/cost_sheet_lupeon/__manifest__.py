@@ -21,8 +21,8 @@
         "Javier Colmenero <javier@comunitea.com>"
     ],
     "data": [
-        'security/ir.model.access.csv',
         'security/sheet_security.xml',
+        'security/ir.model.access.csv',
         'wizard/quality_wizard_view.xml',
         'wizard/group_mrp_wizard_view.xml',
         'wizard/register_workorder_view.xml',
