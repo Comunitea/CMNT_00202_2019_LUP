@@ -28,4 +28,4 @@ access_mrp_workcenter_productivity,acess_mrp_workcenter_productivity,mrp.model_m
 access_mrp_workorder,acess_mrp_workorder,mrp.model_mrp_workorder,basic_office,1,1,1,1
 access_mrp_bom,acess_mrp_bom,mrp.model_mrp_bom,basic_office,1,1,1,1
 access_mrp_bom_line,acess_mrp_bom_line,mrp.model_mrp_bom_line,basic_office,1,1,1,1
-access_mrp_production,acess_mrp_production,mrp.model_mrp_production,mrp.basic_office,1,1,1,1
+access_mrp_production,acess_mrp_production,mrp.model_mrp_production,basic_office,1,1,1,1
