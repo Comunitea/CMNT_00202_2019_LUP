@@ -41,12 +41,12 @@
         <field name="sequence">5</field>
     </record>
     <record id="basic_office" model="res.groups">
-        <field name="name">Oficina técnica (basico)</field>
+        <field name="name">Oficina Básico</field>
         <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
         <field name="category_id" ref="cost_sheet_lupeon.module_category_office"/>
     </record>
     <record id="manager_office" model="res.groups">
-        <field name="name">Oficina técnica (Responsable)</field>
+        <field name="name">Oficina Responsable</field>
          <field name="implied_ids" eval="[(4, ref('basic_office'))]"/>
         <field name="category_id" ref="cost_sheet_lupeon.module_category_office"/>
     </record>
