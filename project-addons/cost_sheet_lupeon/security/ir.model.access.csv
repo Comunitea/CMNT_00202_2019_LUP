@@ -22,10 +22,10 @@ access_group_register_line,acess_group_register_line,model_group_register_line,b
 access_repart_material_line,acess_repart_material_line,model_repart_material_line,base.group_user,1,1,1,1
 access_project_project,acess_project_project,project.model_project_project,cost_sheet_lupeon.basic_office,1,1,1,1
 access_mrp_routing,acess_mrp_routing,mrp.model_mrp_routing,cost_sheet_lupeon.basic_office,1,1,1,1
-access_mrp_routing_workcenter,mrp.routing.workcenter,mrp.model_mrp_routing_workcenter,basic_office,1,1,1,1
-access_mrp_workcenter,acess_mrp_workcenter,mrp.model_mrp_workcenter,basic_office,1,1,1,1
-access_mrp_workcenter_productivity,acess_mrp_workcenter_productivity,mrp.model_mrp_workcenter_productivity,basic_office,1,1,1,1
-access_mrp_workorder,acess_mrp_workorder,mrp.model_mrp_workorder,basic_office,1,1,1,1
-access_mrp_bom,acess_mrp_bom,mrp.model_mrp_bom,basic_office,1,1,1,1
-access_mrp_bom_line,acess_mrp_bom_line,mrp.model_mrp_bom_line,basic_office,1,1,1,1
-access_mrp_production,acess_mrp_production,mrp.model_mrp_production,basic_office,1,1,1,1
+access_mrp_routing_workcenter,mrp.routing.workcenter,mrp.model_mrp_routing_workcenter,cost_sheet_lupeon.basic_office,1,1,1,1
+access_mrp_workcenter,acess_mrp_workcenter,mrp.model_mrp_workcenter,cost_sheet_lupeon.basic_office,1,1,1,1
+access_mrp_workcenter_productivity,acess_mrp_workcenter_productivity,mrp.model_mrp_workcenter_productivity,cost_sheet_lupeon.basic_office,1,1,1,1
+access_mrp_workorder,acess_mrp_workorder,mrp.model_mrp_workorder,cost_sheet_lupeon.basic_office,1,1,1,1
+access_mrp_bom,acess_mrp_bom,mrp.model_mrp_bom,cost_sheet_lupeon.basic_office,1,1,1,1
+access_mrp_bom_line,acess_mrp_bom_line,mrp.model_mrp_bom_line,cost_sheet_lupeon.basic_office,1,1,1,1
+access_mrp_production,acess_mrp_production,mrp.model_mrp_production,cost_sheet_lupeon.basic_office,1,1,1,1
