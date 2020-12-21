@@ -40,7 +40,7 @@ class QualityWizard(models.TransientModel):
                 mrp.ok_quality = True
                 mrp.message_post(body=_('OK Calidad AUTO'))
                 mrp.no_ok_quality = 0
-                auto_mode_done
+                auto_mode_done = True
         else:
             mrp.ok_quality = True
             mrp.message_post(body=_('OK Calidad'))
