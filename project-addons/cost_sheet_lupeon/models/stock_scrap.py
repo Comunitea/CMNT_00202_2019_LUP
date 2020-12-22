@@ -13,8 +13,8 @@ class StockScrap(models.Model):
 
     def action_validate(self):
         res = super().action_validate()
-        if not self.machine_hours and not self._context.get('ok_check', False):
-            raise UserError('Es necesario indicar el tiempo máquina')
+        # if not self.machine_hours and not self._context.get('ok_check', False):
+        #     raise UserError('Es necesario indicar el tiempo máquina')
         if self.workorder_id:
             vals = {
                 'workorder_id': self.workorder_id.id,
