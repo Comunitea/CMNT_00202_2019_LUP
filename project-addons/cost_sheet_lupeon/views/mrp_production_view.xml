@@ -107,7 +107,7 @@
         <field name="model">mrp.production</field>
         <field name="inherit_id" ref="mrp.view_mrp_production_filter"/>
         <field name="arch" type="xml">
-            <field name="name" position="before">
+            <field name="name" position="after">
                 <field name="line_ref"/>
                 <field name="line_name"/>
                 <field name="sheet_id"/>
