@@ -13,3 +13,4 @@ class ResCompany(models.Model):
     help_hours = fields.Integer('Horas ayudante', default=35)
     km_cost = fields.Float('Coste Km', default=0.30)
     cost_sheet_sale = fields.Boolean(string='Sale without Cost Sheets', readonly=False, default = False)
+    lupeon_text = fields.Text('Lupeon Text')

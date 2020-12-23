@@ -16,6 +16,11 @@
                         <field name="km_cost"/>
                     </group>
                 </page>
+                <page string="Texto pedido venta lupéon">
+                    <group>
+                        <field name="lupeon_text" nolabel="1"/>
+                    </group>
+                </page>
             </notebook>
            
        </field>

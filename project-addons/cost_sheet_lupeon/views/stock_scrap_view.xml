@@ -7,7 +7,18 @@
         <field name="inherit_id" ref="stock.stock_scrap_form_view"/>
         <field name="arch" type="xml">
             <field name="product_id" position="after">
-                <field name="machine_hours" widget="float_time" required="1"/>
+                <field name="machine_hours" widget="float_time" required="0"/>
+            </field>  
+       </field>
+   </record>
+
+    <record id="lup_view_stock_scrap_form2" model="ir.ui.view">
+        <field name="name">lup.view.scrap.form</field>
+        <field name="model">stock.scrap</field>
+        <field name="inherit_id" ref="stock.stock_scrap_form_view2"/>
+        <field name="arch" type="xml">
+            <field name="product_id" position="after">
+                <field name="machine_hours" widget="float_time" required="0"/>
             </field>  
        </field>
    </record>
