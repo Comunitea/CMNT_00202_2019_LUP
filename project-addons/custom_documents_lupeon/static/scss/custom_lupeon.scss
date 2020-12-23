@@ -22,6 +22,18 @@ table[class="table table-sm o_table_purchase_quotation"] tbody tr:nth-child(even
 .o_boxed_header {
     border-bottom: none;
 }
+// Header
+.extra-lupeon {
+    color: gray;
+    font-size: 10px;
+}
+
+.table2 { border-collapse: collapse; }
+tr, td { border: none; }
+// td {
+//   border-right: solid 1px #f00; 
+//   border-left: solid 1px #f00;
+// }
 
 // Header - Company Address
 #header_company_address {
@@ -82,6 +94,15 @@ table[class="table table-sm o_table_purchase_quotation"] tbody tr:nth-child(even
         }
     }
 }
+// .o_report_layout_boxed {
+//     .table2{
+//         td{
+//             border-right: none  !important;
+//             border-bottom: 1px black !important;
+//         }
+//     } 
+// }
+
 
 // Total section
 .o_subtotal {

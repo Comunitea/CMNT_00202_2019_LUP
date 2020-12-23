@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record id="stock_picking_print_label" model="ir.ui.view">
+        <field name="name">stock.picking.form.print.label</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+               <field name="label_printed" invisible="1"/>
+               <button name="print_label" type="object" string="Print label" class="btn-success" attrs="{'invisible': [('label_printed', '=', True)]}"/>
+               <button name="print_label" type="object" string="Reprint label"  attrs="{'invisible': [('label_printed', '!=', True)]}"/>
+            </header>
+        </field>          
+    </record>
+
+
+
+</odoo>
+

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <template id="document_move_label">
+        <style>
+            .label-container {
+                position: relative;
+                width: 126mm;
+                height: 72mm;
+                border: 1px solid black;
+                padding: 2px;
+                font-size: 12px;
+            }
+            .square1{
+                text-align: center;
+                  margin: 0px;
+            }
+            .square2{
+                font-size: 12px;
+                background-color: black;
+                color: white;
+                border: 0px solid black;
+                padding: 2px;
+                margin: 0px;
+                line-height: 25px;
+            }
+             .square3{
+                font-size: 12px;
+                 line-height: 25px;
+            }
+             .square4{
+                text-align: center;
+                padding:5px;
+            }
+            .label-row{
+              margin-right: 0px !important;
+            }
+     </style>
+    <div class="label-container">
+        <div class="row label-row">
+            <div class="col-6 square1">
+                 <img t-if="move.picking_id.company_id.logo" t-att-src="image_data_uri(move.picking_id.company_id.logo)" style="width:25mm;height:25mm"/>
+            </div>
+            <div class="col-6 square2" >
+                <strong>Ref. cliente:  </strong><span style="margin-left: 3px" t-field="move.picking_id.sale_id.name2"/>
+                <br/>
+                <strong>Pedido:  </strong><span style="margin-left: 3px" t-field="move.picking_id.sale_id.name2"/>
+                <br/>
+                <strong>Nº Albarán:  </strong><span style="margin-left: 3px" t-field="move.picking_id.name" />
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-8 square3">
+                <strong>Descripción:  </strong><span style="margin-left: 3px" t-field="move.name"/>
+                <br/>
+                <strong>Referencia:  </strong><span style="margin-left: 3px" t-field="move.sale_line_id.ref"/>
+                <br/>
+                <strong>Unidades:  </strong><span style="margin-left: 3px" t-field="move.sale_line_id.product_uom_qty"/>
+                <br/>
+                <strong>Tecnología:  </strong><span style="margin-left: 3px" t-field="move.sale_line_id.report_tech"/>
+                <br/>
+                <strong>Material:  </strong><span style="margin-left: 3px" t-field="move.sale_line_id.report_material"/>
+                <br/>
+                <strong>Acabado:  </strong><span style="margin-left: 3px" t-field="move.sale_line_id.report_finish"/>
+            </div>
+            <div class="col-4 square4">
+                 <img t-if="move.sale_line_id and move.sale_line_id.model_image" t-att-src="image_data_uri(move.sale_line_id.model_image)" style="width:30mm;height:30mm"/>
+            </div>
+        </div>
+        
+    </div>
+
+    </template>
+
+    <template id="move_label">
+        <t t-call="web.basic_layout">
+            <t t-foreach="docs.mapped('move_lines')" t-as="move">
+                <div class="page" t-if="move.sale_line_id">
+                    <t t-call="custom_documents_lupeon.document_move_label">
+                    </t>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <record id="paperformat_move_label" model="report.paperformat">
+        <field name="name">Move label</field>
+        <field name="default" eval="True" />
+        <field name="format">custom</field>
+        <field name="page_height">116</field>
+        <field name="page_width">72</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">3</field>
+        <field name="margin_bottom">1</field>
+        <field name="margin_left">1</field>
+        <field name="margin_right">1</field>
+        <field name="header_line" eval="False" />
+        <field name="header_spacing">0</field>
+        <field name="dpi">90</field>
+    </record>
+       
+    <report id="report_move_label" 
+            model="stock.picking"
+            string="Move Label"
+            report_type="qweb-pdf"
+            name="custom_documents_lupeon.move_label"
+            file="custom_documents_lupeon.move_label"
+            print_report_name="'Label: %s' % (object.display_name)"
+            paperformat="custom_documents_lupeon.paperformat_move_label"
+            menu="True"
+    />
+
+
+</odoo>

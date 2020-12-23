@@ -224,7 +224,7 @@
                 </td>
             </t>
         </xpath>
-        <xpath expr="//table[@name='invoice_line_table']/tbody/t[@t-foreach='o.invoice_line_ids']/tr" position="after">
+        <!-- <xpath expr="//table[@name='invoice_line_table']/tbody/t[@t-foreach='o.invoice_line_ids']/tr" position="after">
             <t t-if="lupeon_report">
                 <tr>
                     <td colspan="2" style="border:none;">
@@ -238,6 +238,22 @@
                     </td>
                     <td style="border:none;"/>
                 </tr>
+            </t>
+        </xpath> -->
+         <xpath expr="////table[@name='invoice_line_table']/tbody/t[@t-foreach='o.invoice_line_ids']/tr/t[1]/td[1]" position="inside">
+            <t t-if="lupeon_report">
+                <t t-if="line.report_tech">
+                    <br/>
+                    <strong class="extra-lupeon">Technologia:</strong> <span class="extra-lupeon" t-field="line.report_tech"/>
+                </t>
+                <t t-if="line.report_material">
+                    <br/>
+                    <strong class="extra-lupeon">Material:</strong> <span class="extra-lupeon" t-field="line.report_material"/>
+                </t>
+                <t t-if="line.report_finish">
+                    <br/>
+                    <strong class="extra-lupeon">Finish:</strong> <span class="extra-lupeon" t-field="line.report_finish"/>
+                </t>
             </t>
         </xpath>
 

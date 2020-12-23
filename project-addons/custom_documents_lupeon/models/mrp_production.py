@@ -18,8 +18,8 @@ class MrpProduction(models.Model):
         self.ensure_one()
         res = ""
         res += "https://erp.dativic.com/"
-        res += "web%23action=456%26active_id={}".format(str(self.id))
-        res += "%26model=mrp.workorder%26view_type=list%26menu_id=183"
+        res += "web%23id={}%26action=472".format(str(self.id))
+        res += "%26model=mrp.production%26view_type=form%26menu_id=299"
         print(res)
         return res
 
