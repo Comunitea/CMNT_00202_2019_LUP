@@ -26,3 +26,17 @@ class ProductCombinationMapper(Component):
         main_weight = self.binder_for('prestashop.product.template').to_internal(record['id_product']).weight
         weight = main_weight + combination_weight
         return {'weight': weight}
+
+    @mapping
+    def barcode(self, record):
+        barcode = record.get('barcode') or record.get('ean13')
+        if barcode in ['', '0']:
+            backend_adapter = self.component(
+                usage='backend.adapter',
+                model_name='prestashop.product.template'
+            )
+            template = backend_adapter.read(record['id_product'])
+            barcode = template.get('barcode') or template.get('ean13')
+        if barcode and barcode != '0':
+            return {'barcode': barcode}
+        return {}

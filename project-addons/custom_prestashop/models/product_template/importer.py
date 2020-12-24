@@ -12,3 +12,12 @@ class TemplateMapper(Component):
         taxes = self._get_tax_ids(record)
         if taxes:
             return {'taxes_id': [(6, 0, taxes.ids)]}
+
+    @mapping
+    def barcode(self, record):
+        if self.has_combinations(record):
+            return {}
+        barcode = record.get('barcode') or record.get('ean13')
+        if barcode in ['', '0']:
+            return {}
+        return {'barcode': barcode}
