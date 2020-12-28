@@ -3,6 +3,7 @@
 
 from odoo import models, fields, api, _
 from datetime import datetime, timedelta
+from odoo.exceptions import UserError
 
 
 class SaleOrder(models.Model):
@@ -324,8 +325,35 @@ class SaleOrderLine(models.Model):
 
     group_sheet_id = fields.Many2one(
         'group.cost.sheet', 'Grupo de hojas coste', readonly=True)
+    storable_product_id = fields.Many2one(
+        'product.product', 'Producto almacenable', readonly=True)
     ref = fields.Char('Referencia')
     sample = fields.Boolean('Muestra')
+
+    def create_storable_product(self):
+        self.ensure_one()
+        vals = {
+            'name': (self.name or '/'),
+            'uom_id': 1,  # TODO get_unit
+            'default_code': 'REP-' + (self.name or '/'),
+            'type': 'product',
+            'lst_price': self.price_total,
+            'group_sheet_id': self.group_sheet_id.id,
+            'route_ids': [(6, 0, self.env.ref('mrp.route_warehouse0_manufacture').ids)],
+        }
+        product = self.env['product.product'].create(vals)
+        self.storable_product_id = product.id
+
+        if not self.group_sheet_id.bom_id:
+            raise UserError(
+                _('No existe lista de materiales asociada al grupo')) 
+
+        if self.group_sheet_id and self.group_sheet_id.bom_id:
+            new_bom = self.group_sheet_id.bom_id.copy()
+            new_bom.write({
+                'product_id': product.id,
+                'product_tmpl_id': product.product_tmpl_id.id})
+        return True
 
     @api.model
     def create(self, vals):

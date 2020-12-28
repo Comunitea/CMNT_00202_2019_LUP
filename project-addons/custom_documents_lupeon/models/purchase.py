@@ -11,7 +11,6 @@ class PurchaseOrderLine(models.Model):
     # @api.onchange('product_id')
     # def onchange_product_id(self):
     #     result = super().onchange_product_id()
-    #     import ipdb; ipdb.set_trace()
     #     if self.product_id and self.product_id.seller_ids and \
     #             self.order_id and self.order_id.partner_id:
     #         sell_lines = self.product_id.seller_ids.filtered(

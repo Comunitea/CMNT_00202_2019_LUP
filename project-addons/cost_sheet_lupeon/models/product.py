@@ -50,3 +50,6 @@ class ProductTemplate(models.Model):
     # dens_cc = fields.Float('Densidad impreso gr/cc')
     # euro_kg = fields.Float('€/kg')
     created_on_fly = fields.Boolean('Creado al vuelo')
+
+    group_sheet_id = fields.Many2one(
+        'group.cost.sheet', 'Grupo de costes reabastecimineto')

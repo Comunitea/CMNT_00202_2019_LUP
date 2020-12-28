@@ -48,7 +48,6 @@ class MrpProduction(models.Model):
                                compute='get_printed_qty')
 
     def get_printed_qty(self):
-        # import ipdb; ipdb.set_trace()
         for prod in self:
             wo = prod.workorder_ids.filtered(lambda x: x.active_move_line_ids)
             if not wo:

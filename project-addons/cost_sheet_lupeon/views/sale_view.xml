@@ -114,6 +114,11 @@
                 <field name="ref"/>
                 <field name="sample" groups="cost_sheet_lupeon.group_cs_manager"/>
                 <field name="group_sheet_id" readonly="True"/>
+                <div>
+                <label for="storable_product_id"/>
+                    <field name="storable_product_id" readonly="True" />
+                    <button name="create_storable_product" type="object" class="oe_link oe_inline" string="Crear Producto almacenable"  attrs="{'invisible': [('group_sheet_id', '=', False)]}"/>
+                </div>
             </xpath>
             <!--xpath expr="//field[@name='order_line']/form//field[@name='price_unit']" position="attributes">
                 <attribute name="attrs">{'readonly': [('state', 'in', ('sale', 'done'))]}</attribute>

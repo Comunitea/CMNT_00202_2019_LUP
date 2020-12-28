@@ -32,7 +32,6 @@ class RegisterWorkorderWizard(models.TransientModel):
         wo.qty_producing = self.qty
 
         if self.consume_ids and not self.machine_hours:
-            import ipdb; ipdb.set_trace()
             raise UserError('Es necesario indicar el tiempo máquina')
 
         vals = {

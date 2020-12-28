@@ -16,6 +16,10 @@
                         <field name="is_material"/>
                         <label for="is_material"/>
                     </div>
+                    <div attrs="{'invisible':[('type', 'not in', ['product', 'consu', 'service'])]}">
+                        <label for="group_sheet_id"/>
+                        <field name="group_sheet_id"/>
+                    </div>
                 </div>
 
                  <notebook position="inside">
