@@ -36,7 +36,7 @@ class SaleOrder(models.Model):
 
     def _compute_ship_cost(self):
         for order in self:
-            order.ship_cost = sum(picking_ids.picking_ids.mapped('ship_cost'))
+            order.ship_cost = sum(order.picking_ids.mapped('ship_cost'))
 
 
     def _compute_ship_price(self):
