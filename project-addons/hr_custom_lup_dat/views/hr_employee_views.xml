@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="view_employee_files_form" model="ir.ui.view">
+        <field name="name">employee_files_form</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//page[@name='hr_settings']" position="after">
+                <page string="Files">
+                    <field name="file_ids">
+                        <tree string="Files" editable="bottom">
+                            <control>
+                                <create string="Add a file"/>
+                            </control>
+                            <field name="name" />
+                            <field name="file_type_id"/>
+                            <field name="datas"/>
+                            <field name="date"/>
+                        </tree>
+                        <form string="Files" >
+                            <group>
+                                <group >
+                                    <field name="name" />
+                                    <field name="file_type_id"/>
+                                </group>
+                                <group>
+                                    <field name="datas"/>
+                                    <field name="date"/>
+                                </group>
+                            </group>
+                        </form>
+
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

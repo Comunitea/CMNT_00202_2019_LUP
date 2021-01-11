@@ -1,0 +1,113 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* hr_custom_lup_dat
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-01-09 18:41+0000\n"
+"PO-Revision-Date: 2021-01-09 18:41+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: hr_custom_lup_dat
+#: model_terms:ir.ui.view,arch_db:hr_custom_lup_dat.view_employee_files_form
+msgid "Add a file"
+msgstr "Añadir fichero"
+
+#. module: hr_custom_lup_dat
+#: model:ir.model.fields,field_description:hr_custom_lup_dat.field_hr_employee_file__assigned_attachment_ids
+#: model:ir.model.fields,field_description:hr_custom_lup_dat.field_hr_file_type__assigned_attachment_ids
+msgid "Assigned Attachments"
+msgstr ""
+
+#. module: hr_custom_lup_dat
+#: model:ir.model.fields,field_description:hr_custom_lup_dat.field_hr_employee_file__create_uid
+#: model:ir.model.fields,field_description:hr_custom_lup_dat.field_hr_file_type__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: hr_custom_lup_dat
+#: model:ir.model.fields,field_description:hr_custom_lup_dat.field_hr_employee_file__create_date
+#: model:ir.model.fields,field_description:hr_custom_lup_dat.field_hr_file_type__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: hr_custom_lup_dat
+#: model:ir.model.fields,field_description:hr_custom_lup_dat.field_hr_employee_file__date
+msgid "Date"
+msgstr "Fecha"
+
+#. module: hr_custom_lup_dat
+#: model:ir.model.fields,field_description:hr_custom_lup_dat.field_hr_employee_file__display_name
+#: model:ir.model.fields,field_description:hr_custom_lup_dat.field_hr_file_type__display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: hr_custom_lup_dat
+#: model:ir.model,name:hr_custom_lup_dat.model_hr_employee
+#: model:ir.model.fields,field_description:hr_custom_lup_dat.field_hr_employee_file__employee_id
+msgid "Employee"
+msgstr "Empleado"
+
+#. module: hr_custom_lup_dat
+#: model:ir.model.fields,field_description:hr_custom_lup_dat.field_hr_employee_file__datas
+msgid "File"
+msgstr "Archivo"
+
+#. module: hr_custom_lup_dat
+#: model:ir.model.fields,field_description:hr_custom_lup_dat.field_hr_employee__file_ids
+#: model_terms:ir.ui.view,arch_db:hr_custom_lup_dat.view_employee_files_form
+msgid "Files"
+msgstr "Archivos"
+
+#. module: hr_custom_lup_dat
+#: model:ir.model.fields,field_description:hr_custom_lup_dat.field_hr_employee_file__id
+#: model:ir.model.fields,field_description:hr_custom_lup_dat.field_hr_file_type__id
+msgid "ID"
+msgstr ""
+
+#. module: hr_custom_lup_dat
+#: model:ir.model.fields,field_description:hr_custom_lup_dat.field_hr_employee_file____last_update
+#: model:ir.model.fields,field_description:hr_custom_lup_dat.field_hr_file_type____last_update
+msgid "Last Modified on"
+msgstr "Última modificación en"
+
+#. module: hr_custom_lup_dat
+#: model:ir.model.fields,field_description:hr_custom_lup_dat.field_hr_employee_file__write_uid
+#: model:ir.model.fields,field_description:hr_custom_lup_dat.field_hr_file_type__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: hr_custom_lup_dat
+#: model:ir.model.fields,field_description:hr_custom_lup_dat.field_hr_employee_file__write_date
+#: model:ir.model.fields,field_description:hr_custom_lup_dat.field_hr_file_type__write_date
+msgid "Last Updated on"
+msgstr "Última actualización el"
+
+#. module: hr_custom_lup_dat
+#: model:ir.model.fields,field_description:hr_custom_lup_dat.field_hr_employee_file__name
+#: model:ir.model.fields,field_description:hr_custom_lup_dat.field_hr_file_type__name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: hr_custom_lup_dat
+#: model:ir.model.fields,field_description:hr_custom_lup_dat.field_hr_employee_file__file_type_id
+msgid "Type"
+msgstr "Tipo"
+
+#. module: hr_custom_lup_dat
+#: model:ir.model,name:hr_custom_lup_dat.model_hr_employee_file
+msgid "hr.employee.file"
+msgstr ""
+
+#. module: hr_custom_lup_dat
+#: model:ir.model,name:hr_custom_lup_dat.model_hr_file_type
+msgid "hr.file.type"
+msgstr ""
+
