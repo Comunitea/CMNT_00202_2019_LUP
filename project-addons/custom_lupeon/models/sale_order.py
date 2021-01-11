@@ -12,7 +12,7 @@ class SaleOrder(models.Model):
 
     _inherit = "sale.order"
 
-    ship_cost = fields.Monetary(string='Ship Cost', default=0.0)
+    ship_cost = fields.Monetary(string='Ship Cost', compute="_compute_ship_cost")
     ship_price = fields.Monetary(string='Ship Price', compute="_compute_ship_price")
     num_line = fields.Char(string='Nº Line')
     rejected = fields.Boolean('Rejected')
@@ -25,6 +25,18 @@ class SaleOrder(models.Model):
                                 compute="_compute_delivered",
                                 store=True)
     delivery_blocked = fields.Boolean("Entrega bloqueada", default=False)
+
+    @api.multi
+    def print_quotation(self):
+        self.filtered(lambda s: s.state == 'draft').write({'state': 'sent'})
+
+        return self.env.ref('sale.action_report_pro_forma_invoice')\
+            .with_context(discard_logo_check=True).report_action(self)
+
+
+    def _compute_ship_cost(self):
+        for order in self:
+            order.ship_cost = sum(picking_ids.picking_ids.mapped('ship_cost'))
 
 
     def _compute_ship_price(self):
