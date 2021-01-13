@@ -29,9 +29,12 @@ class SaleOrder(models.Model):
     @api.multi
     def print_quotation(self):
         self.filtered(lambda s: s.state == 'draft').write({'state': 'sent'})
-
-        return self.env.ref('sale.action_report_pro_forma_invoice')\
-            .with_context(discard_logo_check=True).report_action(self)
+        if self.company_id.cost_sheet_sale:
+            return self.env.ref('sale.action_report_pro_forma_invoice')\
+                .with_context(discard_logo_check=True).report_action(self)
+        else:
+            return self.env.ref('custom_documents_lupeon.action_report_saleorder_lupeon')\
+                .with_context(discard_logo_check=True).report_action(self)
 
 
     def _compute_ship_cost(self):

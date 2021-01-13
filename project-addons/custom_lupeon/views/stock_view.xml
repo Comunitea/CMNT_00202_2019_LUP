@@ -301,8 +301,8 @@
 
     <menuitem id="menu_picking_ship_cost"
             action="action_stock_picking_cost"
-            parent="sale.sale_order_menu"
-            sequence="40" groups="sales_team.group_sale_salesman"/>
+            parent="stock.menu_stock_warehouse_mgmt"
+            sequence="140" groups="sales_team.group_sale_salesman"/>
 
 
 </odoo>
