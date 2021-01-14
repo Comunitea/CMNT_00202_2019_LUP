@@ -242,6 +242,8 @@
                 <field name="date_done" string="Confirmation Date" readonly="True"/>
                 <field name="partner_id" readonly="True"/>
                 <field name="carrier_id" readonly="True"/>
+                <field name="carrier_tracking_ref" readonly="True"/>
+                <field name="origin" readonly="True"/>
                 <!--field name="ship_price" sum="Total Ship Price" widget="monetary" readonly="True"/-->
                 <!--field name="amount_total" sum="Total Tax Included" widget="monetary" readonly="True"/-->
                 <field name="state" readonly="True"/>
@@ -263,7 +265,7 @@
                 
                 <filter string="Whithout shipping cost" name="no_shipping_cost" domain="[('ship_cost', '=', 0), ('state', '=', 'done')]"/>
                 <separator/>
-                <filter string="Whith Carrier" name="carrier" domain="[('carrier_id', '!=', False)]"/>
+                <filter string="With Carrier" name="carrier" domain="[('carrier_id', '!=', False)]"/>
                 <separator/>
                 
             </filter>
