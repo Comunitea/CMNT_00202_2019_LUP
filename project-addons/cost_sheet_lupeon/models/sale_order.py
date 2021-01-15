@@ -15,7 +15,8 @@ class SaleOrder(models.Model):
     sheets_count = fields.Integer(string='Hojas de coste',
                                   compute='_count_sheets')
     purchase_count = fields.Integer(string='Compras',
-                                    compute='_count_purchases')
+                                    compute='_count_purchases',
+                                    compute_sudo=True)
     production_count = fields.Integer('Productions',
                                 compute='_count_production_and_task')
     count_task = fields.Integer('Productions',
