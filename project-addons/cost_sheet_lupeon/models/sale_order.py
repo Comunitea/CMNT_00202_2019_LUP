@@ -326,7 +326,7 @@ class SaleOrderLine(models.Model):
     group_sheet_id = fields.Many2one(
         'group.cost.sheet', 'Grupo de hojas coste', readonly=True)
     storable_product_id = fields.Many2one(
-        'product.product', 'Producto almacenable', readonly=True)
+        'product.product', 'Producto almacenable', readonly=True, copy=False)
     ref = fields.Char('Referencia')
     sample = fields.Boolean('Muestra')
 
