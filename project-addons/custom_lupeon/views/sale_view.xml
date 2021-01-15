@@ -210,15 +210,15 @@
             </field>
         </record>
 
-        <record id="sale_order_custom_aeat" model="ir.ui.view" >
+    <!--record id="sale_order_custom_aeat" model="ir.ui.view" >
         <field name="name">sale.order.custom.aeat</field>
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="l10n_es_aeat.view_partner_form"/>
         <field name="arch" type="xml">
             <group name="aeat" position="attributes">
                 <attribute name="groups">l10n_es_aeat.group_account_aeat</attribute>
-            </field>
+            </group>
         </field>
-    </record
+    </record-->
 
 </odoo>
