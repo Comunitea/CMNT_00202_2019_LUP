@@ -108,55 +108,47 @@
                     <field name="state" widget="statusbar" statusbar_visible="draft,sent,'design',sale"  attrs="{'invisible': [('company_id', '!=', 1)]}"/>
                 </header>
             </header>
+            
+            <field name="payment_term_id" position="after">
+                <field name="cost_sheet_sale" invisible="1"/>
+                <field name="name2" attrs="{'invisible': [('cost_sheet_sale','=',True)], 'required': [('cost_sheet_sale','!=',True)] }"/>
+            </field>
 
+            <field name="company_id" position="after">
+                <field name="project_id"/>
+            </field >
 
+        </field>
+    </record>
+
+    <record id="sale_order_custom_lup_2" model="ir.ui.view" >
+        <field name="name">sale.order.custom.lup2</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_order_custom_lup"/>
+        <field name="arch" type="xml">
             <xpath expr="//field[@name='order_line']/form//field[@name='product_id']" position="after">
-                <field name="ref"/>
-                <field name="sample" groups="cost_sheet_lupeon.group_cs_manager"/>
-                <field name="group_sheet_id" readonly="True"/>
+                <field name="cost_sheet_sale" invisible="1"/>
+                <field name="ref" attrs="{'invisible': [('cost_sheet_sale','=',True)]}"/>
+                <field name="sample" groups="cost_sheet_lupeon.group_cs_manager" attrs="{'invisible': [('cost_sheet_sale','=',True)]}"/>
+                <field name="group_sheet_id" readonly="True" attrs="{'invisible': [('cost_sheet_sale','=',True)]}"/>
                 <div>
                 <label for="storable_product_id"/>
                     <field name="storable_product_id" readonly="True" />
                     <button name="create_storable_product" type="object" class="oe_link oe_inline" string="Crear Producto almacenable"  attrs="{'invisible': [('group_sheet_id', '=', False)]}"/>
                 </div>
             </xpath>
-            <!--xpath expr="//field[@name='order_line']/form//field[@name='price_unit']" position="attributes">
-                <attribute name="attrs">{'readonly': [('state', 'in', ('sale', 'done'))]}</attribute>
-            </xpath>
-            <xpath expr="//field[@name='order_line']/form//field[@name='product_uom_qty']" position="attributes">
-                <attribute name="attrs">{'readonly': [('state', 'in', ('sale', 'done'))]}</attribute>
-            </xpath>
-            <xpath expr="//field[@name='order_line']/form//field[@name='discount']" position="attributes">
-                <attribute name="attrs">{'readonly': [('state', 'in', ('sale', 'done'))]}</attribute>
-            </xpath>
-            <xpath expr="//field[@name='order_line']/tree//field[@name='price_unit']" position="attributes">
-                <attribute name="attrs">{'readonly': [('state', 'in', ('sale', 'done'))]}</attribute>
-            </xpath>
-            <xpath expr="//field[@name='order_line']/tree//field[@name='product_uom_qty']" position="attributes">
-                <attribute name="attrs">{'readonly': [('state', 'in', ('sale', 'done'))]}</attribute>
-            </xpath>
-            <xpath expr="//field[@name='order_line']/tree//field[@name='discount']" position="attributes">
-                <attribute name="attrs">{'readonly': [('state', 'in', ('sale', 'done'))]}</attribute>
-            </xpath-->
+
+            
 
             <xpath expr="//field[@name='order_line']/tree//field[@name='product_id']" position="after">
-                <field name="ref"/>
-                <field name="sample" groups="cost_sheet_lupeon.group_cs_manager"/>
-                <field name="group_sheet_id" readonly="True"/>
-            </xpath>
-
-            <field name="company_id" position="after">
-                <field name="project_id"/>
-            </field >
-
-            <field name="payment_term_id" position="after">
                 <field name="cost_sheet_sale" invisible="1"/>
-                <field name="name2" attrs="{'invisible': [('cost_sheet_sale','=',True)], 'required': [('cost_sheet_sale','!=',True)] }"/>
-            </field>
-
-            <!-- <field name="commitment_date" position="after">
-                <field name="production_date"/>
-            </field> -->
+                <field name="ref" attrs="{'column_invisible': [('parent.cost_sheet_sale','=',True)]}"/>
+                <field name="sample" groups="cost_sheet_lupeon.group_cs_manager" attrs="{'column_invisible': [('parent.cost_sheet_sale','=',True)]}"/>
+                <field name="group_sheet_id" readonly="True" attrs="{'column_invisible': [('parent.cost_sheet_sale','=',True)]}"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree//field[@name='product_uom']" position="attributes">
+                <field name="attrs">{'column_invisible': [('parent.cost_sheet_sale','=',True)]}</field>
+            </xpath>
         </field>
     </record>
 

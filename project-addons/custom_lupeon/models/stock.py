@@ -71,6 +71,7 @@ class StockPicking(models.Model):
 
     _inherit = "stock.picking"
 
+    ship_cost = fields.Monetary(string='Ship Cost', default=0.0)
     delivered = fields.Boolean('Delivered', compute="_compute_delivered", store=True, readonly=False)
     delivery_blocked = fields.Boolean('Delivery blocked', related='sale_id.delivery_blocked')
     partner_phone = fields.Char('Phone', related='partner_id.phone')

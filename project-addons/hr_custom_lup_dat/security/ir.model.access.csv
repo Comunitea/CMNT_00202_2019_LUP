@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_employee_file_user,Access user on employee file,hr_custom_lup_dat.model_hr_employee_file,hr.group_hr_user,1,0,0,0
+access_employee_file_manager,Access manager on employee file,hr_custom_lup_dat.model_hr_employee_file,hr.group_hr_manager,1,1,1,1
+access_employee_file_type_manager,Access manager on employee file type,hr_custom_lup_dat.model_hr_file_type,hr.group_hr_manager,1,1,1,1

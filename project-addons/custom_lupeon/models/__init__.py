@@ -7,3 +7,4 @@ from . import sale_order
 from . import payment
 from . import account_invoice
 from . import delivery_carrier
+from . import mrp_production

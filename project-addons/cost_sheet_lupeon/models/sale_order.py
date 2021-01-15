@@ -323,6 +323,7 @@ class SaleOrderLine(models.Model):
 
     _inherit = "sale.order.line"
 
+    cost_sheet_sale = fields.Boolean(related="order_id.cost_sheet_sale")
     group_sheet_id = fields.Many2one(
         'group.cost.sheet', 'Grupo de hojas coste', readonly=True)
     storable_product_id = fields.Many2one(
