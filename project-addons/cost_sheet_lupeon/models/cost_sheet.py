@@ -631,6 +631,11 @@ class CostSheet(models.Model):
                     partners = groups.mapped('users.partner_id')
                     if partners:
                         project.message_subscribe(partners.ids)
+
+                    # Añadir usuarios a favoritos
+                    users = groups.mapped('users')
+                    if users:
+                        project.favorite_user_ids = [(4, usr.id) for usr in users]
                 meet_lines = self.mapped('meet_line_ids').filtered(
                     lambda x: not x.task_id)
                 meet_lines.create_meet_tasks(project)
