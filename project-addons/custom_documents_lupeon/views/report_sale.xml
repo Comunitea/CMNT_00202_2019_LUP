@@ -254,14 +254,17 @@
         </xpath>
 
         <xpath expr="//p[@t-if='doc.payment_term_id.note']" position="before">
-            <div class="col-12" id="pay_details" t-if="doc.confirmation_date or doc.payment_mode_id.note or (doc.fiscal_position_id and doc.fiscal_position_id.sudo().note)">
-                <span>Payment details</span>
-            </div>
-            <br/>
-            <p t-if="doc.confirmation_date">
-                <strong>Payed on:</strong>
-                <span t-esc="doc.confirmation_date.strftime('%Y-%m-%d')"/>
-            </p>
+            <t t-if="not env.context.get('proforma', False) and not is_pro_forma">
+                <span>Proforma</span>
+                <div class="col-12" id="pay_details" t-if="doc.confirmation_date or doc.payment_mode_id.note or (doc.fiscal_position_id and doc.fiscal_position_id.sudo().note)">
+                    <span>Payment details</span>
+                </div>
+                <br/>
+                <p t-if="doc.confirmation_date">
+                    <strong>Payed on:</strong>
+                    <span t-esc="doc.confirmation_date.strftime('%Y-%m-%d')"/>
+                </p>
+            </t>
         </xpath>
 
         <xpath expr="//div[@class='page']" position="after">
