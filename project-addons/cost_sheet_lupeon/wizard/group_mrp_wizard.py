@@ -23,6 +23,10 @@ class GroupMrpWizard(models.TransientModel):
 
         for prod in production_ids:
             wo = prod.workorder_ids.filtered(lambda x: x.active_move_line_ids)
+            if not wo:
+                raise UserError(
+                    'No se encuentran consumos asociados a la orden de \
+                    trabajo')
             vals = {
                 'group_mrp_id': group.id,
                 'workorder_id': wo.id,

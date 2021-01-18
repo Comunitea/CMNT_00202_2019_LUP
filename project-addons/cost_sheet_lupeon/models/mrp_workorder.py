@@ -14,7 +14,7 @@ class MrpWorkorder(models.Model):
         'cost.sheet', 'Cost Sheet', related='production_id.sheet_id')
     th_machine_hours = fields.Float(
        'Horas máquina estimadas',
-       related='production_id.sheet_id.machine_hours')
+       compute="_get_th_machine_hours")
     e_partner_id = fields.Many2one(
         'res.partner', 'Proveedor Externalización', readonly=True)
     out_pick_id = fields.Many2one('stock.picking', 'Albarán salida',
@@ -44,6 +44,13 @@ class MrpWorkorder(models.Model):
         for wo in self:
             wo.machine_time = sum([x.time for x in wo.machine_time_ids])
 
+    def _get_th_machine_hours(self):
+        for wo in self:
+            machine_time = wo.sheet_id.machine_hours
+            # Para las producciones repetidas calculamos el factor
+            factor = machine_time / wo.sheet_id.cus_units
+            wo.th_machine_hours = wo.qty_production * factor
+
     def _get_th_user_time(self):
         for wo in self:
             tech_line = wo.sheet_id.workforce_cost_ids.filtered(
@@ -54,7 +61,8 @@ class MrpWorkorder(models.Model):
                 lambda o: wo.name == o.name)
             if oppi:
                 duration = oppi.time
-            wo.th_user_hours = duration
+            factor = duration / wo.sheet_id.cus_units
+            wo.th_user_hours = wo.qty_production * factor
 
     # No quiero que cree checks de calidad
     def _create_checks(self):

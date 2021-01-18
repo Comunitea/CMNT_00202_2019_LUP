@@ -848,12 +848,14 @@ class CostSheet(models.Model):
                     'date_planned_start':
                     self.sale_line_id.order_id.production_date -
                     timedelta(hours=duration),
-                    'employee_id': oppi.employee_id.id
             }
+            if oppi and oppi.employee_id:
+                vals.update(
+                    employee_id=oppi.employee_id.id)
 
             if oppi and oppi.e_partner_id:
                 vals.update(
-                    e_partner_id=oppi.e_partner_id.id,)
+                    e_partner_id=oppi.e_partner_id.id)
             wo.write(vals)
         self.write({'production_id': prod.id})
 
