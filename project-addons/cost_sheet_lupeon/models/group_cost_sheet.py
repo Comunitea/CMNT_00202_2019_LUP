@@ -61,7 +61,7 @@ class GroupCostSheet(models.Model):
                 pu = group.line_pvp / group.sale_line_id.product_uom_qty
 
             if group.sale_id and group.sale_id.state in (
-                    'draft', 'sent', 'design'):
+                    'draft', 'sent'):
                 group.sale_line_id.write({'price_unit': pu})
 
     @api.depends('sheet_ids', 'assembly_ids')

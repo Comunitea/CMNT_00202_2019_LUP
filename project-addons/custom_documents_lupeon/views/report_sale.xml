@@ -37,8 +37,10 @@
                                 <t t-if="ia.state_id.name">
                                     (  <span t-esc="ia.state_id.name"/>  )
                                 </t>
+                            </div>
+                            <div>
                                 <t t-if="ia.country_id.name">
-                                    (  <span t-esc="ia.country_id.name"/>  )
+                                    <span t-esc="ia.country_id.name"/>
                                 </t>
                             </div>
                             <div t-if="ia.vat">
@@ -68,8 +70,10 @@
                                 <t t-if="sa.state_id.name">
                                     (  <span t-esc="sa.state_id.name"/>  )
                                 </t>
+                            </div>
+                            <div>
                                 <t t-if="sa.country_id.name">
-                                    (  <span t-esc="sa.country_id.name"/>  )
+                                    <span t-esc="sa.country_id.name"/>
                                 </t>
                             </div>
                             <div t-if="sa.vat">
