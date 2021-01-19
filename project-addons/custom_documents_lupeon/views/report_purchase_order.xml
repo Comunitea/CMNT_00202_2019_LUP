@@ -71,12 +71,12 @@
                                     (  <span t-esc="ia.state_id.name"/>  )
                                 </t>
                             </div>
-                            <div t-if="sa.country_id.name">
-                               <span t-esc="sa.country_id.name"/>
+                            <div t-if="ia.country_id.name">
+                               <span t-esc="ia.country_id.name"/>
                             </div>
                             <div>
                                 <i class='fa fa-phone fa-fw' role="img" aria-label="Phone" title="Phone"/>
-                                <span t-esc="sa.phone or sa.mobile"/>
+                                <span t-esc="ia.phone or ia.mobile"/>
                             </div>
                             <div t-if="ia.vat">
                                 CIF: <span t-esc="ia.vat"/>
