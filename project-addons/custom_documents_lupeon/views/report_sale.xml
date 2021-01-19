@@ -38,10 +38,8 @@
                                     (  <span t-esc="ia.state_id.name"/>  )
                                 </t>
                             </div>
-                            <div>
-                                <t t-if="ia.country_id.name">
-                                    <span t-esc="ia.country_id.name"/>
-                                </t>
+                            <div t-if="ia.country_id.name">
+                                <span t-esc="ia.country_id.name"/>
                             </div>
                             <div t-if="ia.vat">
                                 CIF: <span t-esc="ia.vat"/>
@@ -71,10 +69,8 @@
                                     (  <span t-esc="sa.state_id.name"/>  )
                                 </t>
                             </div>
-                            <div>
-                                <t t-if="sa.country_id.name">
-                                    <span t-esc="sa.country_id.name"/>
-                                </t>
+                            <div t-if="sa.country_id.name">
+                                <span t-esc="sa.country_id.name"/>
                             </div>
                             <div t-if="sa.vat">
                         CIF: <span t-esc="sa.vat"/>

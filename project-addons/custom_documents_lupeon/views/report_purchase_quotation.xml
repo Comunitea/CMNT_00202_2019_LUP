@@ -40,12 +40,9 @@
                                 <t t-if="sa.state_id.name">
                                     (  <span t-esc="sa.state_id.name"/>  )
                                 </t>
-                                <t t-if="sa.country_id.name">
-                                    (  <span t-esc="sa.country_id.name"/>  )
-                                </t>
                             </div>
-                            <div>
-                                <span t-esc="sa.country_id.name"/>
+                            <div t-if="sa.country_id.name">
+                               <span t-esc="sa.country_id.name"/>
                             </div>
                             <div>
                                 <i class='fa fa-phone fa-fw' role="img" aria-label="Phone" title="Phone"/>
@@ -79,11 +76,8 @@
                                 <t t-if="ia.state_id.name">
                                     (  <span t-esc="ia.state_id.name"/>  )
                                 </t>
-                                <t t-if="ia.country_id.name">
-                                    (  <span t-esc="ia.country_id.name"/>  )
-                                </t>
                             </div>
-                            <div>
+                            <div t-if="ia.country_id.name">
                                 <span t-esc="ia.country_id.name"/>
                             </div>
                             <div t-if="ia.phone or sa.mobile">

@@ -37,9 +37,9 @@
                     <t t-if="company.partner_id.state_id">
                      (<span t-esc="company.partner_id.state_id.name"/>)
                     </t>
-                    <t t-if="company.partner_id.country_id">
-                     (<span t-esc="company.partner_id.country_id.name"/>)
-                    </t>
+                </div>
+                <div t-if="company.partner_id.country_id.name">
+                    <span t-esc="company.partner_id.country_id.name"/>
                 </div>
                 <div t-if="company.partner_id.phone">
                     <span>Tel:</span><span t-esc="company.partner_id.phone"/>
