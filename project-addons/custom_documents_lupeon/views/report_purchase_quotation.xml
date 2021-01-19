@@ -44,9 +44,13 @@
                             <div t-if="sa.country_id.name">
                                <span t-esc="sa.country_id.name"/>
                             </div>
-                            <div>
+                            <div t-if="sa.phone or sa.mobile">
                                 <i class='fa fa-phone fa-fw' role="img" aria-label="Phone" title="Phone"/>
                                 <span t-esc="sa.phone or sa.mobile"/>
+                            </div>
+                            <div t-if="sa.email">
+                                <i class='fa fa-envelope-o fa-fw' role="img" aria-label="Mail" title="Mail"/>
+                                <span t-esc="sa.email"/>
                             </div>
                             <div t-if="sa.vat">
                                 CIF: <span t-esc="sa.vat"/>
@@ -80,9 +84,13 @@
                             <div t-if="ia.country_id.name">
                                 <span t-esc="ia.country_id.name"/>
                             </div>
-                            <div t-if="ia.phone or sa.mobile">
+                            <div t-if="ia.phone or ia.mobile">
                                 <i class='fa fa-phone fa-fw' role="img" aria-label="Phone" title="Phone"/>
-                                <span t-esc="ia.phone or sa.mobile"/>
+                                <span t-esc="ia.phone or ia.mobile"/>
+                            </div>
+                            <div t-if="ia.email">
+                                <i class='fa-envelope-o fa-fw' role="img" aria-label="Mail" title="Mail"/>
+                                <span t-esc="ia.email"/>
                             </div>
                             <div t-if="ia.vat">
                                 CIF: <span t-esc="ia.vat"/>
