@@ -122,11 +122,11 @@
                 </div>
                 <div t-if="doc.confirmation_date and doc.state not in ['draft','sent']" class="col-auto mw-100 mb-2 text-center">
                     <strong>Order Date:</strong>
-                    <p class="m-0" t-esc="doc.confirmation_date.strftime('%Y-%m-%d')"/>
+                    <p class="m-0" t-esc="doc.confirmation_date.strftime('%d-%m-%Y')"/>
                 </div>
                 <div t-if="doc.date_order and doc.state in ['draft','sent']" class="col-auto mw-100 mb-2 text-center">
                     <strong>Quotation Date:</strong>
-                    <p class="m-0" t-esc="doc.date_order.strftime('%Y-%m-%d')"/>
+                    <p class="m-0" t-esc="doc.date_order.strftime('%d-%m-%Y')"/>
                 </div>
                 <div t-if="doc.client_order_ref" class="col-auto mw-100 mb-2 text-center">
                     <strong>Nº Customer Order:</strong>
@@ -142,7 +142,7 @@
                 </div>
                 <div t-if="doc.validity_date and env.context.get('proforma', False) or is_pro_forma" class="col-auto mw-100 mb-2 text-center">
                     <strong>Expiration Date:</strong>
-                    <p class="m-0" t-esc="doc.validity_date.strftime('%Y-%m-%d')"/>
+                    <p class="m-0" t-esc="doc.validity_date.strftime('%d-%m-%Y')"/>
                 </div>
                 <div t-if="doc.incoterm" class="col-auto mw-100 mb-2 text-center" name="incoterm" groups="sale_stock.group_display_incoterm">
                     <strong>Incoterm:</strong>
@@ -260,7 +260,7 @@
                 <br/>
                 <p t-if="doc.confirmation_date">
                     <strong>Payed on:</strong>
-                    <span t-esc="doc.confirmation_date.strftime('%Y-%m-%d')"/>
+                    <span t-esc="doc.confirmation_date.strftime('%d-%m-%Y')"/>
                 </p>
             </t>
         </xpath>

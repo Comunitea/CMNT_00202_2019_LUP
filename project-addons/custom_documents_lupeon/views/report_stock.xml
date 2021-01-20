@@ -4,9 +4,9 @@
     <template id="report_delivery_document_custom" inherit_id="stock.report_delivery_document">
 
         <!-- Replace Order by Picking -->
-        <xpath expr="//div[hasclass('page')]//table//th[@t-if='o.origin']" position="replace">
+        <!-- <xpath expr="//div[hasclass('page')]//table//th[@t-if='o.origin']" position="replace">
             <th t-if="o.origin"><strong>Picking</strong></th>
-        </xpath>
+        </xpath> -->
 
         <!-- Replace partner address. Add invoice and shipping address -->
         <xpath expr="//t[@t-if='partner']" position="replace"/>
@@ -116,10 +116,10 @@
 
         <!-- Dates without time -->
         <xpath expr="//span[@t-field='o.date_done']" position="replace">
-            <span t-esc="o.date_done.strftime('%Y-%m-%d')"/>
+            <span t-esc="o.date_done.strftime('%d-%m-%Y')"/>
         </xpath>
         <xpath expr="//span[@t-field='o.scheduled_date']" position="replace">
-             <span t-esc="o.scheduled_date.strftime('%Y-%m-%d')"/>
+             <span t-esc="o.scheduled_date.strftime('%d-%m-%Y')"/>
         </xpath>
 
         <!-- Picking Name -->
@@ -259,15 +259,20 @@
         </xpath>
     </template>
 
+    <!-- SOBREESCRITO PARA QUE NO SALGA MAL ALINEADA ENCIMA DE LA DIREEECION DE ENTREGA -->
     <template id="sale_stock.report_delivery_document_inherit_sale_stock" inherit_id="stock.report_delivery_document">
-        <xpath expr="//h2" position="before">
-            <div class="row justify-content-end" t-if="o.sudo().sale_id.client_order_ref">
-                <div class="col-4">
-                    <strong>Cuustomer Reference:</strong>
-                    <p t-field="o.sudo().sale_id.client_order_ref"/>
-                </div>
-            </div>
+
+        <xpath expr="//div[hasclass('page')]//table//th[@t-if='o.origin']" position="after">
+            <th t-if="o.sudo().sale_id.client_order_ref">
+                <strong>Client Ref</strong>
+            </th>
         </xpath>
+        <xpath expr="//div[hasclass('page')]//table//td[@t-if='o.origin']" position="after">
+            <td t-if="o.sudo().sale_id.client_order_ref">
+                <span t-field="o.sudo().sale_id.client_order_ref"/>
+            </td>
+        </xpath>
+           
     </template>
 
      <template id="report_deliveryslip_lupeon">

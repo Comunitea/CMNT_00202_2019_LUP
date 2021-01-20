@@ -132,7 +132,7 @@
                 </div>
                 <div t-if="o.date_order" class="col-auto mw-100 mb-2 text-center">
                     <strong>Date:</strong>
-                    <p class="m-0" t-esc="o.date_order.strftime('%Y-%m-%d')"/>
+                    <p class="m-0" t-esc="o.date_order.strftime('%d-%m-%Y')"/>
                 </div>
                 <!-- No groups for purchase -->
                 <div t-if="o.partner_id.sale_incoterm_id or o.incoterm_id" class="col-auto mw-100 mb-2 text-center" name="incoterm_id">
@@ -152,7 +152,7 @@
 
         <!-- Format date planned -->
         <xpath expr="//table[hasclass('table', 'table-sm', 'o_main_table')]//td[3]/span" position="replace">
-            <span t-esc="line.date_planned.strftime('%Y-%m-%d')"/>
+            <span t-esc="line.date_planned.strftime('%d-%m-%Y')"/>
         </xpath>
 
         <!-- Price unit concurrency -->

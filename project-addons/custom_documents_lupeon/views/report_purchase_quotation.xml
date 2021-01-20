@@ -128,7 +128,7 @@
                 </div>
                 <div t-if="o.date_order" class="col-auto mw-100 mb-2 text-center">
                     <strong>Date:</strong>
-                    <p class="m-0" t-esc="o.date_order.strftime('%Y-%m-%d')"/>
+                    <p class="m-0" t-esc="o.date_order.strftime('%d-%m-%Y')"/>
                 </div>
                 <!-- No groups for purchase -->
                 <div t-if="o.partner_id.sale_incoterm_id or o.incoterm_id" class="col-auto mw-100 mb-2 text-center" name="incoterm_id">
@@ -145,7 +145,7 @@
 
         <!-- Format expected date -->
         <xpath expr="//table[hasclass('table', 'table-sm', 'o_table_purchase_quotation')]//td[2]/span" position="replace">
-            <span t-esc="order_line.date_planned.strftime('%Y-%m-%d')"/>
+            <span t-esc="order_line.date_planned.strftime('%d-%m-%Y')"/>
         </xpath>
 
         <!-- Change Qty and center -->
