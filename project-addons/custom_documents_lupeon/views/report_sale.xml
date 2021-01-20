@@ -195,6 +195,22 @@
             <attribute name="class">text-right</attribute>
         </xpath>
 
+        <!-- Cambiar etiqueta descuento -->
+        <xpath expr="//table/thead/tr/th[@t-if='display_discount']" position="replace">
+            <th name="th_discount" t-if="display_discount" class="text-right" groups="sale.group_discount_per_so_line">
+                <span>DISC.(%)</span>
+                <!-- TODO: remove in master -->
+                <t t-set="colspan" t-value="colspan+1"/>
+            </th>
+        </xpath>
+
+        <!-- Quitar columna impuestos -->
+        <xpath expr="//table/thead/tr/th[@name='th_taxes']" position="replace">
+        </xpath>
+        <xpath expr="//table[@class='table table-sm o_main_table']//tbody//t[@t-foreach='doc.order_line']//tr//t[@t-if='not line.display_type']/td[5]"  position="replace">
+            <attribute name="t-options">{'widget': 'monetary', 'display_currency': doc.pricelist_id.currency_id}</attribute>
+        </xpath>
+
         <!-- Etiqueta plazo de pago -->
         <xpath expr="//p[@t-if='doc.payment_term_id.note']" position="replace">
             <p t-if="doc.payment_term_id.note" name="payment_term">
