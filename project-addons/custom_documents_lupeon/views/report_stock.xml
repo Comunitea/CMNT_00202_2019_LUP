@@ -4,9 +4,9 @@
     <template id="report_delivery_document_custom" inherit_id="stock.report_delivery_document">
 
         <!-- Replace Order by Picking -->
-        <!-- <xpath expr="//div[hasclass('page')]//table//th[@t-if='o.origin']" position="replace">
-            <th t-if="o.origin"><strong>Picking</strong></th>
-        </xpath> -->
+        <xpath expr="//div[hasclass('page')]//table//th[@t-if='o.origin']" position="replace">
+            <th t-if="o.origin"><strong>Nª Order</strong></th>
+        </xpath>
 
         <!-- Replace partner address. Add invoice and shipping address -->
         <xpath expr="//t[@t-if='partner']" position="replace"/>

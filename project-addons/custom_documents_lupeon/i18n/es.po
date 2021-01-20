@@ -6,14 +6,35 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-23 16:24+0000\n"
-"PO-Revision-Date: 2020-12-23 16:24+0000\n"
+"POT-Creation-Date: 2021-01-20 12:35+0000\n"
+"PO-Revision-Date: 2021-01-20 12:35+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_delivery_document_custom
+msgid "<br/>\n"
+"                                <strong class=\"extra-lupeon\">Finish:</strong>"
+msgstr  "<br/>\n"
+"                                <strong class=\"extra-lupeon\">Acabado:</strong>"
+
+#. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_delivery_document_custom
+msgid "<br/>\n"
+"                                <strong class=\"extra-lupeon\">Material:</strong>"
+msgstr "<br/>\n"
+"                                <strong class=\"extra-lupeon\">Material:</strong>"
+
+#. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_delivery_document_custom
+msgid "<br/>\n"
+"                                <strong class=\"extra-lupeon\">Technology:</strong>"
+msgstr "<br/>\n"
+"                                <strong class=\"extra-lupeon\">Tecnología:</strong>"
 
 #. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_invoice_document
@@ -33,19 +54,19 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_invoice_document
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
 msgid "<br/>\n"
-"                    <strong class=\"extra-lupeon\">Technologia:</strong>"
-msgstr ""
-
-#. module: custom_documents_lupeon
-#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.document_move_label
-msgid "<br/>\n"
-"                <span>Material:  </span>"
+"                    <strong class=\"extra-lupeon\">Technology:</strong>"
 msgstr ""
 
 #. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.document_move_label
 msgid "<br/>\n"
 "                <strong>Acabado:  </strong>"
+msgstr ""
+
+#. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.document_move_label
+msgid "<br/>\n"
+"                <strong>Material:  </strong>"
 msgstr ""
 
 #. module: custom_documents_lupeon
@@ -91,9 +112,30 @@ msgid "<br/>\n"
 msgstr ""
 
 #. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_delivery_document_custom
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_invoice_document
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchaseorder_document_custom_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchasequotation_document_custom_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
+msgid "<i class=\"fa fa-envelope-o fa-fw\" role=\"img\" aria-label=\"Mail\" title=\"Mail\"/>"
+msgstr ""
+
+#. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_delivery_document_custom
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_invoice_document
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchaseorder_document_custom_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchasequotation_document_custom_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
 msgid "<i class=\"fa fa-phone fa-fw\" role=\"img\" aria-label=\"Phone\" title=\"Phone\"/>"
+msgstr ""
+
+#. module: custom_documents_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_delivery_document_custom
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_invoice_document
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchaseorder_document_custom_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchasequotation_document_custom_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
+msgid "<i class=\"fa-envelope-o fa-fw\" role=\"img\" aria-label=\"Mail\" title=\"Mail\"/>"
 msgstr ""
 
 #. module: custom_documents_lupeon
@@ -113,7 +155,7 @@ msgstr ""
 
 #. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
-msgid "<span>Nota</span>"
+msgid "<span>Note</span>"
 msgstr ""
 
 #. module: custom_documents_lupeon
@@ -263,11 +305,6 @@ msgid "<strong>Payment Term:</strong>"
 msgstr "<strong>Plazo de pago:</strong>"
 
 #. module: custom_documents_lupeon
-#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_delivery_document_custom
-msgid "<strong>Picking</strong>"
-msgstr "<strong>Albarán</strong>"
-
-#. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchaseorder_document_custom_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_purchasequotation_document_custom_lupeon
 msgid "<strong>Quantity</strong>"
@@ -367,11 +404,6 @@ msgid "Finish"
 msgstr "Acabado"
 
 #. module: custom_documents_lupeon
-#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_delivery_document_custom
-msgid "Finish:"
-msgstr "Acabado"
-
-#. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
 msgid "Firmado: __________________________"
 msgstr ""
@@ -408,11 +440,6 @@ msgstr "Correo:"
 #: model:ir.model.fields,field_description:custom_documents_lupeon.field_prestashop_sale_order_line_discount__report_material
 #: model:ir.model.fields,field_description:custom_documents_lupeon.field_sale_order_line__report_material
 msgid "Material"
-msgstr ""
-
-#. module: custom_documents_lupeon
-#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_delivery_document_custom
-msgid "Material:"
 msgstr ""
 
 #. module: custom_documents_lupeon
@@ -535,11 +562,6 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_invoice_document
 msgid "T2LF MERCANCÍA SIN DECLARACIÓN DE EXPEDICIÓN"
 msgstr ""
-
-#. module: custom_documents_lupeon
-#: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_delivery_document_custom
-msgid "Technologia:"
-msgstr "Tecnología"
 
 #. module: custom_documents_lupeon
 #: model:ir.model.fields,field_description:custom_documents_lupeon.field_account_invoice_line__report_tech
