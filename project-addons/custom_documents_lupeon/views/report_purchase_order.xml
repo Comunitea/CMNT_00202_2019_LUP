@@ -26,7 +26,7 @@
                     <div class="row mt8" id="shipping_address_content">
                         <div class="col-12">
                             <div>
-                                <span itemprop="name" t-esc="sa.name"/>
+                                <span itemprop="name" t-esc="sa.display_name"/>
                             </div>
                             <div>
                                 <span t-esc="sa.street"/>
@@ -64,7 +64,7 @@
                     <div class="row mt8" id="supplier_address_content">
                         <div class="col-12">
                             <div>
-                                <span itemprop="name" t-esc="ia.name"/>
+                                <span itemprop="name" t-esc="ia.display_name"/>
                             </div>
                             <div>
                                 <span t-esc="ia.street"/>

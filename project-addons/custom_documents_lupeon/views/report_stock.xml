@@ -26,7 +26,7 @@
                     <div class="row mt8" id="invoice_address_content">
                         <div class="col-12">
                             <div>
-                                <span itemprop="name" t-esc="ia.name"/>
+                                <span itemprop="name" t-esc="ia.display_name"/>
                             </div>
                             <div>
                                 <span t-esc="ia.street"/>
@@ -66,7 +66,7 @@
                     <div class="row mt8" id="shipping_address_content">
                         <div class="col-12">
                             <div>
-                                <span itemprop="name" t-esc="sa.name"/>
+                                <span itemprop="name" t-esc="sa.display_name"/>
                             </div>
                             <div>
                                 <span t-esc="sa.street"/>
@@ -203,7 +203,7 @@
                 <t t-if="lupeon_report">
                     <tr  style="border-top:1px solid black;background-color:#F0F8FF">
                         <td colspan="2" style="border:none;">
-                            Technologia: <span t-field="move_line.move_id.sale_line_id and move_line.move_id.sale_line_id.report_tech"/>
+                            Technology: <span t-field="move_line.move_id.sale_line_id and move_line.move_id.sale_line_id.report_tech"/>
                         </td>
                         <td colspan="3" style="border:none;background-color:#F0F8FF">
                             Material: <span t-field="move_line.move_id.sale_line_id and move_line.move_id.sale_line_id.report_material"/>
@@ -254,6 +254,17 @@
                         </table>
 
                     </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="sale_stock.report_delivery_document_inherit_sale_stock" inherit_id="stock.report_delivery_document">
+        <xpath expr="//h2" position="before">
+            <div class="row justify-content-end" t-if="o.sudo().sale_id.client_order_ref">
+                <div class="col-4">
+                    <strong>Cuustomer Reference:</strong>
+                    <p t-field="o.sudo().sale_id.client_order_ref"/>
                 </div>
             </div>
         </xpath>

@@ -23,7 +23,7 @@
                     <div class="row mt8" id="invoice_address_content">
                         <div class="col-12">
                             <div>
-                                <span itemprop="name" t-esc="ia.name"/>
+                                <span itemprop="name" t-esc="ia.display_name"/>
                             </div>
                             <div>
                                 <span t-esc="ia.street"/>
@@ -62,7 +62,7 @@
                     <div class="row mt8" id="shipping_address_content">
                         <div class="col-12">
                             <div>
-                                <span itemprop="name" t-esc="sa.name"/>
+                                <span itemprop="name" t-esc="sa.display_name"/>
                             </div>
                             <div>
                                 <span t-esc="sa.street"/>
@@ -221,29 +221,11 @@
                 </td>
             </t>
         </xpath>
-
-        <!-- <xpath expr="//table[@class='table table-sm o_main_table']/tbody/t[@t-foreach='doc.order_line']/tr" position="after">
-            <t t-if="lupeon_report">
-                <tr>
-                    <td colspan="2" style="border:none;">
-                        Technologia: <span t-field="line.report_tech"/>
-                    </td>
-                    <td colspan="2" style="border:none;">
-                        Material: <span t-field="line.report_material"/>
-                    </td>
-                    <td colspan="2" style="border:none;">
-                        Finish: <span t-field="line.report_finish"/>
-                    </td>
-                    <td style="border:none;"/>
-                </tr>
-            </t>
-        </xpath> -->
-
          <xpath expr="//table[@class='table table-sm o_main_table']/tbody/t[@t-foreach='doc.order_line']/tr/t[1]/td[1]" position="inside">
             <t t-if="lupeon_report">
                 <t t-if="line.report_tech">
                     <br/>
-                    <strong class="extra-lupeon">Technologia:</strong> <span class="extra-lupeon" t-field="line.report_tech"/>
+                    <strong class="extra-lupeon">Technology:</strong> <span class="extra-lupeon" t-field="line.report_tech"/>
                 </t>
                 <t t-if="line.report_material">
                     <br/>
