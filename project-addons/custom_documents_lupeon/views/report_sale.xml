@@ -269,7 +269,7 @@
 
         <xpath expr="//p[@t-if='doc.payment_term_id.note']" position="before">
             <t t-if="not env.context.get('proforma', False) and not is_pro_forma">
-                <span>Proforma</span>
+                <!-- <span>Proforma</span> -->
                 <div class="col-12" id="pay_details" t-if="doc.confirmation_date or doc.payment_mode_id.note or (doc.fiscal_position_id and doc.fiscal_position_id.sudo().note)">
                     <span>Payment details</span>
                 </div>
