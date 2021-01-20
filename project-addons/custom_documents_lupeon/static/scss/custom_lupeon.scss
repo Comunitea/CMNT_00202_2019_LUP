@@ -38,7 +38,8 @@ tr, td { border: none; }
 // Header - Company Address
 #header_company_address {
     font-size: 13px;
-    border-left: 6px solid darken(#8cd4d8, 20%);
+    // border-left: 6px solid darken(#8cd4d8, 20%);
+    border-left: 6px solid #8cd4d8
     float: right;
     min-width: 65%;
     & div {

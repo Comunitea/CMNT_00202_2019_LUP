@@ -246,7 +246,7 @@
         <!-- Pay details after total table -->
         <xpath expr="//p[@t-field='doc.note']" position="before">
             <div class="col-12" id="doc_note" t-if="doc.note">
-                <span>Nota</span>
+                <span>Note</span>
             </div>
             <br/>
         </xpath>
@@ -268,10 +268,12 @@
         <xpath expr="//div[@class='page']" position="after">
             <t t-if="lupeon_report">
                 <div class="page" style="page-break-before:always;">
+                    <br/>
+                    <br/>
                     <div>
                         <table class="table2" width="750px" height="300px;">
                             <tr width="100%">
-                                <td width="40%" rowspan="0" style=";background-color:#8cd4d8;color:white;font-weight: bold">
+                                <td width="40%" rowspan="0" style="text-align:center;vertical-align:middle;background-color:#8cd4d8;color:white;font-weight: bold">
                                     <strong>Aceptación del presupuesto</strong>
                                     <br/>
                                     (Devolver firmado y sellado)
@@ -288,29 +290,29 @@
                             </tr>
                             <tr>
                                 <td ></td>
-                                <td style="border-right:none;border-bottom:1px solid black; vertical-align:middle">Automoción</td>
+                                <td style="padding-left:5px;border-right:none;border-bottom:1px solid black; vertical-align:middle">Automoción</td>
                                 <td style="border-right:none;border-bottom:1px solid black;"></td>
                                 <td style="border-right:none;border-bottom:1px solid black;text-align:center;vertical-align:middle"><input type="checkbox" name="cb-autos"/></td>
                             </tr>
                             <tr>
                                 <td style="text-align:center" width="40%" rowspan="2">Firmado: __________________________</td>
-                                <td style="border-right:none;border-bottom:1px solid black; vertical-align:middle">Alimentación</td>
+                                <td style="padding-left:5px;border-right:none;border-bottom:1px solid black; vertical-align:middle">Alimentación</td>
                                 <td style="border-right:none;border-bottom:1px solid black;"></td>
                                 <td style="border-right:none;border-bottom:1px solid black;text-align:center;vertical-align:middle"><input type="checkbox" name="cb-autos"/></td>
                             </tr>
                             <tr>
-                                <td style="border-right:none;border-bottom:1px solid black; vertical-align:middle">Sanitario</td>
+                                <td style="padding-left:5px;border-right:none;border-bottom:1px solid black; vertical-align:middle">Sanitario</td>
                                 <td style="border-right:none;border-bottom:1px solid black;"></td>
                                 <td style="border-right:none;border-bottom:1px solid black;text-align:center;vertical-align:middle"><input type="checkbox" name="cb-autos"/></td>
                             </tr>
                             <tr>
                                 <td style="text-align:center" width="40%" rowspan="2">Fecha: __________________________</td>
-                                <td style="border-right:none;border-bottom:1px solid black; vertical-align:middle">Aeronáutico</td>
+                                <td style="padding-left:5px;border-right:none;border-bottom:1px solid black; vertical-align:middle">Aeronáutico</td>
                                 <td style="border-right:none;border-bottom:1px solid black;"></td>
                                 <td style="border-right:none;border-bottom:1px solid black;text-align:center;vertical-align:middle"><input type="checkbox" name="cb-autos"/></td>
                             </tr>
                             <tr>
-                                <td style="border-right:none;border-bottom:1px solid black; vertical-align:middle">Otros:</td>
+                                <td style="padding-left:5px;border-right:none;border-bottom:1px solid black; vertical-align:middle">Otros:</td>
                                 <td style="border-right:none;border-bottom:1px solid black;"></td>
                                 <td style="border-right:none;border-bottom:1px solid black;text-align:center;vertical-align:middle"><input type="checkbox" name="cb-autos"/></td>
                             </tr>

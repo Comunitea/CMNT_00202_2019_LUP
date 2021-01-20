@@ -8,13 +8,15 @@
                 position: relative;
                 width: 126mm;
                 height: 72mm;
-                border: 1px solid black;
+                border: 0px solid black;
                 padding: 2px;
                 font-size: 12px;
             }
             .square1{
                 text-align: center;
-                  margin: 0px;
+                margin: 0px;
+                border: 0px solid black;
+                position: relative;
             }
             .square2{
                 font-size: 12px;
@@ -27,11 +29,15 @@
             }
              .square3{
                 font-size: 12px;
-                 line-height: 25px;
+                line-height: 25px;
+                border: 0px solid black;
+                height: 52mm;
             }
              .square4{
                 text-align: center;
-                padding:5px;
+                border: 0px solid black;
+                height: 52mm;
+                padding-top: 15px;
             }
             .label-row{
               margin-right: 0px !important;
@@ -40,7 +46,7 @@
     <div class="label-container">
         <div class="row label-row">
             <div class="col-6 square1">
-                 <img t-if="move.picking_id.company_id.logo" t-att-src="image_data_uri(move.picking_id.company_id.logo)" style="width:25mm;height:25mm"/>
+                 <img t-if="move.picking_id.company_id.logo" t-att-src="image_data_uri(move.picking_id.company_id.logo)" style="width:45mm;height:20mm"/>
             </div>
             <div class="col-6 square2" >
                 <strong>Ref. cliente:  </strong><span style="margin-left: 3px" t-field="move.picking_id.sale_id.name2"/>
@@ -51,7 +57,7 @@
             </div>
         </div>
         
-        <div class="row">
+        <div class="row label-row">
             <div class="col-8 square3">
                 <strong>Descripción:  </strong><span style="margin-left: 3px" t-field="move.name"/>
                 <br/>
@@ -66,7 +72,7 @@
                 <strong>Acabado:  </strong><span style="margin-left: 3px" t-field="move.sale_line_id.report_finish"/>
             </div>
             <div class="col-4 square4">
-                 <img t-if="move.sale_line_id and move.sale_line_id.model_image" t-att-src="image_data_uri(move.sale_line_id.model_image)" style="width:30mm;height:30mm"/>
+                 <img t-if="move.sale_line_id and move.sale_line_id.model_image" t-att-src="image_data_uri(move.sale_line_id.model_image)" style="vertical-align:bottom;width:30mm;height:30mm"/>
             </div>
         </div>
         
@@ -77,7 +83,7 @@
     <template id="move_label">
         <t t-call="web.basic_layout">
             <t t-foreach="docs.mapped('move_lines')" t-as="move">
-                <div class="page" t-if="move.sale_line_id">
+                <div class="page" style="page-break-before:always;" t-if="move.sale_line_id">
                     <t t-call="custom_documents_lupeon.document_move_label">
                     </t>
                 </div>

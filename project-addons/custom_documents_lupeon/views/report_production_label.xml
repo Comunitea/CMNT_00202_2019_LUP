@@ -21,11 +21,11 @@
             }
             .label-row {
                 font-weight: bold;
-                height: 40%;
+                height: 45%;
                 position: relative;
             }
             .label-row2 {
-                height: 60%;
+                height: 55%;
                 border: 0px solid black;
                 position: relative;
             }
