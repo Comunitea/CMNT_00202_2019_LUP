@@ -84,7 +84,7 @@
                                 <span t-esc="ia.phone or ia.mobile"/>
                             </div>
                             <div t-if="ia.email">
-                                <i class='fa-envelope-o fa-fw' role="img" aria-label="Mail" title="Mail"/>
+                                <i class='fa fa-envelope-o fa-fw' role="img" aria-label="Mail" title="Mail"/>
                                 <span t-esc="ia.email"/>
                             </div>
                             <div t-if="ia.vat">
