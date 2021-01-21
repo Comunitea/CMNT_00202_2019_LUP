@@ -173,7 +173,7 @@
         <xpath expr="//table[@t-if=&quot;o.move_line_ids and o.state==&apos;done&apos;&quot;]/tbody/tr[@t-foreach='o.move_line_ids']" position="replace">
             <t t-foreach="o.move_line_ids" t-as="move_line">
                 <tr>
-                    <td t-if="lupeon_report">
+                    <td style="background-color:white; !important" t-if="lupeon_report">
                         <img t-att-src="'data:image/png;base64,%s' % to_text(move_line.move_id.sale_line_id and move_line.move_id.sale_line_id.model_image or '')" style="max-height: 50px;"/>
                     </td>
                     <td t-if="lupeon_report">
@@ -216,22 +216,30 @@
                         <td class="text-right"><span t-field="move_line.sale_price_unit" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
                         <td class="text-right" groups="sale.group_discount_per_so_line"><span t-field="move_line.sale_discount" /></td>
                         <td class="text-right"><span t-field="move_line.sale_price_subtotal" /></td>
-                        <td class="text-center" style="background-color: inherit !important;"><span t-field="move_line.sale_tax_description"/></td>
+                        <!-- <td class="text-center" style="background-color: inherit !important;"><span t-field="move_line.sale_tax_description"/></td> -->
                     </t>
                 </tr>
             </t>
         </xpath>
     </template>
-    
 
+    
     <template id="valued_report_picking" inherit_id="stock_picking_report_valued.valued_report_picking">
-        
-         <!-- No doy heredado, buscar traducción dto y ponerle el % -->
-         <!-- <xpath expr="//table[@t-if=&quot;o.move_line_ids and o.state==&apos;done&apos;&quot;]/thead/tr/th[5]" position="replace">
+                 <!-- Hay que heredar en relaccion a la segunda plantilla, por lo queth2 es la columna descuento -->
+        <xpath expr="//table[@t-if=&quot;o.move_line_ids and o.state==&apos;done&apos;&quot;]/thead/tr/t/th[2]" position="replace">
                 <th class="text-right" groups="sale.group_discount_per_so_line">
-                    <strong> sDisc. (%)</strong>
+                    <strong> Disc. (%)</strong>
                 </th>     
+        </xpath>
+        <!-- Quitar impuestos -->
+        <xpath expr="//table[@t-if=&quot;o.move_line_ids and o.state==&apos;done&apos;&quot;]/thead/tr/t/th[4]" position="replace">
+        </xpath>
+
+        <!-- ESTA NO SE DA HEREDADO NI A TIROS POR ESO SOBREESCRIBO ARRIBA PARA QUITAR IMPUESTOS -->
+        <!-- ENo se da heredado porque esta tabla está pisada arriba, lo he comentado allí -->
+        <!-- <xpath expr="//table[@t-if=&quot;o.move_line_ids and o.state==&apos;done&apos;&quot;]/tbody//tr//t[@t-if=&quot;o.valued and o.sale_id and o.move_line_ids&quot;]" position="replace">
         </xpath> -->
+
 
         <xpath expr="//table[@class='table table-condensed mt32']" position="replace">
          <div class="clearfix">
@@ -263,13 +271,33 @@
             </div>
         </xpath>
     </template>
+    
+    <!-- SOBRESCRIBO PLANTILLA, SOLO AÑADO LOS ESTILOS -->
+    <!-- Forzar el blanco en todas las últimas posibles celdas td, para que no lo ponga en gris debido al estilo por defecto -->
+    <template id="delivery.report_delivery_document2" inherit_id="stock.report_delivery_document">
+        <xpath expr="//th[@name='td_sched_date_h']" position="after">
+            <th t-if="o.picking_type_id.code == 'outgoing' and o.carrier_id"><strong>Carrier</strong></th>
+            <th t-if="o.shipping_weight"><strong>Shipping Weight</strong></th>
+            <th t-if="o.carrier_tracking_ref"><strong>Tracking Number</strong></th>
+        </xpath>
+        <xpath expr="//td[@name='td_sched_date']" position="after">
+            <td style="background-color:white; !important" t-if="o.picking_type_id.code == 'outgoing' and o.carrier_id">
+                    <span t-field="o.carrier_id"/>
+            </td>
+            <td style="background-color:white; !important" t-if="o.shipping_weight">
+                <span t-field="o.shipping_weight"/>
+                <span t-field="o.weight_uom_id"/>
+            </td>
+            <td style="background-color:white; !important" t-if="o.carrier_tracking_ref">
+                <span t-field="o.carrier_tracking_ref"/>
+            </td>
+        </xpath>
+    </template>
+
 
     <!-- SOBREESCRITO PARA QUE NO SALGA MAL ALINEADA ENCIMA DE LA DIREEECION DE ENTREGA -->
     <!-- Pongo en la herencia de arriba lo que debería ser para que me coja las traducciones -->
     <template id="sale_stock.report_delivery_document_inherit_sale_stock" inherit_id="stock.report_delivery_document">
-
-        
-           
     </template>
 
      <template id="report_deliveryslip_lupeon">

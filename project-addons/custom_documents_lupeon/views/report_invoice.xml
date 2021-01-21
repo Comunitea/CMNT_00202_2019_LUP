@@ -232,8 +232,6 @@
 
 
         <!--    MODIFICACIONES INFORME LUPEÓN -->
-
-
         <xpath expr="//table[@name='invoice_line_table']/thead/tr/th[1]" position="before">
             <t t-if="lupeon_report">
                 <th class="text-left">Model</th>
@@ -243,7 +241,7 @@
 
         <xpath expr="//table[@name='invoice_line_table']/tbody/t[@t-foreach='o.invoice_line_ids']/tr/t[1]/td[1]" position="before">
             <t t-if="lupeon_report">
-                <td>
+                <td style="background-color:white; !important">
                     <img t-att-src="'data:image/png;base64,%s' % to_text(line.model_image)" style="max-height: 50px;"/>
                 </td>
                 <td>

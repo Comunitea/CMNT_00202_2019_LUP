@@ -28,18 +28,22 @@ table[class="table table-sm o_table_purchase_quotation"] tbody tr:nth-child(even
     font-size: 10px;
 }
 
-.table2 { border-collapse: collapse; }
-tr, td { border: none; }
-// td {
-//   border-right: solid 1px #f00; 
-//   border-left: solid 1px #f00;
-// }
+.table2 { 
+    border-collapse: collapse; 
+    & .custom-header{
+        text-align:center;
+        vertical-align:middle;
+        font-weight: bold;
+        background-color: gray('200');
+        padding: 5px 10px;
+        font-size: 14px;
+    }
+}
 
 // Header - Company Address
 #header_company_address {
     font-size: 13px;
-    // border-left: 6px solid darken(#8cd4d8, 20%);
-    border-left: 6px solid #8cd4d8
+    border-left: 6px solid #8cd4d8;
     float: right;
     min-width: 65%;
     & div {

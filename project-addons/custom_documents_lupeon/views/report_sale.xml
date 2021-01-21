@@ -288,12 +288,12 @@
                     <div>
                         <table class="table2" width="750px" height="300px;">
                             <tr width="100%">
-                                <td width="40%" rowspan="0" style="text-align:center;vertical-align:middle;background-color:#8cd4d8;color:white;font-weight: bold">
+                                <td width="40%" rowspan="0" class="custom-header">
                                     <strong>Aceptación del presupuesto</strong>
                                     <br/>
                                     (Devolver firmado y sellado)
                                 </td>
-                                <td colspan="3" style="text-align:center;vertical-align:middle;background-color:#8cd4d8;color:white;font-weight: bold">
+                                <td colspan="3" class="custom-header">
                                     <strong>Legislación aplicable </strong> (a completar por el cliente)
                                 </td>
                             </tr>

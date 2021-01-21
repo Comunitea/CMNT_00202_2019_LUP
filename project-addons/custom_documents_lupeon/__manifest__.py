@@ -25,6 +25,7 @@
         'web',
         'custom_lupeon',
         'account_due_dates_str',
+        'delivery',
         'stock_picking_report_valued',
         'web_gantt',
         'sale_partner_incoterm',
