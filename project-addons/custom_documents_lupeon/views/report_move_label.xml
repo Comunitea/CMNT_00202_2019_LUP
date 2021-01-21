@@ -51,7 +51,7 @@
             <div class="col-6 square2" >
                 <strong>Ref. cliente:  </strong><span style="margin-left: 3px" t-field="move.picking_id.sale_id.name2"/>
                 <br/>
-                <strong>Pedido:  </strong><span style="margin-left: 3px" t-field="move.picking_id.sale_id.name2"/>
+                <strong>Pedido:  </strong><span style="margin-left: 3px" t-field="move.picking_id.sale_id.name"/>
                 <br/>
                 <strong>Nº Albarán:  </strong><span style="margin-left: 3px" t-field="move.picking_id.name" />
             </div>
