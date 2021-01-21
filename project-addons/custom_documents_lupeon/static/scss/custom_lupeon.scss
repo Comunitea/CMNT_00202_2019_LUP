@@ -33,6 +33,21 @@ table[class="table table-sm o_table_purchase_quotation"] tbody tr:nth-child(even
     background-color: unset;
 }
 
+// .o_report_layout_boxed .page > table:not(.o_main_table) tr td:last-child {
+//     background-color: unset;
+// }
+.o_report_layout_boxed {
+    & .page {
+        & table:not(.o_main_table){
+           & tr {
+               & td:last-child{
+                background-color: transparent;
+               }
+           } 
+        }
+    }
+}
+
 .table2 { 
     border-collapse: collapse; 
     & .custom-header{

@@ -272,28 +272,6 @@
         </xpath>
     </template>
     
-    <!-- SOBRESCRIBO PLANTILLA, SOLO AÑADO LOS ESTILOS -->
-    <!-- Forzar el blanco en todas las últimas posibles celdas td, para que no lo ponga en gris debido al estilo por defecto -->
-    <template id="delivery.report_delivery_document2" inherit_id="stock.report_delivery_document">
-        <xpath expr="//th[@name='td_sched_date_h']" position="after">
-            <th t-if="o.picking_type_id.code == 'outgoing' and o.carrier_id"><strong>Carrier</strong></th>
-            <th t-if="o.shipping_weight"><strong>Shipping Weight</strong></th>
-            <th t-if="o.carrier_tracking_ref"><strong>Tracking Number</strong></th>
-        </xpath>
-        <xpath expr="//td[@name='td_sched_date']" position="after">
-            <td style="background-color:white; !important" t-if="o.picking_type_id.code == 'outgoing' and o.carrier_id">
-                    <span t-field="o.carrier_id"/>
-            </td>
-            <td style="background-color:white; !important" t-if="o.shipping_weight">
-                <span t-field="o.shipping_weight"/>
-                <span t-field="o.weight_uom_id"/>
-            </td>
-            <td style="background-color:white; !important" t-if="o.carrier_tracking_ref">
-                <span t-field="o.carrier_tracking_ref"/>
-            </td>
-        </xpath>
-    </template>
-
 
     <!-- SOBREESCRITO PARA QUE NO SALGA MAL ALINEADA ENCIMA DE LA DIREEECION DE ENTREGA -->
     <!-- Pongo en la herencia de arriba lo que debería ser para que me coja las traducciones -->

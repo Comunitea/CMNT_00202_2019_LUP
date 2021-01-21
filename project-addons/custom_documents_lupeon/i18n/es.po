@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-21 12:41+0000\n"
-"PO-Revision-Date: 2021-01-21 12:41+0000\n"
+"POT-Creation-Date: 2021-01-21 16:27+0000\n"
+"PO-Revision-Date: 2021-01-21 16:27+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -34,7 +34,7 @@ msgstr "<br/>\n"
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
 msgid "<br/>\n"
 "                    <strong class=\"extra-lupeon\">Finish:</strong>"
-msgstr  "<br/>\n"
+msgstr "\"<br/>\n"
 "                    <strong class=\"extra-lupeon\">Acabado:</strong>"
 
 #. module: custom_documents_lupeon
@@ -160,7 +160,7 @@ msgstr "<span>Nota</span>"
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_invoice_document
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
 msgid "<span>Payment details</span>"
-msgstr "Detalles del pago"
+msgstr "<span>Detalles del pago</span>"
 
 #. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
@@ -197,7 +197,7 @@ msgstr ""
 #. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_delivery_document_custom
 msgid "<strong>Client Ref</strong>"
-msgstr "Referencia cliente"
+msgstr "<strong>Referencia cliente</strong>"
 
 #. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_invoice_document
