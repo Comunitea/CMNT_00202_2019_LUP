@@ -208,7 +208,6 @@
         <xpath expr="//table/thead/tr/th[@name='th_taxes']" position="replace">
         </xpath>
         <xpath expr="//table[@class='table table-sm o_main_table']//tbody//t[@t-foreach='doc.order_line']//tr//t[@t-if='not line.display_type']/td[5]"  position="replace">
-            <attribute name="t-options">{'widget': 'monetary', 'display_currency': doc.pricelist_id.currency_id}</attribute>
         </xpath>
 
         <!-- Etiqueta plazo de pago -->
@@ -229,8 +228,8 @@
       
          <xpath expr="//table[@class='table table-sm o_main_table']/tbody/t[@t-foreach='doc.order_line']/tr/t[1]/td[1]" position="before">
             <t t-if="lupeon_report">
-                <td>
-                    <img t-att-src="'data:image/png;base64,%s' % to_text(line.model_image)" style="max-height: 50px;"/>
+                <td style="background-color:white; !important">
+                    <img t-if="line.model_image" t-att-src="'data:image/png;base64,%s' % to_text(line.model_image)" style="max-height: 50px;"/>
                 </td>
                 <td>
                      <span t-field="line.ref"/>
@@ -268,15 +267,15 @@
         </xpath>
 
         <xpath expr="//p[@t-if='doc.payment_term_id.note']" position="before">
-            <t t-if="not env.context.get('proforma', False) and not is_pro_forma">
+            <t>
                 <!-- <span>Proforma</span> -->
                 <div class="col-12" id="pay_details" t-if="doc.confirmation_date or doc.payment_mode_id.note or (doc.fiscal_position_id and doc.fiscal_position_id.sudo().note)">
                     <span>Payment details</span>
                 </div>
                 <br/>
-                <p t-if="doc.confirmation_date">
+                <p t-if="doc.confirmation_date and doc.payment_term_id.name">
                     <strong>Payed on:</strong>
-                    <span t-esc="doc.confirmation_date.strftime('%d-%m-%Y')"/>
+                    <span t-esc="doc.payment_term_id.name"/>
                 </p>
             </t>
         </xpath>
