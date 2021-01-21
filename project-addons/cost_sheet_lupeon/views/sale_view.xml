@@ -26,34 +26,7 @@
                 </button>
             </div>
 
-
-            <!-- AÑADIR DISEÑO AL FLUJO DE VENTAS -->
-            <!-- <button name="action_done" position="after">
-                <button name="duplicate_with_costs" type="object" string="Duplicate costs"/>
-            </button> -->
-            <!-- <xpath expr="//buttom[@id='action_confirm'][2]" position="replace">
-            </xpath> -->
-            <!-- <field name="state" position="attributes">
-                <attribute name="statusbar_visible">draft,sent,design,sale</attribute>
-            </field>
-            <button name="action_cancel" position="attributes">
-                <attribute name="states">draft,sent,design,sale</attribute>
-            </button>
-            <button name="action_quotation_send" position="attributes">
-                <attribute name="states">draft,sent</attribute>
-            </button>
-            <button name="print_quotation" position="before">
-                <button name="action_design" type="object" string="Design" class="btn-primary" states="draft,sent"/>
-            </button>
-            <xpath expr="//button[@id='action_confirm'][1]" position="replace">
-                    <button name="action_confirm" id="action_confirm"
-                        string="Confirm" class="btn-primary" type="object"
-                        attrs="{'invisible': [('state', 'not in', ['design'])]}"/>
-            </xpath>
-            <xpath expr="//button[@name='action_confirm'][2]" position="replace">
-            </xpath> -->
-
-            <!-- Replazo el header para meter el flujo del estado de diseño
+     <!-- Replazo el header para meter el flujo del estado de diseño
                 SOLO en la compañia de lupen
              -->
             <header position="replace">
@@ -134,7 +107,7 @@
                 <div>
                 <label for="storable_product_id"/>
                     <field name="storable_product_id" readonly="True" />
-                    <button name="create_storable_product" type="object" class="oe_link oe_inline" string="Crear Producto almacenable"  attrs="{'invisible': [('group_sheet_id', '=', False)]}"/>
+                    <button name="create_storable_product" type="object" class="oe_link oe_inline" string="Crear Producto almacenable" groups="cost_sheet_lupeon.group_cs_manager" attrs="{'invisible': [('group_sheet_id', '=', False)]}"/>
                 </div>
             </xpath>
 

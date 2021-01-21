@@ -337,7 +337,7 @@ class SaleOrderLine(models.Model):
         vals = {
             'name': (self.name or '/'),
             'uom_id': 1,  # TODO get_unit
-            'default_code': 'REP-' + (self.name or '/'),
+            'default_code': 'CRP-' + (self.name or '/'),
             'type': 'product',
             'lst_price': self.price_total,
             'group_sheet_id': self.group_sheet_id.id,
