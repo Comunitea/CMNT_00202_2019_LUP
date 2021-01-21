@@ -284,7 +284,6 @@
             <t t-if="lupeon_report">
                 <div class="page" style="page-break-before:always;">
                     <br/>
-                    <br/>
                     <div>
                         <table class="table2" width="750px" height="300px;">
                             <tr width="100%">
@@ -346,7 +345,7 @@
                     </div> -->
                     <t t-if="doc.report_image">
                         <div style="text-align:center;">
-                            <img t-att-src="'data:image/png;base64,%s' % to_text(doc.report_image)" style="max-height: 500px;"/>
+                            <img t-att-src="'data:image/png;base64,%s' % to_text(doc.report_image)" style="max-height: 400px;"/>
                         </div>
                     </t>
                 </div>
