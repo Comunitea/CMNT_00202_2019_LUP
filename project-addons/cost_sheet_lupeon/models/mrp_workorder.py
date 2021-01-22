@@ -48,7 +48,7 @@ class MrpWorkorder(models.Model):
         for wo in self:
             machine_time = wo.sheet_id.machine_hours
             # Para las producciones repetidas calculamos el factor
-            factor = machine_time / wo.sheet_id.cus_units
+            factor = machine_time / (wo.sheet_id.cus_units or 1.0)
             wo.th_machine_hours = wo.qty_production * factor
 
     def _get_th_user_time(self):
@@ -61,7 +61,7 @@ class MrpWorkorder(models.Model):
                 lambda o: wo.name == o.name)
             if oppi:
                 duration = oppi.time
-            factor = duration / wo.sheet_id.cus_units
+            factor = duration / (wo.sheet_id.cus_units or 1.0)
             wo.th_user_hours = wo.qty_production * factor
 
     # No quiero que cree checks de calidad
