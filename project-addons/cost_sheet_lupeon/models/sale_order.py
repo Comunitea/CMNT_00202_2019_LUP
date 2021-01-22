@@ -198,6 +198,11 @@ class SaleOrder(models.Model):
         return action
 
     def _create_purchases(self, lines):
+        """
+        Crea compras agrupadas por proveedor y las enlaza al aventa.
+        Hay una función equivalente en stock.rule que no la enlaza al producto
+        TODO refactorizar
+        """
         self.ensure_one()
         suppliers = lines.mapped('partner_id')
         supplier_purchase = {}

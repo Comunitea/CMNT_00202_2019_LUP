@@ -93,4 +93,51 @@ class StockRule(models.Model):
                     wo.write(vals)
 
                 new_sheet.write({'production_id': prod.id})
+
+            # CREO COMPRAS, COMO LA FUNCIÓN DE VENTAS
+            p_lines = product.group_sheet_id.sheet_ids.mapped(
+                'purchase_line_ids').filtered(lambda x: x.partner_id)
+            self._create_purchases(p_lines, product)
         return res
+
+    def _create_purchases(self, lines, product):
+        """
+        Crea compras agrupadas por proveedor y las enlaza al aventa.
+        Hay una función equivalente en stock.rule que no la enlaza al producto
+        TODO refactorizar
+        """
+        self.ensure_one()
+        suppliers = lines.mapped('partner_id')
+        supplier_purchase = {}
+        for partner in suppliers:
+            vals = {
+                'partner_id': partner.id,
+                'origin': 'CRP - ' + product.name,
+                'dest_sale_id': False,
+                'payment_term_id':
+                partner.property_supplier_payment_term_id.id,
+                'date_order': fields.Datetime.now()
+            }
+            po = self.env['purchase.order'].create(vals)
+            supplier_purchase[partner.id] = po
+
+        for line in lines:
+            po = supplier_purchase[line.partner_id.id]
+            taxes = line.product_id.supplier_taxes_id
+            # fpos = po.fiscal_position_id
+            # taxes_id = fpos.map_tax(
+            #     taxes, line.product_id.id, line.partne_id.name) if fpos \
+            #     else taxes
+
+            vals = {
+                'name': line.name or line.product_id.name,
+                'product_qty': line.qty,
+                'product_id': line.product_id.id,
+                'product_uom': line.product_id.uom_po_id.id,
+                'price_unit': line.cost_ud,
+                'date_planned': fields.Datetime.now(),
+                # 'taxes_id': [(6, 0, taxes_id.ids)],
+                'taxes_id': [(6, 0, taxes.ids)],
+                'order_id': po.id,
+            }
+            self.env['purchase.order.line'].create(vals)
