@@ -277,10 +277,10 @@
                     <span>Payment details</span>
                 </div>
                 <br/>
-                <p t-if="doc.confirmation_date and doc.payment_term_id.name">
+                <!-- <p t-if="doc.confirmation_date and doc.payment_term_id.name">
                     <strong>Payed on:</strong>
                     <span t-esc="doc.payment_term_id.name"/>
-                </p>
+                </p> -->
             </t>
         </xpath>
 
