@@ -176,6 +176,10 @@
         <xpath expr="//table[@class='table table-sm o_main_table']/thead/tr//th[last()-1]" position="attributes">
             <attribute name="class">text-center</attribute>
         </xpath>
+        <!-- Center Head taxes -->
+        <xpath expr="//table[@class='table table-sm o_main_table']/thead/tr//th[2]" position="attributes">
+            <attribute name="class">text-center</attribute>
+        </xpath>
 
         <!-- Mostrar nombre bien en el impuesto -->
         <xpath expr="//table[@class='table table-sm o_main_table']/tbody/t[@t-foreach='doc.order_line']/tr/t[1]/td[5]" position="replace">

@@ -54,7 +54,7 @@ table[class="table table-sm o_table_purchase_quotation"] tbody tr:nth-child(even
         text-align:center;
         vertical-align:middle;
         font-weight: bold;
-        background-color: gray('200');
+        background-color: gray('200') !important;
         padding: 5px 10px;
         font-size: 14px;
     }
