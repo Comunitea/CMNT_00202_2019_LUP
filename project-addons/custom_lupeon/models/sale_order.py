@@ -250,7 +250,7 @@ class SaleOrderLine(models.Model):
         """
         price = super()._get_display_price(product)
         if self.order_id.partner_id._get_admin_fact() and \
-                self.order_id.company_id != 1:
+                self.order_id.company_id.id != 1:
             price_precision = self.env['decimal.precision'].precision_get(
             'Product Price')
             price = float_round(price * (1 + self.order_id.partner_id.\
