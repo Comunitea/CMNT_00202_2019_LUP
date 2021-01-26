@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_account_invoice_tax_report_pivot" model="ir.ui.view">
+         <field name="name">account.invoice.tax.report.pivot</field>
+         <field name="model">account.invoice.tax.report</field>
+         <field name="arch" type="xml">
+             <pivot string="Invoice Taxes Analysis" disable_linking="True">
+                 <field name="tax_id" type="row"/>
+                 <field name="date" type="col"/>
+                 <field name="amount" type="measure"/>
+             </pivot>
+         </field>
+    </record>
+
+    <record id="view_account_invoice_tax_report_graph" model="ir.ui.view">
+         <field name="name">account.invoice.tax.report.graph</field>
+         <field name="model">account.invoice.tax.report</field>
+         <field name="arch" type="xml">
+             <graph string="Invoice Taxes Analysis">
+                 <field name="tax_id"/>
+                 <field name="amount" type="measure"/>
+             </graph>
+         </field>
+    </record>
+
+    <record id="view_account_invoice_tax_report_search" model="ir.ui.view">
+        <field name="name">account.invoice.tax.report.search</field>
+        <field name="model">account.invoice.tax.report</field>
+        <field name="arch" type="xml">
+            <search string="Invoice Taxes Analysis">
+                <field name="date"/>
+                <filter string="This Year" name="thisyear" domain="['|', ('date', '=', False), '&amp;',('date','&lt;=', time.strftime('%%Y-12-31')),('date','&gt;=',time.strftime('%%Y-01-01'))]" help="Invoice taxes with period in current year"/>
+                <separator/>
+                <filter string="Pending" domain="[('state','=','draft')]" help = "Draft Taxes"/>
+                <filter string="Applied" name="current" domain="[('state','not in', ('draft','cancel'))]"/>
+                <separator/>
+                <filter string="This Month" name="this_month" domain="[('date', '&gt;=', context_today().strftime('%%Y-%%m-01'))]"/>
+                <filter string="Last Month" name="last_month" domain="['&amp;', ('date', '&gt;=', (context_today() - relativedelta(months=1)).strftime('%%Y-%%m-01')), ('date', '&lt;', context_today().strftime('%%Y-%%m-01'))]"/>
+                <separator/>
+                <filter string="Customer" name="customer" domain="['|', ('type','=','out_invoice'),('type','=','out_refund')]"/>
+                <filter string="Vendor" name="supplier" domain="['|', ('type','=','in_invoice'),('type','=','in_refund')]"/>
+                <separator/>
+                <filter string="Invoice" domain="['|', ('type','=','out_invoice'),('type','=','in_invoice')]"/>
+                <filter string="Credit Note" domain="['|', ('type','=','out_refund'),('type','=','in_refund')]"/>
+                <field name="partner_id" operator="child_of"/>
+                <field name="journal_id" />
+                <field name="tax_id"/>
+                <group expand="1" string="Group By">
+                    <filter string="Partner" name="partner_id" context="{'group_by':'partner_id'}"/>
+                    <filter string="Journal" name="journal" context="{'group_by':'journal_id'}"/>
+                    <filter string="Tax" name="tax" context="{'group_by':'tax_id'}"/>
+                    <filter string="Status" context="{'group_by':'state'}"/>
+                    <filter string="Company" context="{'group_by':'company_id'}" groups="base.group_multi_company"/>
+                    <separator orientation="vertical" />
+                    <filter string="Date" context="{'group_by':'date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_account_invoice_tax_report" model="ir.actions.act_window">
+        <field name="name">Invoice Taxes Analysis</field>
+        <field name="res_model">account.invoice.tax.report</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">pivot,graph</field>
+        <field name="context">{'search_default_current':1, 'group_by':[], 'group_by_no_leaf':1, 'search_default_year': 1}</field>
+        <field name="search_view_id" ref="view_account_invoice_tax_report_search"/>
+    </record>
+
+    <menuitem name="Invoice Taxes Analysis" action="action_account_invoice_tax_report" id="menu_action_account_invoice_tax_report" parent="account.account_reports_management_menu" sequence="24"/>
+
+</odoo>
