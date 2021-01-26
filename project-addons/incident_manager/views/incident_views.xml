@@ -86,7 +86,7 @@
                     <group>
                         <field name="name"/>
                         <field name="date"/>
-                        <field name="incident_type"/>
+                        <field name="incident_type" widget="selection"/>
                         <field name="claimed_amount"/>
                         <field name="user_id"/>
                     </group>

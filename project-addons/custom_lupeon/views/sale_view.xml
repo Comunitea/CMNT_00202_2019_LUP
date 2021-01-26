@@ -210,15 +210,30 @@
             </field>
         </record>
 
-    <!--record id="sale_order_custom_aeat" model="ir.ui.view" >
-        <field name="name">sale.order.custom.aeat</field>
+    <record id="sale_view_opportunity_view" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.opportunity_view</field>
         <field name="model">sale.order</field>
-        <field name="inherit_id" ref="l10n_es_aeat.view_partner_form"/>
+        <field name="inherit_id" ref="sale_crm.sale_view_inherit123"/>
         <field name="arch" type="xml">
-            <group name="aeat" position="attributes">
-                <attribute name="groups">l10n_es_aeat.group_account_aeat</attribute>
+           
+            <field name="opportunity_id" position="attributes">
+                <attribute name="groups">base.group_user</attribute>
+            </field>
+        </field>
+    </record>
+   
+
+   <record id="sale_view_techical_view" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.technical_view</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+           
+            <group name="technical" position="attributes">
+                <attribute name="groups">base.group_user</attribute>
             </group>
         </field>
-    </record-->
+    </record>
+   
 
 </odoo>
