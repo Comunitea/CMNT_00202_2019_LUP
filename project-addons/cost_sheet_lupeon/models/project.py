@@ -26,3 +26,14 @@ class Projecttask(models.Model):
     sale_id = fields.Many2one('sale.order', 'Sale Order',
                               related='sheet_id.sale_id', readonly=True,
                               store=True)
+    show_planned_hours = fields.Boolean(string='Show planned Hours',
+        compute='get_show_planned_hours',)
+
+
+    @api.multi
+    def get_show_planned_hours(self):
+        """ Only display the planned hours 
+         if the user has access to them """
+        users = self.env.ref('base.group_no_one').users   #definir grupo
+        for user in self:
+            user.show_technical_features = user in users
