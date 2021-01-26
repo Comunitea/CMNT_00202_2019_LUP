@@ -19,7 +19,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_delivery_document_custom
 msgid "<br/>\n"
 "                                <strong class=\"extra-lupeon\">Finish:</strong>"
-msgstr "\"<br/>\n"
+msgstr "\<br/>\n"
 "                                <strong class=\"extra-lupeon\">Acabado:</strong>"
 
 #. module: custom_documents_lupeon
@@ -34,7 +34,7 @@ msgstr "<br/>\n"
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_saleorder_document_custom_lupeon
 msgid "<br/>\n"
 "                    <strong class=\"extra-lupeon\">Finish:</strong>"
-msgstr "\"<br/>\n"
+msgstr "\<br/>\n"
 "                    <strong class=\"extra-lupeon\">Acabado:</strong>"
 
 #. module: custom_documents_lupeon
