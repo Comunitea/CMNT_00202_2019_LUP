@@ -223,4 +223,17 @@
     </record>
    
 
+   <record id="sale_view_techical_view" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.technical_view</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+           
+            <group name="technical" position="attributes">
+                <attribute name="groups">base.group_user</attribute>
+            </group>
+        </field>
+    </record>
+   
+
 </odoo>
