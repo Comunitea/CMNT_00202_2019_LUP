@@ -145,8 +145,11 @@ class MrpWorkorder(models.Model):
     def _generate_lot_ids(self):
         """
         OVERWRITE
-        Corrijo para que cre un move line por cada move_line del movbimiento, y con el
-        lote que se reservó ya puesto 
+        Corrijo para que cree un move line por cada move_line del movimiento, 
+        y con el lote que se reservó ya puesto.
+
+        Está función es la que asigna los consumos a las órdenes de trabajo.
+        Odoo por defecto no lo hace si no
         """
         self.ensure_one()
         MoveLine = self.env['stock.move.line']
@@ -170,20 +173,38 @@ class MrpWorkorder(models.Model):
                     })
                     qty -= 1
             else:
-                for ml in move.move_line_ids:
+                # Añado este caso para la reserva y que pase mas de un lote
+                # si así los hubiera reservado
+                if move.move_line_ids:
+                    for ml in move.move_line_ids:
+                        MoveLine.create({
+                            'move_id': move.id,
+                            'product_uom_qty': 0,
+                            'product_uom_id': move.product_uom.id,
+                            'qty_done': ml.product_uom_qty,
+                            'product_id': move.product_id.id,
+                            'production_id': self.production_id.id,
+                            'workorder_id': self.id,
+                            'done_wo': False,
+                            'location_id': move.location_id.id,
+                            'location_dest_id': move.location_dest_id.id,
+                            'lot_id': ml.lot_id.id
+                            })
+                # Este es el original
+                else:
                     MoveLine.create({
                         'move_id': move.id,
                         'product_uom_qty': 0,
                         'product_uom_id': move.product_uom.id,
-                        'qty_done': ml.product_uom_qty,
+                        'qty_done': qty,
                         'product_id': move.product_id.id,
                         'production_id': self.production_id.id,
                         'workorder_id': self.id,
                         'done_wo': False,
                         'location_id': move.location_id.id,
                         'location_dest_id': move.location_dest_id.id,
-                        'lot_id': ml.lot_id.id
-                        })
+                    })
+
 
 
 class MachineTime(models.Model):
