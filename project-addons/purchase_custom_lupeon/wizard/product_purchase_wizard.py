@@ -43,7 +43,8 @@ class ProductPurchaseWizard(models.TransientModel):
                 'product_id': line.product_id.id,
                 'product_uom': line.product_id.uom_id,
                 'order_id': self.purchase_order.id,
-                'product_qty': line.product_qty})
+                'product_qty': line.product_qty,
+                'partner_id': self.purchase_order.partner_id.id})
             order_line.onchange_product_id()
             order_line.product_qty = line.product_qty
             order_line_vals = order_line._convert_to_write(
