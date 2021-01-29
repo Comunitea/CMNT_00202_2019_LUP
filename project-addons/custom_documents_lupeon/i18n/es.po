@@ -237,7 +237,7 @@ msgstr ""
 #. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_delivery_document_custom
 msgid "<strong>Incoterm</strong>"
-msgstr "<strong>Incoterm</strong>\""
+msgstr "<strong>Incoterm</strong>"
 
 #. module: custom_documents_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_documents_lupeon.report_invoice_document

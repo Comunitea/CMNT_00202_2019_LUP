@@ -110,7 +110,7 @@
         </xpath>
         <xpath expr="//div[hasclass('page')]//table//td[@name='td_sched_date']" position="after">
             <td t-if="o.sale_id.incoterm" groups="sale_stock.group_display_incoterm">
-                <span t-esc="o.partner_id.sale_incoterm_id.code or o.incoterm.code"/> (<span t-esc="o.partner_id.sale_incoterm_id.name or o.incoterm.name"/>)
+                <span t-esc="o.partner_id.sale_incoterm_id.code"/> (<span t-esc="o.partner_id.sale_incoterm_id.name"/>)
             </td>
         </xpath>
 
