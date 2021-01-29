@@ -97,10 +97,10 @@ class StockRule(models.Model):
             # CREO COMPRAS, COMO LA FUNCIÓN DE VENTAS
             p_lines = product.group_sheet_id.sheet_ids.mapped(
                 'purchase_line_ids').filtered(lambda x: x.partner_id)
-            self._create_purchases(p_lines, product)
+            self._create_purchases(p_lines, product, product_qty)
         return res
 
-    def _create_purchases(self, lines, product):
+    def _create_purchases(self, lines, product, product_qty):
         """
         Crea compras agrupadas por proveedor y las enlaza al aventa.
         Hay una función equivalente en stock.rule que no la enlaza al producto
@@ -128,10 +128,11 @@ class StockRule(models.Model):
             # taxes_id = fpos.map_tax(
             #     taxes, line.product_id.id, line.partne_id.name) if fpos \
             #     else taxes
-
+            factor = line.qty / (line.sheet_id.cus_units or 1.0)
+            qty = product_qty * factor
             vals = {
                 'name': line.name or line.product_id.name,
-                'product_qty': line.qty,
+                'product_qty': qty,
                 'product_id': line.product_id.id,
                 'product_uom': line.product_id.uom_po_id.id,
                 'price_unit': line.cost_ud,
