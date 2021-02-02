@@ -24,6 +24,14 @@ class StockRule(models.Model):
         res = super()._run_manufacture(
             product_id, product_qty, product_uom, location_id, name,
             origin, values)
+
+        # Crear ordenes de trabajo de la produccion principal
+        domain = [('origin', '=', name)]
+        main_production = self.env['mrp.production'].search(
+            domain, order='id desc', limit=1)
+        if main_production:
+            main_production.button_plan()
+
         product = product_id
         if product.group_sheet_id:
             mrp_types = ['fdm', 'sls', 'poly', 'sla', 'sls2', 'dmls']
