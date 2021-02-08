@@ -14,15 +14,6 @@ class StockScrap(models.Model):
     company_id = fields.Many2one('res.company', 'Company',
                                  related='location_id.company_id',
                                  store=True)
-
-class StockMove(models.Model):
-
-    _inherit = "stock.move"
-
-    line_state = fields.Selection(related='sale_line_id.state', 
-        string="State sale line", store=True)
-    sale_name = fields.Text('Sale Description', related='sale_line_id.name')
-    
     
 class PickingType(models.Model):
 
