@@ -6,14 +6,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-18 17:46+0000\n"
-"PO-Revision-Date: 2020-11-18 17:46+0000\n"
+"POT-Creation-Date: 2021-02-08 10:59+0000\n"
+"PO-Revision-Date: 2021-02-08 10:59+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: custom_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_lupeon.view_picking_cost_tree
+msgid "Albaranes"
+msgstr ""
 
 #. module: custom_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_lupeon.view_order_form_inherit_barcode
@@ -34,6 +39,7 @@ msgstr "No se puede crear gactura si la referencia de cliente es PENDIENTE"
 
 #. module: custom_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_lupeon.sale_order_filter_custom_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_lupeon.stock_picking_filter_ship_cost
 msgid "Carrier"
 msgstr "Transportista"
 
@@ -43,7 +49,7 @@ msgid "Company"
 msgstr "Compañía"
 
 #. module: custom_lupeon
-#: model_terms:ir.ui.view,arch_db:custom_lupeon.view_order_cost_tree
+#: model_terms:ir.ui.view,arch_db:custom_lupeon.view_picking_cost_tree
 msgid "Confirmation Date"
 msgstr "Fecha confirmación"
 
@@ -58,10 +64,15 @@ msgid "Correos Express"
 msgstr ""
 
 #. module: custom_lupeon
-#: model:ir.actions.act_window,name:custom_lupeon.action_sale_order_cost
-#: model:ir.ui.menu,name:custom_lupeon.menu_sale_ship_cost
-msgid "Costes de envío en ventas"
-msgstr ""
+#: model:ir.actions.act_window,name:custom_lupeon.action_stock_picking_cost
+#: model:ir.ui.menu,name:custom_lupeon.menu_picking_ship_cost
+msgid "Costes de envío en albaranes"
+msgstr "Costes de envío"
+
+#. module: custom_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_lupeon.vpicktree_delivered
+msgid "Create Incident"
+msgstr "Crear incidencia"
 
 #. module: custom_lupeon
 #: selection:delivery.carrier,delivery_type:0
@@ -92,8 +103,8 @@ msgid "Delivery blocked"
 msgstr "Entrega bloqueada"
 
 #. module: custom_lupeon
-#: model_terms:ir.actions.act_window,help:custom_lupeon.action_sale_order_cost
-msgid "Editar para añadir coste de envío a los pedidos"
+#: model_terms:ir.actions.act_window,help:custom_lupeon.action_stock_picking_cost
+msgid "Editar para añadir coste de envío a los albaranes"
 msgstr ""
 
 #. module: custom_lupeon
@@ -114,6 +125,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:custom_lupeon.field_res_partner__admin_fact
 #: model:ir.model.fields,field_description:custom_lupeon.field_res_users__admin_fact
 msgid "Factor administrativo (%)"
+msgstr ""
+
+#. module: custom_lupeon
+#: selection:delivery.carrier,delivery_type:0
+msgid "FedEx"
 msgstr ""
 
 #. module: custom_lupeon
@@ -157,8 +173,8 @@ msgid "No active picking to deliver"
 msgstr "No hay albarán activo para entregar"
 
 #. module: custom_lupeon
-#: code:addons/custom_lupeon/models/sale_order.py:121
-#: code:addons/custom_lupeon/models/stock.py:141
+#: code:addons/custom_lupeon/models/sale_order.py:136
+#: code:addons/custom_lupeon/models/stock.py:162
 #, python-format
 msgid "No pickings in assigned state to open"
 msgstr "No hay albaranes en estado preparado para mostrar."
@@ -188,11 +204,6 @@ msgid "Nº Line"
 msgstr "Nº Línea"
 
 #. module: custom_lupeon
-#: model_terms:ir.ui.view,arch_db:custom_lupeon.view_order_cost_tree
-msgid "Order Number"
-msgstr "Número de pedido"
-
-#. module: custom_lupeon
 #: selection:sale.order,delivered:0
 msgid "Partially Delivered"
 msgstr "Parcialmente entregado"
@@ -206,11 +217,6 @@ msgstr "Coste modo de pago"
 #: model:ir.model,name:custom_lupeon.model_account_payment_mode
 msgid "Payment Modes"
 msgstr "Modos de pago"
-
-#. module: custom_lupeon
-#: model_terms:ir.ui.view,arch_db:custom_lupeon.view_order_cost_tree
-msgid "Pedidos"
-msgstr ""
 
 #. module: custom_lupeon
 #: model:ir.model.fields,field_description:custom_lupeon.field_prestashop_sale_order_state__pending_payment
@@ -241,7 +247,7 @@ msgstr "Albaranes de reservas"
 #. module: custom_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_lupeon.view_picking_internal_search_sale_state
 msgid "Pickings not blocked from sales"
-msgstr "Albaranes no bloqueados en ventas"
+msgstr ""
 
 #. module: custom_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_lupeon.view_picking_internal_search_sale_state
@@ -254,9 +260,27 @@ msgid "Pickings with reserve from sales"
 msgstr "Albaranes con reserva desde ventas"
 
 #. module: custom_lupeon
+#: model:ir.model.fields,help:custom_lupeon.field_prestashop_product_combination__list_price
+#: model:ir.model.fields,help:custom_lupeon.field_prestashop_product_template__list_price
+#: model:ir.model.fields,help:custom_lupeon.field_product_product__list_price
+#: model:ir.model.fields,help:custom_lupeon.field_product_template__list_price
+msgid "Price at which the product is sold to customers."
+msgstr "Precio al que se vende el producto a los clientes."
+
+#. module: custom_lupeon
 #: model:ir.model,name:custom_lupeon.model_product_product
 msgid "Product"
 msgstr "Producto"
+
+#. module: custom_lupeon
+#: model:ir.model,name:custom_lupeon.model_product_template
+msgid "Product Template"
+msgstr "Plantilla de producto"
+
+#. module: custom_lupeon
+#: model:ir.model,name:custom_lupeon.model_mrp_production
+msgid "Production Order"
+msgstr ""
 
 #. module: custom_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_lupeon.view_move_search_custom
@@ -295,7 +319,7 @@ msgstr "Razón de rechazo"
 #: model:ir.model.fields,field_description:custom_lupeon.field_res_partner__require_num_order
 #: model:ir.model.fields,field_description:custom_lupeon.field_res_users__require_num_order
 msgid "Requires num order"
-msgstr "Requiere número cliente"
+msgstr "Requiere nº de pedido"
 
 #. module: custom_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_lupeon.sale_order_custom_reserve
@@ -314,6 +338,11 @@ msgstr "Reservado"
 #: model:ir.ui.menu,name:custom_lupeon.reserve_picking
 msgid "Reserves"
 msgstr "Reservas"
+
+#. module: custom_lupeon
+#: model:ir.model.fields,field_description:custom_lupeon.field_stock_move__sale_name
+msgid "Sale Description"
+msgstr "Descripción de venta"
 
 #. module: custom_lupeon
 #: model:ir.model,name:custom_lupeon.model_sale_order
@@ -336,6 +365,14 @@ msgid "Sales Order Line"
 msgstr "Línea de pedido de venta"
 
 #. module: custom_lupeon
+#: model:ir.model.fields,field_description:custom_lupeon.field_prestashop_product_combination__list_price
+#: model:ir.model.fields,field_description:custom_lupeon.field_prestashop_product_template__list_price
+#: model:ir.model.fields,field_description:custom_lupeon.field_product_product__list_price
+#: model:ir.model.fields,field_description:custom_lupeon.field_product_template__list_price
+msgid "Sales Price"
+msgstr "Precio de venta"
+
+#. module: custom_lupeon
 #: model:ir.model,name:custom_lupeon.model_stock_scrap
 msgid "Scrap"
 msgstr "Desechar"
@@ -348,6 +385,7 @@ msgstr ""
 #. module: custom_lupeon
 #: model:ir.model.fields,field_description:custom_lupeon.field_prestashop_sale_order__ship_cost
 #: model:ir.model.fields,field_description:custom_lupeon.field_sale_order__ship_cost
+#: model:ir.model.fields,field_description:custom_lupeon.field_stock_picking__ship_cost
 msgid "Ship Cost"
 msgstr "Coste de envío"
 
@@ -360,6 +398,12 @@ msgstr "Importe envío"
 #. module: custom_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_lupeon.view_picking_internal_search_sale_state
 msgid "Sin bloqueo"
+msgstr ""
+
+#. module: custom_lupeon
+#: model:ir.model.fields,field_description:custom_lupeon.field_delivery_carrier__ps_sync
+#: model:ir.model.fields,field_description:custom_lupeon.field_prestashop_delivery_carrier__ps_sync
+msgid "Sincro PS"
 msgstr ""
 
 #. module: custom_lupeon
@@ -382,15 +426,10 @@ msgid "Supplier Number"
 msgstr " Nº proveedor"
 
 #. module: custom_lupeon
-#: code:addons/custom_lupeon/models/stock.py:110
+#: code:addons/custom_lupeon/models/stock.py:131
 #, python-format
 msgid "The picking is blocked form Sale Order %s"
 msgstr "El albarán esta'bloqueado en el pedido %s"
-
-#. module: custom_lupeon
-#: model_terms:ir.ui.view,arch_db:custom_lupeon.view_order_cost_tree
-msgid "Total Ship Price"
-msgstr "Importe total de envío"
 
 #. module: custom_lupeon
 #: model:ir.model,name:custom_lupeon.model_stock_picking
@@ -404,17 +443,45 @@ msgid "Trigger Delivered"
 msgstr ""
 
 #. module: custom_lupeon
+#: model:ir.model.fields,field_description:custom_lupeon.field_prestashop_address__valued_picking
+#: model:ir.model.fields,field_description:custom_lupeon.field_prestashop_res_partner__valued_picking
+#: model:ir.model.fields,field_description:custom_lupeon.field_prestashop_supplier__valued_picking
+#: model:ir.model.fields,field_description:custom_lupeon.field_res_partner__valued_picking
+#: model:ir.model.fields,field_description:custom_lupeon.field_res_users__valued_picking
+msgid "Valued Picking"
+msgstr "Albarán valorado"
+
+#. module: custom_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_lupeon.vpicktree_delivered
+msgid "View Picking"
+msgstr "Ver albarán"
+
+#. module: custom_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_lupeon.sale_order_filter_custom_lupeon
 msgid "Whith Carrier"
 msgstr "Con transportista"
 
 #. module: custom_lupeon
-#: model_terms:ir.ui.view,arch_db:custom_lupeon.sale_order_filter_custom_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_lupeon.stock_picking_filter_ship_cost
 msgid "Whithout shipping cost"
 msgstr "Sin coste de envío"
 
 #. module: custom_lupeon
-#: code:addons/custom_lupeon/models/sale_order.py:72
+#: model_terms:ir.ui.view,arch_db:custom_lupeon.stock_picking_filter_ship_cost
+msgid "With Carrier"
+msgstr ""
+
+#. module: custom_lupeon
+#: model:ir.model.fields,help:custom_lupeon.field_prestashop_address__valued_picking
+#: model:ir.model.fields,help:custom_lupeon.field_prestashop_res_partner__valued_picking
+#: model:ir.model.fields,help:custom_lupeon.field_prestashop_supplier__valued_picking
+#: model:ir.model.fields,help:custom_lupeon.field_res_partner__valued_picking
+#: model:ir.model.fields,help:custom_lupeon.field_res_users__valued_picking
+msgid "You can select which partners have valued pickings"
+msgstr "Puede seleccionar qué empresas tienen albarán valorado"
+
+#. module: custom_lupeon
+#: code:addons/custom_lupeon/models/sale_order.py:87
 #, python-format
 msgid "You need to set commitment date."
 msgstr "Necesitas establecer la fecha de compromiso para confirmar el pedido"

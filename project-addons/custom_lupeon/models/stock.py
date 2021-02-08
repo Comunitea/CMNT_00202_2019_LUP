@@ -21,6 +21,7 @@ class StockMove(models.Model):
 
     line_state = fields.Selection(related='sale_line_id.state', 
         string="State sale line", store=True)
+    sale_name = fields.Text('Sale Description', related='sale_line_id.name')
     
     
 class PickingType(models.Model):
