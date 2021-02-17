@@ -207,7 +207,7 @@
             <form create="false">
                 <header>
                     <button name="manually_create_task_or_production" string="Generate production manually" type="object" attrs="{'invisible': ['|', '|', ('sheet_type', 'in', ['design', 'purchase']), ('sale_state', 'in', ['draft']), ('production_state', 'in', ['progress', 'done'])]}"/>
-                    <button name="manually_create_task_or_production" string="Generate tasks manually" type="object" attrs="{'invisible': ['|', '|', ('sheet_type', 'in', ['design', 'purchase']), ('sale_state', 'in', ['draft']), ('production_state', 'in', ['progress', 'done'])]}"/>
+                    <button name="manually_create_task_or_production" string="Generate tasks manually" type="object" attrs="{'invisible': ['|', '|', ('sheet_type', 'not in', ['design', 'purchase']), ('sale_state', 'in', ['draft']), ('production_state', 'in', ['progress', 'done'])]}"/>
                     <button name="manually_add_consumes" string="Generar consumo manual" type="object" attrs="{'invisible': ['|', '|', ('sheet_type', '!=', 'purchase'), ('sale_state', 'in', ['draft']), ('sheet_imprevist', '=',  True)]}"/>
                 </header>
                 <sheet>

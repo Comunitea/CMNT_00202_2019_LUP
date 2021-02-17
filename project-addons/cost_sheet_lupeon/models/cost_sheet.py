@@ -661,8 +661,9 @@ class CostSheet(models.Model):
             self.production_id.unlink()
 
         if self.sale_id.project_id:
-            self.mapped('sale_id.project_id.task_ids').unlink()
-            self.mapped('sale_id.project_id').unlink()
+            self.mapped('sale_id.project_id.task_ids').\
+                filtered(lambda s: s.sheet_id.id == self.id).unlink()
+            # self.mapped('sale_id.project_id').unlink()
 
         self.create_tasks()
         self.create_sale_productions()
