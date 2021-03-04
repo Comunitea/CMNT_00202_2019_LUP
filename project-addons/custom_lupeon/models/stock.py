@@ -97,7 +97,7 @@ class StockPicking(models.Model):
         domain = self.env['procurement.group']._get_moves_to_assign_domain(
             self.company_id.id)
 
-        domain.append(('raw_material_production_id', '!=', False))
+        #domain.append(('raw_material_production_id', '!=', False))
         moves_to_assign = self.env['stock.move'].search(domain, limit=None,
             order='priority desc, date_expected asc')
         for moves_chunk in split_every(100, moves_to_assign.ids):
