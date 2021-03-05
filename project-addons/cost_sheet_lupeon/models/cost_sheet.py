@@ -700,13 +700,14 @@ class CostSheet(models.Model):
                     bom_vals.append((0, 0, vals))
 
                 # Actualizo consumos producción
-                bom.write({'bom_line_ids': bom_vals})
-                update_quantity_wizard = self.env['change.production.qty'].\
-                    create({
-                        'mo_id': production.id,
-                        'product_qty': production.product_qty,
-                    })
-                update_quantity_wizard.change_prod_qty()
+                if production.state != 'done':
+                    bom.write({'bom_line_ids': bom_vals})
+                    update_quantity_wizard = self.env['change.production.qty'].\
+                        create({
+                            'mo_id': production.id,
+                            'product_qty': production.product_qty,
+                        })
+                    update_quantity_wizard.change_prod_qty()
 
                 if self.sale_id:
                     p_lines = self.purchase_line_ids.\
