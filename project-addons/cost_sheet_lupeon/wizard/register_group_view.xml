@@ -9,6 +9,7 @@
                         <group>
                             <field name="machine_hours" widget="float_time"/>
                             <field name="user_hours" widget="float_time"/>
+                            <field name="final_lot"/>
                         </group>
                         <group string="Cantidades hechas" attrs="{'invisible': [('qty_done_ids', '=', [])]}">
                             <field name="qty_done_ids" nolabel="1">

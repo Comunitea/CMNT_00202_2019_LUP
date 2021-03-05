@@ -23,6 +23,7 @@
                         <field name="name"/>
                         <field name="create_date"/>
                         <field name="total_time" widget="float_time"/>
+                        <field name="final_lot"/>
                     </group>
                     <group string="Órdenes de trabajo agrupadas">
                         <field name="register_ids" nolabel="1">
@@ -74,6 +75,7 @@
         <field name="arch" type="xml">
             <tree create="false">
                 <field name="name"/>
+                <field name="final_lot"/>
                 <field name="create_date"/>
                 <field name="total_time"/>
                 <field name="state"/>
@@ -87,6 +89,7 @@
         <field name="arch" type="xml">
             <search>
                 <field name="name"/>
+                <field name="final_lot"/>
             </search>
         </field>
     </record>

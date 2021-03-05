@@ -37,6 +37,8 @@ class GroupProduction(models.Model):
 
     total_done = fields.Float('Total realizado', compute="_get_total_done")
 
+    final_lot = fields.Char('Lote final')
+
     def _get_total_done(self):
         for gr in self:
             total = 0

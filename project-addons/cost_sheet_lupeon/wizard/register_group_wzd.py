@@ -45,6 +45,7 @@ class RegistergroupWizard(models.TransientModel):
 
     machine_hours = fields.Float('Horas máquina')
     user_hours = fields.Float('Horas técnico')
+    final_lot = fields.Char('Lote final')
     qty_done_ids = fields.One2many(
         'group.done.line', 'wzd_id', 'Cantidades Producidas')
     consume_ids = fields.One2many(
@@ -59,6 +60,9 @@ class RegistergroupWizard(models.TransientModel):
 
         if not self.user_hours:
             raise UserError('Es necesario indicar las horas de usuario')
+
+        if not self.final_lot:
+            raise UserError('Es necesario indicar el lote final')
 
         for consume in self.consume_ids:
             if not consume.lot_id:
@@ -151,6 +155,9 @@ class RegistergroupWizard(models.TransientModel):
         if self.machine_hours:
             time = gp.total_time
             gp.total_time = time + self.machine_hours
+
+        if self.final_lot:
+            gp.final_lot = self.final_lot
 
         # Actualizo consumos
         for consume in self.consume_ids:
