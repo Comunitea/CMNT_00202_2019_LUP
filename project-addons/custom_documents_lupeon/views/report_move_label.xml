@@ -49,7 +49,7 @@
                  <img t-if="move.picking_id.company_id.logo" t-att-src="image_data_uri(move.picking_id.company_id.logo)" style="width:45mm;height:20mm"/>
             </div>
             <div class="col-6 square2" >
-                <strong>Ref. cliente:  </strong><span style="margin-left: 3px" t-field="move.picking_id.sale_id.name2"/>
+                <strong>Ref. cliente:  </strong><span style="margin-left: 3px" t-field="move.picking_id.sale_id.client_order_ref"/>
                 <br/>
                 <strong>Pedido:  </strong><span style="margin-left: 3px" t-field="move.picking_id.sale_id.name"/>
                 <br/>
