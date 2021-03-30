@@ -16,6 +16,7 @@ class ProductTemplate(models.Model):
 
     _inherit = 'product.template'
 
+    cost_sheet_sale = fields.Boolean(related='company_id.cost_sheet_sale')
     is_material = fields.Boolean('Es un material')
     custom_mrp_ok = fields.Boolean('Fabricación lupeon')
     # material = fields.Boolean('Material')
