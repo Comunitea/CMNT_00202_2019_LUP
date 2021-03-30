@@ -25,6 +25,14 @@ class SaleOrder(models.Model):
                                 compute="_compute_delivered",
                                 store=True)
     delivery_blocked = fields.Boolean("Entrega bloqueada", default=False)
+    admin_fact = fields.Float("Factor admin.", compute="_compute_fa", 
+                                readonly=True,
+                                store = True)
+
+    @api.depends('partner_id')
+    def _compute_fa(self):
+        for order in self:
+            order.admin_fact = order.partner_id._get_admin_fact()
 
     @api.multi
     def print_quotation(self):
@@ -35,7 +43,6 @@ class SaleOrder(models.Model):
         else:
             return self.env.ref('custom_documents_lupeon.action_report_saleorder_lupeon')\
                 .with_context(discard_logo_check=True).report_action(self)
-
 
     def _compute_ship_cost(self):
         for order in self:
