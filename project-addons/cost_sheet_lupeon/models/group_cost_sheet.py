@@ -80,15 +80,15 @@ class GroupCostSheet(models.Model):
         self.ensure_one()
         res = []
         mrp_types = ['fdm', 'sls', 'poly', 'sla', 'sls2', 'dmls']
+        operation_id = False
+        if routing and routing.operation_ids:
+            operation_id = routing.operation_ids[0].id
         for sh in self.sheet_ids.filtered(
                 lambda sh: sh.sheet_type in mrp_types):
             if not sh.product_id:
                 print('error')
                 continue
 
-            operation_id = False
-            if routing and routing.operation_ids:
-                operation_id = routing.operation_ids[0].id
             vals = {
                 'product_id': sh.product_id.id,
                 'product_qty': sh.cus_units,  # TODO review,
@@ -96,7 +96,7 @@ class GroupCostSheet(models.Model):
                 'operation_id': operation_id,
             }
             res.append((0, 0, vals))
-        
+
         # Añadir compras como consumo
         for sh in self.sheet_ids.filtered(
                 lambda sh: sh.sheet_type == 'purchase'):
@@ -109,7 +109,7 @@ class GroupCostSheet(models.Model):
                     'product_uom_id': line.product_id.uom_id.id,
                     'operation_id': operation_id,
                 }
-                res.append((0,0, vals))
+                res.append((0, 0, vals))
         return res
 
     def get_group_routing_on_fly(self):
