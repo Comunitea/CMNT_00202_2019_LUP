@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <record model="ir.ui.view" id="utm_campaign_company_form">
+        <field name="name">utm.campaign.company_form</field>
+        <field name="model">utm.campaign</field>
+        <field name="inherit_id" ref="utm.utm_campaign_form"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="company_id"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

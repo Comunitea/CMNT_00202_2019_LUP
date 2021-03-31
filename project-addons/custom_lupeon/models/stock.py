@@ -27,6 +27,8 @@ class PickingType(models.Model):
 
     _inherit = "stock.picking.type"
 
+    count_picking_blocked = fields.Integer(
+        compute='_compute_picking_count')
 
     def _compute_picking_count(self):
         # SE SOBREESCRIBE
@@ -51,6 +53,10 @@ class PickingType(models.Model):
                                     '|', ('picking_type_id.code', '!=', 'outgoing'), 
                                     '&', ('picking_type_id.code', '=', 'outgoing'), ('sale_id.state','not in', ['draft', 'sent'])],
             'count_picking_backorders': [('backorder_id', '!=', False), ('state', 'in', ('confirmed', 'assigned', 'waiting'))],
+            'count_picking_blocked': [('state', 'in', ('confirmed', 'assigned', 'waiting')),
+                                    '|', ('delivery_blocked','=', True), 
+                                    ('sale_id.prestashop_state.pending_payment','=', True)
+                                    ],
         }
         for field in domains:
             data = self.env['stock.picking'].read_group(domains[field] +

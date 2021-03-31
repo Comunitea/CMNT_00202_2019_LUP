@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <record model="ir.ui.view" id="sale_quotation_color_tree">
+        <field name="name">sale.quotation.color.tree</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_quotation_tree"/>
+        <field name="arch" type="xml">
+            
+            <field name="date_order" position="after">
+                <field name="validity_date" invisible="True"/>
+            </field>
+            <tree position="attributes">
+                <attribute name="decoration-danger">state in ('draft', 'sent') and validity_date &lt; current_date</attribute>
+                
+            </tree>
+        </field>
+        
+    </record>
+
+</odoo>

@@ -333,4 +333,42 @@
         </field>
     </record>
 
+    <!-- Accion y vistas para ver albaranes bloqueados-->
+
+    <record id="blocked_action_picking_dashboard" model="ir.actions.act_window">
+        <field name="name">Pickings Blocked</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">stock.picking</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" eval="False"/>
+        <field name="domain">[('state', 'in', ('confirmed', 'assigned', 'waiting')),
+            '|', ('delivery_blocked','=', True), 
+            ('sale_id.prestashop_state.pending_payment','=', True)]</field>
+        <field name="context">{'default_picking_type_id': active_id}</field>
+    </record>
+
+    <record id="stock_picking_type_blocked_kanban" model="ir.ui.view">
+        <field name="name">stock.picking.type.blocked.kanban</field>
+        <field name="model">stock.picking.type</field>
+        <field name="inherit_id" ref="stock.stock_picking_type_kanban"/>
+        <field name="arch" type="xml">
+            <field name="code" position="after">
+                <field name="count_picking_blocked"/>
+            </field>
+            <xpath expr="//div[hasclass('o_kanban_primary_right')]" position="inside">
+                <div t-if="record.count_picking_blocked.raw_value > 0" class="row">
+                    <div class="col-9">
+                        <a name="%(blocked_action_picking_dashboard)d"  type="action">
+                            Blocked
+                        </a>
+                    </div>
+                    <div class="col-3">
+                        <field name="count_picking_blocked"/>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
 </odoo>

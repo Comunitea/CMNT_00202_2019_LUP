@@ -10,13 +10,14 @@
             <field name="inherit_id" ref="product.product_template_form_view"/>
             <field name="arch" type="xml">
                 <div name="options" position="inside">
-                    <div attrs="{'invisible':[('type', 'not in', ['product', 'consu', 'service'])]}">
-                        <field name="custom_mrp_ok"/>
+                    <div attrs="{'invisible':[('cost_sheet_sale', '=', True)]}">
+                        <field name="cost_sheet_sale" invisible="True"/>
+                        <field name="custom_mrp_ok" />
                         <label for="custom_mrp_ok"/>
                         <field name="is_material"/>
                         <label for="is_material"/>
                     </div>
-                    <div attrs="{'invisible':[('type', 'not in', ['product', 'consu', 'service'])]}">
+                    <div attrs="{'invisible':[('cost_sheet_sale', '=', True)]}">
                         <label for="group_sheet_id"/>
                         <field name="group_sheet_id"/>
                     </div>
