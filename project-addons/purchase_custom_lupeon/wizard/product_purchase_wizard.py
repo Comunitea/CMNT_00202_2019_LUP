@@ -18,16 +18,23 @@ class ProductPurchaseLineWizard(models.TransientModel):
     qty_available = fields.Float('A mano', readonly=True)
     reordering_min_qty = fields.Float('Max', readonly=True)
     reordering_max_qty = fields.Float('Min', readonly=True)
-    
-    
+       
 class ProductPurchaseWizard(models.TransientModel):
 
     _name = "product.purchase.wizard"
 
+    @api.multi
+    def _compute_purchased_qties(self):
+        
+        self.purchased_qties = sum(x.product_qty for x in self.line_ids)
+        
+
+
     supplier_id = fields.Many2one('res.partner', 'Supplier')
     purchase_order = fields.Many2one('purchase.order')
     line_ids = fields.One2many('product.purchase.line.wizard', 'product_purchase_wzd_id')
-
+    purchased_qties = fields.Float('Totat Ordered Qty', compute=_compute_purchased_qties)
+    
     def add_to_purchase_order(self):
 
         if not self.purchase_order:
@@ -89,7 +96,7 @@ class ProductPurchaseWizard(models.TransientModel):
             )
             for product in products
         ]
-
+        res['purchased_qties'] = sum(x.purchase_qty for x in products)
         if len(products.mapped('main_supplier_id')) == 1:
             res['supplier_id'] = products.mapped('main_supplier_id').id
             po = self.env['purchase.order'].search(
@@ -100,3 +107,12 @@ class ProductPurchaseWizard(models.TransientModel):
             
         res['line_ids'] =lines
         return res
+
+  
+    def refresh(self):
+        _action = self.env.ref("purchase_custom_lupeon.action_add_product_purchase_line_wzd")
+        action = _action.read()[0]        
+        action["res_id"] = self.id
+        return action
+
+

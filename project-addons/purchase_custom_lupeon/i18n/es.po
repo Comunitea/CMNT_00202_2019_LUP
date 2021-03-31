@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-11 19:22+0000\n"
-"PO-Revision-Date: 2020-11-11 19:22+0000\n"
+"POT-Creation-Date: 2021-03-31 10:32+0000\n"
+"PO-Revision-Date: 2021-03-31 10:32+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,9 +16,19 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: purchase_custom_lupeon
+#: model:ir.model.fields,field_description:purchase_custom_lupeon.field_product_purchase_line_wizard__twelve_months_ago
+msgid "12"
+msgstr ""
+
+#. module: purchase_custom_lupeon
 #: model_terms:ir.ui.view,arch_db:purchase_custom_lupeon.purchase_product_custom_tree
 msgid "A Mano"
 msgstr ""
+
+#. module: purchase_custom_lupeon
+#: model:ir.model.fields,field_description:purchase_custom_lupeon.field_product_purchase_line_wizard__qty_available
+msgid "A mano"
+msgstr "Stock físico"
 
 #. module: purchase_custom_lupeon
 #: model:ir.model.fields,field_description:purchase_custom_lupeon.field_product_product__actual_po_id
@@ -39,6 +49,11 @@ msgstr "Añadir a pedido de compra"
 #: model:ir.model.fields,field_description:purchase_custom_lupeon.field_product_purchase_line_wizard__assigned_attachment_ids
 #: model:ir.model.fields,field_description:purchase_custom_lupeon.field_product_purchase_wizard__assigned_attachment_ids
 msgid "Assigned Attachments"
+msgstr ""
+
+#. module: purchase_custom_lupeon
+#: model_terms:ir.ui.view,arch_db:purchase_custom_lupeon.add_product_purchase_line_wzd
+msgid "Calc. Qties"
 msgstr ""
 
 #. module: purchase_custom_lupeon
@@ -127,7 +142,7 @@ msgstr ""
 #. module: purchase_custom_lupeon
 #: model:ir.ui.menu,name:purchase_custom_lupeon.menu_action_purchase_custom_all
 msgid "Info compra productos"
-msgstr ""
+msgstr "Necesidades aprovisionamiento"
 
 #. module: purchase_custom_lupeon
 #: model:ir.model.fields,field_description:purchase_custom_lupeon.field_product_purchase_line_wizard____last_update
@@ -138,7 +153,7 @@ msgstr "Última modificación en"
 #. module: purchase_custom_lupeon
 #: model:ir.model.fields,field_description:purchase_custom_lupeon.field_product_product__last_month_ago
 msgid "Last Month Ago"
-msgstr "Útimo mes"
+msgstr "Último mes"
 
 #. module: purchase_custom_lupeon
 #: model:ir.model.fields,field_description:purchase_custom_lupeon.field_product_purchase_line_wizard__write_uid
@@ -160,7 +175,17 @@ msgstr "Linea"
 #. module: purchase_custom_lupeon
 #: model:ir.model.fields,field_description:purchase_custom_lupeon.field_product_product__main_supplier_id
 msgid "Main Supplier"
-msgstr "Proveedor principal"
+msgstr ""
+
+#. module: purchase_custom_lupeon
+#: model:ir.model.fields,field_description:purchase_custom_lupeon.field_product_purchase_line_wizard__reordering_min_qty
+msgid "Max"
+msgstr "Máx"
+
+#. module: purchase_custom_lupeon
+#: model:ir.model.fields,field_description:purchase_custom_lupeon.field_product_purchase_line_wizard__reordering_max_qty
+msgid "Min"
+msgstr "Mín"
 
 #. module: purchase_custom_lupeon
 #: model:ir.model,name:purchase_custom_lupeon.model_stock_warehouse_orderpoint
@@ -173,7 +198,7 @@ msgid "New order lines"
 msgstr "Nuevas lineas de pedido"
 
 #. module: purchase_custom_lupeon
-#: code:addons/purchase_custom_lupeon/wizard/product_purchase_wizard.py:26
+#: code:addons/purchase_custom_lupeon/wizard/product_purchase_wizard.py:41
 #, python-format
 msgid "No order selected"
 msgstr "Pedido no seleccionado"
@@ -194,6 +219,7 @@ msgid "Presupuestos"
 msgstr ""
 
 #. module: purchase_custom_lupeon
+#: model:ir.model.fields,field_description:purchase_custom_lupeon.field_product_purchase_line_wizard__virtual_available
 #: model_terms:ir.ui.view,arch_db:purchase_custom_lupeon.purchase_product_custom_tree
 msgid "Previsto"
 msgstr ""
@@ -207,7 +233,7 @@ msgstr "Producto"
 #. module: purchase_custom_lupeon
 #: model:ir.actions.act_window,name:purchase_custom_lupeon.action_product_purchase_custom_all
 msgid "Product Purchase Info"
-msgstr "Información de compra de producto"
+msgstr "Necesidades aprovisionamiento"
 
 #. module: purchase_custom_lupeon
 #: model:ir.model.fields,field_description:purchase_custom_lupeon.field_product_purchase_line_wizard__product_purchase_wzd_id
@@ -230,6 +256,7 @@ msgid "Purchase"
 msgstr "Compra"
 
 #. module: purchase_custom_lupeon
+#: model:ir.model,name:purchase_custom_lupeon.model_purchase_order
 #: model:ir.model.fields,field_description:purchase_custom_lupeon.field_product_purchase_wizard__purchase_order
 msgid "Purchase Order"
 msgstr "Pedido de compra"
@@ -248,19 +275,19 @@ msgstr "Líneas pedido de compra"
 #. module: purchase_custom_lupeon
 #: model_terms:ir.ui.view,arch_db:purchase_custom_lupeon.purchase_custom_search
 msgid "Purchase Order Lines Status"
-msgstr "Estado de líneas de pedido de compra"
+msgstr ""
 
 #. module: purchase_custom_lupeon
 #: code:addons/purchase_custom_lupeon/models/product.py:115
 #: code:addons/purchase_custom_lupeon/models/res_partner.py:25
 #, python-format
 msgid "Purchase order lines"
-msgstr "Líneas de pedido de comppra"
+msgstr "Lineas de compra"
 
 #. module: purchase_custom_lupeon
 #: model_terms:ir.ui.view,arch_db:purchase_custom_lupeon.purchase_product_custom_tree
 msgid "Purchase prducts"
-msgstr "Productos de compra"
+msgstr "Lista de compras"
 
 #. module: purchase_custom_lupeon
 #: model:ir.model.fields,field_description:purchase_custom_lupeon.field_product_purchase_line_wizard__product_qty
@@ -285,7 +312,7 @@ msgstr "Seleccione un pedido de venta para añadir los productos seleccionados"
 #. module: purchase_custom_lupeon
 #: model:ir.model.fields,field_description:purchase_custom_lupeon.field_product_product__six_months_ago
 msgid "Six Months Ago"
-msgstr "Últ. 6 meses"
+msgstr "Seis meses"
 
 #. module: purchase_custom_lupeon
 #: model:ir.model.fields,field_description:purchase_custom_lupeon.field_product_purchase_wizard__supplier_id
@@ -295,44 +322,55 @@ msgstr "Proveedor"
 #. module: purchase_custom_lupeon
 #: model:ir.model.fields,field_description:purchase_custom_lupeon.field_product_product__supplier_delay
 msgid "Supplier Delay"
-msgstr "Retraso prov."
+msgstr "Retraso del proveedor"
 
 #. module: purchase_custom_lupeon
 #: model:ir.model.fields,field_description:purchase_custom_lupeon.field_product_product__supplier_price
 msgid "Supplier Price"
-msgstr "Precio prov."
+msgstr "Tarifa del proveedor"
 
 #. module: purchase_custom_lupeon
 #: model:ir.model.fields,field_description:purchase_custom_lupeon.field_product_product__supplier_min_qty
 msgid "Supplier min qty"
-msgstr "Ctdad. min. prov."
+msgstr "Mín. cant servida"
 
 #. module: purchase_custom_lupeon
 #: model:ir.model.fields,field_description:purchase_custom_lupeon.field_purchase_order_line__to_deliver_qty
 msgid "To Deliver Qty"
-msgstr "Ctdad. a enviar"
+msgstr "Cantidad pendiente"
+
+#. module: purchase_custom_lupeon
+#: model:ir.model.fields,field_description:purchase_custom_lupeon.field_product_purchase_wizard__purchased_qties
+#: model:ir.model.fields,field_description:purchase_custom_lupeon.field_purchase_order__purchased_qties
+msgid "Totat Ordered Qty"
+msgstr "Cant. Ordenada"
+
+#. module: purchase_custom_lupeon
+#: model:ir.model.fields,field_description:purchase_custom_lupeon.field_purchase_order__received_qties
+msgid "Totat Received Qty"
+msgstr "Cant. Recibida"
 
 #. module: purchase_custom_lupeon
 #: model:ir.model.fields,field_description:purchase_custom_lupeon.field_product_product__twelve_months_ago
 msgid "Twelve Months Ago"
-msgstr "Últ. 12 meses"
+msgstr "12 Meses"
 
 #. module: purchase_custom_lupeon
 #: model_terms:ir.ui.view,arch_db:purchase_custom_lupeon.product_unreceived_items
 msgid "Unreceived Items"
-msgstr "Elementos no recibidos"
+msgstr "No recibido"
 
 #. module: purchase_custom_lupeon
 #: model_terms:ir.ui.view,arch_db:purchase_custom_lupeon.product_unreceived_items
 msgid "compute last sales"
-msgstr "Calcular últ. ventas"
+msgstr ""
 
 #. module: purchase_custom_lupeon
 #: model:ir.actions.server,name:purchase_custom_lupeon.ir_cron_sales_last_ir_actions_server
 #: model:ir.cron,cron_name:purchase_custom_lupeon.ir_cron_sales_last
 #: model:ir.cron,name:purchase_custom_lupeon.ir_cron_sales_last
 msgid "compute last sales "
-msgstr "Calcular últ. ventas"
+msgstr "Calculo de últimas ventas"
 
 #. module: purchase_custom_lupeon
 #: model:ir.model,name:purchase_custom_lupeon.model_plpc_line

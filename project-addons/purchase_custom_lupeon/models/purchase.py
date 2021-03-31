@@ -4,7 +4,17 @@ from odoo import fields, models, api
 from odoo.tools.misc import formatLang
 
 
+class PurcaseOrder(models.Model):
+    _inherit="purchase.order"
 
+    @api.multi
+    def _compute_purchased_qties(self):
+        for purchase_id in self:
+            purchase_id.purchased_qties = sum(x.product_uom_qty for x in purchase_id.order_line)
+            purchase_id.received_qties = sum(x.qty_received for x in purchase_id.order_line)
+
+    purchased_qties = fields.Float('Totat Ordered Qty', compute=_compute_purchased_qties)
+    received_qties = fields.Float('Totat Received Qty', compute=_compute_purchased_qties)
 
 class PurchaseOrderLine(models.Model):
     _inherit = "purchase.order.line"
