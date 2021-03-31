@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-08 10:59+0000\n"
-"PO-Revision-Date: 2021-02-08 10:59+0000\n"
+"POT-Creation-Date: 2021-03-31 06:43+0000\n"
+"PO-Revision-Date: 2021-03-31 06:43+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -30,6 +30,11 @@ msgstr "Código de barras"
 #: selection:delivery.carrier,delivery_type:0
 msgid "Based on Rules"
 msgstr "En base a reglas"
+
+#. module: custom_lupeon
+#: model_terms:ir.ui.view,arch_db:custom_lupeon.stock_picking_type_blocked_kanban
+msgid "Blocked"
+msgstr "Bloqueados"
 
 #. module: custom_lupeon
 #: code:addons/custom_lupeon/wizard/sale_make_invoice_advanced.py:23
@@ -68,6 +73,11 @@ msgstr ""
 #: model:ir.ui.menu,name:custom_lupeon.menu_picking_ship_cost
 msgid "Costes de envío en albaranes"
 msgstr "Costes de envío"
+
+#. module: custom_lupeon
+#: model:ir.model.fields,field_description:custom_lupeon.field_stock_picking_type__count_picking_blocked
+msgid "Count Picking Blocked"
+msgstr "Albaranes bloqueados"
 
 #. module: custom_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_lupeon.vpicktree_delivered
@@ -116,6 +126,12 @@ msgstr "Correo electrónico"
 #: model:ir.model.fields,field_description:custom_lupeon.field_prestashop_sale_order__delivery_blocked
 #: model:ir.model.fields,field_description:custom_lupeon.field_sale_order__delivery_blocked
 msgid "Entrega bloqueada"
+msgstr ""
+
+#. module: custom_lupeon
+#: model:ir.model.fields,field_description:custom_lupeon.field_prestashop_sale_order__admin_fact
+#: model:ir.model.fields,field_description:custom_lupeon.field_sale_order__admin_fact
+msgid "Factor admin."
 msgstr ""
 
 #. module: custom_lupeon
@@ -173,8 +189,8 @@ msgid "No active picking to deliver"
 msgstr "No hay albarán activo para entregar"
 
 #. module: custom_lupeon
-#: code:addons/custom_lupeon/models/sale_order.py:136
-#: code:addons/custom_lupeon/models/stock.py:162
+#: code:addons/custom_lupeon/models/sale_order.py:143
+#: code:addons/custom_lupeon/models/stock.py:167
 #, python-format
 msgid "No pickings in assigned state to open"
 msgstr "No hay albaranes en estado preparado para mostrar."
@@ -245,9 +261,14 @@ msgid "Picking reserves"
 msgstr "Albaranes de reservas"
 
 #. module: custom_lupeon
+#: model:ir.actions.act_window,name:custom_lupeon.blocked_action_picking_dashboard
+msgid "Pickings Blocked"
+msgstr "Albaranes bloqueados"
+
+#. module: custom_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_lupeon.view_picking_internal_search_sale_state
 msgid "Pickings not blocked from sales"
-msgstr ""
+msgstr "Albaranes no bloqueados desde ventas"
 
 #. module: custom_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_lupeon.view_picking_internal_search_sale_state
@@ -340,11 +361,6 @@ msgid "Reserves"
 msgstr "Reservas"
 
 #. module: custom_lupeon
-#: model:ir.model.fields,field_description:custom_lupeon.field_stock_move__sale_name
-msgid "Sale Description"
-msgstr "Descripción de venta"
-
-#. module: custom_lupeon
 #: model:ir.model,name:custom_lupeon.model_sale_order
 msgid "Sale Order"
 msgstr "Pedido de venta"
@@ -426,7 +442,7 @@ msgid "Supplier Number"
 msgstr " Nº proveedor"
 
 #. module: custom_lupeon
-#: code:addons/custom_lupeon/models/stock.py:131
+#: code:addons/custom_lupeon/models/stock.py:136
 #, python-format
 msgid "The picking is blocked form Sale Order %s"
 msgstr "El albarán esta'bloqueado en el pedido %s"
@@ -454,7 +470,7 @@ msgstr "Albarán valorado"
 #. module: custom_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_lupeon.vpicktree_delivered
 msgid "View Picking"
-msgstr "Ver albarán"
+msgstr ""
 
 #. module: custom_lupeon
 #: model_terms:ir.ui.view,arch_db:custom_lupeon.sale_order_filter_custom_lupeon
@@ -481,7 +497,7 @@ msgid "You can select which partners have valued pickings"
 msgstr "Puede seleccionar qué empresas tienen albarán valorado"
 
 #. module: custom_lupeon
-#: code:addons/custom_lupeon/models/sale_order.py:87
+#: code:addons/custom_lupeon/models/sale_order.py:94
 #, python-format
 msgid "You need to set commitment date."
 msgstr "Necesitas establecer la fecha de compromiso para confirmar el pedido"
