@@ -14,10 +14,11 @@
         <field name="inherit_id" ref="project.view_task_form2"/>
         <field name="arch" type="xml">
             <field name="tag_ids" position="after">
-                <field name="sheet_id"/>
-                <field name="sale_id"/>
-                <field name="sale_line_id"/>
-                <field name="oppi_line_id"/>
+                <field name="cost_sheet_sale" invisible="True"/>
+                <field name="sheet_id" attrs="{'invisible':[('cost_sheet_sale', '=', True)]}"/>
+                <field name="sale_id" attrs="{'invisible':[('cost_sheet_sale', '=', True)]}"/>
+                <field name="sale_line_id" attrs="{'invisible':[('cost_sheet_sale', '=', True)]}"/>
+                <field name="oppi_line_id" attrs="{'invisible':[('cost_sheet_sale', '=', True)]}"/>
             </field>
             
         </field>
@@ -29,10 +30,11 @@
         <field name="inherit_id" ref="project.view_task_tree2"/>
         <field name="arch" type="xml">
             <field name="stage_id" position="after">
-                <field name="sheet_id"/>
-                <field name="sale_id"/>
-                <field name="sale_line_id"/>
-                <field name="oppi_line_id"/>
+                <field name="cost_sheet_sale" invisible="True"/>
+                <field name="sheet_id" attrs="{'invisible':[('cost_sheet_sale', '=', True)]}"/>
+                <field name="sale_id" attrs="{'invisible':[('cost_sheet_sale', '=', True)]}"/>
+                <field name="sale_line_id" attrs="{'invisible':[('cost_sheet_sale', '=', True)]}"/>
+                <field name="oppi_line_id" attrs="{'invisible':[('cost_sheet_sale', '=', True)]}"/>
             </field>
             
         </field>
@@ -60,4 +62,3 @@
 
 
 </odoo>
-
