@@ -5,6 +5,7 @@ from odoo import models, fields, api, _
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT, float_compare, float_round
 from odoo.exceptions import UserError
 from odoo.tools.float_utils import float_round
+from dateutil.relativedelta import relativedelta
 
 
 
@@ -28,6 +29,22 @@ class SaleOrder(models.Model):
     admin_fact = fields.Float("Factor admin.", compute="_compute_fa", 
                                 readonly=True,
                                 store = True)
+    with_reserves = fields.Boolean("With Reserves", compute="_compute_reserves")
+
+
+    # Se usa en una acción de servidor 
+    def get_activity_deadline(self, activity_type_id):
+      
+        # Date.context_today is correct because date_deadline is a Date and is meant to be
+        # expressed in user TZ
+        base = fields.Date.context_today(self)
+        
+        return base + relativedelta(**{activity_type_id.delay_unit: activity_type_id.delay_count})
+
+    
+    def _compute_reserves(self):
+        for order in self:
+            order.with_reserves = any(line.reserved > 0 for line in order.order_line)
 
     @api.depends('partner_id')
     def _compute_fa(self):
