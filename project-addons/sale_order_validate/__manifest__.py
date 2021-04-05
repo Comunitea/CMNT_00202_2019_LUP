@@ -11,9 +11,11 @@
     "application": False,
     "installable": True,
     "depends": [
-        "sale"
+        "sale", "delivery"
     ],
     "data": [
-        "views/sale_order_view.xml"
+        "views/sale_order_view.xml",
+        "views/product_views.xml",
+        "views/delivery_carrier_view.xml"
     ],
 }

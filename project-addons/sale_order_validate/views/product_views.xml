@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="product_template_form_view">
+        <field name="name">product.template.common.form.custom</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='group_lots_and_weight']" position="inside">
+                <field name="transport_restrictions"/>
+                <label for="forbidden_country_ids" />
+                <div class="o_row" name="label_fc_ids">
+                    <field name="forbidden_country_ids" widget="many2many_tags"/>                    
+                </div>
+            </xpath>
+            
+        </field>
+        
+    </record>
+
+</odoo>
