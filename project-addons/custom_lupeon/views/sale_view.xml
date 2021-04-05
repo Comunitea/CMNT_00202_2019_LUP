@@ -14,6 +14,7 @@
                 />
                 <!--field name="reserved"/-->
                 <field name="qty_reserved"/>
+                <field name="real_stock" invisible="1"/>
             </xpath>
             <xpath expr="//field[@name='order_line']" position="before">
                 <div class="oe_right oe_button_box" name="button_proc">

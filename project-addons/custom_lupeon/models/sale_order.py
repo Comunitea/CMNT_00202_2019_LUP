@@ -197,6 +197,7 @@ class SaleOrderLine(models.Model):
 
     reserved = fields.Boolean('Reserved', compute="_is_reserve")
     qty_reserved = fields.Float('Qty Reserved', compute="_is_reserve")
+    real_stock = fields.Float('Real stock', related="product_id.qty_available")
 
     @api.multi
     def _is_reserve(self):
@@ -280,6 +281,17 @@ class SaleOrderLine(models.Model):
             price = float_round(price * (1 + self.order_id.partner_id.\
                 _get_admin_fact()/100), price_precision)
         return price
+    
+    @api.depends('product_id', 'customer_lead', 'product_uom_qty',
+                 'order_id.warehouse_id', 'order_id.commitment_date')
+    def _compute_qty_at_date(self):
+        """
+        Add reserved qty to compute calc
+        """
+        super()._compute_qty_at_date()
+        for line in self:
+            new_qty = line.virtual_available_at_date + line.qty_reserved
+            line.virtual_available_at_date = new_qty
     
 class SaleOrderState(models.Model):
     _inherit = "sale.order.state"
