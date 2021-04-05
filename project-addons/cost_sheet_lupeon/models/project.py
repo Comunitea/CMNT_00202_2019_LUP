@@ -15,6 +15,7 @@ class Projecttask(models.Model):
 
     _inherit = "project.task"
 
+    cost_sheet_sale = fields.Boolean(related='company_id.cost_sheet_sale')
     sheet_id = fields.Many2one(
         'cost.sheet', 'Cost Sheet', readonly=True)
     oppi_line_id = fields.Many2one(
