@@ -32,6 +32,7 @@
         'sale_order_incoterm_place',
         'purchase',
         'purchase_stock',  # Have to replace Shipping address before
+        'sale_summary_lines',
     ],
     'data': [
         'views/sale_view.xml',
