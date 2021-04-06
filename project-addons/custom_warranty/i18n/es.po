@@ -1,0 +1,171 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* custom_warranty
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-04-06 18:14+0000\n"
+"PO-Revision-Date: 2021-04-06 18:14+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: custom_warranty
+#: model_terms:ir.ui.view,arch_db:custom_warranty.view_template_property_form
+msgid "<span> days</span>"
+msgstr "<span> días</span>"
+
+#. module: custom_warranty
+#: model_terms:ir.ui.view,arch_db:custom_warranty.view_production_lot_form
+msgid "<span><strong> End Warranty: </strong></span>"
+msgstr "<span><strong> Fin Garantía: </strong></span>"
+
+#. module: custom_warranty
+#: model_terms:ir.ui.view,arch_db:custom_warranty.view_production_lot_form
+msgid "<span><strong> Sale Date: </strong></span>"
+msgstr "<span><strong> Fecha de Venta: </strong></span>"
+
+#. module: custom_warranty
+#: model_terms:ir.actions.act_window,help:custom_warranty.warranties_action
+msgid "A price is a set of sales prices or rules to compute the price of sales order lines based on products, product categories, dates and ordered quantities.\n"
+"            This is the perfect tool to handle several pricings, seasonal discounts, etc."
+msgstr ""
+
+#. module: custom_warranty
+#: model_terms:ir.actions.act_window,help:custom_warranty.action_warranties
+msgid "Add a lot/serial number"
+msgstr "Añadir un numero de lote/serie"
+
+#. module: custom_warranty
+#: model:ir.model,name:custom_warranty.model_res_partner
+msgid "Contact"
+msgstr "Contacto"
+
+#. module: custom_warranty
+#: model_terms:ir.actions.act_window,help:custom_warranty.warranties_action
+msgid "Create a new pricelist"
+msgstr "Crear una nueva lista de precios"
+
+#. module: custom_warranty
+#: model_terms:ir.ui.view,arch_db:custom_warranty.view_production_lot_form
+msgid "Dates"
+msgstr "Fechas"
+
+#. module: custom_warranty
+#: model_terms:ir.ui.view,arch_db:custom_warranty.search_product_lot_filter_inherit_warranty
+msgid "En garantía"
+msgstr ""
+
+#. module: custom_warranty
+#: model:ir.model.fields,field_description:custom_warranty.field_stock_production_lot__life_date
+msgid "End warranty"
+msgstr "Fin Garantía"
+
+#. module: custom_warranty
+#: model_terms:ir.ui.view,arch_db:custom_warranty.search_product_lot_filter_inherit_warranty
+msgid "Garantías"
+msgstr ""
+
+#. module: custom_warranty
+#: model:ir.model,name:custom_warranty.model_stock_production_lot
+msgid "Lot/Serial"
+msgstr "Lote/Número de serie"
+
+#. module: custom_warranty
+#: model_terms:ir.ui.view,arch_db:custom_warranty.view_serial_warranty
+msgid "Lots/Serial Numbers"
+msgstr "Lotes/Números de serie"
+
+#. module: custom_warranty
+#: model:ir.model,name:custom_warranty.model_product_product
+msgid "Product"
+msgstr "Producto"
+
+#. module: custom_warranty
+#: model:ir.model,name:custom_warranty.model_stock_move_line
+msgid "Product Moves (Stock Move Line)"
+msgstr "Movimientos de Producto (Stock Move Line)"
+
+#. module: custom_warranty
+#: model:ir.model,name:custom_warranty.model_product_template
+msgid "Product Template"
+msgstr "Plantilla de producto"
+
+#. module: custom_warranty
+#: model:ir.model.fields,field_description:custom_warranty.field_stock_production_lot__sale_date
+msgid "Sale date"
+msgstr "Fecha de Venta"
+
+#. module: custom_warranty
+#: model:ir.model.fields,field_description:custom_warranty.field_product_product__with_warranty
+#: model:ir.model.fields,field_description:custom_warranty.field_product_template__with_warranty
+#: model:ir.model.fields,field_description:custom_warranty.field_stock_production_lot__with_warranty
+msgid "Serial Register"
+msgstr "Registro Nº Serie"
+
+#. module: custom_warranty
+#: code:addons/custom_warranty/models/stock_move_line.py:22
+#, python-format
+msgid "Serial {} is under warranty. Please, reset warranties before compute new warranties"
+msgstr "El serie {} está en garantía. Resetea la garantía para calcular la nueva"
+
+#. module: custom_warranty
+#: model_terms:ir.ui.view,arch_db:custom_warranty.search_product_lot_filter_inherit_warranty
+msgid "Serials with warranty"
+msgstr "Nº de Serie en garantía"
+
+#. module: custom_warranty
+#: model_terms:ir.actions.act_window,help:custom_warranty.action_warranties
+msgid "This is the list of all the production lots you recorded. When\n"
+"            you select a lot, you can get the traceability of the products contained in lot."
+msgstr "Esta es la lista de todos los lotes de producción que ha grabado. Cuando\n"
+"            selecciona un lote, usted puede conseguir la trazabilidad de los productos contenidos en el lote."
+
+#. module: custom_warranty
+#: model:ir.model.fields,field_description:custom_warranty.field_stock_production_lot__under_warranty
+msgid "Under warranty"
+msgstr "En Garantía"
+
+#. module: custom_warranty
+#: model:ir.actions.act_window,name:custom_warranty.action_warranties
+#: model:ir.actions.act_window,name:custom_warranty.warranties_action
+#: model:ir.ui.menu,name:custom_warranty.menu_action_action_warranties_stock
+#: model:ir.ui.menu,name:custom_warranty.menu_action_action_warranties_stock_sales
+#: model_terms:ir.ui.view,arch_db:custom_warranty.res_partner_view_buttons
+msgid "Warranties"
+msgstr "Garantías"
+
+#. module: custom_warranty
+#: model:ir.model.fields,field_description:custom_warranty.field_res_partner__warranties_count
+#: model:ir.model.fields,field_description:custom_warranty.field_res_users__warranties_count
+msgid "Warranties count"
+msgstr "Garantías"
+
+#. module: custom_warranty
+#: model_terms:ir.ui.view,arch_db:custom_warranty.view_production_lot_form
+#: model_terms:ir.ui.view,arch_db:custom_warranty.view_production_lot_form_simple
+msgid "Warranty"
+msgstr "Garantía"
+
+#. module: custom_warranty
+#: model:ir.model.fields,field_description:custom_warranty.field_stock_production_lot__warranty_partner_id
+#: model_terms:ir.ui.view,arch_db:custom_warranty.search_product_lot_filter_inherit_warranty
+msgid "Warranty Partner"
+msgstr "Cliente Asoc. Garantía"
+
+#. module: custom_warranty
+#: model:ir.model.fields,field_description:custom_warranty.field_product_product__life_time
+#: model:ir.model.fields,field_description:custom_warranty.field_product_template__life_time
+msgid "Warranty duration (in days)"
+msgstr "Duración de la garantía (en días)"
+
+#. module: custom_warranty
+#: model_terms:ir.actions.act_window,help:custom_warranty.warranties_action
+msgid "You can assign pricelists to your customers or select one when creating a new sales quotation."
+msgstr "Puede asignar listas de precios a sus clientes o seleccionar una al crear una nueva orden de ventas."
+

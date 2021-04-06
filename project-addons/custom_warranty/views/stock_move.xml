@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_serial_warranty" model="ir.ui.view">
+        <field name="name">serial.warranty.tree</field>
+        <field name="model">stock.production.lot</field>
+        <field name="arch" type="xml">
+            <tree string="Lots/Serial Numbers">
+                <field name="name"/>
+                <field name="ref"/>
+                <field name="product_id" invisible="context.get('product_id', False)"/>
+                <field name="warranty_partner_id" invisible="context.get('warranty_partner_id', False)"/>
+                <field name="sale_date"/>
+                <field name="life_date"/>
+            </tree>
+        </field>
+    </record>
+</odoo>
