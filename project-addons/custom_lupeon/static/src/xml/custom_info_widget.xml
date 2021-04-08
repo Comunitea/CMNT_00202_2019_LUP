@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2020 Tecnativa - Ernesto Tejeda
+     License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl.html). -->
+<templates>
+
+    <!-- CUSTOM WIDGET -->
+    <div t-name="custom_lupeon.customInfoWidget">
+        <!-- <div t-att-class="!widget.data.display_qty_widget ? 'd-none' : ''"> -->
+        <div>
+            <t t-if="widget.data.pop_up_info_date">
+                <a tabindex="0" class="fa fa-info-circle text-primary"/>
+            </t>
+            <t t-else="">
+                <a tabindex="0" class="fa fa-info-circle text-danger"/>
+            </t>
+        </div>
+    </div>
+
+    <!-- EL POP OVER -->
+    <div t-name="custom_lupeon.CustomInfoPopOver">
+        <table>
+            <tbody>
+                <t  t-if="data.pop_up_info_date">
+                    <tr>
+                        <td><strong>Previsto en</strong><br /><small> <span t-esc="data.pop_up_info_date"/></small></td>
+                    </tr>
+                </t>
+                <t t-else="">
+                    <td><strong>Sin fecha prevista</strong><br /></td>
+                </t>
+
+            </tbody>
+        </table>
+    </div>
+</templates>

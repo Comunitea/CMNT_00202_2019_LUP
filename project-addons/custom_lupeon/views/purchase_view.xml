@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record id="view_stock_product_tree_info_popup" model="ir.ui.view">
+        <field name="name">skip.check.in.purchase.product.custom.tree</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="purchase_custom_lupeon.purchase_product_custom_tree"/>
+        <field name="arch" type="xml">
+             <field name="virtual_available" position="after">
+                 <field name="pop_up_info_date" invisible="1"/>
+                 <widget name="custom_info_widget" width="0.1"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

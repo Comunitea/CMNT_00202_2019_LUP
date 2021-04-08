@@ -8,3 +8,4 @@ from . import payment
 from . import account_invoice
 from . import delivery_carrier
 from . import mrp_production
+from . import ir_ui_view

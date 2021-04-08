@@ -11,18 +11,21 @@
     "depends": ["product", "sale_stock", "delivery", "account_payment", 
                 "sale_margin", "sale_order_margin_percent", "stock_barcode",
                 "stock", "account", "custom_prestashop", "l10n_es_facturae",
-                "cost_sheet_lupeon","incident_manager", "mrp_bom_cost", 
-                "sale_stock_info_popup"],
+                "cost_sheet_lupeon","incident_manager", "mrp_bom_cost", "web",
+                "sale_stock_info_popup", "purchase_custom_lupeon"],
     "qweb": [
         "static/src/xml/qty_popip_fix.xml",
+        "static/src/xml/custom_info_widget.xml",
     ],
     "data": [
         'views/partner_view.xml',
         'views/sale_view.xml',
         'views/invoice_view.xml',
         'views/stock_view.xml',
+        'views/assets.xml',
         'views/payment_mode_view.xml',
         'views/report_facturae.xml',
         'views/account_menus.xml',
+        'views/purchase_view.xml',
         'views/product_view.xml'],
 }

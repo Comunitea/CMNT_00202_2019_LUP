@@ -15,6 +15,24 @@ class ProductProduct(models.Model):
 
     _inherit = "product.product"
 
+    pop_up_info_date = fields.Char('Info date', compute='_compute_info_date')
+
+    def _compute_info_date(self):
+        for p in self:
+            date_str = ''
+            domain = [
+                ('product_id', '=', p.id),
+                ('state', 'in', ['confirmed', 'assigned']),
+                ('picking_code', '=', 'incoming'),
+            ]
+            moves = self.env['stock.move'].search(domain, order="id")
+            if moves:
+                dates_list = moves.mapped('date_expected')
+                for d in dates_list:
+                    str_date = d.strftime('%d-%m-%Y')
+                    date_str +=  str_date + ',\n'
+            p.pop_up_info_date = date_str
+
     @api.model
     def name_search(self, name="", args=None, operator="ilike", limit=100):
         """
