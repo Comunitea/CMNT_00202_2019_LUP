@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- stock.production.lot inherit form view -->
+    <record id="view_production_lot_form_simple" model="ir.ui.view">
+        <field name="name">stock.production.lot.inherit.view.form</field>
+        <field name="model">stock.production.lot</field>
+        <field name="inherit_id" ref="stock.view_production_lot_form_simple"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='main_group']" position="after">
+                <group string="Warranty" attrs="{'invisible': [('with_warranty', '!=', True)]}">
+                    <field name="with_warranty" readonly="1"/>    
+                    <field name="sale_date"/>   
+                    <field name="life_date" readonly="1"/>  
+                    <field name="warranty_partner_id" readonly="1"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_production_lot_form" model="ir.ui.view">
+        <field name="name">stock.production.lot.view.form</field>
+        <field name="model">stock.production.lot</field>
+        <field name="inherit_id" ref="stock.view_production_lot_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='main_group']" position="after">
+                <group string="Warranty" attrs="{'invisible': [('with_warranty', '!=', True)]}">
+                    <field name="with_warranty" invisible="1" readonly="1"/>  
+                    <field name="under_warranty" readonly="0"/> 
+                    
+                    <label for="sale_date" string="Dates" attrs="{'invisible': [('warranty_partner_id', '=', False)]}"/>
+                    <div attrs="{'invisible': [('warranty_partner_id', '=', False)]}">
+                        <span><strong> Sale Date: </strong></span>
+                        <field name="sale_date" readonly="0" class="oe_inline"/>
+                        <span><strong> End Warranty: </strong></span>
+                        <field name="life_date" readonly="0" class="oe_inline"/>
+                    </div>
+                    <field name="warranty_partner_id" readonly="0" attrs="{'invisible': [('warranty_partner_id', '=', False)]}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_serial_warranty" model="ir.ui.view">
+        <field name="name">serial.warranty.tree</field>
+        <field name="model">stock.production.lot</field>
+        <field name="arch" type="xml">
+            <tree string="Lots/Serial Numbers" create="0" 
+                decoration-muted="under_warranty == False and sale_date" 
+                decoration-success="under_warranty == True">
+                <field name="name"/>
+                <field name="ref"/>
+                <field name="product_id" invisible="context.get('default_product_id', False)"/>
+                <field name="warranty_partner_id" invisible="context.get('warranty_partner_id', False)"/>
+                <field name="under_warranty" invisible="1"/>
+                <field name="sale_date"/>
+                <field name="life_date"/>
+            </tree>
+        </field>
+    </record>
+    <record id="search_product_lot_filter_inherit_warranty" model="ir.ui.view">
+        <field name="name">stock.production.lot.search.warranty</field>
+        <field name="model">stock.production.lot</field>
+        <field name="inherit_id" ref="stock.search_product_lot_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_id']" position="after">
+                <separator/>
+                <field name="warranty_partner_id" string="Warranty Partner"/>
+                <filter string="Garantías" domain="[('with_warranty', '=', True)]" name="under_warranty"/>
+                <filter string="En garantía"
+                    domain="[('under_warranty', '=', True)]"
+                    help="Serials with warranty"
+                    name="under_warranty"/>
+            </xpath>
+        </field>
+     </record>
+
+     <record id="warranties_action" model="ir.actions.act_window">
+        <field name="name">Warranties</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">stock.production.lot</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="search_view_id" ref="product.product_pricelist_view_search" />
+        <field name="context">{"default_base":'list_price'}</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Create a new pricelist
+          </p><p>
+            A price is a set of sales prices or rules to compute the price of sales order lines based on products, product categories, dates and ordered quantities.
+            This is the perfect tool to handle several pricings, seasonal discounts, etc.
+          </p><p>
+            You can assign pricelists to your customers or select one when creating a new sales quotation.
+          </p>
+        </field>
+    </record>
+
+
+
+    <record id="action_warranties" model="ir.actions.act_window">
+        <field name="name">Warranties</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">stock.production.lot</field>
+        <field name="view_ids"
+                   eval="[(5, 0, 0),
+                          (0, 0, {'view_mode': 'tree', 'view_id': ref('view_serial_warranty')}),
+                          (0, 0, {'view_mode': 'form', 'view_id': ref('stock.view_production_lot_form')})]"/>
+        <field name="search_view_id" ref="stock.search_product_lot_filter"/>
+        <field name="context">{'search_default_group_by_product': 1}</field>
+        <field name="domain">[('with_warranty', '=', True), ('warranty_partner_id', '!=', False)]</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Add a lot/serial number
+          </p><p>
+            This is the list of all the production lots you recorded. When
+            you select a lot, you can get the traceability of the products contained in lot.
+          </p>
+        </field>
+    </record>
+    <menuitem action="action_warranties" id="menu_action_action_warranties_stock"
+        parent="stock.menu_stock_inventory_control" groups="stock.group_production_lot"
+        sequence="102"/>
+    <menuitem id="menu_action_action_warranties_stock_sales" name="Warranties" parent="sale.product_menu_catalog" 
+        action="action_warranties" groups="stock.group_production_lot"/>
+</odoo>
