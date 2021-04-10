@@ -18,7 +18,6 @@ class SaleOrder(models.Model):
             msg = order._check_transport_restrictions()
             if msg:
                 raise ValidationError(msg)
-
         for order in self:
             
             if (not order.partner_shipping_id.country_id or 
@@ -27,10 +26,9 @@ class SaleOrder(models.Model):
                 not order.partner_shipping_id.zip):
                 raise UserError(_('No están informados todos los campos necesarios de la dirección de entrega. Por favor revise: País, provincia, código postal y teléfono'))
         
-      
-
         res = super().action_confirm()
         return res    
+
 
     def get_delivery_price(self):
         for order in self.filtered(lambda o: o.state in ('draft', 'sent') and len(o.order_line) > 0):
@@ -41,6 +39,7 @@ class SaleOrder(models.Model):
                 for line in so_lines:
                     msg = '{}\n{}'.format(msg, line.product_id.display_name)
                 raise ValidationError (msg)
+    
     
     def _check_country_restrictions(self):
         msg = False
@@ -94,6 +93,83 @@ class SaleOrder(models.Model):
         self.ensure_one()
         msg = self._check_transport_restrictions()
         return self.return_checks(msg)
+
+
+
+    @api.multi
+    def print_quotation(self):
+        if not self.env.context.get('bypass_checks', False):
+            for order in self:
+                res = order.check_quotation_conditions()
+                if res['alert']:
+                    return self.env['check.send.print.wiz'].create({
+                            'exception_msg': res['message'],
+                            'order_id': order.id,
+                            'continue_method': 'print_quotation',
+                        }).action_show()
+
+        return super().print_quotation()
+
+
+    @api.multi
+    def action_quotation_send(self):
+        if not self.env.context.get('bypass_checks', False):
+            for order in self:
+                res = order.check_quotation_conditions()
+                if res['alert']:
+                    return self.env['check.send.print.wiz'].create({
+                            'exception_msg': res['message'],
+                            'order_id': order.id,
+                            'continue_method': 'action_quotation_send',
+                        }).action_show()
+
+        return super().action_quotation_send()
+
+    @api.multi
+    def check_quotation_conditions(self):
+        res = {'message': '',
+                'alert': False,
+                'continue':True
+        }
+        for order in self:
+            if order.company_id.cost_sheet_sale:
+                # CHECK DIAMETER
+                diameter_values = order.order_line.mapped('product_id').\
+                    mapped('attribute_value_ids').\
+                    filtered(lambda v: 'Diámetro' in v.attribute_id.name).\
+                    mapped('name')
+                diameter_values = list(set(diameter_values))
+                if len(diameter_values) > 1:
+                    res['message'] += "El pedido incluye productos de diferentes diámetros. Revisar antes de continuar.\n"
+                    res['alert'] = True
+
+                # CHECK DELIVERY
+                delivery_line = order.order_line.mapped('product_id').filtered(lambda p: p.default_code=='SHIP')
+                if not delivery_line:
+                    res['message'] += "No se han incluido gastos de envío en el pedido. Revisar antes de continuar.\n"
+                    res['alert'] = True
+                # CHECK RESERVES
+                if not order.with_reserves:
+                    res['message'] += "No se ha realizado ninguna reserva de stock. Revisar antes de continuar.\n"
+                    res['alert'] = True
+
+            # CHECK SUBCONTACT
+            if (not order.partner_shipping_id.id in order.partner_id.child_ids.ids and order.partner_shipping_id.id != order.partner_id.id) or \
+               (not order.partner_invoice_id.id in order.partner_id.child_ids.ids and order.partner_invoice_id.id != order.partner_id.id) :
+                res['message'] += "La dirección de entrega/factura no es un subcontacto del cliente. Revisar antes de continuar.\n"
+                res['alert'] = True
+            # CHECK COUNTRY
+            if order.partner_id.country_id.id != order.partner_invoice_id.country_id.id:
+                res['message'] += "El país de facturación es distinto al de entrega. Consultar con ADMINISTRACIÓN antes de continuar.\n"
+                res['alert'] = True
+            if order.fiscal_position_id.vat_required and not order.partner_id.commercial_partner_id.vat:
+                res['message'] += "El cliente no tiene NIF asignado. Consultar con ADMINISTRACIÓN antes de continuar.\n"
+                res['alert'] = True
+
+            
+            return res
+                
+
 
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'

@@ -199,7 +199,7 @@ class SaleOrder(models.Model):
 
     use_summary_lines = fields.Boolean('Use Summary Lines', default=False)
     summary_line_ids = fields.One2many('sale.summary.line', 'order_id', 
-                                        string='Order Lines', 
+                                        string='Summary Lines', 
                                         states={'cancel': [('readonly', True)], 'done': [('readonly', True)]}, 
                                         copy=True, 
                                         auto_join=True)

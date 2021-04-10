@@ -11,11 +11,12 @@
     "application": False,
     "installable": True,
     "depends": [
-        "sale", "delivery"
+        "custom_lupeon", "delivery"
     ],
     "data": [
         "views/sale_order_view.xml",
         "views/product_views.xml",
-        "views/delivery_carrier_view.xml"
+        "views/delivery_carrier_view.xml",
+        "wizards/check_send_print.xml"
     ],
 }
