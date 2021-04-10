@@ -54,8 +54,7 @@ class PickingType(models.Model):
                                     '&', ('picking_type_id.code', '=', 'outgoing'), ('sale_id.state','not in', ['draft', 'sent'])],
             'count_picking_backorders': [('backorder_id', '!=', False), ('state', 'in', ('confirmed', 'assigned', 'waiting'))],
             'count_picking_blocked': [('state', 'in', ('confirmed', 'assigned', 'waiting')),
-                                    '|', ('delivery_blocked','=', True), 
-                                    ('sale_id.prestashop_state.pending_payment','=', True)
+                                    ('delivery_blocked','=', True)
                                     ],
         }
         for field in domains:

@@ -19,12 +19,12 @@ class SaleOrder(models.Model):
             if msg:
                 raise ValidationError(msg)
         for order in self:
-            
-            if (not order.partner_shipping_id.country_id or 
-                not order.partner_shipping_id.state_id or 
-                not (order.partner_shipping_id.mobile or order.partner_shipping_id.phone) or
-                not order.partner_shipping_id.zip):
-                raise UserError(_('No están informados todos los campos necesarios de la dirección de entrega. Por favor revise: País, provincia, código postal y teléfono'))
+            if not order.prestashop_state:
+                if (not order.partner_shipping_id.country_id or 
+                    (not order.partner_shipping_id.state_id and order.partner_shipping_id.country_id.state_ids) or 
+                    not (order.partner_shipping_id.mobile or order.partner_shipping_id.phone) or
+                    not order.partner_shipping_id.zip):
+                    raise UserError(_('No están informados todos los campos necesarios de la dirección de entrega. Por favor revise: País, provincia, código postal y teléfono'))
         
         res = super().action_confirm()
         return res    
@@ -40,7 +40,7 @@ class SaleOrder(models.Model):
                     msg = '{}\n{}'.format(msg, line.product_id.display_name)
                 raise ValidationError (msg)
     
-    
+
     def _check_country_restrictions(self):
         msg = False
         ## HArdcode  x.company_id.id == 2 para dativic

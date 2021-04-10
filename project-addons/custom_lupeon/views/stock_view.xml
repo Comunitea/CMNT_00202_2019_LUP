@@ -343,8 +343,8 @@
         <field name="view_mode">tree,form</field>
         <field name="view_id" eval="False"/>
         <field name="domain">[('state', 'in', ('confirmed', 'assigned', 'waiting')),
-            '|', ('delivery_blocked','=', True), 
-            ('sale_id.prestashop_state.pending_payment','=', True)]</field>
+             ('delivery_blocked','=', True)]
+        </field>
         <field name="context">{'default_picking_type_id': active_id}</field>
     </record>
 
