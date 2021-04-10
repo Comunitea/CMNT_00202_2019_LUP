@@ -44,7 +44,7 @@ class SaleOrder(models.Model):
     def _check_country_restrictions(self):
         msg = False
         ## HArdcode  x.company_id.id == 2 para dativic
-        if order.company_id.cost_sheet_sale:
+        if self.company_id.cost_sheet_sale:
             forbidden_products_ids = self.env['product.product']
             country_id = self.partner_shipping_id.country_id
             for line in self.order_line.filtered(lambda x:  x.product_id.forbidden_country_ids):
@@ -77,7 +77,7 @@ class SaleOrder(models.Model):
     def _check_transport_restrictions(self):
         msg = False
         ## HArdcode  x.company_id.id == 2 para dativic
-        if order.company_id.cost_sheet_sale:
+        if self.company_id.cost_sheet_sale:
             forbidden_products_ids = self.env['product.product']
             carrier_id = self.carrier_id
             if not carrier_id or carrier_id.allow_transport_restrictions:
