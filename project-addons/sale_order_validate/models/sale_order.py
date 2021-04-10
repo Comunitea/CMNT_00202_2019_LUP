@@ -44,16 +44,17 @@ class SaleOrder(models.Model):
     def _check_country_restrictions(self):
         msg = False
         ## HArdcode  x.company_id.id == 2 para dativic
-        forbidden_products_ids = self.env['product.product']
-        country_id = self.partner_shipping_id.country_id
-        for line in self.order_line.filtered(lambda x: x.company_id.id == 2 and x.product_id.forbidden_country_ids):
-            if country_id in line.product_id.forbidden_country_ids:
-                forbidden_products_ids |= line.product_id
+        if order.company_id.cost_sheet_sale:
+            forbidden_products_ids = self.env['product.product']
+            country_id = self.partner_shipping_id.country_id
+            for line in self.order_line.filtered(lambda x:  x.product_id.forbidden_country_ids):
+                if country_id in line.product_id.forbidden_country_ids:
+                    forbidden_products_ids |= line.product_id
 
-        if forbidden_products_ids:
-            msg = 'Los siguientes produtos tienen restricciones para el envío a {}:'.format(country_id.name)
-            for p_id in forbidden_products_ids:
-                msg = '{}\n{}'.format(msg, p_id.display_name)
+            if forbidden_products_ids:
+                msg = 'Los siguientes produtos tienen restricciones para el envío a {}:'.format(country_id.name)
+                for p_id in forbidden_products_ids:
+                    msg = '{}\n{}'.format(msg, p_id.display_name)
         return msg
     
     def return_checks(self, msg):
@@ -76,16 +77,17 @@ class SaleOrder(models.Model):
     def _check_transport_restrictions(self):
         msg = False
         ## HArdcode  x.company_id.id == 2 para dativic
-        forbidden_products_ids = self.env['product.product']
-        carrier_id = self.carrier_id
-        if not carrier_id or carrier_id.allow_transport_restrictions:
-            return False
-        for line in self.order_line.filtered(lambda x: x.company_id.id == 2 and x.product_id.transport_restrictions):
-            forbidden_products_ids |= line.product_id
-        if forbidden_products_ids:
-            msg = 'Los siguientes produtos tienen restricciones para el envío para el proveedor {}:'.format(carrier_id.display_name)
-            for p_id in forbidden_products_ids:
-                msg = '{}\n{}'.format(msg, p_id.display_name)
+        if order.company_id.cost_sheet_sale:
+            forbidden_products_ids = self.env['product.product']
+            carrier_id = self.carrier_id
+            if not carrier_id or carrier_id.allow_transport_restrictions:
+                return False
+            for line in self.order_line.filtered(lambda x: x.product_id.transport_restrictions):
+                forbidden_products_ids |= line.product_id
+            if forbidden_products_ids:
+                msg = 'Los siguientes produtos tienen restricciones para el envío para el proveedor {}:'.format(carrier_id.display_name)
+                for p_id in forbidden_products_ids:
+                    msg = '{}\n{}'.format(msg, p_id.display_name)
         return msg
     
     @api.onchange('carrier_id')
