@@ -229,8 +229,8 @@ class SaleOrder(models.Model):
     def _check_summary_amount(self):
         precision = self.env['decimal.precision'].precision_get('Product Price')
         for order in self:
-        if order.use_summary_lines and float_compare(order.summary_amount_total, order.amount_total, precision_digits=precision) != 0:
-            raise ValidationError(_('El importe total de las lineas resumen no coincide con el importe del pedido'))
+            if order.use_summary_lines and float_compare(order.summary_amount_total, order.amount_total, precision_digits=precision) != 0:
+                raise ValidationError(_('El importe total de las lineas resumen no coincide con el importe del pedido'))
 
     @api.model_cr
     def _register_hook(self):
