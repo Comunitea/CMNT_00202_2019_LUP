@@ -1,0 +1,264 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* sale_summary_lines
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-04-12 05:40+0000\n"
+"PO-Revision-Date: 2021-04-12 05:40+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__assigned_attachment_ids
+msgid "Assigned Attachments"
+msgstr ""
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__company_id
+msgid "Company"
+msgstr "Compañía"
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__currency_id
+msgid "Currency"
+msgstr "Moneda"
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__order_partner_id
+msgid "Customer"
+msgstr "Cliente"
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__qty_delivered
+msgid "Delivered Quantity"
+msgstr "Cantidad enviada"
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__name
+msgid "Description"
+msgstr "Descripción"
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__discount
+msgid "Discount (%)"
+msgstr "Descuento (%)"
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: sale_summary_lines
+#: code:addons/sale_summary_lines/models/sale_order.py:233
+#, python-format
+msgid "El importe total de las lineas resumen no coincide con el importe del pedido"
+msgstr ""
+
+#. module: sale_summary_lines
+#: selection:sale.summary.line,invoice_status:0
+msgid "Fully Invoiced"
+msgstr "Totalmente facturado"
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__id
+msgid "ID"
+msgstr ""
+
+#. module: sale_summary_lines
+#: model:ir.model,name:sale_summary_lines.model_account_invoice_line
+msgid "Invoice Line"
+msgstr "Linea de Factura"
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__invoice_lines
+msgid "Invoice Lines"
+msgstr "Líneas de factura"
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__invoice_status
+msgid "Invoice Status"
+msgstr "Estado factura"
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__qty_invoiced
+msgid "Invoiced Quantity"
+msgstr "Cantidad Facturada"
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line____last_update
+msgid "Last Modified on"
+msgstr "Última modificación en"
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__write_date
+msgid "Last Updated on"
+msgstr "Última actualización el"
+
+#. module: sale_summary_lines
+#: selection:sale.summary.line,invoice_status:0
+msgid "Nothing to Invoice"
+msgstr "Nada que facturar"
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__order_id
+msgid "Order Reference"
+msgstr "Referencia del pedido"
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__state
+msgid "Order Status"
+msgstr "Estado del pedido"
+
+#. module: sale_summary_lines
+#: model_terms:ir.ui.view,arch_db:sale_summary_lines.sale_order_summary_form
+msgid "Ordered Qty"
+msgstr "Cantidad pedida"
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__product_uom_qty
+msgid "Ordered Quantity"
+msgstr "Cantidad Pedida"
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__price_reduce
+msgid "Price Reduce"
+msgstr "Reducción de precio"
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__price_reduce_taxexcl
+msgid "Price Reduce Tax excl"
+msgstr "Precio reducido sin IVA"
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__price_reduce_taxinc
+msgid "Price Reduce Tax inc"
+msgstr "Precio reducido sin IVA"
+
+#. module: sale_summary_lines
+#: model:ir.model,name:sale_summary_lines.model_sale_order
+msgid "Sale Order"
+msgstr "Pedido de venta"
+
+#. module: sale_summary_lines
+#: model:ir.model,name:sale_summary_lines.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Línea de pedido de venta"
+
+#. module: sale_summary_lines
+#: model:ir.model,name:sale_summary_lines.model_sale_summary_line
+msgid "Sales Summary Line"
+msgstr "Conceptos resumen"
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_account_invoice_line__summary_line_ids
+msgid "Sales Summary Lines"
+msgstr "Concepto resumen"
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__sequence
+msgid "Sequence"
+msgstr "Secuencia"
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__price_subtotal
+msgid "Subtotal"
+msgstr ""
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_order__summary_line_ids
+msgid "Summary Lines"
+msgstr "Conceptos resumen"
+
+#. module: sale_summary_lines
+#: model_terms:ir.ui.view,arch_db:sale_summary_lines.sale_order_summary_form
+msgid "Summary Order Lines"
+msgstr "Conceptos resumen"
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_order__summary_amount_tax
+msgid "Summary Taxes"
+msgstr "Impuestos resumen"
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_order__summary_amount_total
+msgid "Summary Total"
+msgstr "Total resumen"
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_order__summary_amount_untaxed
+msgid "Summary Untaxed Amount"
+msgstr "Base resumen"
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__tax_id
+msgid "Taxes"
+msgstr "Impuestos"
+
+#. module: sale_summary_lines
+#: code:addons/sale_summary_lines/models/sale_order.py:347
+#, python-format
+msgid "There is no invoiceable line. If a product has a Delivered quantities invoicing policy, please make sure that a quantity has been delivered."
+msgstr "No hay línea facturable. Si un producto tiene una política de facturación de cantidades entregadas, por favor, asegúrese de que la cantidad haya sido entregada."
+
+#. module: sale_summary_lines
+#: selection:sale.summary.line,invoice_status:0
+msgid "To Invoice"
+msgstr "A facturar"
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__qty_to_invoice
+msgid "To Invoice Quantity"
+msgstr "Cantidad a Facturar"
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__price_total
+msgid "Total"
+msgstr ""
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__price_tax
+msgid "Total Tax"
+msgstr "Total de impuestos"
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__price_unit
+msgid "Unit Price"
+msgstr "Precio"
+
+#. module: sale_summary_lines
+#: selection:sale.summary.line,invoice_status:0
+msgid "Upselling Opportunity"
+msgstr "Oportunidad de upselling"
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_order__use_summary_lines
+msgid "Use Summary Lines"
+msgstr "Usar conceptos resumen"
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,help:sale_summary_lines.field_sale_summary_line__order_partner_id
+msgid "You can find a customer by its Name, TIN, Email or Internal Reference."
+msgstr "Puede encontrar un proveedor por su nombre, NIF, correo electrónico o referencia interna."
+
