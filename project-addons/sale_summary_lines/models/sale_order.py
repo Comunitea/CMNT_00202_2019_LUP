@@ -228,8 +228,8 @@ class SaleOrder(models.Model):
     @api.constrains('summary_amount_total', 'amount_total')
     def _check_summary_amount(self):
         precision = self.env['decimal.precision'].precision_get('Product Price')
-
-        if self.use_summary_lines and float_compare(self.summary_amount_total, self.amount_total, precision_digits=precision) != 0:
+        for order in self:
+        if order.use_summary_lines and float_compare(order.summary_amount_total, order.amount_total, precision_digits=precision) != 0:
             raise ValidationError(_('El importe total de las lineas resumen no coincide con el importe del pedido'))
 
     @api.model_cr
