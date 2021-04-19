@@ -848,13 +848,16 @@ class CostSheet(models.Model):
                 lambda o: wo.name == o.name)
             if oppi:
                 duration = oppi.time
+
+            dps = False
+            if self.sale_line_id.order_id.production_date:
+                dps = self.sale_line_id.order_id.production_date - timedelta(hours=duration)
+
             vals = {
                     'duration_expected': duration * 60,
                     'date_planned_finished':
                     self.sale_line_id.order_id.production_date,
-                    'date_planned_start':
-                    self.sale_line_id.order_id.production_date -
-                    timedelta(hours=duration),
+                    'date_planned_start': dps,
             }
             if oppi and oppi.employee_id:
                 vals.update(
