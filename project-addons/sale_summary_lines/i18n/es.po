@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-12 05:40+0000\n"
-"PO-Revision-Date: 2021-04-12 05:40+0000\n"
+"POT-Creation-Date: 2021-04-12 15:58+0000\n"
+"PO-Revision-Date: 2021-04-12 15:58+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -66,9 +66,15 @@ msgid "Display Name"
 msgstr "Nombre mostrado"
 
 #. module: sale_summary_lines
-#: code:addons/sale_summary_lines/models/sale_order.py:233
+#: code:addons/sale_summary_lines/models/sale_order.py:266
 #, python-format
 msgid "El importe total de las lineas resumen no coincide con el importe del pedido"
+msgstr ""
+
+#. module: sale_summary_lines
+#: code:addons/sale_summary_lines/models/sale_order.py:268
+#, python-format
+msgid "El importe total del pedido supera al importe establecido en el bote"
 msgstr ""
 
 #. module: sale_summary_lines
@@ -142,6 +148,11 @@ msgid "Ordered Quantity"
 msgstr "Cantidad Pedida"
 
 #. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_order__amount_pot_available_total
+msgid "Pot Available"
+msgstr "Boste disponible"
+
+#. module: sale_summary_lines
 #: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__price_reduce
 msgid "Price Reduce"
 msgstr "Reducción de precio"
@@ -174,7 +185,7 @@ msgstr "Conceptos resumen"
 #. module: sale_summary_lines
 #: model:ir.model.fields,field_description:sale_summary_lines.field_account_invoice_line__summary_line_ids
 msgid "Sales Summary Lines"
-msgstr "Concepto resumen"
+msgstr "Conceptos resumen o Bote"
 
 #. module: sale_summary_lines
 #: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__sequence
@@ -217,7 +228,7 @@ msgid "Taxes"
 msgstr "Impuestos"
 
 #. module: sale_summary_lines
-#: code:addons/sale_summary_lines/models/sale_order.py:347
+#: code:addons/sale_summary_lines/models/sale_order.py:383
 #, python-format
 msgid "There is no invoiceable line. If a product has a Delivered quantities invoicing policy, please make sure that a quantity has been delivered."
 msgstr "No hay línea facturable. Si un producto tiene una política de facturación de cantidades entregadas, por favor, asegúrese de que la cantidad haya sido entregada."
@@ -248,9 +259,19 @@ msgid "Unit Price"
 msgstr "Precio"
 
 #. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_order__amount_pot_available_untaxed
+msgid "Untaxed Pot Available"
+msgstr "Base bote disponible"
+
+#. module: sale_summary_lines
 #: selection:sale.summary.line,invoice_status:0
 msgid "Upselling Opportunity"
 msgstr "Oportunidad de upselling"
+
+#. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_order__use_pot
+msgid "Use Pot"
+msgstr "Usar bote"
 
 #. module: sale_summary_lines
 #: model:ir.model.fields,field_description:sale_summary_lines.field_sale_order__use_summary_lines
@@ -261,4 +282,3 @@ msgstr "Usar conceptos resumen"
 #: model:ir.model.fields,help:sale_summary_lines.field_sale_summary_line__order_partner_id
 msgid "You can find a customer by its Name, TIN, Email or Internal Reference."
 msgstr "Puede encontrar un proveedor por su nombre, NIF, correo electrónico o referencia interna."
-

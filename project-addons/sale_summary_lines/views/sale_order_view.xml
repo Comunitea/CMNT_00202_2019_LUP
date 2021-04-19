@@ -8,12 +8,18 @@
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
             <field name="client_order_ref" position="after">
-         
                 <field name="use_summary_lines" />
+                <field name="use_pot" />
             </field>
+            <xpath expr="//field[@name='amount_total']" position="after">
+                
+                <field name="amount_pot_available_untaxed" widget='monetary' options="{'currency_field': 'currency_id'}" attrs="{'invisible':[('use_pot' ,'=', False)]}"/>
+                <field name="amount_pot_available_total" widget='monetary'  options="{'currency_field': 'currency_id'}" attrs="{'invisible':[('use_pot' ,'=', False)]}"/>
+            </xpath>
+            
             <xpath expr="//page[@name='order_lines']" position="after">
                 
-                <page string="Summary Order Lines" name="summary_order_lines" attrs="{'invisible':[('use_summary_lines' ,'=', False)]}">
+                <page string="Summary Order Lines" name="summary_order_lines" attrs="{'invisible':[('use_summary_lines' ,'=', False), ('use_pot' ,'=', False)]}">
                     <field name="summary_line_ids" mode="tree" attrs="{'readonly': [('state', 'in', ('done','cancel'))]}">
                         
                         <tree string="Summary Order Lines" editable="bottom" decoration-info="(invoice_status == 'to invoice')">

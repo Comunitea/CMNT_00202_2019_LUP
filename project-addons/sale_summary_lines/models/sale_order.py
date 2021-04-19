@@ -198,15 +198,33 @@ class SaleOrder(models.Model):
     _inherit = "sale.order"
 
     use_summary_lines = fields.Boolean('Use Summary Lines', default=False)
+    use_pot = fields.Boolean('Use Pot', default=False)
     summary_line_ids = fields.One2many('sale.summary.line', 'order_id', 
                                         string='Summary Lines', 
                                         states={'cancel': [('readonly', True)], 'done': [('readonly', True)]}, 
                                         copy=True, 
                                         auto_join=True)
 
-    summary_amount_untaxed = fields.Monetary(string='Summary Untaxed Amount', store=True, readonly=True, compute='_summary_amount_all')
-    summary_amount_tax = fields.Monetary(string='Summary Taxes', store=True, readonly=True, compute='_summary_amount_all')
-    summary_amount_total = fields.Monetary(string='Summary Total', store=True, readonly=True, compute='_summary_amount_all')
+    summary_amount_untaxed = fields.Monetary(string='Summary Untaxed Amount', 
+                                            store=True,
+                                            readonly=True, 
+                                            compute='_summary_amount_all')
+    summary_amount_tax = fields.Monetary(string='Summary Taxes', 
+                                        store=True, 
+                                        readonly=True, 
+                                        compute='_summary_amount_all')
+    summary_amount_total = fields.Monetary(string='Summary Total', 
+                                        store=True, 
+                                        readonly=True, 
+                                        compute='_summary_amount_all')
+    amount_pot_available_untaxed = fields.Monetary(string='Untaxed Pot Available', 
+                                        store=True, 
+                                        readonly=True, 
+                                        compute='_summary_amount_pot')
+    amount_pot_available_total = fields.Monetary(string='Pot Available', 
+                                        store=True, 
+                                        readonly=True, 
+                                        compute='_summary_amount_pot')
 
 
     @api.depends('summary_line_ids.price_total')
@@ -216,14 +234,29 @@ class SaleOrder(models.Model):
         """
         for order in self:
             amount_untaxed = amount_tax = 0.0
-            for line in order.summary_line_ids:
-                amount_untaxed += line.price_subtotal
-                amount_tax += line.price_tax
+            if order.use_summary_lines or order.use_pot:
+                for line in order.summary_line_ids:
+                    amount_untaxed += line.price_subtotal
+                    amount_tax += line.price_tax
             order.update({
                 'summary_amount_untaxed': amount_untaxed,
                 'summary_amount_tax': amount_tax,
                 'summary_amount_total': amount_untaxed + amount_tax,
             })
+
+
+    @api.depends('amount_untaxed', 'amount_total', 'summary_amount_untaxed', 'summary_amount_total'  )
+    def _summary_amount_pot(self):
+        """
+        Compute the total summary amounts of the SO.
+        """
+        for order in self:
+            if order.use_pot:
+                order.update({
+                    'amount_pot_available_untaxed': order.summary_amount_untaxed - order.amount_untaxed ,
+                    'amount_pot_available_total': order.summary_amount_total - order.amount_total,
+                })
+
 
     @api.constrains('summary_amount_total', 'amount_total')
     def _check_summary_amount(self):
@@ -231,6 +264,9 @@ class SaleOrder(models.Model):
         for order in self:
             if order.use_summary_lines and float_compare(order.summary_amount_total, order.amount_total, precision_digits=precision) != 0:
                 raise ValidationError(_('El importe total de las lineas resumen no coincide con el importe del pedido'))
+            if order.use_pot and float_compare(order.summary_amount_total, order.amount_total, precision_digits=precision) < 0:
+                raise ValidationError(_('El importe total del pedido supera al importe establecido en el bote'))
+
 
     @api.model_cr
     def _register_hook(self):
