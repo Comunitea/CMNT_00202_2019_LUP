@@ -389,8 +389,8 @@ class SaleOrderLine(models.Model):
     @api.depends('state', 'product_uom_qty', 'qty_delivered', 'qty_to_invoice', 'qty_invoiced',
                 'order_id.use_summary_lines', 'order_id.summary_line_ids')
     def _compute_invoice_status(self):
-        lines_not_summary  = self.mapped('order_id').filtered(lambda o: not o.use_summary_lines).order_line
-        lines_summary  = self.mapped('order_id').filtered(lambda o: o.use_summary_lines).order_line
+        lines_not_summary  = self.mapped('order_id').filtered(lambda o: not o.use_summary_lines).mapped('order_line')
+        lines_summary  = self.mapped('order_id').filtered(lambda o: o.use_summary_lines).mapped('order_line')
         super(SaleOrderLine, lines_not_summary)._compute_invoice_status()
         for line in lines_summary:
             if all(l.invoice_status == 'invoiced' for l in line.order_id.summary_line_ids):
