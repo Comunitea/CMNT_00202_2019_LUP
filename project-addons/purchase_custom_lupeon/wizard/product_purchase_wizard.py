@@ -6,6 +6,7 @@ from openerp.exceptions import ValidationError
 
 class ProductPurchaseLineWizard(models.TransientModel):
     _name = "product.purchase.line.wizard"
+    _description = "Asistente lineas de compra"
     
     
     product_id = fields.Many2one('product.product')
@@ -22,6 +23,7 @@ class ProductPurchaseLineWizard(models.TransientModel):
 class ProductPurchaseWizard(models.TransientModel):
 
     _name = "product.purchase.wizard"
+    _description = "Asistente de compras"
 
     @api.multi
     def _compute_purchased_qties(self):

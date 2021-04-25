@@ -19,6 +19,7 @@ SHEET_TYPES = [
 
 class AddGroupProductionWzd(models.TransientModel):
     _name = "add.group.production.wzd"
+    _description = "Add Group Production Wizard"
 
     @api.model
     def default_get(self, default_fields):

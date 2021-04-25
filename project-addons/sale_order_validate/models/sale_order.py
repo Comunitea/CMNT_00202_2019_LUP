@@ -25,6 +25,15 @@ class SaleOrder(models.Model):
                     not (order.partner_shipping_id.mobile or order.partner_shipping_id.phone) or
                     not order.partner_shipping_id.zip):
                     raise UserError(_('No están informados todos los campos necesarios de la dirección de entrega. Por favor revise: País, provincia, código postal y teléfono'))
+                if not self.env.context.get('bypass_checks', False):
+                    res = order.check_quotation_conditions()
+                    if res['alert']:
+                        return self.env['check.send.print.wiz'].create({
+                                'exception_msg': res['message'],
+                                'order_id': order.id,
+                                'continue_method': 'action_confirm',
+                            }).action_show()
+
         
         res = super().action_confirm()
         return res    

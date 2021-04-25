@@ -5,6 +5,7 @@ from odoo.exceptions import UserError
 
 class QualityWizard(models.TransientModel):
     _name = "quality.wizard"
+    _description = "Quality Wizard"
 
     @api.model
     def default_get(self, default_fields):

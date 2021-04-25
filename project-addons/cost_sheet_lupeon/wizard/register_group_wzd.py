@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 
 class RegistergroupWizard(models.TransientModel):
     _name = 'register.group.wizard'
+    _description = "Register Group Wizard"
 
     @api.model
     def default_get(self, default_fields):
@@ -172,6 +173,8 @@ class RegistergroupWizard(models.TransientModel):
 
 class GroupConsumeLine(models.TransientModel):
     _name = 'group.done.line'
+    _description = "Group Done Line"
+
 
     wzd_id = fields.Many2one(
         'register.group.wizard', 'Registro producción')
@@ -190,6 +193,7 @@ class GroupConsumeLine(models.TransientModel):
 
 class ConsumeLine(models.TransientModel):
     _name = 'group.consume.line'
+    _description = "Group Consume Line"
 
     wzd_id = fields.Many2one(
         'register.group.wizard', 'Registro producción')

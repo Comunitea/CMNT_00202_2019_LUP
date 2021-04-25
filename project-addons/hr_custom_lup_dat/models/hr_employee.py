@@ -16,6 +16,7 @@ class HrEmployee(models.Model):
 class HrEmployeeFile(models.Model):
 
     _name = "hr.employee.file"
+    _description = "Fichero empleado"
 
     _order = 'date DESC'
 
@@ -34,7 +35,8 @@ class HrEmployeeFile(models.Model):
 class HrFileType(models.Model):
 
     _name = "hr.file.type"
-    
+    _description = "Tipo fichero empleado"
+
     name = fields.Char(
         "Name", required=True
     )

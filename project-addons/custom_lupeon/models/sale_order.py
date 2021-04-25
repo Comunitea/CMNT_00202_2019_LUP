@@ -199,6 +199,17 @@ class SaleOrderLine(models.Model):
     qty_reserved = fields.Float('Qty Reserved', compute="_is_reserve")
     real_stock = fields.Float('Real stock', related="product_id.qty_available")
 
+
+    @api.depends('product_id', 'product_uom_qty', 'qty_delivered', 'state')
+    def _compute_qty_to_deliver(self):
+        """ Based on _compute_qty_to_deliver method of sale.order.line
+            model in Odoo v13 'sale_stock' module.
+            This method is overwrited ofr Customer especification
+        """
+        for line in self:
+            #line.qty_to_deliver = line.product_uom_qty - line.qty_delivered
+            line.display_qty_widget = (line.product_type == 'product')
+
     @api.multi
     def _is_reserve(self):
         for line in self:

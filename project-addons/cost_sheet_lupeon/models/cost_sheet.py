@@ -25,6 +25,8 @@ SHEET_TYPES = [
 class CostSheet(models.Model):
 
     _name = 'cost.sheet'
+    _description = "Cost Sheet"
+
 
     # COMUN
     name = fields.Char('Referencia', required=True)
@@ -900,6 +902,7 @@ class CostSheet(models.Model):
 class DesignTimeLine(models.Model):
 
     _name = 'design.time.line'
+    _description = "Design Time Line"
 
     sheet_id = fields.Many2one(
         'cost.sheet', 'Hoja de coste', ondelete="cascade")
@@ -927,6 +930,7 @@ class DesignTimeLine(models.Model):
 class MaterialCostLine(models.Model):
 
     _name = 'material.cost.line'
+    _description = "Material Cost Line"
 
     # COMUN
     name = fields.Char('Nombre', required=True)
@@ -1109,6 +1113,7 @@ class MaterialCostLine(models.Model):
 class WorkforceCostLine(models.Model):
 
     _name = 'workforce.cost.line'
+    _description = "Workforce Cost Line"
 
     sheet_id = fields.Many2one(
         'cost.sheet', 'Hoja de coste', ondelete="cascade")
@@ -1139,6 +1144,7 @@ class WorkforceCostLine(models.Model):
 class OutsorcingCostLine(models.Model):
 
     _name = 'outsorcing.cost.line'
+    _description = "Outsourcing Cos Line"
 
     sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste',
                                ondelete="cascade")
@@ -1157,6 +1163,7 @@ class OutsorcingCostLine(models.Model):
 class MeetCostLine(models.Model):
 
     _name = 'meet.cost.line'
+    _description = "Meet Cost Line"
 
     sheet_id = fields.Many2one(
         'cost.sheet', 'Hoja de coste', ondelete="cascade")
@@ -1209,6 +1216,7 @@ class MeetCostLine(models.Model):
 class PurchaseCostLine(models.Model):
 
     _name = 'purchase.cost.line'
+    _description = "Purchase Cost Line"
 
     sheet_id = fields.Many2one(
         'cost.sheet', 'Hoja de coste', ondelete="cascade")
@@ -1252,6 +1260,7 @@ class PurchaseCostLine(models.Model):
 class OppiCostLine(models.Model):
 
     _name = 'oppi.cost.line'
+    _description = "Oppi Cost Line"
 
     sheet_id = fields.Many2one('cost.sheet', 'Hoja de coste',
                                ondelete="cascade")

@@ -5,6 +5,7 @@ from odoo.exceptions import UserError
 
 class RegisterWorkorderWizard(models.TransientModel):
     _name = 'register.workorder.wizard'
+    _description = "Register Workorder Wizard"
 
     @api.model
     def default_get(self, default_fields):
@@ -54,6 +55,7 @@ class RegisterWorkorderWizard(models.TransientModel):
 
 class ConsumeLine(models.TransientModel):
     _name = 'consume.line'
+    _description = "Consume Line"
 
     wzd_id = fields.Many2one(
         'register.workorder.wizard', 'Registro producción')
