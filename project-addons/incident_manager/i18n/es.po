@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-14 15:54+0000\n"
-"PO-Revision-Date: 2020-12-14 15:54+0000\n"
+"POT-Creation-Date: 2021-04-25 12:34+0000\n"
+"PO-Revision-Date: 2021-04-25 12:34+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -41,16 +41,41 @@ msgid "Activity State"
 msgstr "Estado de la actividad"
 
 #. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__layer_height
+msgid "Altura de Capa"
+msgstr ""
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_production_fail__assigned_attachment_ids
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report__assigned_attachment_ids
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report_type__assigned_attachment_ids
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report_wzd__assigned_attachment_ids
+#: model:ir.model.fields,field_description:incident_manager.field_model_incident_base__assigned_attachment_ids
+#: model:ir.model.fields,field_description:incident_manager.field_printer_technology__assigned_attachment_ids
 msgid "Assigned Attachments"
-msgstr "Adjuntos asignados"
+msgstr ""
 
 #. module: incident_manager
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report__message_attachment_count
 msgid "Attachment Count"
 msgstr "Conteo de archivos adjuntos"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__available_fails
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report_wzd__available_fails
+msgid "Available Fails"
+msgstr "Fallos"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__available_product_ids
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report_wzd__available_product_ids
+msgid "Available Product"
+msgstr "Productos"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report_wzd__available_types
+msgid "Available Types"
+msgstr "Tipos"
 
 #. module: incident_manager
 #: model_terms:ir.ui.view,arch_db:incident_manager.incident_report_wzd_view
@@ -73,10 +98,44 @@ msgid "Claimed Amount)"
 msgstr "Importe reclamado"
 
 #. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_printer_technology__code
+msgid "Code"
+msgstr "Código"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__company_id
+msgid "Company"
+msgstr "Compañía"
+
+#. module: incident_manager
+#: model:ir.ui.menu,name:incident_manager.menu_config_manager_root
+msgid "Configuration"
+msgstr "Configuración"
+
+#. module: incident_manager
+#: model:ir.model,name:incident_manager.model_res_partner
+msgid "Contact"
+msgstr "Contacto"
+
+#. module: incident_manager
+#: model_terms:ir.actions.act_window,help:incident_manager.action_incident_report_production_form
+msgid "Crear un nuevo documento"
+msgstr ""
+
+#. module: incident_manager
 #: model_terms:ir.ui.view,arch_db:incident_manager.purchase_order_form
+#: model_terms:ir.ui.view,arch_db:incident_manager.view_crm_lead_issue_form
 #: model_terms:ir.ui.view,arch_db:incident_manager.view_order_form
 #: model_terms:ir.ui.view,arch_db:incident_manager.view_picking_form
+#: model_terms:ir.ui.view,arch_db:incident_manager.view_product_incident_form
+#: model_terms:ir.ui.view,arch_db:incident_manager.view_production_incident_form
+#: model_terms:ir.ui.view,arch_db:incident_manager.view_task_form
 msgid "Create Incident"
+msgstr "Crear incidencia"
+
+#. module: incident_manager
+#: model:ir.actions.server,name:incident_manager.partner_create_issue
+msgid "Create Issue"
 msgstr "Crear incidencia"
 
 #. module: incident_manager
@@ -85,16 +144,25 @@ msgid "Create Report"
 msgstr "Crear Incidencia"
 
 #. module: incident_manager
+#: model_terms:ir.ui.view,arch_db:incident_manager.incident_report_wzd_view
+msgid "Create Report And Close"
+msgstr "Crear y cerrar incidencia"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_production_fail__create_uid
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report__create_uid
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report_type__create_uid
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report_wzd__create_uid
+#: model:ir.model.fields,field_description:incident_manager.field_printer_technology__create_uid
 msgid "Created by"
 msgstr "Creado por"
 
 #. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_production_fail__create_date
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report__create_date
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report_type__create_date
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report_wzd__create_date
+#: model:ir.model.fields,field_description:incident_manager.field_printer_technology__create_date
 msgid "Created on"
 msgstr "Creado el"
 
@@ -116,11 +184,31 @@ msgid "Description"
 msgstr "Descripción"
 
 #. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_production_fail__display_name
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report__display_name
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report_type__display_name
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report_wzd__display_name
+#: model:ir.model.fields,field_description:incident_manager.field_model_incident_base__display_name
+#: model:ir.model.fields,field_description:incident_manager.field_printer_technology__display_name
 msgid "Display Name"
 msgstr "Nombre mostrado"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report_type__model_ids
+msgid "Documentos (modelos)"
+msgstr ""
+
+#. module: incident_manager
+#: selection:incident.production.fail,factor_type:0
+#: selection:incident.report,factor_type:0
+msgid "Externo"
+msgstr ""
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_production_fail__factor_type
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__factor_type
+msgid "Factor Type"
+msgstr "Tipo factor"
 
 #. module: incident_manager
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report__message_follower_ids
@@ -143,9 +231,18 @@ msgid "Group By"
 msgstr "Agrupar por"
 
 #. module: incident_manager
+#: selection:incident.production.fail,factor_type:0
+#: selection:incident.report,factor_type:0
+msgid "Humano"
+msgstr ""
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_production_fail__id
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report__id
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report_type__id
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report_wzd__id
+#: model:ir.model.fields,field_description:incident_manager.field_model_incident_base__id
+#: model:ir.model.fields,field_description:incident_manager.field_printer_technology__id
 msgid "ID"
 msgstr ""
 
@@ -165,7 +262,18 @@ msgid "If checked, some messages have a delivery error."
 msgstr "Si se encuentra marcado, algunos mensajes tienen error de envío."
 
 #. module: incident_manager
-#: code:addons/incident_manager/wizard/incident_report_wzd.py:39
+#: model:ir.actions.act_window,name:incident_manager.action_incident_report_picking_form
+msgid "Incidencias"
+msgstr ""
+
+#. module: incident_manager
+#: model:ir.model,name:incident_manager.model_incident_production_fail
+msgid "Incident Production Fail Type"
+msgstr "Fallo de fabricación"
+
+#. module: incident_manager
+#: code:addons/incident_manager/wizard/incident_report_wzd.py:132
+#: code:addons/incident_manager/wizard/incident_report_wzd.py:164
 #: model:ir.model,name:incident_manager.model_incident_report
 #, python-format
 msgid "Incident Report"
@@ -182,7 +290,14 @@ msgid "Incident Report Wizard"
 msgstr "Asistente informe incidencia"
 
 #. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_crm_lead__incident_reports_count
+#: model:ir.model.fields,field_description:incident_manager.field_model_incident_base__incident_reports_count
+#: model:ir.model.fields,field_description:incident_manager.field_mrp_production__incident_reports_count
+#: model:ir.model.fields,field_description:incident_manager.field_product_product__incident_reports_count
+#: model:ir.model.fields,field_description:incident_manager.field_project_task__incident_reports_count
 #: model:ir.model.fields,field_description:incident_manager.field_purchase_order__incident_reports_count
+#: model:ir.model.fields,field_description:incident_manager.field_res_partner__incident_reports_count
+#: model:ir.model.fields,field_description:incident_manager.field_res_users__incident_reports_count
 #: model:ir.model.fields,field_description:incident_manager.field_sale_order__incident_reports_count
 #: model:ir.model.fields,field_description:incident_manager.field_stock_picking__incident_reports_count
 msgid "Incident Reports Count"
@@ -202,10 +317,21 @@ msgstr "Tipo de incidencia"
 
 #. module: incident_manager
 #: model_terms:ir.ui.view,arch_db:incident_manager.purchase_order_form
+#: model_terms:ir.ui.view,arch_db:incident_manager.view_crm_lead_issue_form
 #: model_terms:ir.ui.view,arch_db:incident_manager.view_order_form
+#: model_terms:ir.ui.view,arch_db:incident_manager.view_partner_issue_form
 #: model_terms:ir.ui.view,arch_db:incident_manager.view_picking_form
+#: model_terms:ir.ui.view,arch_db:incident_manager.view_product_incident_form
+#: model_terms:ir.ui.view,arch_db:incident_manager.view_production_incident_form
+#: model_terms:ir.ui.view,arch_db:incident_manager.view_task_form
 msgid "Incidents"
 msgstr "Incidencias"
+
+#. module: incident_manager
+#: model_terms:ir.ui.view,arch_db:incident_manager.incident_report_form
+#: model_terms:ir.ui.view,arch_db:incident_manager.incident_report_wzd_view
+msgid "Info producciones"
+msgstr ""
 
 #. module: incident_manager
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report__message_is_follower
@@ -213,30 +339,68 @@ msgid "Is Follower"
 msgstr "Es un seguidor"
 
 #. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report_wzd__is_production
+msgid "Is Production?"
+msgstr "¿Es producción?"
+
+#. module: incident_manager
+#: model:ir.ui.menu,name:incident_manager.menu_incident_manager_root
+msgid "Issue Manager"
+msgstr "Incidencias"
+
+#. module: incident_manager
+#: model:ir.ui.menu,name:incident_manager.master_incident_report_production_menu
+msgid "Issues"
+msgstr "Incidencias"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_production_fail____last_update
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report____last_update
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report_type____last_update
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report_wzd____last_update
+#: model:ir.model.fields,field_description:incident_manager.field_model_incident_base____last_update
+#: model:ir.model.fields,field_description:incident_manager.field_printer_technology____last_update
 msgid "Last Modified on"
 msgstr "Última modificación en"
 
 #. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_production_fail__write_uid
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report__write_uid
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report_type__write_uid
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report_wzd__write_uid
+#: model:ir.model.fields,field_description:incident_manager.field_printer_technology__write_uid
 msgid "Last Updated by"
 msgstr "Última actualización por"
 
 #. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_production_fail__write_date
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report__write_date
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report_type__write_date
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report_wzd__write_date
+#: model:ir.model.fields,field_description:incident_manager.field_printer_technology__write_date
 msgid "Last Updated on"
 msgstr "Última actualización el"
+
+#. module: incident_manager
+#: model:ir.model,name:incident_manager.model_crm_lead
+msgid "Lead/Opportunity"
+msgstr "Iniciativa/Oportunidad"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__machine
+msgid "Machine"
+msgstr "Máquina"
 
 #. module: incident_manager
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report__message_main_attachment_id
 msgid "Main Attachment"
 msgstr "Adjuntos principales"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__product_id
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report_wzd__product_id
+msgid "Material"
+msgstr ""
 
 #. module: incident_manager
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report__message_has_error
@@ -254,7 +418,29 @@ msgid "Model"
 msgstr "Modelo"
 
 #. module: incident_manager
+#: model:ir.model,name:incident_manager.model_model_incident_base
+msgid "Model Incident"
+msgstr "Modelo de incidencia"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_production_fail__name
+msgid "Motivo"
+msgstr ""
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__view_mrp_data
+msgid "Mrp Data"
+msgstr "Datos producción"
+
+#. module: incident_manager
+#: selection:incident.production.fail,factor_type:0
+#: selection:incident.report,factor_type:0
+msgid "Máquina"
+msgstr ""
+
+#. module: incident_manager
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report_type__name
+#: model:ir.model.fields,field_description:incident_manager.field_printer_technology__name
 msgid "Name"
 msgstr "Nombre"
 
@@ -316,7 +502,7 @@ msgid "Origin Document"
 msgstr "Documento origen"
 
 #. module: incident_manager
-#: code:addons/incident_manager/models/incident_report.py:69
+#: code:addons/incident_manager/models/incident_report.py:251
 #: model_terms:ir.ui.view,arch_db:incident_manager.incident_report_form
 #, python-format
 msgid "Origin document"
@@ -328,6 +514,16 @@ msgid "Overdue"
 msgstr "Atrasado"
 
 #. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__partner_id
+msgid "Partner"
+msgstr "Empresa"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__perfil
+msgid "Perfil"
+msgstr ""
+
+#. module: incident_manager
 #: selection:incident.report,activity_state:0
 msgid "Planned"
 msgstr "Planificado"
@@ -336,6 +532,38 @@ msgstr "Planificado"
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report__access_url
 msgid "Portal Access URL"
 msgstr "URL de acceso al portal"
+
+#. module: incident_manager
+#: model:ir.model,name:incident_manager.model_printer_technology
+msgid "Printer Technology"
+msgstr "Tecnologia"
+
+#. module: incident_manager
+#: model:ir.model,name:incident_manager.model_product_product
+msgid "Product"
+msgstr "Producto"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__production_fail_id
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report_wzd__production_fail_id
+msgid "Production Fail"
+msgstr "Fallo de fabricación"
+
+#. module: incident_manager
+#: model:ir.actions.act_window,name:incident_manager.action_incident_production_fail
+#: model:ir.ui.menu,name:incident_manager.master_incident_production_fail_menu
+msgid "Production Fails"
+msgstr "Fallos de fabricación"
+
+#. module: incident_manager
+#: model:ir.model,name:incident_manager.model_mrp_production
+msgid "Production Order"
+msgstr "Orden de producción"
+
+#. module: incident_manager
+#: model:ir.actions.act_window,name:incident_manager.action_incident_report_production_form
+msgid "Production Reports"
+msgstr "Incidencias de producción"
 
 #. module: incident_manager
 #: model:ir.model,name:incident_manager.model_purchase_order
@@ -362,8 +590,10 @@ msgstr "Tipos de incidencia"
 #. module: incident_manager
 #: model:ir.actions.act_window,name:incident_manager.action_incident_report_form
 #: model:ir.ui.menu,name:incident_manager.master_incident_report_menu
+#: model:ir.ui.menu,name:incident_manager.master_incident_report_picking_menu
+#: model:ir.ui.menu,name:incident_manager.menu_reports_manager_root
 msgid "Reports"
-msgstr "Incidencias envío"
+msgstr "Informes"
 
 #. module: incident_manager
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report__user_id
@@ -405,10 +635,26 @@ msgstr "Estado basado en actividades\n"
 "Planificada: futuras actividades."
 
 #. module: incident_manager
-#: code:addons/incident_manager/models/incident_report.py:78
+#: model:ir.model,name:incident_manager.model_project_task
+msgid "Task"
+msgstr "Tarea"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_production_fail__technology_ids
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report__sheet_type
+msgid "Technology"
+msgstr "Tecnología"
+
+#. module: incident_manager
+#: code:addons/incident_manager/models/incident_report.py:260
 #, python-format
 msgid "There is no origin document for this incident report."
 msgstr "No existe un documento de origen para esta informe de incidencia."
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report_type__picking_type_id
+msgid "Tipo de albarán"
+msgstr ""
 
 #. module: incident_manager
 #: selection:incident.report,activity_state:0
@@ -418,7 +664,7 @@ msgstr "Hoy"
 #. module: incident_manager
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report__carrier_tracking_ref
 msgid "Tracking ref"
-msgstr ""
+msgstr "Ref de seguimiento"
 
 #. module: incident_manager
 #: model:ir.model,name:incident_manager.model_stock_picking
@@ -444,6 +690,11 @@ msgstr "Contador de mensajes sin leer"
 #: model_terms:ir.ui.view,arch_db:incident_manager.incident_report_search
 msgid "User"
 msgstr "Usuario"
+
+#. module: incident_manager
+#: model:ir.model.fields,field_description:incident_manager.field_incident_report_type__view_type
+msgid "Ver tipo albarán"
+msgstr ""
 
 #. module: incident_manager
 #: model:ir.model.fields,field_description:incident_manager.field_incident_report__website_message_ids
