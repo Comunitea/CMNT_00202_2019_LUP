@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="production_product_custom_tree" model="ir.ui.view">
+        <field name="name">production.product.custom.tree</field>
+        <field name="model">product.product</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="Production products" create="false" >           
+                <field name="default_code" readonly="True"/>
+                <field name="name" readonly="True"  />
+                <field name="attribute_value_ids" widget="many2many_tags" groups="product.group_product_variant"/>
+                <field name="categ_id" readonly="True"/>
+                <field name="twelve_months_ago"  readonly="True"/>
+                <field name="six_months_ago"  readonly="True"/>
+                <field name="last_month_ago"  readonly="True"/>
+                <field name="virtual_available" string="Previsto"/>
+                <field name="qty_available" string="A Mano"/>
+                <field name="company_id" groups="base.group_multi_company" invisible="1"/>
+                <field name="total_production_qty"/>
+                <field name="actual_production_id"/>
+                <field name="uom_id" groups="uom.group_uom" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_product_production_custom_all" model="ir.actions.act_window">
+        <field name="name">Product Production Info</field>
+        <field name="res_model">product.product</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('variant_bom_ids', '!=', False)]</field>
+        <field name="view_id" ref="production_product_custom_tree"></field>  <!-- force empty -->
+        <!--field name="search_view_id" ref="purchase_custom_search"/-->
+        <field name="context"></field>
+    </record>
+
+
+     <menuitem id="menu_action_production_custom_all"
+            name="Info fabricación productos"
+            action="action_product_production_custom_all"
+            parent="mrp.menu_mrp_bom"
+            sequence="150"/>
+
+    
+</odoo>
