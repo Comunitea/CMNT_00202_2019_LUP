@@ -11,7 +11,8 @@
     "application": False,
     "installable": True,
     "depends": [
-        "sale"
+        "sale",
+        "delivery"
     ],
     "data": [
         "views/sale_order_view.xml",

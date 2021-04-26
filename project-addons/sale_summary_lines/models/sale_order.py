@@ -300,7 +300,7 @@ class SaleOrder(models.Model):
                 # sequence is the natural order of order_lines
 
                 # START HOOK
-                if not order.use_summary_lines:
+                if not (order.use_summary_lines or order.use_pot):
                 # END HOOK
                     for line in order.order_line:
                         if line.display_type == 'line_section':
@@ -395,10 +395,11 @@ class SaleOrder(models.Model):
                     'summary_line_ids.invoice_status', 'summary_line_ids.invoice_lines')
     def _get_invoiced(self):
         res = super()._get_invoiced()
-        for order in self.filtered(lambda o: o.use_summary_lines):
-            if order.use_summary_lines:
+        line_invoice_status_all = [(d['order_id'][0], d['invoice_status']) for d in self.env['sale.summary.line'].read_group([('order_id', 'in', self.ids)], ['order_id', 'invoice_status'], ['order_id', 'invoice_status'], lazy=False)]
+        for order in self.filtered(lambda o: o.use_summary_lines or o.use_pot):
+            if order.use_summary_lines or order.use_pot:
                 #line_invoice_status_all = [(d['order_id'][0], d['invoice_status']) for d in self.env['sale.order.line'].read_group([('order_id', 'in', self.ids), ('product_id', '!=', deposit_product_id.id)], ['order_id', 'invoice_status'], ['order_id', 'invoice_status'], lazy=False)]
-                line_invoice_status_all = [(d['order_id'][0], d['invoice_status']) for d in self.env['sale.summary.line'].read_group([('order_id', 'in', self.ids)], ['order_id', 'invoice_status'], ['order_id', 'invoice_status'], lazy=False)]
+                
                 invoice_ids = order.summary_line_ids.mapped('invoice_lines').mapped('invoice_id').filtered(lambda r: r.type in ['out_invoice', 'out_refund'])
                 line_invoice_status = [d[1] for d in line_invoice_status_all if d[0] == order.id]
 
