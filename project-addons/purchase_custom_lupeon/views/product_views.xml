@@ -17,6 +17,7 @@
                    <field name="six_months_ago"  readonly="True"/>
                    <field name="last_month_ago"  readonly="True"/>
                    <field name="virtual_available" string="Previsto"/>
+                   <field name="stock_coverage" />
                    <field name="qty_available" string="A Mano"/>
                    <field name="reordering_min_qty" />
                    <field name="reordering_max_qty" />
