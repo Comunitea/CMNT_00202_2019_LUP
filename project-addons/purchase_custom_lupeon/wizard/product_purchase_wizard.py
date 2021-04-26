@@ -13,12 +13,12 @@ class ProductPurchaseLineWizard(models.TransientModel):
     product_qty = fields.Float("Quantity", default=0.00)
     product_purchase_wzd_id = fields.Many2one('product.purchase.wizard')
     twelve_months_ago = fields.Float('12', readonly=True)
-    six_months_ago = fields.Float('6', readonly=True) 
+    six_months_ago = fields.Float('6', readonly=True ) 
     last_month_ago = fields.Float('1', readonly=True) 
-    virtual_available = fields.Float('Previsto', readonly=True)
-    qty_available = fields.Float('A mano', readonly=True)
-    reordering_min_qty = fields.Float('Max', readonly=True)
-    reordering_max_qty = fields.Float('Min', readonly=True)
+    virtual_available = fields.Float('Previsto', readonly=True, force_save=True)
+    qty_available = fields.Float('A mano', readonly=True, force_save=True)
+    reordering_min_qty = fields.Float('Max', readonly=True, force_save=True)
+    reordering_max_qty = fields.Float('Min', readonly=True, force_save=True)
        
 class ProductPurchaseWizard(models.TransientModel):
 
