@@ -258,9 +258,9 @@
                 <field name="carrier_id" readonly="True"/>
                 <field name="carrier_tracking_ref" readonly="True"/>
                 <field name="origin" readonly="True"/>
-                <!--field name="ship_price" sum="Total Ship Price" widget="monetary" readonly="True"/-->
                 <!--field name="amount_total" sum="Total Tax Included" widget="monetary" readonly="True"/-->
                 <field name="state" readonly="True"/>
+                <field name="ship_price" widget="monetary" readonly="True"/>
                 <field name="ship_cost"/>
             </tree>
         </field>
