@@ -6,6 +6,7 @@ from odoo import models, fields, api, _
 class ApplicableLegislation(models.Model):
 
     _name = 'applicable.legislation'
+    _description = "Legislación aplicable"
 
     name = fields.Char('Sector')
     norma = fields.Char('Norma')

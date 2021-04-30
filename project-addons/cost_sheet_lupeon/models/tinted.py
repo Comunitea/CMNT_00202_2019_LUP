@@ -6,5 +6,6 @@ from odoo import models, fields, api, _
 class Tinted(models.Model):
 
     _name = 'tinted'
+    _description = "Tintado"
 
     name = fields.Char('Name')

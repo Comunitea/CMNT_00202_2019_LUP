@@ -9,6 +9,7 @@ from datetime import timedelta
 class GroupProduction(models.Model):
 
     _name = "group.production"
+    _description = "Group Production"
 
     name = fields.Char('Name')
     note = fields.Text('Notas')
@@ -108,6 +109,7 @@ class GroupProduction(models.Model):
 
 class GroupRegisterLine(models.Model):
     _name = 'group.register.line'
+    _description = "Group Register Line"
 
     group_mrp_id = fields.Many2one(
         'group.production', 'Group', readonly=True, ondelete='cascade')
@@ -148,6 +150,7 @@ class GroupRegisterLine(models.Model):
 class GroupMaterialLine(models.Model):
 
     _name = "group.material.line"
+    _description = "Group Material Line"
 
     group_mrp_id = fields.Many2one('group.production', 'Group', readonly=True)
     product_id = fields.Many2one('product.product', 'Product', readonly=True)

@@ -25,6 +25,15 @@ class SaleOrder(models.Model):
                     not (order.partner_shipping_id.mobile or order.partner_shipping_id.phone) or
                     not order.partner_shipping_id.zip):
                     raise UserError(_('No están informados todos los campos necesarios de la dirección de entrega. Por favor revise: País, provincia, código postal y teléfono'))
+                if not self.env.context.get('bypass_checks', False):
+                    res = order.check_quotation_conditions()
+                    if res['alert']:
+                        return self.env['check.send.print.wiz'].create({
+                                'exception_msg': res['message'],
+                                'order_id': order.id,
+                                'continue_method': 'action_confirm',
+                            }).action_show()
+
         
         res = super().action_confirm()
         return res    
@@ -39,11 +48,11 @@ class SaleOrder(models.Model):
                 for line in so_lines:
                     msg = '{}\n{}'.format(msg, line.product_id.display_name)
                 raise ValidationError (msg)
+        super().get_delivery_price()
     
 
     def _check_country_restrictions(self):
         msg = False
-        ## HArdcode  x.company_id.id == 2 para dativic
         if self.company_id.cost_sheet_sale:
             forbidden_products_ids = self.env['product.product']
             country_id = self.partner_shipping_id.country_id

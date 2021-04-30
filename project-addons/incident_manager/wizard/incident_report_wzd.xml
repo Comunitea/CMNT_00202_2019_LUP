@@ -10,8 +10,16 @@
                 <group>
                     <field name="name"/>
                     <field name="date"/>
+                    <field name="available_types" invisible="1"/>
                     <field name="incident_type" widget="selection"/>
                     <field name="user_id"/>
+                </group>
+                <group string="Info producciones" attrs="{'invisible': [('is_production', '=', False)]}">
+                    <field name="available_fails" invisible="1"/>
+                    <field name="available_product_ids" invisible="1"/>
+                    <field name="is_production" invisible="1"/>
+                    <field name="production_fail_id" widget="selection" attrs="{'required': [('is_production', '=', True)]}"/>
+                    <field name="product_id" widget="selection"/>
                 </group>
                 <group colspan="4">
                     <field name="description"/>
@@ -22,6 +30,8 @@
                 </group>
                 <footer>
                     <button name="create_report" string="Create Report" type="object" class="oe_highlight"/>
+                    or
+                    <button name="create_report_close" string="Create Report And Close" type="object" class="oe_highlight"/>
                     or
                     <button string="Cancel" class="oe_link" special="cancel"/>
                 </footer>

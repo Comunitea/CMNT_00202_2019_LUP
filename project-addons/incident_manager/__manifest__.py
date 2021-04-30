@@ -14,8 +14,15 @@
         'views/incident_views.xml',
         'views/purchase_order.xml',
         'views/sale_order.xml',
+        'views/res_partner.xml',
         'views/stock_picking.xml',
+        'views/mrp_production.xml',
+        'views/crm_lead.xml',
+        'views/product_product.xml',
+        'views/project_task.xml',
         'wizard/incident_report_wzd.xml',
+        'data/incident_data.xml',
+        'security/incident_security.xml'
     ],
     'images': [
         '/static/description/icon.png',

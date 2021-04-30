@@ -74,8 +74,11 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="delivery.view_order_form_with_carrier"/>
         <field name="arch" type="xml">
+            <field name="carrier_id" position="after">
+                <field name="available_deliveries_ids" invisible="1"/>
+            </field>
             <field name="carrier_id" position="attributes">
-                <attribute name="domain">[('ps_sync', '=', False)]</attribute>
+                <attribute name="domain">[('id', 'in', available_deliveries_ids)]</attribute>
                 <attribute name="required">1</attribute>
             </field>
         </field>

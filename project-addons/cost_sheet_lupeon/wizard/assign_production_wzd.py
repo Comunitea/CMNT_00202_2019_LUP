@@ -5,6 +5,7 @@ from odoo.exceptions import UserError
 
 class AssignProdctionWzd(models.TransientModel):
     _name = 'assign.production.wzd'
+    _description = "Assign Production Wizard"
 
     sale_id = fields.Many2one('sale.order', 'Asignar a')
 

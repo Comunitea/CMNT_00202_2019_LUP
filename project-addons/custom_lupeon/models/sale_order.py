@@ -13,6 +13,29 @@ class SaleOrder(models.Model):
 
     _inherit = "sale.order"
 
+    def _compute_available_deliveries(self):
+        for order in self:
+            domain = [('ps_sync', '=', False)]
+            if order.partner_shipping_id:
+                country_id = order.partner_shipping_id.country_id.id
+                state_id = order.partner_shipping_id.state_id.id
+                
+                if state_id:
+                    domain += [
+                        '|',
+                        ('state_ids', '=', False),
+                        ('state_ids', '=', state_id)]
+                   
+                if country_id:
+                    domain += [
+                        '|',
+                        ('country_ids', '=', False),
+                        ('country_ids', '=', country_id)]
+
+            carrier_ids = self.env['delivery.carrier'].search(domain).ids
+            return carrier_ids
+
+
     ship_cost = fields.Monetary(string='Ship Cost', compute="_compute_ship_cost")
     ship_price = fields.Monetary(string='Ship Price', compute="_compute_ship_price")
     num_line = fields.Char(string='Nº Line')
@@ -30,6 +53,15 @@ class SaleOrder(models.Model):
                                 readonly=True,
                                 store = True)
     with_reserves = fields.Boolean("With Reserves", compute="_compute_reserves")
+    available_deliveries_ids = fields.Many2many('delivery.carrier')
+
+
+
+    @api.onchange('partner_shipping_id')
+    def onchange_delivery(self):
+        if self.partner_shipping_id:
+            self.available_deliveries_ids = self._compute_available_deliveries()
+
 
 
     # Se usa en una acción de servidor 
@@ -198,6 +230,17 @@ class SaleOrderLine(models.Model):
     reserved = fields.Boolean('Reserved', compute="_is_reserve")
     qty_reserved = fields.Float('Qty Reserved', compute="_is_reserve")
     real_stock = fields.Float('Real stock', related="product_id.qty_available")
+
+
+    @api.depends('product_id', 'product_uom_qty', 'qty_delivered', 'state')
+    def _compute_qty_to_deliver(self):
+        """ Based on _compute_qty_to_deliver method of sale.order.line
+            model in Odoo v13 'sale_stock' module.
+            This method is overwrited ofr Customer especification
+        """
+        for line in self:
+            #line.qty_to_deliver = line.product_uom_qty - line.qty_delivered
+            line.display_qty_widget = (line.product_type == 'product')
 
     @api.multi
     def _is_reserve(self):

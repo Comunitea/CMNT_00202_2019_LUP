@@ -26,6 +26,9 @@ class ProductProduct(models.Model):
     actual_po_id = fields.Many2one('purchase.order', 'Actual Purchase',
                                        compute="_compute_supplier_info",
                                     ) 
+    stock_coverage = fields.Float('Cobertura',
+                                compute="_compute_supplier_info",
+                                readonly=True)
     
     
     @api.depends('seller_ids', 'seller_ids.name', 'seller_ids.price')
@@ -53,6 +56,12 @@ class ProductProduct(models.Model):
             else:
                 product.purchase_qty = 0
                 product.actual_po_id = False
+            div = (product.twelve_months_ago/365*0.2) + (product.six_months_ago/180*0.5) + (product.last_month_ago/30*0.3)
+            if div != 0:
+                stock_coverage = product.qty_available / div
+                product.stock_coverage = stock_coverage
+            else:
+                product.stock_coverage = 0
                 
            
     

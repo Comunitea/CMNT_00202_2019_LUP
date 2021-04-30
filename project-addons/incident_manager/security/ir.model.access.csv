@@ -1,3 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_incident_report_type,access_incident_report_type,model_incident_report_type,base.group_user,1,1,1,1
 access_incident_report,access_incident_report,model_incident_report,base.group_user,1,1,1,0
+access_incident_production_fail,access_incident_production_fail,model_incident_production_fail,base.group_user,1,1,1,1
+access_printer_technology,access_printer_technology,model_printer_technology,base.group_user,1,1,1,1

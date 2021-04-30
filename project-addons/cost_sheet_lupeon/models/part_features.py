@@ -6,5 +6,6 @@ from odoo import models, fields, api, _
 class PartFeatures(models.Model):
 
     _name = 'part.feature'
+    _description = "Sector"
 
     name = fields.Char('Sector')

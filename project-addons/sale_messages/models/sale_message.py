@@ -8,6 +8,7 @@ from odoo import fields, models, api, _
 class SaleOrderMessage(models.Model):
 
     _name = "sale.order.message"
+    _description = "Mensaje de ventas"
 
     _order = 'date DESC'
 

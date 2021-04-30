@@ -4,7 +4,7 @@ from odoo import fields, models, api
 from odoo.tools.misc import formatLang
 
 
-class PurcaseOrder(models.Model):
+class PurchaseOrder(models.Model):
     _inherit="purchase.order"
 
     @api.multi

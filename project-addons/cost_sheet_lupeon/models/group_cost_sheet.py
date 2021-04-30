@@ -9,6 +9,7 @@ from datetime import datetime, timedelta
 class GroupCostSheet(models.Model):
 
     _name = 'group.cost.sheet'
+    _description = "Cost Group"
     _rec_name = 'sale_line_id'
 
     # display_name = fields.Char('Name', readonly="True")
@@ -175,6 +176,7 @@ class GroupCostSheet(models.Model):
 class AssemblyCostLine(models.Model):
 
     _name = 'assembly.cost.line'
+    _description = "Assembly Cost Line"
 
     group_id = fields.Many2one('group.cost.sheet', 'Grupo de coste',
                                ondelete="cascade")

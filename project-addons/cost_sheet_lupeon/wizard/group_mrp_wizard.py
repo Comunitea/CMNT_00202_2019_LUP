@@ -5,6 +5,7 @@ from odoo.exceptions import UserError
 
 class GroupMrpWizard(models.TransientModel):
     _name = "group.mrp.wizard"
+    _description = "Group MRP Wizard"
 
     name = fields.Char('Name')
 

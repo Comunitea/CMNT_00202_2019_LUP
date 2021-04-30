@@ -210,6 +210,7 @@ class MrpWorkorder(models.Model):
 class MachineTime(models.Model):
 
     _name = "machine.time"
+    _description = "Machine Time"
 
     workorder_id = fields.Many2one('mrp.workorder')
     time = fields.Float('Horas máquina')

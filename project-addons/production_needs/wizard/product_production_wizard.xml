@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- © 2017 Comunitea
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+        <record id="add_product_production_line_wzd" model="ir.ui.view">
+            <field name="name">add.product.production.line.wzd</field>
+            <field name="model">product.production.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Introduzca cantidades a produxir">
+        
+                    <separator string="New Productions" colspan="4"/>
+                    <group>
+                        <field name="line_ids" nolabel="1">
+                            <tree string="Products" editable="top" delete="1" create="1">
+                                <field name="product_id"/>
+                                <field name="twelve_months_ago" force_save="1"/>
+                                <field name="six_months_ago" force_save="1"/>
+                                <field name="last_month_ago" force_save="1"/>
+                                <field name="virtual_available" force_save="1"/>
+                                <field name="qty_available" force_save="1"/>
+                                <field name="production_id" force_save="1"/>
+                                <field name="product_qty"/>
+                            </tree>
+                        </field>
+
+                    </group>
+              
+                    <footer>
+                        <button name="create_production_order" string="Create Production" type="object" class="btn-primary"/>
+                        <button special="cancel" string="Cancel" class="btn-default"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window
+            id="action_add_product_purchase_line_wzd"
+            name="Create productions"
+            res_model="product.production.wizard"
+            src_model="product.product"
+            view_type="form"
+            view_mode="form"
+            target="new"
+            key2="client_action_multi"
+            groups="purchase.group_purchase_user"
+            view_id="add_product_production_line_wzd"/>
+
+</odoo>
