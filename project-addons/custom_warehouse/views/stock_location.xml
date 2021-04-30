@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+
+    <record id="view_location_form" model="ir.ui.view">
+        <field name="model">stock.location</field>
+        <field name="inherit_id" ref="stock.view_location_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='usage']" position="after">
+                <field name="loc_format"/>
+            </xpath>
+            <xpath expr="//field[@name='removal_priority']" position="after">
+                <field name="route_dir"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_location_search" model="ir.ui.view">
+        <field name="model">stock.location</field>
+        <field name="inherit_id" ref="stock.view_location_search" />
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='inactive']" position="before">
+                <filter name="pasillos" string="Pasillos" domain="[('loc_format', '=', '1')]"/>
+                <filter name="estantes" string="Estantes" domain="[('loc_format', '=', '2')]"/>
+                <filter name="palets" string="Palets" domain="[('loc_format', '=', '3')]"/>
+                <filter name="armarios" string="Armarios" domain="[('loc_format', '=', '4')]"/>
+                <separator/>
+            </xpath>
+           
+        </field>
+    </record>
+
+
+    <record id="action_generar_estanterias" model="ir.actions.server">
+        <field name="name">Act. Sububicaciones</field>
+        <field name="type">ir.actions.server</field>
+        <field name="model_id" ref="stock.model_stock_location"/>
+        <field name="binding_model_id" ref="stock.model_stock_location"/>
+        <field name="state">code</field>
+        <field name="code">
+            if records:
+                action = records.generar_estanterias()
+        </field>
+    </record>
+    </data>
+</odoo>

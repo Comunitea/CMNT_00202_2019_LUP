@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<odoo>
+
+
+  <record id="stock_fixed_putaway_strat_tree" model="ir.ui.view">
+    <field name="name">stock.fixed.putaway.strat.tree</field>
+    <field name="model">stock.fixed.putaway.strat</field>
+    <field name="priority" eval="0"/>
+    <field name="arch" type="xml">
+        <tree string="Stock Fixed Putaway Strat" editable="top" delete="1" create="1">
+            <field name="sequence" widget="handle"/>
+            <field name="putaway_id"/>
+            <field name="fixed_location_id" domain="[('usage', '=', 'internal')]"/>
+            <field name="product_id"/>
+            <!--field name="categ_id"/-->
+        </tree>
+    </field>
+</record>
+<record id="view_sfps_search" model="ir.ui.view">
+  <field name="name">stock.fixed.putaway.strat.search</field>
+  <field name="model">stock.fixed.putaway.strat</field>
+  <field name="arch" type="xml">
+      <search string="Stock Fixed Putaway Strat">
+          <field name="product_id" 
+            string="Product"
+            filter_domain="[('product_id','ilike', self)]"/>
+            <!--field name="product_id" string="Product"/-->
+            <field name="putaway_id" string="Strategy"/>
+          <field name="fixed_location_id" string="Fixed Location"/>
+          
+          <separator/>
+          <filter name="group_location_id" string="Location" domain="[]" context="{'group_by':'fixed_location_id'}"/>
+      </search>
+  </field>
+</record>
+  <record id="action_product_putaway_strats" model="ir.actions.act_window">
+      <field name="name">Fixed Locations</field>
+      <field name="res_model">stock.fixed.putaway.strat</field>
+      <field name="view_type">form</field>
+      <!--field name="view_id" ref="view_location_tree2"/-->
+      <!--field name="search_view_id" ref="view_location_search"/-->
+      <field name="context"></field>
+      <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face">
+          Add a new fixed location
+        </p><p>
+          
+        </p><p>
+        </p>
+      </field>
+  </record>
+
+  <menuitem action="action_product_putaway_strats" id="menu_action_product_putaway_strats"
+      parent="stock.menu_warehouse_config" sequence="2" groups="stock.group_stock_multi_locations"/>
+
+</odoo>
