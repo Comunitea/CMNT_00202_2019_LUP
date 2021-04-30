@@ -13,6 +13,29 @@ class SaleOrder(models.Model):
 
     _inherit = "sale.order"
 
+    def _compute_available_deliveries(self):
+        for order in self:
+            domain = [('ps_sync', '=', False)]
+            if order.partner_shipping_id:
+                country_id = order.partner_shipping_id.country_id.id
+                state_id = order.partner_shipping_id.state_id.id
+                
+                if state_id:
+                    domain += [
+                        '|',
+                        ('state_ids', '=', False),
+                        ('state_ids', '=', state_id)]
+                   
+                if country_id:
+                    domain += [
+                        '|',
+                        ('country_ids', '=', False),
+                        ('country_ids', '=', country_id)]
+
+            carrier_ids = self.env['delivery.carrier'].search(domain).ids
+            return carrier_ids
+
+
     ship_cost = fields.Monetary(string='Ship Cost', compute="_compute_ship_cost")
     ship_price = fields.Monetary(string='Ship Price', compute="_compute_ship_price")
     num_line = fields.Char(string='Nº Line')
@@ -30,6 +53,15 @@ class SaleOrder(models.Model):
                                 readonly=True,
                                 store = True)
     with_reserves = fields.Boolean("With Reserves", compute="_compute_reserves")
+    available_deliveries_ids = fields.Many2many('delivery.carrier')
+
+
+
+    @api.onchange('partner_shipping_id')
+    def onchange_delivery(self):
+        if self.partner_shipping_id:
+            self.available_deliveries_ids = self._compute_available_deliveries()
+
 
 
     # Se usa en una acción de servidor 

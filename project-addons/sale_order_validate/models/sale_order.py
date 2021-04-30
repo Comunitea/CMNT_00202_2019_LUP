@@ -48,11 +48,11 @@ class SaleOrder(models.Model):
                 for line in so_lines:
                     msg = '{}\n{}'.format(msg, line.product_id.display_name)
                 raise ValidationError (msg)
+        super().get_delivery_price()
     
 
     def _check_country_restrictions(self):
         msg = False
-        ## HArdcode  x.company_id.id == 2 para dativic
         if self.company_id.cost_sheet_sale:
             forbidden_products_ids = self.env['product.product']
             country_id = self.partner_shipping_id.country_id
