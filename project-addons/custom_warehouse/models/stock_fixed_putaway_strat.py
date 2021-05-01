@@ -10,20 +10,24 @@ _logger = logging.getLogger(__name__)
 class StockMoveLocationWizard(models.TransientModel):
     _inherit = "wiz.stock.move.location"
 
-    @api.multi
-    def group_lines(self):
-        lines_grouped = {}
-        for line in self.stock_move_location_line_ids:
-            lines_grouped.setdefault(
-                line.product_id.id,
-                self.env["wiz.stock.move.location.line"].browse(),
-            )
-            lines_grouped[line.product_id.id] |= line
-        return lines_grouped
-
+    
     def _get_group_quants(self):
-        return super()._get_group_quants()
-
+        location_id = self.origin_location_id.id
+        company = self.env['res.company']._company_default_get(
+            'stock.inventory',
+        )
+        # Using sql as search_group doesn't support aggregation functions
+        # leading to overhead in queries to DB
+        query = """
+            SELECT product_id, lot_id, SUM(quantity)
+            FROM stock_quant
+            WHERE location_id = %s
+            AND company_id = %s
+            GROUP BY product_id, lot_id
+            limit 250
+        """
+        self.env.cr.execute(query, (location_id, company.id))
+        return self.env.cr.dictfetchall()
 class StockFixedPutawayStrat(models.Model):
 
     _inherit = "stock.fixed.putaway.strat"
