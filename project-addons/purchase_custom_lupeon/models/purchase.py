@@ -16,6 +16,28 @@ class PurchaseOrder(models.Model):
 
     purchased_qties = fields.Float('Totat Ordered Qty', compute=_compute_purchased_qties)
     received_qties = fields.Float('Totat Received Qty', compute=_compute_purchased_qties)
+    received = fields.Selection([('received', 'Received'),
+                                    ('not_received', 'Not Received'),
+                                    ('partially', 'Partially Received')],
+                                string='Received',
+                                default='not_received',
+                                compute="_compute_received",
+                                store=True)
+
+
+    @api.depends('picking_ids.state')
+    def _compute_received(self):
+        for order in self:
+            if order.picking_ids:
+                if all([x.state in ['done', 'cancel'] for x in order.picking_ids]):
+                    order.received = 'received'
+                elif any([x.state in ['done'] for x in order.picking_ids]):
+                    order.received = 'partially'
+                else:
+                    order.received = 'not_received'
+            else:
+                order.received = 'not_received'
+
 
 class PurchaseOrderLine(models.Model):
     _inherit = "purchase.order.line"
