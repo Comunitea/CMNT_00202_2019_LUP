@@ -27,5 +27,6 @@
         'views/report_facturae.xml',
         'views/account_menus.xml',
         'views/purchase_view.xml',
-        'views/product_view.xml'],
+        'views/product_view.xml',
+        'views/crm_lead.xml'],
 }
