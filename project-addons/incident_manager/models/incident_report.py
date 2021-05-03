@@ -9,8 +9,8 @@ class ModelIncidentBase(models.AbstractModel):
     def _compute_incident_reports_count(self):
         for record in self:
             incident_report_ids = self.env['incident.report'].search([
-                ('res_id', '=', self.id),
-                ('model_id', '=', self.env['ir.model'].search([('model', '=', self._name)]).id)
+                ('res_id', '=', record.id),
+                ('model_id', '=', self.env['ir.model'].search([('model', '=', record._name)]).id)
             ])
             record.incident_reports_count = len(incident_report_ids)
 
@@ -63,8 +63,8 @@ class IncidentProductionFail(models.Model):
         [('human', 'Humano'),
         ('machine', 'Máquina'),
         ('external', 'Externo')],
-        required=False) 
-    
+        required=False)
+
 
 class IncidentReportType(models.Model):
     _name = "incident.report.type"
@@ -86,11 +86,11 @@ class IncidentReportType(models.Model):
     def _compute_view_type(self):
         for record in self:
             picking_model = self.env['ir.model'].search([('model', '=', 'stock.picking')])
-            if picking_model.id in record.model_ids.ids:       
+            if picking_model.id in record.model_ids.ids:
                 record.view_type = True
             else:
                 record.view_type = False
-        
+
 
 
 class IncidentReport(models.Model):
@@ -98,7 +98,7 @@ class IncidentReport(models.Model):
     _description = "Incident Report"
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
 
-    
+
     name = fields.Text('Incident title')
     date = fields.Date('Date',
                        required=True,
@@ -145,7 +145,7 @@ class IncidentReport(models.Model):
         [('human', 'Humano'),
         ('machine', 'Máquina'),
         ('external', 'Externo')],
-        required=False) 
+        required=False)
     sheet_type = fields.Many2one(
         comodel_name='printer.technology',
         string='Technology')
@@ -189,7 +189,7 @@ class IncidentReport(models.Model):
                         if product_ids:
                             record.available_products = product_ids.ids
                         else:
-                            record.available_products = False 
+                            record.available_products = False
 
 
     @api.depends('model_id', 'res_id')
@@ -208,7 +208,7 @@ class IncidentReport(models.Model):
                             ])
                             record.available_fails = fails.ids
                         else:
-                            record.available_fails = False 
+                            record.available_fails = False
 
 
     @api.depends('model_id', 'res_id')
@@ -222,7 +222,7 @@ class IncidentReport(models.Model):
                     if origin.carrier_id:
                         incident.carrier_id = origin.carrier_id.id
                     else:
-                        incident.carrier_id = False  
+                        incident.carrier_id = False
                 if 'carrier_tracking_ref' in origin._fields:
                     incident.carrier_tracking_ref = origin.carrier_tracking_ref
                 if 'name' in origin._fields:
@@ -236,11 +236,11 @@ class IncidentReport(models.Model):
                         incident.sheet_type = technology_id.id
                         incident.layer_height = origin.sheet_id.layer_height
                         incident.perfil = origin.sheet_id.perfil
-                        
 
 
-        
-    
+
+
+
     def open_origin_document(self):
         self.ensure_one()
         origin = self.env[self.model_id.model].search([

@@ -10,7 +10,7 @@ class PurchaseOrder(models.Model):
     @api.multi
     def _compute_purchased_qties(self):
         for purchase_id in self:
-            order_lines = purchase_id.order_line.filtered(lambda x: x.product_id in ['product', 'consu'])
+            order_lines = purchase_id.order_line.filtered(lambda x: x.product_id.type in ['product', 'consu'])
             purchase_id.purchased_qties = sum(x.product_uom_qty for x in order_lines)
             purchase_id.received_qties = sum(x.qty_received for x in order_lines)
 
@@ -20,13 +20,13 @@ class PurchaseOrder(models.Model):
 class PurchaseOrderLine(models.Model):
     _inherit = "purchase.order.line"
 
-   
+
     product_categ_id = fields.Many2one(
         "product.category", "Category", related="product_id.categ_id"
     )
     to_deliver_qty = fields.Float(compute="_compute_to_deliver_qty")
-    
-    
+
+
 
     def _compute_to_deliver_qty(self):
         ## Todo revisar con Jose Luis que movimientos se tienen en cuenta.
