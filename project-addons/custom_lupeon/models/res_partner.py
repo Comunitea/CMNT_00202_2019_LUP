@@ -14,6 +14,30 @@ class ResPartner(models.Model):
     valued_picking = fields.Boolean(
         default=False,)
     
+
+    @api.model
+    def name_search(self, name, args=None, operator='ilike', limit=100):
+        """Give preference to commercial names on name search, appending
+        the rest of the results after. This has to be done this way, as
+        Odoo overwrites name_search on res.partner in a non inheritable way."""
+        if not args:
+            args = []
+        partners = self.search(
+            [('vat', operator, name)] + args, limit=limit,
+        )
+        res = partners.name_get()
+        if limit:
+            limit_rest = limit - len(partners)
+        else:  # pragma: no cover
+            # limit can be 0 or None representing infinite
+            limit_rest = limit
+        if limit_rest or not limit:
+            args += [('id', 'not in', partners.ids)]
+            res += super(ResPartner, self).name_search(
+                name, args=args, operator=operator, limit=limit_rest,
+            )
+        return res
+
     @api.multi
     def _get_admin_fact(self):
         if self.admin_fact:
