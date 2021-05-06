@@ -8,7 +8,7 @@
     "maintainer": "Comunitea",
     "website": "www.comunitea.com",
     "license": "AGPL-3",
-    "depends": ["purchase", "stock", "sale"],
+    "depends": ["purchase", "stock", "sale", "delivery"],
     "data": [
         'security/ir.model.access.csv',
         'views/incident_views.xml',
