@@ -43,8 +43,8 @@ class SaleOrder(models.Model):
         for order in self.filtered(lambda o: o.state in ('draft', 'sent') and len(o.order_line) > 0):
             carrier_id = self.carrier_id
             so_lines = order.order_line.filtered(lambda x: x.product_id.transport_restrictions)
-            if so_lines and self.carrier_id.allow_transport_restrictions:
-                msg = 'Los siguintes artículos no tiene restricciones de transporte'
+            if so_lines and not self.carrier_id.allow_transport_restrictions:
+                msg = 'Los siguintes artículos tienen restricciones de transporte'
                 for line in so_lines:
                     msg = '{}\n{}'.format(msg, line.product_id.display_name)
                 raise ValidationError (msg)
