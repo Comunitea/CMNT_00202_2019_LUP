@@ -147,7 +147,7 @@ class SaleOrder(models.Model):
                 # CHECK DIAMETER
                 diameter_values = order.order_line.mapped('product_id').\
                     mapped('attribute_value_ids').\
-                    filtered(lambda v: 'Diámetro' in v.attribute_id.name).\
+                    filtered(lambda v: v.attribute_id.name == 'Diámetro' ).\
                     mapped('name')
                 diameter_values = list(set(diameter_values))
                 if len(diameter_values) > 1:
