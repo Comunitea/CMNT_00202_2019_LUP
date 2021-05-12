@@ -8,3 +8,4 @@ from . import res_partner
 from . import account_fiscal_position
 from . import account_payment_mode
 from . import account_invoice
+from . import prestashop_backend

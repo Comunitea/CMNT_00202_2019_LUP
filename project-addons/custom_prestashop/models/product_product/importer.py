@@ -40,3 +40,9 @@ class ProductCombinationMapper(Component):
         if barcode and barcode != '0':
             return {'barcode': barcode}
         return {}
+
+
+class PrestashopProductCombinationOptionValue(Component):
+    _name = 'prestashop.product.combination.option.value.batch.importer'
+    _inherit = 'prestashop.delayed.batch.importer'
+    _apply_on = 'prestashop.product.combination.option.value'
