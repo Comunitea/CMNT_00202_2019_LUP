@@ -78,7 +78,7 @@ class CostSheet(models.Model):
     cc_ud = fields.Float('cc ud')
     euros_cc = fields.Float('€/cc', compute='get_euros_cc_fdm')
 
-    printer_id = fields.Many2one('printer.machine', 'Impresora')
+    printer_id = fields.Many2one('printer.machine', 'Categoría Impresora')
 
     # [ALL] COSTE MANO DE OBRA
     calc_material_id = fields.Many2one('product.product', 'Material FDM principal')
@@ -122,7 +122,7 @@ class CostSheet(models.Model):
     tray_hours = fields.Float('h Maq. Bandeja')
     euro_machine = fields.Float('€/h maq',  compute='get_euro_machine')
     perfil = fields.Char('Perfil')
-    perfil_id = fields.Many2one('sheet.perfil', 'Perfil')
+    perfil_id = fields.Many2one('sheet.perfil', 'Perfil', required=True)
 
     # FDM COSTE MATERIAL
     material_cost_ids = fields.One2many(
@@ -254,6 +254,9 @@ class CostSheet(models.Model):
         for sh in self:
             if sh.unplanned_cost < 0:
                 raise UserError('El coste imprevisto no puede ser negativo')
+            
+            if sh.material_cost_ids and not sh.material_cost_ids[0].tray_meters:
+                raise UserError('Es necesario indicar un valor de metros bandeja en los costes de material')
 
     @api.model
     def create(self, vals):

@@ -16,7 +16,7 @@ PRINT_TYPES = [
 class PrinterMachine(models.Model):
 
     _name = 'printer.machine'
-    _description = "Impresora"
+    _description = "Categoría Impresora"
 
     name = fields.Char('Name')
     type = fields.Selection(PRINT_TYPES, 'Print Type', required=True)

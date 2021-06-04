@@ -57,14 +57,14 @@
         </field>
     </record>
 
-    <record id="action_printer_machines" model="ir.actions.act_window">
-        <field name="name">Printers</field>
+    <record id="action_printer_machines_categ" model="ir.actions.act_window">
+        <field name="name">Categoría impresoras</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">printer.machine</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
     </record>
 
-    <menuitem id="menu_action_printer_machines" action="action_printer_machines" name="Printers" parent="menu_cost_cfg" sequence="10"/>
+    <menuitem id="menu_action_printer_machines_categ" action="action_printer_machines_categ" name="Categoría impresoras" parent="menu_cost_cfg" sequence="10"/>
 
 </odoo>

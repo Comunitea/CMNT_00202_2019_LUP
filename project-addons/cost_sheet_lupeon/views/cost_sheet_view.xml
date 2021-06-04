@@ -1118,7 +1118,7 @@
             <tree editable="bottom">
                 <field name="can_edit" invisible="1"/>
                 <field name="name"/>
-                <field name="available_material_ids" invisible="0"/>
+                <field name="available_material_ids" invisible="1"/>
                 <field name="material_id" domain="[('id', 'in', available_material_ids), ('is_material', '=', True), ('material_type', '=', parent.sheet_type), ('diameter', '=', diameter)]"/>
                 <!-- FDM FIELDS -->
                 <field name="diameter" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
@@ -1163,7 +1163,7 @@
             <tree editable="bottom">
                 <field name="can_edit" invisible="1"/>
                 <field name="name"/>
-                <field name="available_material_ids" invisible="0"/>
+                <field name="available_material_ids" invisible="1"/>
                 <field name="material_id" attrs="{'column_invisible': [('parent.sheet_type', '=', 'fdm')]}" domain="[('id', 'in', available_material_ids), ('is_material', '=', True), ('material_type', '=', parent.sheet_type)]"/>
                     <field name="material_id2" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}" domain="[('id', 'in', available_material_ids), ('is_material', '=', True), ('material_type', '=', parent.sheet_type), ('diameter', '=', diameter)]"/>
                 <!-- FDM FIELDS -->
