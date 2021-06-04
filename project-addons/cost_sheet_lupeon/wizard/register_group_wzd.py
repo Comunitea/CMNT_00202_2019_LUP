@@ -52,6 +52,17 @@ class RegistergroupWizard(models.TransientModel):
     consume_ids = fields.One2many(
         'group.consume.line', 'wzd_id', 'Consumos')
 
+    density = fields.Float('Density (%)')
+    bucket_height_sls = fields.Float('Altura cubeta (cm)')
+    dosaje_inf = fields.Float('Dosaje rango inferior (%) ')
+    dosaje_sup = fields.Float('Dosaje rango inferior (%) ')
+    dosaje_type = fields.Selection([
+        ('sequencial', 'Sequencial'),
+        ('permanent', 'Permanenete'),
+        ('off', 'Off'),
+        ], 'Tipo de dosaje')
+    desviation = fields.Float('Desviastion (%)')
+
     def confirm(self):
         gp = self.env['group.production'].browse(
             self._context.get('active_id'))
@@ -159,6 +170,15 @@ class RegistergroupWizard(models.TransientModel):
 
         if self.final_lot:
             gp.final_lot = self.final_lot
+
+        gp.write({
+            'density': self.density,
+            'bucket_height_sls': self.bucket_height_sls,
+            'dosaje_inf': self.dosaje_inf,
+            'dosaje_sup': self.dosaje_sup,
+            'dosaje_type': self.dosaje_type,
+            'desviation': self.desviation,
+        })
 
         # Actualizo consumos
         for consume in self.consume_ids:

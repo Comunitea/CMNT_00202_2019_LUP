@@ -40,6 +40,17 @@ class GroupProduction(models.Model):
 
     final_lot = fields.Char('Lote final')
 
+    density = fields.Float('Density (%)')
+    bucket_height_sls = fields.Float('Altura cubeta (cm)')
+    dosaje_inf = fields.Float('Dosaje rango inferior (%) ')
+    dosaje_sup = fields.Float('Dosaje rango inferior (%) ')
+    dosaje_type = fields.Selection([
+        ('sequencial', 'Sequencial'),
+        ('permanent', 'Permanenete'),
+        ('off', 'Off'),
+        ], 'Tipo de dosaje')
+    desviation = fields.Float('Desviastion (%)')
+
     def _get_total_done(self):
         for gr in self:
             total = 0

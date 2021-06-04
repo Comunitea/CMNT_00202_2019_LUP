@@ -25,6 +25,14 @@
                         <field name="total_time" widget="float_time"/>
                         <field name="final_lot"/>
                     </group>
+                    <group>
+                        <field name="density"/>
+                        <field name="bucket_height_sls"/>
+                        <field name="dosaje_inf"/>
+                        <field name="dosaje_sup"/>
+                        <field name="dosaje_type"/>
+                        <field name="desviation"/>
+                    </group>
                     <group string="Órdenes de trabajo agrupadas">
                         <field name="register_ids" nolabel="1">
                             <tree editable="bottom" create="0" delete="1">
