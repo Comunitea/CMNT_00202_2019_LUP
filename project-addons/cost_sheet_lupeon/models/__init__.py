@@ -5,6 +5,7 @@ from . import stock
 from . import applicable_legislation
 from . import part_features
 from . import oppi_type
+from . import sheet_perfil
 from . import printer_machine
 from . import tinted
 from . import product

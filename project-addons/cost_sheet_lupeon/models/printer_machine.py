@@ -36,6 +36,8 @@ class PrinterMachine(models.Model):
     default_sla = fields.Boolean('Por defecto en sla')
     default_dmls = fields.Boolean('Por defecto en dmls')
 
+    perfil_ids = fields.One2many('sheet.perfil', 'printer_id', 'Perfiles')
+
     _sql_constraints = [(
         'default_fdm_unique',
         'unique(default_fdm)',

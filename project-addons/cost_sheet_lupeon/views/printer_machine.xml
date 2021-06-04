@@ -29,6 +29,11 @@
                         <field name="default_sls2" attrs="{'invisible': [('type', '!=', 'sls2')]}"/>
                         <field name="default_dmls" attrs="{'invisible': [('type', '!=', 'dmls')]}"/>
                     </group>
+                    <notebook>
+                        <page string="Perfiles">
+                            <field name="perfil_ids" nolabel="1"/>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>

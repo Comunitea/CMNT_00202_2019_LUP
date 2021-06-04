@@ -16,6 +16,7 @@ access_purchase_cost_line,acess_purchase_cost_line,model_purchase_cost_line,base
 access_part_feature,acess_part_feature,model_part_feature,base.group_user,1,1,1,1
 access_tinted,acess_tinted,model_tinted,base.group_user,1,1,1,1
 access_oppi_type,acess_oppi_type,model_oppi_type,base.group_user,1,1,1,1
+access_sheet_perfil,acess_sheet_perfil,model_sheet_perfil,base.group_user,1,1,1,1
 access_group_production,acess_group_production,model_group_production,base.group_user,1,1,1,1
 access_group_material_line,acess_group_material_line,model_group_material_line,base.group_user,1,1,1,1
 access_group_register_line,acess_group_register_line,model_group_register_line,base.group_user,1,1,1,1

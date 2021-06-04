@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<odoo>
+
+   
+    <record id="sheet_perfil_view_form" model="ir.ui.view">
+        <field name="name">sheet.perfil.view</field>
+        <field name="model">sheet.perfil</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="printer_id"/>
+                        <field name="infill"/>
+                        <field name="loops"/>
+                        <field name="layer_height"/>
+                    </group>
+                    <notebook>
+                        <page string="Material">
+                            <field name="material_ids" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="sheet_perfil_view_tree" model="ir.ui.view">
+        <field name="name">sheet.perfil.view</field>
+        <field name="model">sheet.perfil</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="printer_id"/>
+                <field name="infill"/>
+                <field name="infill"/>
+                <field name="loops"/>
+                <field name="layer_height"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_sheet_perfils" model="ir.actions.act_window">
+        <field name="name">Perfiles</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sheet.perfil</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_action_sheet_perfils" action="action_sheet_perfils"  name="Perfiles" parent="menu_cost_cfg" sequence="31"/>
+
+</odoo>

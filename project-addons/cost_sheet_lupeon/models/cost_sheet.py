@@ -122,6 +122,7 @@ class CostSheet(models.Model):
     tray_hours = fields.Float('h Maq. Bandeja')
     euro_machine = fields.Float('€/h maq',  compute='get_euro_machine')
     perfil = fields.Char('Perfil')
+    perfil_id = fields.Many2one('sheet.perfil', 'Perfil')
 
     # FDM COSTE MATERIAL
     material_cost_ids = fields.One2many(
@@ -249,12 +250,18 @@ class CostSheet(models.Model):
                 ciclo = sh.cus_units / sh.tray_units
                 sh.heat_treatment_cost = ciclo * mat.term_cost
 
+    def do_checks(self):
+        for sh in self:
+            if sh.unplanned_cost < 0:
+                raise UserError('El coste imprevisto no puede ser negativo')
+
     @api.model
     def create(self, vals):
         res = super().create(vals)
         res.group_id.update_sale_line_price()
         res.update_workforce_cost()
         res.update_tech_hours()
+        res.do_checks()
         return res
 
     def write(self, vals):
@@ -262,6 +269,7 @@ class CostSheet(models.Model):
         self.mapped('group_id').update_sale_line_price()
         self.update_workforce_cost()
         self.update_tech_hours()
+        self.do_checks()
         return res
 
     def update_tech_hours(self):
@@ -289,6 +297,13 @@ class CostSheet(models.Model):
         if self.sheet_type in ['sls', 'poly', 'sla', 'sls2', 'dmls']:
             hours = (5/60) + (maq_hours * self.printer_id.machine_hour)
         tech_line.hours = hours
+
+    @api.onchange('perfil_id')
+    def change_perfil_id(self):
+        if self.perfil_id:
+            self.infill = self.perfil_id.infill
+            self.loops = self.perfil_id.loops
+            self.layer_height = self.perfil_id.layer_height
 
     @api.onchange('price_unit', 'cus_units')
     def change_inspection_type(self):
@@ -985,6 +1000,23 @@ class MaterialCostLine(models.Model):
     #                     'message': 'El diametro no coincide conla impresora'},
     #             }
 
+    available_material_ids = fields.Many2many(
+        string="Perfiles disponibles",
+        comodel_name="product.product",
+        compute="_compute_available_materials",
+    )
+
+    @api.depends("sheet_id.perfil_id")
+    def _compute_available_materials(self):
+        for line in self:
+            aval = []
+            if line.sheet_id.perfil_id:
+                aval = line.sheet_id.perfil_id.material_ids.\
+                    mapped('product_variant_ids')
+            line.available_material_ids = aval
+
+
+
     def get_sls_gr_tray(self):
         self.ensure_one()
         res = 0.0
@@ -1228,7 +1260,7 @@ class PurchaseCostLine(models.Model):
         'res.partner', 'Proveedor', domain=[('supplier', '=', True)])
     cost_ud = fields.Float('Coste Ud.')
     ports = fields.Float('Portes')
-    margin = fields.Float('Margin (%)', default=30.0)
+    margin = fields.Float('Margen (%)', default=30.0)
     pvp_ud = fields.Float('PVP Ud', compute="_get_pvp")
     pvp_total = fields.Float('PVP TOTAL', compute="_get_pvp")
 
@@ -1244,10 +1276,25 @@ class PurchaseCostLine(models.Model):
             ocl.pvp_ud = pvp_ud
             ocl.pvp_total = pvp
 
+    @api.onchange('margin')
+    def onchange_margin(self):
+        if self.product_id:
+            self.cost_ud = self.product_id.standard_price
+
     @api.onchange('product_id')
     def onchange_product_id(self):
         if self.product_id:
             self.cost_ud = self.product_id.standard_price
+    
+    @api.onchange('margin')
+    def onchange_unplanned_cost(self):
+        if self.margin < 15:
+            self.margin = 15
+            return {
+                    'warning': {
+                        'title': _('Error'),
+                        'message': 'El margen no puede ser menor de 15%'}
+                }
 
     @api.model
     def create(self, vals):
