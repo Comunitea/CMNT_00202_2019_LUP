@@ -74,7 +74,8 @@ class CostSheet(models.Model):
 
 
     # DATOS PIEZA
-    cus_units = fields.Integer('Uds. Cliente')
+    rpf = fields.Integer('RPF', default=1.0)
+    cus_units = fields.Integer('Uds. a Fabricar', compute='_get_cus_units')
     cc_ud = fields.Float('cc ud')
     euros_cc = fields.Float('€/cc', compute='get_euros_cc_fdm')
 
@@ -122,7 +123,7 @@ class CostSheet(models.Model):
     tray_hours = fields.Float('h Maq. Bandeja')
     euro_machine = fields.Float('€/h maq',  compute='get_euro_machine')
     perfil = fields.Char('Perfil')
-    perfil_id = fields.Many2one('sheet.perfil', 'Perfil', required=True)
+    perfil_id = fields.Many2one('sheet.perfil', 'Perfil', required=False)
 
     # FDM COSTE MATERIAL
     material_cost_ids = fields.One2many(
@@ -148,7 +149,7 @@ class CostSheet(models.Model):
     # ------------------------------------------------------------------------
 
     # SLS DATOS PIEZA
-    cus_units = fields.Integer('Uds. Cliente')
+    # cus_units = fields.Integer('Uds. Cliente')
 
     cm2_sls = fields.Float('cm^2 ud')
     x_mm_sls = fields.Float('X (mm)')
@@ -217,6 +218,10 @@ class CostSheet(models.Model):
                     sh.env.user.has_group(
                         'cost_sheet_lupeon.group_cs_manager')
 
+    @api.depends('rpf', 'group_id.sale_line_id.product_uom_qty')
+    def _get_cus_units(self):
+        for sh in self:
+            sh.cus_units = sh.sale_line_id.product_uom_qty * sh.rpf
 
     @api.depends('oppi_line_ids')
     def _get_oppi_total(self):
@@ -529,9 +534,11 @@ class CostSheet(models.Model):
             if sh.sheet_type == 'sls':
                 tray_hours = sh.tray_hours_sls
             if sh.cus_units:
-                machine_hours = (tray_hours / sh.tray_units) * sh.cus_units
+                machine_hours = 0
+                if sh.tray_units:
+                    machine_hours = (tray_hours / sh.tray_units) * sh.cus_units
                 sh.machine_hours = machine_hours
-                euro_machine_ud = machine_hours * sh.euro_machine / sh.cus_units
+                euro_machine_ud = machine_hours * sh.euro_machine / (sh.cus_units)
                 sh.euro_machine_ud = euro_machine_ud
                 sh.euro_machine_total = euro_machine_ud * sh.cus_units
 
@@ -1263,7 +1270,8 @@ class PurchaseCostLine(models.Model):
 
     product_id = fields.Many2one('product.product', 'Producto')
     name = fields.Char('Ref. / Descripción')
-    qty = fields.Float('Unidades', required=True)
+    rfc = fields.Float('RFC', required=True)
+    qty = fields.Float('Unidades', required=True, compute="_get_qty")
     partner_id = fields.Many2one(
         'res.partner', 'Proveedor', domain=[('supplier', '=', True)])
     cost_ud = fields.Float('Coste Ud.')
@@ -1271,6 +1279,13 @@ class PurchaseCostLine(models.Model):
     margin = fields.Float('Margen (%)', default=30.0)
     pvp_ud = fields.Float('PVP Ud', compute="_get_pvp")
     pvp_total = fields.Float('PVP TOTAL', compute="_get_pvp")
+
+    @api.depends('rfc', 'sheet_id.rpf', 'sheet_id.group_id.sale_line_id.product_uom_qty')
+    def _get_qty(self):
+        for ocl in self:
+            ocl.qty = ocl.rfc * ocl.sheet_id.rpf * ocl.sheet_id.group_id.sale_line_id.product_uom_qty
+            if ocl.sheet_id.sheet_type == 'purchase':
+                ocl.qty = ocl.rfc * ocl.sheet_id.group_id.sale_line_id.product_uom_qty
 
     @api.depends('qty', 'cost_ud', 'ports', 'margin')
     def _get_pvp(self):
@@ -1322,12 +1337,20 @@ class OppiCostLine(models.Model):
 
     name = fields.Char('Descripción', required=True)
     type = fields.Many2one('oppi.type', 'Tipo', required=True)
-    time = fields.Float('Tiempo')
+    t1f = fields.Float('T1F')
+    time = fields.Float('Tiempo', compute="_get_time")
     time_real = fields.Float('Tiempo real', related='task_id.effective_hours')
     employee_id = fields.Many2one('hr.employee', 'Asignado a')
     task_id = fields.Many2one('project.task', 'Task', readonly=True,  
                               copy=False)
     e_partner_id = fields.Many2one('res.partner', 'Externalización')
+
+    @api.depends('t1f', 'sheet_id.rpf', 'sheet_id.group_id.sale_line_id.product_uom_qty', 'e_partner_id')
+    def _get_time(self):
+        for ocl in self:
+            ocl.time = ocl.t1f * ocl.sheet_id.rpf * ocl.sheet_id.group_id.sale_line_id.product_uom_qty
+            if ocl.e_partner_id:
+                ocl.time = ocl.t1f * ocl.sheet_id.rpf
 
     def create_oppi_tasks(self, project):
         for line in self:
