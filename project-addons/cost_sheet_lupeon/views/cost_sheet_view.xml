@@ -103,6 +103,7 @@
                                 <field name="sale_id"/>
                                 <field name="production_id"/>
                                 <field name="price_total"/>
+                                <button name="duplicate_sheet" type="object" string="Duplicate" icon="fa-copy"/>
                             </tree>
                         </field>
                     </group>

@@ -254,9 +254,14 @@ class CostSheet(models.Model):
         for sh in self:
             if sh.unplanned_cost < 0:
                 raise UserError('El coste imprevisto no puede ser negativo')
-            
-            if sh.material_cost_ids and not sh.material_cost_ids[0].tray_meters:
+
+            if sh.material_cost_ids and sh.sheet_type == 'fdm' and not sh.material_cost_ids[0].tray_meters:
                 raise UserError('Es necesario indicar un valor de metros bandeja en los costes de material')
+
+    def duplicate_sheet(self):
+        self.ensure_one()
+        new_line = self.copy()
+        new_line.group_id = self.group_id.id
 
     @api.model
     def create(self, vals):

@@ -415,3 +415,7 @@ class SaleOrderLine(models.Model):
             domain = [('bom_id', 'in', self.group_sheet_id.bom_id.ids)]
             production = self.env['mrp.production'].search(domain)
         return production
+
+    def duplicate_line(self):
+        self.ensure_one()
+        self.with_context(from_copy=True).copy({'order_id': self.order_id.id})

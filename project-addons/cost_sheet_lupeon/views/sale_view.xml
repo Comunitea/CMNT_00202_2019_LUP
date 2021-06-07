@@ -91,6 +91,13 @@
                 <field name="project_id"/>
             </field >
 
+            <xpath expr="//field[@name='order_line']/tree/field[@name='price_subtotal']" position="after">
+                <button name="duplicate_line"
+                        type="object"
+                        icon="fa-copy"
+                        states="draft"
+                />
+            </xpath>
         </field>
     </record>
 
