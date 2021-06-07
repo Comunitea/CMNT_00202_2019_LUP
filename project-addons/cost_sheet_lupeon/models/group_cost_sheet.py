@@ -48,9 +48,12 @@ class GroupCostSheet(models.Model):
     def name_get(self):
         res = []
         for sheet in self:
+            ref_name = sheet.sale_line_id.name
+            if sheet.sale_line_id.ref:
+                ref_name = sheet.sale_line_id.ref
             res.append((sheet.id, ("[%s] %s") %
                        (sheet.sale_line_id.order_id.name,
-                        sheet.sale_line_id.name)))
+                        ref_name)))
         return res
 
     def update_sale_line_price(self):

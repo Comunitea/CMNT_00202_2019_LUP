@@ -83,6 +83,8 @@
                     <group>
                         <field name="name"/>
                         <field name="categ_id"/>
+                        <field name="machine_hours"/>
+                        
                     </group>
                 </sheet>
             </form>
@@ -96,6 +98,7 @@
             <tree>
                 <field name="name"/>
                 <field name="categ_id"/>
+                <field name="machine_hours"/>
             </tree>
         </field>
     </record>
