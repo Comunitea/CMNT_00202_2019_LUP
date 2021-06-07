@@ -13,10 +13,11 @@ PRINT_TYPES = [
     ('dmls', 'DMLS'),
 ]
 
+
 class PrinterMachine(models.Model):
 
     _name = 'printer.machine'
-    _description = "Categoría Impresora"
+    _description = "Impresora"
 
     name = fields.Char('Name')
     type = fields.Selection(PRINT_TYPES, 'Print Type', required=True)
@@ -37,6 +38,8 @@ class PrinterMachine(models.Model):
     default_dmls = fields.Boolean('Por defecto en dmls')
 
     perfil_ids = fields.One2many('sheet.perfil', 'printer_id', 'Perfiles')
+    printer_ids = fields.One2many(
+        'printer.machine.instance', 'categ_id', 'Impresoras')
 
     _sql_constraints = [(
         'default_fdm_unique',
@@ -69,3 +72,12 @@ class PrinterMachine(models.Model):
         'Ya existe otra impresora por defecto para DMLS'
         )
     ]
+
+
+class PrinterMachineInstance(models.Model):
+
+    _name = 'printer.machine.instance'
+    _description = "Categoría Impresora"
+
+    name = fields.Char('Name')
+    categ_id = fields.Many2one('printer.machine', 'Categoría Impresora')

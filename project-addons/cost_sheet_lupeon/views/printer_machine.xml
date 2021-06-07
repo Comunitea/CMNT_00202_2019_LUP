@@ -33,6 +33,13 @@
                         <page string="Perfiles">
                             <field name="perfil_ids" nolabel="1"/>
                         </page>
+                        <page string="Impresoras">
+                            <field name="printer_ids" nolabel="1">
+                                <tree editable="bottom">
+                                    <field name="name"/>
+                                </tree>
+                            </field>
+                        </page>
                     </notebook>
                 </sheet>
             </form>
@@ -66,5 +73,41 @@
     </record>
 
     <menuitem id="menu_action_printer_machines_categ" action="action_printer_machines_categ" name="Categoría impresoras" parent="menu_cost_cfg" sequence="10"/>
+
+    <record id="printer_machine_instance_view_form" model="ir.ui.view">
+        <field name="name">printer.machine.instance_view</field>
+        <field name="model">printer.machine.instance</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="categ_id"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="printer_machine_instance_view_tree" model="ir.ui.view">
+        <field name="name">printer.machine.instance.view</field>
+        <field name="model">printer.machine.instance</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="categ_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_printer_machines_instance" model="ir.actions.act_window">
+        <field name="name">Impresoras</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">printer.machine.instance</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_action_printer_machines_instance" action="action_printer_machines_instance" name="Impresoras" parent="menu_cost_cfg" sequence="11"/>
 
 </odoo>

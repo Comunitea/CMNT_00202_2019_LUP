@@ -80,6 +80,7 @@ class CostSheet(models.Model):
     euros_cc = fields.Float('€/cc', compute='get_euros_cc_fdm')
 
     printer_id = fields.Many2one('printer.machine', 'Categoría Impresora')
+    printer_instance_id = fields.Many2one('printer.machine.instance', 'Impresora')
 
     # [ALL] COSTE MANO DE OBRA
     calc_material_id = fields.Many2one('product.product', 'Material FDM principal')
