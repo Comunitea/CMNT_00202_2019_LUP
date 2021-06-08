@@ -675,12 +675,12 @@ class CostSheet(models.Model):
         return
 
     @api.multi
-    def create_sale_productions(self):
+    def create_sale_productions(self, exist_product=False):
         design_sheets = self.filtered(lambda s: s.sheet_type == 'design')
         production_sheets = self - design_sheets
 
         if production_sheets:
-            production_sheets.create_productions()
+            production_sheets.create_productions(exist_product)
         return
 
     def manually_create_task_or_production(self):
@@ -690,6 +690,7 @@ class CostSheet(models.Model):
         """
         self.ensure_one()
         if self.production_id:
+            exist_product = self.production_id.product_id
             self.production_id.action_cancel()
             self.production_id.unlink()
 
@@ -699,7 +700,7 @@ class CostSheet(models.Model):
             # self.mapped('sale_id.project_id').unlink()
 
         self.create_tasks()
-        self.create_sale_productions()
+        self.create_sale_productions(exist_product)
 
     @api.multi
     def manually_add_consumes(self):
@@ -902,10 +903,18 @@ class CostSheet(models.Model):
             wo.write(vals)
         self.write({'production_id': prod.id})
 
-    def create_productions(self):
+    def create_productions(self, exist_product):
+        """
+        Para el caso de que una fabricación manual sea ejecutada hay que
+        respetar el producto que tenía la original, ya que este es el que está
+        como componente de la fabricación principal
+        """
         mrp_types = ['fdm', 'sls', 'poly', 'sla', 'sls2', 'dmls']
         for sheet in self.filtered(lambda sh: sh.sheet_type in mrp_types):
-            product = sheet.create_product_on_fly()
+            if exist_product:
+                product = exist_product
+            else:
+                product = sheet.create_product_on_fly()
             bom = sheet.create_bom_on_fly(product)
             vals = {
                 'sheet_id': sheet.id,
