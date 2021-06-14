@@ -1,7 +1,7 @@
 # © 2020 Comunitea
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from odoo.addons.component.core import Component
-from odoo.addons.connector.components.mapper import mapping
+from odoo.addons.connector.components.mapper import mapping, only_create
 
 
 class ProductCombinationMapper(Component):
@@ -46,3 +46,12 @@ class PrestashopProductCombinationOptionValue(Component):
     _name = 'prestashop.product.combination.option.value.batch.importer'
     _inherit = 'prestashop.delayed.batch.importer'
     _apply_on = 'prestashop.product.combination.option.value'
+
+
+class ProductCombinationOptionValueMapper(Component):
+    _inherit = 'prestashop.product.combination.option.value.mapper'
+
+    @only_create
+    @mapping
+    def odoo_id(self, record):
+        return {}
