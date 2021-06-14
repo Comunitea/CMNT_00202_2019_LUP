@@ -79,7 +79,7 @@ class IncidentReportWiz(models.TransientModel):
 
     production_fail_id = fields.Many2one(comodel_name='incident.production.fail',
         string='Production Fail',
-        required=True,
+        required=False,
         domain ="[('id', 'in', available_fails)]"
         )
     model_id = fields.Many2one(
