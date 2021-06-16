@@ -7,18 +7,17 @@ from odoo.addons.connector.components.mapper import mapping, only_create
 class ProductCombinationMapper(Component):
     _inherit = "prestashop.product.combination.mapper"
 
+    @only_create
     @mapping
-    def from_main_template(self, record):
+    def main_template_type(self, record):
         main_template = self.get_main_template_binding(record)
-        result = super().from_main_template(record)
         if (
             main_template
             and main_template.odoo_id["type"] == "virtual"
         ):
-            result["type"] = "service"
+            return {"type":  "service"}
         else:
-            result["type"] = "product"
-        return result
+            return {"type":  "product"}
 
     @mapping
     def weight(self, record):
