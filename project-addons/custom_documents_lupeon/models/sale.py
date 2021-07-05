@@ -24,8 +24,11 @@ class SaleOrderLine(models.Model):
     @api.multi
     @api.onchange('product_id')
     def product_id_change(self):
+        """
+        Cuando es producto CRP (los que se conmvierten en almacenables)
+        propago los fatos de la linea de venta asociada
+        """
         res = super().product_id_change()
-        import ipdb; ipdb.set_trace()
         if self.product_id and self.product_id.sale_line_id:
             self.report_tech = self.product_id.sale_line_id.report_tech
             self.report_material = self.product_id.sale_line_id.report_material
