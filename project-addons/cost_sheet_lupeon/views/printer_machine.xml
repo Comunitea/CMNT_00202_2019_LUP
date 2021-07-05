@@ -83,7 +83,7 @@
                     <group>
                         <field name="name"/>
                         <field name="categ_id"/>
-                        <field name="machine_hours"/>
+                        <field name="machine_hours" widget="float_time"/>
                         
                     </group>
                 </sheet>
@@ -98,7 +98,7 @@
             <tree>
                 <field name="name"/>
                 <field name="categ_id"/>
-                <field name="machine_hours"/>
+                <field name="machine_hours" widget="float_time"/>
             </tree>
         </field>
     </record>

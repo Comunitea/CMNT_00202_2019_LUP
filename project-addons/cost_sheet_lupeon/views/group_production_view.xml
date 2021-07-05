@@ -32,6 +32,7 @@
                         <field name="dosaje_sup"/>
                         <field name="dosaje_type"/>
                         <field name="desviation"/>
+                        <field name="printer_instance_id"/>
                     </group>
                     <group string="Órdenes de trabajo agrupadas">
                         <field name="register_ids" nolabel="1">

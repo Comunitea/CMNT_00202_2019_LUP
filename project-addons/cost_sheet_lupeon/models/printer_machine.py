@@ -81,13 +81,14 @@ class PrinterMachineInstance(models.Model):
 
     name = fields.Char('Name')
     categ_id = fields.Many2one('printer.machine', 'Categoría Impresora')
-    machine_hours = fields.Float('Horas máquina', compute="_get_machine_hours")
+    # machine_hours = fields.Float('Horas máquina', compute="_get_machine_hours")
+    machine_hours = fields.Float('Horas máquina')
 
-    def _get_machine_hours(self):
-        for p in self:
-            res = 0.0
-            domain = [('printer_instance_id', '=', p.id)]
-            sheets = self.env['cost.sheet'].search(domain)
-            if sheets:
-                res = sum([x.machine_hours for x in sheets])
-            p.machine_hours = res
+    # def _get_machine_hours(self):
+    #     for p in self:
+    #         res = 0.0
+    #         domain = [('printer_instance_id', '=', p.id)]
+    #         sheets = self.env['cost.sheet'].search(domain)
+    #         if sheets:
+    #             res = sum([x.machine_hours for x in sheets])
+    #         p.machine_hours = res

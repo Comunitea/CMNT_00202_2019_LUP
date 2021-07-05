@@ -418,4 +418,12 @@ class SaleOrderLine(models.Model):
 
     def duplicate_line(self):
         self.ensure_one()
-        self.with_context(from_copy=True).copy({'order_id': self.order_id.id})
+        new_line = self.with_context(from_copy=True).copy({'order_id': self.order_id.id})
+        c = self.company_id
+        new_line.group_sheet_id.write({
+            'sale_line_id': new_line.id,
+            'ing_hours': c.ing_hours,
+            'tech_hours': c.tech_hours,
+            'help_hours': c.help_hours,
+            'km_cost': c.km_cost,
+        })

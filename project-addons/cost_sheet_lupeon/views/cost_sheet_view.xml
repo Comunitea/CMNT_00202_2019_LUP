@@ -306,14 +306,14 @@
                             <div style="border-bottom: 1px solid black;"></div>
                             <group cospan="2" col="6" string="Parámetros impresión">
                                 <field name="printer_id" domain="[('type', '=', sheet_type)]" options="{'no_create_edit': True, 'no_quick_create': True}"/>
-                                <field name="printer_instance_id" domain="[('categ_id', '=', printer_id)]" options="{'no_create_edit': True, 'no_quick_create': True}"/>
+                                <!-- <field name="printer_instance_id" domain="[('categ_id', '=', printer_id)]" options="{'no_create_edit': True, 'no_quick_create': True}"/> -->
                                 <!-- <field name="perfil"/> -->
                                 <field name="perfil_id" attrs="{'required': [('sheet_type', '=', 'fdm')]}" domain="[('printer_id', '=', printer_id)]" options="{'no_create': True, 'no_create_edit':True}" />
                                 <field name="tray_units"/>
                                 <field name="loops"/>
                                 <field name="infill"/>
-                                <field name="tray_hours"/>
                                 <field name="layer_height" readonly="1" force_save="1"/>
+                                <field name="tray_hours"/>
                                 <field name="euro_machine" groups="cost_sheet_lupeon.group_cs_advanced"/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
@@ -329,7 +329,7 @@
                             <group></group>
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="2" col="6" string="Coste Máquina">
-                                <field name="machine_hours"/>
+                                <field name="machine_hours" widget="float_time"/>
                                 <field name="euro_machine_ud"  groups="cost_sheet_lupeon.group_cs_advanced"/>
                                 <field name="euro_machine_total"  groups="cost_sheet_lupeon.group_cs_advanced"/>
                             </group>
@@ -403,7 +403,7 @@
                              <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="2" col="6" string="Parámetros impresión">
                                 <field name="printer_id" options="{'no_create_edit': True, 'no_quick_create': True}"/>
-                                 <field name="printer_instance_id" domain="[('categ_id', '=', printer_id)]" options="{'no_create_edit': True, 'no_quick_create': True}"/>
+                                 <!-- <field name="printer_instance_id" domain="[('categ_id', '=', printer_id)]" options="{'no_create_edit': True, 'no_quick_create': True}"/> -->
                                 <field name="tray_units"/>
                                 <field name="print_increment" attrs="{'invisible': [('sheet_type', 'in', ['poly'])], 'readonly': [('can_edit', '!=', True)]}"/>
                                 <field name="tray_hours_sls"/>
@@ -427,7 +427,7 @@
                             <group></group>
                              <div style="border-bottom: 1px solid black;"></div>
                              <group colspan="2" col="6" string="Coste Máquina">
-                                <field name="machine_hours"/>
+                                <field name="machine_hours" widget="float_time"/>
                                 <field name="euro_machine_ud" groups="cost_sheet_lupeon.group_cs_advanced"/>
                                 <field name="euro_machine_total" groups="cost_sheet_lupeon.group_cs_advanced"/>
                             </group>
@@ -497,7 +497,7 @@
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="2" col="6" string="Parámetros impresión">
                                 <field name="printer_id" options="{'no_create_edit': True, 'no_quick_create': True}"/>
-                                <field name="printer_instance_id" domain="[('categ_id', '=', printer_id)]" options="{'no_create_edit': True, 'no_quick_create': True}"/>
+                                <!-- <field name="printer_instance_id" domain="[('categ_id', '=', printer_id)]" options="{'no_create_edit': True, 'no_quick_create': True}"/> -->
                                 <field name="tray_units"/>
                                 <field name="finish_pol"/>
                                 <field name="tray_hours"/>
@@ -514,7 +514,7 @@
                             <group></group>
                             <div style="border-bottom: 1px solid black;"></div>
                              <group colspan="2" col="6" string="Coste Máquina">
-                                <field name="machine_hours"/>
+                                <field name="machine_hours" widget="float_time"/>
                                 <field name="euro_machine_ud" groups="cost_sheet_lupeon.group_cs_advanced"/>
                                 <field name="euro_machine_total" groups="cost_sheet_lupeon.group_cs_advanced"/>
                             </group>
@@ -583,7 +583,7 @@
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="2" col="6" string="Parámetros impresión">
                                 <field name="printer_id" options="{'no_create_edit': True, 'no_quick_create': True}"/>
-                                <field name="printer_instance_id" options="{'no_create_edit': True, 'no_quick_create': True}" domain="[('categ_id', '=', printer_id)]"/>
+                                <!-- <field name="printer_instance_id" options="{'no_create_edit': True, 'no_quick_create': True}" domain="[('categ_id', '=', printer_id)]"/> -->
                                 <field name="tray_units"/>
                                 <field name="tray_hours"/>
                                 <field name="euro_machine" groups="cost_sheet_lupeon.group_cs_advanced"/>
@@ -599,7 +599,7 @@
                             <group></group>
                             <div style="border-bottom: 1px solid black;"></div>
                              <group colspan="2" col="6" string="Coste Máquina">
-                                <field name="machine_hours"/>
+                                <field name="machine_hours" widget="float_time"/>
                                 <field name="euro_machine_ud" groups="cost_sheet_lupeon.group_cs_advanced"/>
                                 <field name="euro_machine_total" groups="cost_sheet_lupeon.group_cs_advanced"/>
                             </group>
@@ -668,7 +668,7 @@
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="2" col="6" string="Parámetros impresión">
                                 <field name="printer_id" options="{'no_create_edit': True, 'no_quick_create': True}"/>
-                                <field name="printer_instance_id" domain="[('categ_id', '=', printer_id)]" options="{'no_create_edit': True, 'no_quick_create': True}"/>
+                                <!-- <field name="printer_instance_id" domain="[('categ_id', '=', printer_id)]" options="{'no_create_edit': True, 'no_quick_create': True}"/> -->
                                 <field name="tray_units"/>
                                 <field name="tray_hours"/>
                                 <field name="euro_machine" groups="cost_sheet_lupeon.group_cs_advanced"/>
@@ -684,7 +684,7 @@
                             <group></group>
                             <div style="border-bottom: 1px solid black;"></div>
                              <group colspan="2" col="6" string="Coste Máquina">
-                                <field name="machine_hours"/>
+                                <field name="machine_hours" widget="float_time"/>
                                 <field name="euro_machine_ud" groups="cost_sheet_lupeon.group_cs_advanced"/>
                                 <field name="euro_machine_total" groups="cost_sheet_lupeon.group_cs_advanced"/>
                             </group>
@@ -754,7 +754,7 @@
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="2" col="6" string="Parámetros impresión">
                                 <field name="printer_id" options="{'no_create_edit': True, 'no_quick_create': True}"/>
-                                <field name="printer_instance_id" domain="[('categ_id', '=', printer_id)]" options="{'no_create_edit': True, 'no_quick_create': True}"/>
+                                <!-- <field name="printer_instance_id" domain="[('categ_id', '=', printer_id)]" options="{'no_create_edit': True, 'no_quick_create': True}"/> -->
                                 <field name="tray_units"/>
                                 <field name="tray_hours"/>
                                 <field name="euro_machine" groups="cost_sheet_lupeon.group_cs_advanced"/>
@@ -773,7 +773,7 @@
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="2" col="6" string="Coste Máquina">
-                                <field name="machine_hours"/>
+                                <field name="machine_hours" widget="float_time"/>
                                 <field name="euro_machine_ud" groups="cost_sheet_lupeon.group_cs_advanced"/>
                                 <field name="euro_machine_total" groups="cost_sheet_lupeon.group_cs_advanced"/>
                             </group>
@@ -947,14 +947,14 @@
                             <div style="border-bottom: 1px solid black;"></div>
                             <group cospan="2" col="6" string="Parámetros impresión">
                                 <field name="printer_id" options="{'no_create_edit': True, 'no_quick_create': True}"/>
-                                 <field name="printer_instance_id" domain="[('categ_id', '=', printer_id)]" options="{'no_create_edit': True, 'no_quick_create': True}"/>
+                                 <!-- <field name="printer_instance_id" domain="[('categ_id', '=', printer_id)]" options="{'no_create_edit': True, 'no_quick_create': True}"/> -->
                                 <!-- <field name="perfil"/> -->
                                 <field name="perfil_id" attrs="{'required': [('sheet_type', '=', 'fdm')]}" domain="[('printer_id', '=', printer_id)]" options="{'no_create': True, 'no_create_edit':True}" />
                                 <field name="tray_units"/>
-                                <field name="tray_hours"/>
+                                <field name="layer_height" readonly="1" force_save="1"/>
                                 <field name="loops"/>
                                 <field name="infill"/>
-                                <field name="layer_height" readonly="1" force_save="1"/>
+                                <field name="tray_hours"/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
 
@@ -983,7 +983,7 @@
                              <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="2" col="6" string="Parámetros impresión">
                                 <field name="printer_id" options="{'no_create_edit': True, 'no_quick_create': True}"/>
-                                 <field name="printer_instance_id" domain="[('categ_id', '=', printer_id)]" options="{'no_create_edit': True, 'no_quick_create': True}"/>
+                                 <!-- <field name="printer_instance_id" domain="[('categ_id', '=', printer_id)]" options="{'no_create_edit': True, 'no_quick_create': True}"/> -->
                                 <field name="tray_units"/>
                                 <field name="print_increment" attrs="{'invisible': [('sheet_type', 'in', ['poly'])], 'readonly': [('can_edit', '!=', True)]}"/>
                                 <field name="tray_hours_sls"/>
@@ -1010,7 +1010,7 @@
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="2" col="6" string="Parámetros impresión">
                                 <field name="printer_id" options="{'no_create_edit': True, 'no_quick_create': True}"/>
-                                 <field name="printer_instance_id" domain="[('categ_id', '=', printer_id)]" options="{'no_create_edit': True, 'no_quick_create': True}"/>
+                                 <!-- <field name="printer_instance_id" domain="[('categ_id', '=', printer_id)]" options="{'no_create_edit': True, 'no_quick_create': True}"/> -->
                                 <field name="tray_units"/>
                                 <field name="finish_pol"/>
                                 <field name="tray_hours"/>
@@ -1034,7 +1034,7 @@
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="2" col="6" string="Parámetros impresión">
                                 <field name="printer_id" options="{'no_create_edit': True, 'no_quick_create': True}"/>
-                                 <field name="printer_instance_id" domain="[('categ_id', '=', printer_id)]" options="{'no_create_edit': True, 'no_quick_create': True}"/>
+                                 <!-- <field name="printer_instance_id" domain="[('categ_id', '=', printer_id)]" options="{'no_create_edit': True, 'no_quick_create': True}"/> -->
                                 <field name="tray_units"/>
                                 <field name="tray_hours"/>
                             </group>
@@ -1058,7 +1058,7 @@
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="2" col="6" string="Parámetros impresión">
                                 <field name="printer_id" options="{'no_create_edit': True, 'no_quick_create': True}"/>
-                                 <field name="printer_instance_id" domain="[('categ_id', '=', printer_id)]" options="{'no_create_edit': True, 'no_quick_create': True}"/>
+                                 <!-- <field name="printer_instance_id" domain="[('categ_id', '=', printer_id)]" options="{'no_create_edit': True, 'no_quick_create': True}"/> -->
                                 <field name="tray_units"/>
                                 <field name="tray_hours"/>
                             </group>
@@ -1084,7 +1084,7 @@
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="2" col="6" string="Parámetros impresión">
                                 <field name="printer_id" options="{'no_create_edit': True, 'no_quick_create': True}"/>
-                                <field name="printer_instance_id" domain="[('categ_id', '=', printer_id)]" options="{'no_create_edit': True, 'no_quick_create': True}"/>
+                                <!-- <field name="printer_instance_id" domain="[('categ_id', '=', printer_id)]" options="{'no_create_edit': True, 'no_quick_create': True}"/> -->
                                 <field name="tray_units"/>
                                 <field name="tray_hours"/>
                             </group>
