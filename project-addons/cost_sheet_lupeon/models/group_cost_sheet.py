@@ -193,7 +193,7 @@ class AssemblyCostLine(models.Model):
     def _get_time(self):
         for line in self:
             if line.group_id and line.group_id.sale_line_id:
-                line.time = line.line.group_id.sale_line_id.product_uom_qty * line.t1p
+                line.time = line.group_id.sale_line_id.product_uom_qty * line.t1p
 
     def _get_total(self):
         for line in self:
