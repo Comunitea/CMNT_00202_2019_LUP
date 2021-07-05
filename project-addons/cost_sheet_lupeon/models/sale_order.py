@@ -346,6 +346,8 @@ class SaleOrderLine(models.Model):
             'type': 'product',
             'lst_price': self.price_total,
             'group_sheet_id': self.group_sheet_id.id,
+            'sale_line_id': self.id,
+            'crp': True,
             'route_ids': [(6, 0, self.env.ref('mrp.route_warehouse0_manufacture').ids)],
         }
         product = self.env['product.product'].create(vals)

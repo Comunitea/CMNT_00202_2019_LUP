@@ -22,6 +22,19 @@ class SaleOrderLine(models.Model):
     model_image = fields.Binary('Model image')
 
     @api.multi
+    @api.onchange('product_id')
+    def product_id_change(self):
+        res = super().product_id_change()
+        import ipdb; ipdb.set_trace()
+        if self.product_id and self.product_id.sale_line_id:
+            self.report_tech = self.product_id.sale_line_id.report_tech
+            self.report_material = self.product_id.sale_line_id.report_material
+            self.report_finish = self.product_id.sale_line_id.report_finish
+            self.model_image = self.product_id.sale_line_id.model_image
+        return res
+
+
+    @api.multi
     def _prepare_invoice_line(self, qty):
         """
         Propagar campos a la factura

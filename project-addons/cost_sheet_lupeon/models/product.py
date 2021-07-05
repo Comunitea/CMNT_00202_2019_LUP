@@ -54,6 +54,9 @@ class ProductTemplate(models.Model):
 
     group_sheet_id = fields.Many2one(
         'group.cost.sheet', 'Grupo de costes reabastecimineto')
+    crp = fields.Boolean('Producto CRP')
+    sale_line_id = fields.Many2one(
+        'sale.order.line', 'Linea venta asociada')
 
     perfil_ids = fields.Many2many(
         'sheet.perfil', 'product_perfil_rel',
