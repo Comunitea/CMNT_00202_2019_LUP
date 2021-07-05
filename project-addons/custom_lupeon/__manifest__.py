@@ -18,6 +18,7 @@
         "static/src/xml/custom_info_widget.xml",
     ],
     "data": [
+        'security/groups.xml',
         'views/partner_view.xml',
         'views/sale_view.xml',
         'views/invoice_view.xml',

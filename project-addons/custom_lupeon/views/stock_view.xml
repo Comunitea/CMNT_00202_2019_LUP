@@ -17,13 +17,19 @@
      <record id="view_move_form_custom" model="ir.ui.view" >
         <field name="name">view_move_form_custom</field>
         <field name="model">stock.picking</field>
-        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="inherit_id" ref="stock_split_picking.view_picking_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='move_ids_without_package']/tree/field[@name='product_id']" position="after">
                 <field name="name"/>
             </xpath>
         </field>
     </record>
+
+    <!-- Modificaciones para permisos -->
+
+    
+
+
 
     <!-- stock.move inherit search view -->
     <record id="view_move_search_custom" model="ir.ui.view">
@@ -231,7 +237,7 @@
                     name="action_barcode_delivery"
                     class="oe_stat_button"
                     icon="fa-barcode"
-                    groups="base.group_user"
+                    groups="stock.group_stock_user"
                     string="Barcode"/>
             </div>
 
@@ -319,6 +325,24 @@
             action="action_stock_picking_cost"
             parent="stock.menu_stock_warehouse_mgmt"
             sequence="140" groups="sales_team.group_sale_salesman"/>
+
+
+    <record id="view_permissions" model="ir.ui.view" >
+        <field name="name">view_permissions</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <button name="%(stock_split_picking.action_stock_split_picking)s" position="attributes">
+                <attribute name="groups"></attribute>
+            </button>
+            <button name="action_cancel" position="attributes">
+                <attribute name="groups">custom_lupeon.group_cancel_picking</attribute>
+            </button>
+            <button name="button_scrap" position="attributes">
+                <attribute name="groups">stock.group_stock_user</attribute>
+            </button>
+        </field>
+    </record>
 
 
     <record id="view_inventory_validate_group" model="ir.ui.view">
