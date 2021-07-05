@@ -116,6 +116,7 @@
                             <tree create="1" editable="bottom">
                                 <field name="name"/>
                                 <field name="type" options="{'no_create_edit': True, 'no_quick_create': True}"/>
+                                <field name="t1p" widget="time"/>
                                 <field name="time"/>
                                 <field name="total"/>
                             </tree>
