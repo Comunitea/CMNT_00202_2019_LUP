@@ -1329,12 +1329,12 @@ class PurchaseCostLine(models.Model):
                         'message': 'El margen no puede ser menor de 15%'}
                 }
 
-    @api.model
-    def create(self, vals):
-        if not vals.get('qty'):
-            raise UserError(
-                _('Debes especificar la cantidad de otros consumos')) 
-        return super().create(vals)
+    # @api.model
+    # def create(self, vals):
+    #     if not vals.get('qty'):
+    #         raise UserError(
+    #             _('Debes especificar la cantidad de otros consumos')) 
+    #     return super().create(vals)
 
 
 class OppiCostLine(models.Model):
