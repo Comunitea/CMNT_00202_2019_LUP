@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="view_sale_warnings_form" model="ir.ui.view">
+        <field name="name">sale_warnings_form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <header position="after">
+                <div
+                    class="alert alert-warning"
+                    role="alert"
+                    attrs="{'invisible': [('warn', '!=', 'warning')]}"
+                    style="margin-bottom:0px;">
+                    <p>
+                        <i class="fa fa-info-circle" />
+                        &amp;nbsp;
+                        <span class="oe_inline" >
+                            <field name="warn" invisible="True" />
+                            <field name="warn_msg"/>
+                        </span>
+                    </p>
+                </div>
+                <div
+                    class="alert alert-danger"
+                    role="alert"
+                    attrs="{'invisible': [('warn', '!=', 'block')]}"
+                    style="margin-bottom:0px;">
+                    <p>
+                        <i class="fa fa-thumbs-down" />
+                        &amp;nbsp;
+                        <span class="oe_inline" >
+                            <field name="warn" invisible="True" />
+                            <field name="warn_msg"/>
+                        </span>
+                    </p>
+                </div>
+            </header>
+            
+        </field>
+    </record>
+
+    <record id="view_sale_warning_tree" model="ir.ui.view">
+        <field name="name">sale_warning_tree</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_tree"/>
+        <field name="arch" type="xml">
+            <field name="state" position="before">
+                <field name="warn" />
+            </field>
+        </field>
+    </record>
+
+    <record id="view_quotation_warning_tree" model="ir.ui.view">
+        <field name="name">quotation_warning_tree</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_quotation_tree"/>
+        <field name="arch" type="xml">
+            <field name="state" position="before">
+                <field name="warn" />
+            </field>
+        </field>
+    </record>
+
+</odoo>
