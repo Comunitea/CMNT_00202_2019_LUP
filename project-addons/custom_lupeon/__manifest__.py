@@ -18,10 +18,13 @@
         "static/src/xml/custom_info_widget.xml",
     ],
     "data": [
+        'wizard/question_cancel.xml',
         'views/partner_view.xml',
         'views/sale_view.xml',
         'views/invoice_view.xml',
         'views/stock_view.xml',
+        'views/mrp_production_view.xml',
+        # 'views/mrp_workorder_view.xml',
         'views/assets.xml',
         'views/payment_mode_view.xml',
         'views/report_facturae.xml',
