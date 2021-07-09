@@ -32,6 +32,7 @@
         'data/sheet_data.xml',
         'data/stock_data.xml',
         'views/sale_view.xml',
+        'views/payment_term_view.xml',
         'views/stock_location_view.xml',
         'views/cost_sheet_view.xml',
         'views/applicable_legislation_view.xml',

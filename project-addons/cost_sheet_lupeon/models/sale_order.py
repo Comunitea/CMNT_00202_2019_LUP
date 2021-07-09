@@ -247,12 +247,24 @@ class SaleOrder(models.Model):
         self._create_purchases(p_lines)
 
     @api.multi
+    def check_payment_mode_validate(self):
+        self.ensure_one()
+        if self.payment_term_id and self.env.user.has_group(
+                'cost_sheet_lupeon.group_order_payment_validate'):
+            if self.payment_term_id.check_order_validate:
+                raise UserError(_('El plazo de pago requiere permisos de \
+                                   administración para validar'))
+
+
+    @api.multi
     def action_confirm(self):
         """
         Check if order requires client_order_ref.
         Creation of product sheet ids
         """
         for order in self:
+            # Compruebo si puedo validar con el método de pago
+            order.check_payment_mode_validate()
             # Creo las tareas y producciones asociadas a cada hoja de costes
             sheet_lines = order.get_sheet_lines()
             sheet_lines.create_sale_productions()

@@ -1,6 +1,13 @@
 <?xml version="1.0"?>
 <odoo>
 
+    <!-- Este menú solo con manager -->
+    <menuitem id="mrp.menu_mrp_reporting"
+              name="Reporting"
+              parent="mrp.menu_mrp_root"
+              groups="mrp.group_mrp_manager"
+              sequence="25"/>
+
     <!-- ADD cost sheet and sale to project -->
     <record id="mrp_production_form_cost_sheet" model="ir.ui.view">
         <field name="name">mrp_production.form.cost.sheet</field>
