@@ -166,7 +166,8 @@
         <xpath expr="//table[@class='table table-sm o_main_table']/tbody/t[@t-foreach='o.invoice_line_ids']/tr/t[1]/td[3]" position="replace">
             <!-- Center Cell Qty -->
             <td class="text-center">
-                <span t-esc="int(line.quantity)"/>
+                <span t-if="line.quantity.is_integer()" t-esc="int(line.quantity)"/>
+                <span t-if="not line.quantity.is_integer()" t-esc="line.quantity"/>
                 <!-- <span t-field="line.uom_id"  groups="uom.group_uom"/> -->
             </td>
         </xpath>
