@@ -393,7 +393,7 @@ class SaleOrderLine(models.Model):
             vals = {
                 'sale_line_id': line.id,
                 # 'name': line.order_id.name + ' - ' + line.name,
-                'admin_fact': line.order_id.partner_id._get_admin_fact()
+                'admin_fact': line.order_id.admin_fact
             }
             line.group_sheet_id = self.env['group.cost.sheet'].create(vals)
         return

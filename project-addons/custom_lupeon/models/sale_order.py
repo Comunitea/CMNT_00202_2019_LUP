@@ -78,10 +78,16 @@ class SaleOrder(models.Model):
         for order in self:
             order.with_reserves = any(line.reserved > 0 for line in order.order_line)
 
-    @api.depends('partner_id')
+    @api.depends('partner_id', 'partner_invoice_id')
     def _compute_fa(self):
         for order in self:
-            order.admin_fact = order.partner_id._get_admin_fact()
+            admin_fact = 0
+            if order.partner_invoice_id and \
+                    order.partner_invoice_id.admin_fact:
+                admin_fact = order.partner_invoice_id._get_admin_fact()
+            else:
+                admin_fact = order.partner_id._get_admin_fact()
+            order.admin_fact = admin_fact
 
     @api.multi
     def print_quotation(self):
@@ -317,8 +323,13 @@ class SaleOrderLine(models.Model):
         Actualizar solo en compañía dativic
         """
         price = super()._get_display_price(product)
-        if self.order_id.partner_id._get_admin_fact() and \
-                self.order_id.company_id.id != 1:
+        admin_fact = 0
+        if self.order_id.partner_invoice_id.admin_fact:
+            admin_fact = self.order_id.partner_invoice_id.admin_fact
+        else:
+            admin_fact = self.order_id.partner_id._get_admin_fact()
+
+        if  admin_fact and self.order_id.company_id.id != 1:
             price_precision = self.env['decimal.precision'].precision_get(
             'Product Price')
             price = float_round(price * (1 + self.order_id.partner_id.\
