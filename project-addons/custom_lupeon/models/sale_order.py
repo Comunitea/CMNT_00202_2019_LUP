@@ -346,7 +346,15 @@ class SaleOrderLine(models.Model):
         for line in self:
             new_qty = line.virtual_available_at_date + line.qty_reserved
             line.virtual_available_at_date = new_qty
-    
+
+    def unlink(self):
+        for line in self:
+            if line.move_ids:
+                line.move_ids._action_cancel()
+                # line.move_ids._do_unreserve()
+                line.move_ids.unlink()
+        super().unlink()
+
 class SaleOrderState(models.Model):
     _inherit = "sale.order.state"
 
