@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <odoo>
-
+    <!-- Cambio altura de 52mm a 42 para sacar el barcode -->
     <template id="document_move_label">
         <style>
             .label-container {
                 position: relative;
                 width: 126mm;
-                height: 72mm;
+                height: 42mm;
                 border: 0px solid black;
                 padding: 2px;
                 font-size: 12px;
+            }
+            .label-barcode {
+                position: relative;
+                width: 126mm;
+                border: 0px solid black;
             }
             .square1{
                 text-align: center;
@@ -31,12 +36,12 @@
                 font-size: 12px;
                 line-height: 25px;
                 border: 0px solid black;
-                height: 52mm;
+                height: 42mm;
             }
              .square4{
                 text-align: center;
                 border: 0px solid black;
-                height: 52mm;
+                height: 42mm;
                 padding-top: 15px;
             }
             .label-row{
@@ -70,9 +75,16 @@
                 <strong>Material:  </strong><span style="margin-left: 3px" t-field="move.sale_line_id.report_material"/>
                 <br/>
                 <strong>Acabado:  </strong><span style="margin-left: 3px" t-field="move.sale_line_id.report_finish"/>
+                <!-- <br/> -->
+                <!-- <img t-if="move.product_id.default_code" t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', move.product_id.default_code, 600, 150)" style="width:100%;height:20%;"/> -->
             </div>
             <div class="col-4 square4">
                  <img t-if="move.sale_line_id and move.sale_line_id.model_image" t-att-src="image_data_uri(move.sale_line_id.model_image)" style="vertical-align:bottom;width:30mm;height:30mm"/>
+            </div>
+        </div>
+        <div class="row label-barcode">
+            <div class="col-12">
+                <img t-if="move.product_id.default_code" t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', move.product_id.default_code, 600, 150)" style="width:100%;height:20%;"/>
             </div>
         </div>
         
