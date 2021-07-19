@@ -10,32 +10,7 @@ _logger = logging.getLogger(__name__)
 class StockMoveLocationWizard(models.TransientModel):
     _inherit = "wiz.stock.move.location"
 
-    def move_without_pick(self):
-        strategy_id = self.destination_location_id.putaway_strategy_id
-        if not strategy_id:
-            raise UserError (_('%s no tiene estrategia de traslado'% self.destination_location_id.display_name))
-        ## Lista de artículos
-        product_ids = self.stock_move_location_line_ids.mapped('product_id')
-
-        ## Necesito borrar stoock_move_lines
-        domain = [('location_dest_id', '=', self.destination_location_id.id), 
-                  ('product_id', 'in', product_ids.ids), 
-                  ('state', 'in', ['confirmed', 'assigned', 'partially_available'])]
-
-        sml_ids = self.env['stock.move.line'].search(domain)
-        moves_to_reserve = sml_ids.mapped('move_id')
-        sml_ids.unlink()
-        for product in product_ids:
-            domain = [('product_id', '=', product.id), ('putaway_id', '=', strategy_id.id)]
-            p_id = self.env['stock.fixed.putaway.strat'].search(domain, limit=1)
-            if p_id:
-                domain = [('product_id', '=', product.id), 
-                          ('reserved_quantity', '=', 0), 
-                          ('location_id', '=', self.destination_location_id.id)]
-                self.env['stock.quant'].search(domain).write({'location_id': p_id.fixed_location_id.id})
-        moves_to_reserve._action_assign()
-        
-    """
+    
     def _get_group_quants(self):
         location_id = self.origin_location_id.id
         company = self.env['res.company']._company_default_get(
@@ -43,17 +18,16 @@ class StockMoveLocationWizard(models.TransientModel):
         )
         # Using sql as search_group doesn't support aggregation functions
         # leading to overhead in queries to DB
-        query = '
+        query = """
             SELECT product_id, lot_id, SUM(quantity)
             FROM stock_quant
             WHERE location_id = %s
             AND company_id = %s
             GROUP BY product_id, lot_id
             limit 250
-        '
+        """
         self.env.cr.execute(query, (location_id, company.id))
         return self.env.cr.dictfetchall()
-""" 
 class StockFixedPutawayStrat(models.Model):
 
     _inherit = "stock.fixed.putaway.strat"

@@ -15,6 +15,7 @@ class StockLocation(models.Model):
 
     loc_format = fields.Selection([('1', 'Pasillo'), ('2', 'Estantería'), ('3', 'Palet'), ('4', 'Armario')], string="Formato de ubicación")
     route_dir = fields.Boolean('Prioridad +/-', help="Si está marcado, la prioridad es positiva en las sububicaciones")
+    
 
     def get_putaway_strategy(self, product):
         ## Ralentiza muchisimo el action assign
@@ -28,24 +29,14 @@ class StockLocation(models.Model):
     def name_get(self):
         ret_list = []
         for location in self:
-            if location.loc_format == '4' and location.usage != 'view':
-                parent_location = location.location_id.location_id
-                if not parent_location:
-                    raise UserError(_('You have to set a parent location for this box (%s).'% location.location_id.name))
-                name = "%s - %s" % (parent_location.name, location.name)
-                ret_list.append((location.id, name))
-            elif location.loc_format in ['2', '3']:
-                name = location.name
-                ret_list.append((location.id, name))
-            else:
-                orig_location = location
-                name = location.name
-                while location.location_id and location.usage != 'view' and not location.loc_format:
-                    location = location.location_id
-                    if not name:
-                        raise UserError(_('You have to set a name for this location.'))
-                    name = location.name + "/" + name
-                ret_list.append((orig_location.id, name))
+            orig_location = location
+            name = location.name
+            while location.location_id and location.usage != 'view' and not location.loc_format:
+                location = location.location_id
+                if not name:
+                    raise UserError(_('You have to set a name for this location.'))
+                name = location.name + "/" + name
+            ret_list.append((orig_location.id, name))
         return ret_list
 
 
@@ -79,35 +70,32 @@ class StockLocation(models.Model):
             if loc_id.usage != 'view':
                 raise UserError("Solo tipo vista")
             tipo = loc_id.loc_format
-            if tipo == '1':
-                tipo == '4'
 
             posx = loc_id.posx
             posy_max = loc_id.posy
             posz_max = loc_id.posz
             rute_dir = loc_id.route_dir
-            name = loc_id.name
+
             for _posy in range(0, posy_max):
                 for _posz in range(0, posz_max):
                     posy = _posy +1
                     posz = _posz +1
                    
-                    if tipo in ['1','2'] : ## pasillo/estantería
+                    if tipo == '1': ## pasillo
+                        
                         loc_name = loc_id.name.upper().replace('D', '1').replace('E','2').replace('A','0') ## 1D es 11, 1E es 10
                         posx = '%02d'%int(loc_name)
-                        ## Esto es una mierda pero tienen distintas los nobres de lupeon y dativic
                         if lup:
                             name = '%s-%02d-%02d'%(loc_id.name, posy, posz)
                         else:
                             name = '%s-%02d-%d'%(loc_id.name, posy, posz)
                         rp = posy if rute_dir else 100-posy                    
                         removal_priority = loc_id.removal_priority * 100 + int(rp)
-                        
-                    elif tipo == '4': ## armario
+                    elif  tipo == '4': ## armario
                         loc_name = loc_id.name.upper().replace('BOX ', 'B')
                         name = '%s-%s-%02d'%(loc_name, letters[posy], posz)
-                        tipo = '4'
-                    elif tipo == '3': ## Palet
+                        
+                    elif  tipo == '3': ## Palet
                         loc_name = loc_id.name.upper().replace('PALET ', 'P')
                         name = '%s-%s-%02d'%(loc_name, letters[posy], posz)
 
@@ -123,20 +111,17 @@ class StockLocation(models.Model):
                     if new_loc_id:
                         new_loc_id = self.browse(new_loc_id.res_id)
                         ## Solo actualizo 
-                        """
-                        vals = {
+                        new_loc_id.write({
                             'name': name,
                             'removal_priority': removal_priority,
-                            'barcode': barcode}
-                        if False:
-                            new_loc_id.write(vals)
-                            """
+                            'barcode': barcode,
+                            'loc_format': loc_id.loc_format,
+                        })
                         _logger.info ("->Actualizo %s"%name)
-
                     else:
                         vals = {
                             'location_id': loc_id.id,
-                            'loc_format': tipo, ## '2', ## loc_id.loc_format
+                            'loc_format': loc_id.loc_format,
                             'usage': usage,
                             'name': name,
                             'barcode': barcode,

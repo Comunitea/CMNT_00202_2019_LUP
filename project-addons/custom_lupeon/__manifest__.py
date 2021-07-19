@@ -19,6 +19,7 @@
     ],
     "data": [
         'wizard/question_cancel.xml',
+        'security/groups.xml',
         'views/partner_view.xml',
         'views/sale_view.xml',
         'views/invoice_view.xml',

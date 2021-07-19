@@ -1,24 +1,23 @@
 # © 2020 Comunitea
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from odoo.addons.component.core import Component
-from odoo.addons.connector.components.mapper import mapping
+from odoo.addons.connector.components.mapper import mapping, only_create
 
 
 class ProductCombinationMapper(Component):
     _inherit = "prestashop.product.combination.mapper"
 
+    @only_create
     @mapping
-    def from_main_template(self, record):
+    def main_template_type(self, record):
         main_template = self.get_main_template_binding(record)
-        result = super().from_main_template(record)
         if (
             main_template
             and main_template.odoo_id["type"] == "virtual"
         ):
-            result["type"] = "service"
+            return {"type":  "service"}
         else:
-            result["type"] = "product"
-        return result
+            return {"type":  "product"}
 
     @mapping
     def weight(self, record):
@@ -46,3 +45,12 @@ class PrestashopProductCombinationOptionValue(Component):
     _name = 'prestashop.product.combination.option.value.batch.importer'
     _inherit = 'prestashop.delayed.batch.importer'
     _apply_on = 'prestashop.product.combination.option.value'
+
+
+class ProductCombinationOptionValueMapper(Component):
+    _inherit = 'prestashop.product.combination.option.value.mapper'
+
+    @only_create
+    @mapping
+    def odoo_id(self, record):
+        return {}
