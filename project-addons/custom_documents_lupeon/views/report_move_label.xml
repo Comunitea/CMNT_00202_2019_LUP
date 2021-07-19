@@ -68,7 +68,9 @@
                 <br/>
                 <strong>Referencia:  </strong><span style="margin-left: 3px" t-field="move.sale_line_id.ref"/>
                 <br/>
-                <strong>Unidades:  </strong><span style="margin-left: 3px" t-field="move.sale_line_id.product_uom_qty"/>
+                <!-- <strong>Unidades:  </strong><span style="margin-left: 3px" t-field="move.sale_line_id.product_uom_qty"/> -->
+                <!-- <strong>Unidades:  </strong><span style="margin-left: 3px" t-field="move.quantity_done"/> -->
+                <strong>Unidades:  </strong><span style="margin-left: 3px" t-field="move.product_uom_qty"/>
                 <br/>
                 <strong>Tecnología:  </strong><span style="margin-left: 3px" t-field="move.sale_line_id.report_tech"/>
                 <br/>
