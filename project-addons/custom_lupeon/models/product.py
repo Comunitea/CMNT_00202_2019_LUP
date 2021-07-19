@@ -17,6 +17,12 @@ class ProductProduct(models.Model):
 
     pop_up_info_date = fields.Char('Info date', compute='_compute_info_date')
 
+    def generate_auto_ean(self):
+        self.ensure_one()
+        if not self.barcode:
+            autoean = self.env['ir.sequence'].next_by_code('auto.ean')
+            self.barcode = autoean
+
     def _compute_info_date(self):
         for p in self:
             date_str = ''
