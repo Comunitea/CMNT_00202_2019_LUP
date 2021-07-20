@@ -234,9 +234,14 @@
     <template id="valued_report_picking" inherit_id="stock_picking_report_valued.valued_report_picking">
                  <!-- Hay que heredar en relaccion a la segunda plantilla, por lo queth2 es la columna descuento -->
         <xpath expr="//table[@t-if=&quot;o.move_line_ids and o.state==&apos;done&apos;&quot;]/thead/tr/t/th[2]" position="replace">
-                <th class="text-right" groups="sale.group_discount_per_so_line">
+                <th class="text-center" groups="sale.group_discount_per_so_line">
                     <strong> Disc. (%)</strong>
                 </th>     
+        </xpath>
+        <xpath expr="//table[@t-if=&quot;o.move_line_ids and o.state==&apos;done&apos;&quot;]/tbody/tr/t/td[2]" position="replace">
+                <td class="text-center" groups="sale.group_discount_per_so_line">
+                    <span t-field="move_line.sale_discount" /> %
+                </td>
         </xpath>
         <!-- Quitar impuestos -->
         <xpath expr="//table[@t-if=&quot;o.move_line_ids and o.state==&apos;done&apos;&quot;]/thead/tr/t/th[4]" position="replace">

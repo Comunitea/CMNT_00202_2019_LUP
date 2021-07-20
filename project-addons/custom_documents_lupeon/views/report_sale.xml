@@ -245,7 +245,7 @@
             </th>
         </xpath>
         <xpath expr="//table/tbody//td[@t-if='display_discount']" position="replace">
-            <td t-if="display_discount" class="text-right" groups="sale.group_discount_per_so_line">
+            <td t-if="display_discount" class="text-center" groups="sale.group_discount_per_so_line">
                 <span t-field="line.discount"/> %
             </td>
         </xpath>
