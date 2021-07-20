@@ -810,6 +810,7 @@ class CostSheet(models.Model):
                 'product_qty': line.get_bom_qty(),  # TODO review,
                 'product_uom_id': line.material_id.uom_id.id,
                 'operation_id': operation,
+                'pline_description': '',
             }
             res.append((0,0, vals))
 
@@ -821,8 +822,9 @@ class CostSheet(models.Model):
                 'product_qty': line.qty,
                 'product_uom_id': line.product_id.uom_id.id,
                 'operation_id': operation,
+                'pline_description': line.name,
             }
-            res.append((0,0, vals))
+            res.append((0, 0, vals))
         return res
 
     def get_routing_on_fly(self):

@@ -9,3 +9,12 @@ class MrpBom(models.Model):
     _inherit = 'mrp.bom'
 
     created_on_fly = fields.Boolean('Creado al vuelo')
+
+
+    
+
+class MrpBomLine(models.Model):
+
+    _inherit = 'mrp.bom.line'
+
+    pline_description = fields.Char('Description')

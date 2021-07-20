@@ -32,6 +32,9 @@
             <xpath expr="//header/button[@name='button_mark_done'][2]" position="replace">
                 <button name="button_mark_done" attrs="{'invisible': ['|', '|', ('check_to_done', '=', False), ('consumed_less_than_planned', '=', False), ('availability', '!=', 'assigned')]}" string="Mark as Done" type="object" class="oe_highlight" confirm="You have consumed less material than what was planned. Are you sure you want to close this MO?"/>
             </xpath> -->
+            <xpath expr="//field[@name='move_raw_ids']/tree/field[@name='product_id']" position="after">
+                <field name="pline_description"/>
+            </xpath>
 
             <field name="product_id" position="after">
                 <field name="sheet_id" context="{'form_view_ref': 'cost_sheet_lupeon.simple_cost_sheet_view_form'}"   attrs="{'invisible': [('company_id', '!=', 1)]}"/>

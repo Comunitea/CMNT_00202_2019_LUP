@@ -59,6 +59,16 @@ class MrpProduction(models.Model):
     # desviation = fields.Float('Desviastion (%)')
     # printer_instance_id = fields.Many2one('printer.machine.instance', 'Impresora')
 
+    def _get_raw_move_data(self, bom_line, line_data):
+        """
+        Propagar la descripción de las líneas de compra
+        """
+        res = super()._get_raw_move_data(bom_line, line_data)
+        if bom_line.pline_description:
+            res.update(pline_description=bom_line.pline_description)
+        return res
+
+
     def get_printed_qty(self):
         for prod in self:
             wo = prod.workorder_ids.filtered(lambda x: x.active_move_line_ids)
