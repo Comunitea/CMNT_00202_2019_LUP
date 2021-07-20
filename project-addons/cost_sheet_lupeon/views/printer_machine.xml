@@ -31,10 +31,10 @@
                     </group>
                     <notebook>
                         <page string="Perfiles">
-                            <field name="perfil_ids" nolabel="1"/>
+                            <field name="perfil_ids" nolabel="1" mode="tree"/>
                         </page>
                         <page string="Impresoras">
-                            <field name="printer_ids" nolabel="1">
+                            <field name="printer_ids" nolabel="1" mode="tree">
                                 <tree editable="bottom">
                                     <field name="name"/>
                                 </tree>

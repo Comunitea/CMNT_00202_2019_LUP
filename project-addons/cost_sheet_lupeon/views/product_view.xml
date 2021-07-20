@@ -72,7 +72,7 @@
                     </group>
                 </page>
                 <page string="Perfiles">
-                    <field name="perfil_ids" nolabel="1"/>
+                    <field name="perfil_ids" nolabel="1" mode="tree"/>
                 </page>
             </notebook>
             </field>

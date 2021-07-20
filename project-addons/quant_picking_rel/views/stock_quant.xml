@@ -22,11 +22,11 @@
                         name="action_view_stock_moves_reservations">
                     <div class="o_field_widget o_stat_info danger">
                         <span class="o_stat_value">
-                            <field name="quantity_reserved" widget="statinfo" nolabel="1" class="mr4"/>
+                            <field name="quantity_reserved" widget="statinfo" nolabel="1" mode="tree" class="mr4"/>
                             <span class="o_stat_text">Reservas</span>
                         </span>
                         <span class="o_stat_value">
-                            <field name="quantity_reserved_link" widget="statinfo" nolabel="1" class="mr4"/>
+                            <field name="quantity_reserved_link" widget="statinfo" nolabel="1" mode="tree" class="mr4"/>
                             <span class="o_stat_text">Movs</span>
                         </span>
                     </div>

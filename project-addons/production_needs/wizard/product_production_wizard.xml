@@ -13,7 +13,7 @@
         
                     <separator string="New Productions" colspan="4"/>
                     <group>
-                        <field name="line_ids" nolabel="1">
+                        <field name="line_ids" nolabel="1" mode="tree">
                             <tree string="Products" editable="top" delete="1" create="1">
                                 <field name="product_id"/>
                                 <field name="twelve_months_ago" force_save="1"/>

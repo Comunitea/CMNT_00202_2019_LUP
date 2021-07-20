@@ -17,7 +17,7 @@
                     </group>
                     <notebook>
                         <page string="Material">
-                            <field name="material_ids" nolabel="1"/>
+                            <field name="material_ids" nolabel="1" mode="tree"/>
                         </page>
                     </notebook>
                 </sheet>
