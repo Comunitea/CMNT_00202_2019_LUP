@@ -212,6 +212,21 @@ class CostSheet(models.Model):
 
     can_edit = fields.Boolean(compute='_compute_can_edit')
 
+    available_material_ids = fields.Many2many(
+        string="Perfiles disponibles",
+        comodel_name="product.product",
+        compute="_compute_available_materials",
+    )
+
+    @api.depends("perfil_id")
+    def _compute_available_materials(self):
+        for sh in self:
+            aval = []
+            if sh.perfil_id:
+                aval = sh.perfil_id.material_ids.\
+                    mapped('product_variant_ids')
+            sh.available_material_ids = aval
+
     def _compute_can_edit(self):
         for sh in self:
             sh.can_edit = sh.env.user.has_group(
@@ -501,6 +516,7 @@ class CostSheet(models.Model):
                 }
                 cost_lines.append((0, 0, vals))
             self.material_cost_ids = cost_lines
+        self.perfil_id = False
         return res
 
     @api.depends('price_total', 'cc_ud')
@@ -1014,35 +1030,6 @@ class MaterialCostLine(models.Model):
     dmls_cc_total = fields.Float('gr Total', compute='_compute_cost')
 
     can_edit = fields.Boolean(related='sheet_id.can_edit')
-
-    # @api.onchange('material_id')
-    # def onchange_material_id(self):
-    #     if self.material_id and self.sheet_id and \
-    #             self.sheet_id.printer_id and self.sheet_id == 'fdm':
-    #         if self.material_id.diameter != self.sheet_id.printer_id.diameter:
-    #             self.material_id = False
-    #             return {
-    #                 'warning': {
-    #                     'title': _('Error'),
-    #                     'message': 'El diametro no coincide conla impresora'},
-    #             }
-
-    available_material_ids = fields.Many2many(
-        string="Perfiles disponibles",
-        comodel_name="product.product",
-        compute="_compute_available_materials",
-    )
-
-    @api.depends("sheet_id.perfil_id")
-    def _compute_available_materials(self):
-        for line in self:
-            aval = []
-            if line.sheet_id.perfil_id:
-                aval = line.sheet_id.perfil_id.material_ids.\
-                    mapped('product_variant_ids')
-            line.available_material_ids = aval
-
-
 
     def get_sls_gr_tray(self):
         self.ensure_one()

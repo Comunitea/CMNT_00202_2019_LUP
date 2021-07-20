@@ -310,6 +310,7 @@
                                 <!-- <field name="printer_instance_id" domain="[('categ_id', '=', printer_id)]" options="{'no_create_edit': True, 'no_quick_create': True}"/> -->
                                 <!-- <field name="perfil"/> -->
                                 <field name="perfil_id" attrs="{'required': [('sheet_type', '=', 'fdm')]}" domain="[('printer_id', '=', printer_id)]" options="{'no_create': True, 'no_create_edit':True}" />
+                                <field name="available_material_ids" invisible="1" widget="many2many_tags"/>
                                 <field name="tray_units"/>
                                 <field name="loops"/>
                                 <field name="infill"/>
@@ -951,6 +952,7 @@
                                  <!-- <field name="printer_instance_id" domain="[('categ_id', '=', printer_id)]" options="{'no_create_edit': True, 'no_quick_create': True}"/> -->
                                 <!-- <field name="perfil"/> -->
                                 <field name="perfil_id" attrs="{'required': [('sheet_type', '=', 'fdm')]}" domain="[('printer_id', '=', printer_id)]" options="{'no_create': True, 'no_create_edit':True}" />
+                                <field name="available_material_ids" invisible="1" widget="many2many_tags"/>
                                 <field name="tray_units"/>
                                 <field name="layer_height" readonly="1" force_save="1"/>
                                 <field name="loops"/>
@@ -1157,8 +1159,7 @@
             <tree editable="bottom">
                 <field name="can_edit" invisible="1"/>
                 <field name="name"/>
-                <field name="available_material_ids" invisible="1"/>
-                <field name="material_id" domain="[('id', 'in', available_material_ids), ('is_material', '=', True), ('material_type', '=', parent.sheet_type), ('diameter', '=', diameter)]"/>
+                <field name="material_id" domain="[('id', 'in', parent.available_material_ids)]"/>
                 <!-- FDM FIELDS -->
                 <field name="diameter" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
                 <!-- <field name="color" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/> -->
@@ -1202,9 +1203,8 @@
             <tree editable="bottom">
                 <field name="can_edit" invisible="1"/>
                 <field name="name"/>
-                <field name="available_material_ids" invisible="1"/>
-                <field name="material_id" attrs="{'column_invisible': [('parent.sheet_type', '=', 'fdm')]}" domain="[('id', 'in', available_material_ids), ('is_material', '=', True), ('material_type', '=', parent.sheet_type)]"/>
-                    <field name="material_id2" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}" domain="[('id', 'in', available_material_ids), ('is_material', '=', True), ('material_type', '=', parent.sheet_type), ('diameter', '=', diameter)]"/>
+                <field name="material_id" attrs="{'column_invisible': [('parent.sheet_type', '=', 'fdm')]}" domain="[('id', 'in', parent.available_material_ids)]"/>
+                    <field name="material_id2" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}" domain="[('id', 'in', parent.available_material_ids)]"/>
                 <!-- FDM FIELDS -->
                 <field name="diameter" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
                 <!-- <field name="color" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/> -->
@@ -1250,9 +1250,8 @@
                     <field name="can_edit" invisible="1"/>
                     <field name="name"/>
                     <field name="name"/>
-                    <field name="available_material_ids" invisible="0"/>
-                    <field name="material_id" options="{'no_create_edit': True, 'no_quick_create': True}" attrs="{'column_invisible': [('parent.sheet_type', '=', 'fdm')]}" domain="[('id', 'in', available_material_ids), ('is_material', '=', True), ('material_type', '=', parent.sheet_type)]"/>
-                    <field name="material_id2" options="{'no_create_edit': True, 'no_quick_create': True}" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}" domain="[('id', 'in', available_material_ids), ('is_material', '=', True), ('material_type', '=', parent.sheet_type), ('diameter', '=', diameter)]"/>
+                    <field name="material_id" options="{'no_create_edit': True, 'no_quick_create': True}" attrs="{'column_invisible': [('parent.sheet_type', '=', 'fdm')]}" domain="[('id', 'in', parent.available_material_ids)]"/>
+                    <field name="material_id2" options="{'no_create_edit': True, 'no_quick_create': True}" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}" domain="[('id', 'in', parent.available_material_ids)]"/>
                     <!-- FDM FIELDS -->
                     <field name="diameter" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
                     <!-- <field name="color" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/> -->
