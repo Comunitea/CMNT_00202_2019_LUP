@@ -37,7 +37,7 @@ class RegisterWorkorderWizard(models.TransientModel):
     #     ('off', 'Off'),
     #     ], 'Tipo de dosaje')
     # desviation = fields.Float('Desviastion (%)')
-    # printer_instance_id = fields.Many2one('printer.machine.instance', 'Impresora')
+    printer_instance_id = fields.Many2one('printer.machine.instance', 'Impresora')
 
     def confirm(self):
         wo = self.env['mrp.workorder'].browse(self._context.get('active_id'))
@@ -54,8 +54,8 @@ class RegisterWorkorderWizard(models.TransientModel):
         self.env['machine.time'].create(vals)
 
         # Escribo las horas máquina
-        # mh = self.printer_instance_id.machine_hours
-        # self.printer_instance_id.machine_hours = mh + self.machine_hours
+        mh = self.printer_instance_id.machine_hours
+        self.printer_instance_id.machine_hours = mh + self.machine_hours
 
         # if not self.density:
         #     raise UserError('Es necesario indicar el campo Densidad')
@@ -68,16 +68,15 @@ class RegisterWorkorderWizard(models.TransientModel):
         # if not self.desviation:
         #     raise UserError('Es necesario indicar el campos Desviación')
 
-
-        # wo.production_id.write({
-        #     'density': self.density,
-        #     'bucket_height_sls': self.bucket_height_sls,
-        #     'dosaje_inf': self.dosaje_inf,
-        #     'dosaje_sup': self.dosaje_sup,
-        #     'dosaje_type': self.dosaje_type,
-        #     'desviation': self.desviation,
-        #     'printer_instance_id': self.printer_instance_id.id
-        # })
+        wo.production_id.write({
+            # 'density': self.density,
+            # 'bucket_height_sls': self.bucket_height_sls,
+            # 'dosaje_inf': self.dosaje_inf,
+            # 'dosaje_sup': self.dosaje_sup,
+            # 'dosaje_type': self.dosaje_type,
+            # 'desviation': self.desviation,
+            'printer_instance_id': self.printer_instance_id.id
+        })
 
         # Write consumes on workorrder
         for line in self.consume_ids:

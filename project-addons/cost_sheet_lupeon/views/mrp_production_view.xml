@@ -67,17 +67,17 @@
                         </field>
                     </group>
                 </page>
-                <!-- <page string="Info">
+                <page string="Info">
                     <group string="Info">
-                        <field name="density" readonly="1"/>
+                        <!-- <field name="density" readonly="1"/>
                         <field name="bucket_height_sls" readonly="1"/>
                         <field name="dosaje_inf" readonly="1"/>
                         <field name="dosaje_sup" readonly="1"/>
                         <field name="dosaje_type" readonly="1"/>
-                        <field name="desviation" readonly="1"/>
+                        <field name="desviation" readonly="1"/> -->
                         <field name="printer_instance_id" readonly="1"/>
                     </group>
-                </page> -->
+                </page>
             </notebook>
             
         </field>

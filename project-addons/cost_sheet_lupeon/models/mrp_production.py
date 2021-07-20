@@ -57,7 +57,7 @@ class MrpProduction(models.Model):
     #     ('off', 'Off'),
     #     ], 'Tipo de dosaje')
     # desviation = fields.Float('Desviastion (%)')
-    # printer_instance_id = fields.Many2one('printer.machine.instance', 'Impresora')
+    printer_instance_id = fields.Many2one('printer.machine.instance', 'Impresora')
 
     def _get_raw_move_data(self, bom_line, line_data):
         """
