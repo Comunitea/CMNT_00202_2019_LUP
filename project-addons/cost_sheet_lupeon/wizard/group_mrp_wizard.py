@@ -19,7 +19,8 @@ class GroupMrpWizard(models.TransientModel):
                     _('No puedes agrupar distintos tipos de hojas'))
 
         group = self.env['group.production'].create({
-            'name': self.name
+            'name': self.name,
+            'sheet_type': sheet_type_ref
         })
 
         for prod in production_ids:

@@ -3,6 +3,18 @@ from odoo import api, fields, models, _
 from odoo.exceptions import UserError
 from datetime import datetime, timedelta
 
+SHEET_TYPES = [
+    ('design', 'Design'),
+    ('fdm', 'FDM'),
+    ('sls', 'SLS P396'),  # Renombrado
+    ('poly', 'Poly'),
+    ('sla', 'SLA'),
+    ('sls2', 'SLS'),  # Copia de sla, nuevo SLS
+    ('dmls', 'DMLS'),
+    ('unplanned', 'Imprevistos'),
+    ('meets', 'Reuniones'),
+    ('purchase', 'Compras'),
+]
 
 class RegistergroupWizard(models.TransientModel):
     _name = 'register.group.wizard'
@@ -13,9 +25,9 @@ class RegistergroupWizard(models.TransientModel):
         gp = self.env['group.production'].browse(
             self._context.get('active_id'))
         res = super().default_get(default_fields)
-
         res['consume_ids'] = []
         res['qty_done_ids'] = []
+        res['sheet_type'] = gp.sheet_type
 
         # Load qty
         # for wo in gp.workorder_ids:
@@ -45,6 +57,7 @@ class RegistergroupWizard(models.TransientModel):
         return res
 
     machine_hours = fields.Float('Horas máquina')
+    sheet_type = fields.Selection(SHEET_TYPES, 'Tipo de hoja')
     user_hours = fields.Float('Horas técnico')
     final_lot = fields.Char('Lote final')
     qty_done_ids = fields.One2many(
@@ -77,16 +90,17 @@ class RegistergroupWizard(models.TransientModel):
         if not self.final_lot:
             raise UserError('Es necesario indicar el lote final')
 
-        if not self.density:
-            raise UserError('Es necesario indicar el campo Densidad')
-        if not self.bucket_height_sls:
-            raise UserError('Es necesario indicar el campo Altura cubeta')
-        if not self.dosaje_inf:
-            raise UserError('Es necesario indicar el campo Dosaje rango inferior')
-        if not self.dosaje_inf:
-            raise UserError('Es necesario indicar el campo Dosaje rango superior')
-        if not self.desviation:
-            raise UserError('Es necesario indicar el campos Desviación')
+        if gp.sheet_type != 'fdm':
+            if not self.density:
+                raise UserError('Es necesario indicar el campo Densidad')
+            if not self.bucket_height_sls:
+                raise UserError('Es necesario indicar el campo Altura cubeta')
+            if not self.dosaje_inf:
+                raise UserError('Es necesario indicar el campo Dosaje rango inferior')
+            if not self.dosaje_sup:
+                raise UserError('Es necesario indicar el campo Dosaje rango superior')
+            if not self.desviation:
+                raise UserError('Es necesario indicar el campos Desviación')
 
         for consume in self.consume_ids:
             if not consume.lot_id:

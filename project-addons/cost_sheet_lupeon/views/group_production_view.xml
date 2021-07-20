@@ -24,6 +24,7 @@
                         <field name="create_date"/>
                         <field name="total_time" widget="float_time"/>
                         <field name="final_lot"/>
+                        <field name="sheet_type" readonly="1"/>
                     </group>
                     <group>
                         <field name="density"/>

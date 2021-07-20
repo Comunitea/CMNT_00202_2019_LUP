@@ -6,12 +6,26 @@ from odoo.exceptions import UserError
 from datetime import timedelta
 
 
+SHEET_TYPES = [
+    ('design', 'Design'),
+    ('fdm', 'FDM'),
+    ('sls', 'SLS P396'),  # Renombrado
+    ('poly', 'Poly'),
+    ('sla', 'SLA'),
+    ('sls2', 'SLS'),  # Copia de sla, nuevo SLS
+    ('dmls', 'DMLS'),
+    ('unplanned', 'Imprevistos'),
+    ('meets', 'Reuniones'),
+    ('purchase', 'Compras'),
+]
+
 class GroupProduction(models.Model):
 
     _name = "group.production"
     _description = "Group Production"
 
     name = fields.Char('Name')
+    sheet_type = fields.Selection(SHEET_TYPES, 'Tipo de hoja')
     note = fields.Text('Notas')
 
     workorder_ids = fields.One2many(
