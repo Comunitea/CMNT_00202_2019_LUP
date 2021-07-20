@@ -27,17 +27,17 @@ class RegisterWorkorderWizard(models.TransientModel):
     machine_hours = fields.Float('Horas máquina')
     consume_ids = fields.One2many('consume.line', 'wzd_id', 'Consumos')
 
-    density = fields.Float('Density (%)')
-    bucket_height_sls = fields.Float('Altura cubeta (cm)')
-    dosaje_inf = fields.Float('Dosaje rango inferior (%) ')
-    dosaje_sup = fields.Float('Dosaje rango inferior (%) ')
-    dosaje_type = fields.Selection([
-        ('sequencial', 'Sequencial'),
-        ('permanent', 'Permanenete'),
-        ('off', 'Off'),
-        ], 'Tipo de dosaje')
-    desviation = fields.Float('Desviastion (%)')
-    printer_instance_id = fields.Many2one('printer.machine.instance', 'Impresora')
+    # density = fields.Float('Density (%)')
+    # bucket_height_sls = fields.Float('Altura cubeta (cm)')
+    # dosaje_inf = fields.Float('Dosaje rango inferior (%) ')
+    # dosaje_sup = fields.Float('Dosaje rango inferior (%) ')
+    # dosaje_type = fields.Selection([
+    #     ('sequencial', 'Sequencial'),
+    #     ('permanent', 'Permanenete'),
+    #     ('off', 'Off'),
+    #     ], 'Tipo de dosaje')
+    # desviation = fields.Float('Desviastion (%)')
+    # printer_instance_id = fields.Many2one('printer.machine.instance', 'Impresora')
 
     def confirm(self):
         wo = self.env['mrp.workorder'].browse(self._context.get('active_id'))
@@ -54,30 +54,30 @@ class RegisterWorkorderWizard(models.TransientModel):
         self.env['machine.time'].create(vals)
 
         # Escribo las horas máquina
-        mh = self.printer_instance_id.machine_hours
-        self.printer_instance_id.machine_hours = mh + self.machine_hours
+        # mh = self.printer_instance_id.machine_hours
+        # self.printer_instance_id.machine_hours = mh + self.machine_hours
 
-        if not self.density:
-            raise UserError('Es necesario indicar el campo Densidad')
-        if not self.bucket_height_sls:
-            raise UserError('Es necesario indicar el campo Altura cubeta')
-        if not self.dosaje_inf:
-            raise UserError('Es necesario indicar el campo Dosaje rango inferior')
-        if not self.dosaje_inf:
-            raise UserError('Es necesario indicar el campo Dosaje rango superior')
-        if not self.desviation:
-            raise UserError('Es necesario indicar el campos Desviación')
+        # if not self.density:
+        #     raise UserError('Es necesario indicar el campo Densidad')
+        # if not self.bucket_height_sls:
+        #     raise UserError('Es necesario indicar el campo Altura cubeta')
+        # if not self.dosaje_inf:
+        #     raise UserError('Es necesario indicar el campo Dosaje rango inferior')
+        # if not self.dosaje_inf:
+        #     raise UserError('Es necesario indicar el campo Dosaje rango superior')
+        # if not self.desviation:
+        #     raise UserError('Es necesario indicar el campos Desviación')
 
 
-        wo.production_id.write({
-            'density': self.density,
-            'bucket_height_sls': self.bucket_height_sls,
-            'dosaje_inf': self.dosaje_inf,
-            'dosaje_sup': self.dosaje_sup,
-            'dosaje_type': self.dosaje_type,
-            'desviation': self.desviation,
-            'printer_instance_id': self.printer_instance_id.id
-        })
+        # wo.production_id.write({
+        #     'density': self.density,
+        #     'bucket_height_sls': self.bucket_height_sls,
+        #     'dosaje_inf': self.dosaje_inf,
+        #     'dosaje_sup': self.dosaje_sup,
+        #     'dosaje_type': self.dosaje_type,
+        #     'desviation': self.desviation,
+        #     'printer_instance_id': self.printer_instance_id.id
+        # })
 
         # Write consumes on workorrder
         for line in self.consume_ids:
