@@ -34,6 +34,7 @@ class SaleOrderLine(models.Model):
             self.report_material = self.product_id.sale_line_id.report_material
             self.report_finish = self.product_id.sale_line_id.report_finish
             self.model_image = self.product_id.sale_line_id.model_image
+            self.ref = self.product_id.sale_line_id.ref
         return res
 
 
