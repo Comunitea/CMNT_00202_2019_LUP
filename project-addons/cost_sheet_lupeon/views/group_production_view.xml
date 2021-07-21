@@ -27,12 +27,12 @@
                         <field name="sheet_type" readonly="1"/>
                     </group>
                     <group>
-                        <field name="density" attrs="{'invisible': [('sheet_type', '!=', 'fdm')]}"/>
-                        <field name="bucket_height_sls" attrs="{'invisible': [('sheet_type', '!=', 'fdm')]}"/>
-                        <field name="dosaje_inf" attrs="{'invisible': [('sheet_type', '!=', 'fdm')]}"/>
-                        <field name="dosaje_sup" attrs="{'invisible': [('sheet_type', '!=', 'fdm')]}"/>
-                        <field name="dosaje_type" attrs="{'invisible': [('sheet_type', '!=', 'fdm')]}"/>
-                        <field name="desviation" attrs="{'invisible': [('sheet_type', '!=', 'fdm')]}"/>
+                        <field name="density" attrs="{'invisible': [('sheet_type', '!=', 'sls')]}"/>
+                        <field name="bucket_height_sls" attrs="{'invisible': [('sheet_type', '!=', 'sls')]}"/>
+                        <field name="dosaje_inf" attrs="{'invisible': [('sheet_type', '!=', 'sls')]}"/>
+                        <field name="dosaje_sup" attrs="{'invisible': [('sheet_type', '!=', 'sls')]}"/>
+                        <field name="dosaje_type" attrs="{'invisible': [('sheet_type', '!=', 'sls')]}"/>
+                        <field name="desviation" attrs="{'invisible': [('sheet_type', '!=', 'sls')]}"/>
                         <field name="printer_instance_id"/>
                     </group>
                     <group string="Órdenes de trabajo agrupadas">
