@@ -57,7 +57,7 @@ class GroupProduction(models.Model):
     density = fields.Float('Density (%)')
     bucket_height_sls = fields.Float('Altura cubeta (cm)')
     dosaje_inf = fields.Float('Dosaje rango inferior (%) ')
-    dosaje_sup = fields.Float('Dosaje rango inferior (%) ')
+    dosaje_sup = fields.Float('Dosaje rango superior (%) ')
     dosaje_type = fields.Selection([
         ('sequencial', 'Sequencial'),
         ('permanent', 'Permanenete'),

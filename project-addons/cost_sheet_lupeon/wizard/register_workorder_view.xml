@@ -13,13 +13,6 @@
                             <field name="qty" required="1"/>
                             <field name="machine_hours" widget="float_time" attrs="{'invisible': [('consume_ids', '=', [])]}"/>
                         </group>
-                        <group>
-                            <!-- <field name="density" required="1"/>
-                            <field name="bucket_height_sls" required="1"/>
-                            <field name="dosaje_inf" required="1"/>
-                            <field name="dosaje_sup" required="1"/>
-                            <field name="dosaje_type" required="1"/>
-                            <field name="desviation" required="1"/> -->
                             <field name="printer_instance_id" required="1"/>
                         </group>
                         <group string="Consumos" attrs="{'invisible': [('consume_ids', '=', [])]}">

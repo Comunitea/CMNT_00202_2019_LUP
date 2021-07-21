@@ -90,7 +90,7 @@ class RegistergroupWizard(models.TransientModel):
         if not self.final_lot:
             raise UserError('Es necesario indicar el lote final')
 
-        if gp.sheet_type != 'fdm':
+        if gp.sheet_type == 'fdm':
             if not self.density:
                 raise UserError('Es necesario indicar el campo Densidad')
             if not self.bucket_height_sls:

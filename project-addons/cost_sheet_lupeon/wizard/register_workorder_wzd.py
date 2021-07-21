@@ -57,24 +57,7 @@ class RegisterWorkorderWizard(models.TransientModel):
         mh = self.printer_instance_id.machine_hours
         self.printer_instance_id.machine_hours = mh + self.machine_hours
 
-        # if not self.density:
-        #     raise UserError('Es necesario indicar el campo Densidad')
-        # if not self.bucket_height_sls:
-        #     raise UserError('Es necesario indicar el campo Altura cubeta')
-        # if not self.dosaje_inf:
-        #     raise UserError('Es necesario indicar el campo Dosaje rango inferior')
-        # if not self.dosaje_inf:
-        #     raise UserError('Es necesario indicar el campo Dosaje rango superior')
-        # if not self.desviation:
-        #     raise UserError('Es necesario indicar el campos Desviación')
-
         wo.production_id.write({
-            # 'density': self.density,
-            # 'bucket_height_sls': self.bucket_height_sls,
-            # 'dosaje_inf': self.dosaje_inf,
-            # 'dosaje_sup': self.dosaje_sup,
-            # 'dosaje_type': self.dosaje_type,
-            # 'desviation': self.desviation,
             'printer_instance_id': self.printer_instance_id.id
         })
 
