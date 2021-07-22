@@ -101,12 +101,12 @@ class SaleOrder(models.Model):
             order.count_task = \
                 len(
                     order.get_sheet_lines().
-                    mapped('time_line_ids.task_id').filtered('active')) + \
+                    mapped('time_line_ids.task_id')) + \
                 len(
                     order.get_sheet_lines().
-                    mapped('oppi_line_ids.task_id').filtered('active')) + \
+                    mapped('oppi_line_ids.task_id')) + \
                 len(
-                    order.get_sheet_lines().mapped('meet_line_ids.task_id').filtered('active'))
+                    order.get_sheet_lines().mapped('meet_line_ids.task_id'))
 
     @api.multi
     def view_purchases(self):
