@@ -12,5 +12,8 @@
     "data": [
         'views/assets.xml',
     ],
+    'qweb': [
+        "static/src/xml/qweb_templates.xml",
+    ],
     'installable': True,
 }

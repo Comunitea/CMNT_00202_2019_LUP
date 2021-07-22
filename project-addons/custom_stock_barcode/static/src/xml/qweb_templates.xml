@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="stock_barcode_summary_template">
+        <div class="o_barcode_page_summary" t-if="mode !== 'no_multi_locations'">
+            <div class="o_barcode_product_line d-flex justify-content-between align-items-center">
+                <span t-if="model == 'stock.picking'" class="o_barcode_locations">
+                    <div class="d-inline-block font-weight-bold text-right">
+                        <span t-if="mode !== 'receipt'" class="o_barcode_location_label">From: </span> <span t-if="mode !== 'receipt'" class="o_barcode_summary_location_src" t-esc="locationParent"/>/<span t-if="mode !== 'receipt'" class="o_barcode_summary_location_src" t-esc="locationName"/> <strong t-if="mode !== 'receipt'">P: </strong><span t-if="mode !== 'receipt'" class="o_barcode_summary_location_src" t-esc="locationPosx"/> <strong t-if="mode !== 'receipt'">E: </strong><span t-if="mode !== 'receipt'" class="o_barcode_summary_location_src" t-esc="locationPosy"/> <strong t-if="mode !== 'receipt'">A: </strong><span t-if="mode !== 'receipt'" class="o_barcode_summary_location_src" t-esc="locationPosz"/>
+                        <span t-if="mode !== 'delivery'" class="o_barcode_location_label">To: </span> <span t-if="mode !== 'delivery'" class="o_barcode_summary_location_dest" t-esc="locationDestParent"/>/<span t-if="mode !== 'delivery'" class="o_barcode_summary_location_dest" t-esc="locationDestName"/>  <strong t-if="mode !== 'delivery'" >P: </strong><span t-if="mode !== 'delivery'" class="o_barcode_summary_location_src" t-esc="locationDestPosx"/> <strong t-if="mode !== 'delivery'" >E: </strong><span t-if="mode !== 'delivery'" class="o_barcode_summary_location_src" t-esc="locationDestPosy"/> <strong t-if="mode !== 'delivery'" >A: </strong><span t-if="mode !== 'delivery'" class="o_barcode_summary_location_src" t-esc="locationDestPosz"/>
+                    </div>
+                </span>
+                <span t-if="model == 'stock.inventory'" class="o_barcode_locations">
+                    <span class="o_barcode_summary_location_src"><t t-esc="locationParent"/>/<t t-esc="locationName"/></span>
+                </span>
+                <t t-if="nbPages">
+                    <span class="o_barcode_move_number font-weight-bold"><t t-esc="pageIndex"></t>/<t t-esc="nbPages"></t></span>
+                </t>
+            </div>
+        </div>
+    </t>
+
+</templates>
