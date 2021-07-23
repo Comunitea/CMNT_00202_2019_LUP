@@ -84,8 +84,8 @@
 
     <menuitem id="menu_maintance" name="Mantenimiento" sequence="31" groups="group_maintance"/>
 
-    <menuitem id="menu_printer_maintances" action="action_printer_maintances"  name="Printer Maintance" parent="menu_maintance" sequence="0" groups="group_maintance"/>
+    <menuitem id="menu_printer_maintances" action="action_printer_maintances"  name="Impresoras" parent="menu_maintance" sequence="0" groups="group_maintance"/>
 
-    <menuitem id="menu_action_printer_maintances" action="action_printer_maintances"  name="Printer Maintance" parent="menu_printer_maintances" sequence="0" groups="group_maintance"/>
+    <menuitem id="menu_action_printer_maintances" action="action_printer_maintances"  name="Mantenimiento impresoras" parent="menu_printer_maintances" sequence="0" groups="group_maintance"/>
 
 </odoo>
