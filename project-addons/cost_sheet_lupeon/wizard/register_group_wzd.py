@@ -28,6 +28,7 @@ class RegistergroupWizard(models.TransientModel):
         res['consume_ids'] = []
         res['qty_done_ids'] = []
         res['sheet_type'] = gp.sheet_type
+        res['printer_id'] = gp.printer_id.id
 
         # Load qty
         # for wo in gp.workorder_ids:
@@ -75,6 +76,7 @@ class RegistergroupWizard(models.TransientModel):
         ('off', 'Off'),
         ], 'Tipo de dosaje')
     desviation = fields.Float('Desviación (%)')
+    printer_id = fields.Many2one('printer.machine', 'Categoría Impresora')
     printer_instance_id = fields.Many2one('printer.machine.instance', 'Impresora')
 
     def confirm(self):
@@ -208,8 +210,9 @@ class RegistergroupWizard(models.TransientModel):
         })
 
         # Escribo las horas máquina
-        mh = self.printer_instance_id.machine_hours
-        self.printer_instance_id.machine_hours = mh + self.machine_hours
+        self.printer_instance_id.update_hours(self.machine_hours)
+        # mh = self.printer_instance_id.machine_hours
+        # self.printer_instance_id.machine_hours = mh + self.machine_hours
         # Actualizo consumos
         for consume in self.consume_ids:
             consume.group_line_id.write({

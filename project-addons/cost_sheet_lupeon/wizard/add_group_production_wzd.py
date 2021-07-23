@@ -36,6 +36,7 @@ class AddGroupProductionWzd(models.TransientModel):
         return res
 
     sheet_type_ref = fields.Selection(SHEET_TYPES, 'Tipo de hoja')
+    printer_id_ref = fields.Many2one('printer.machine', 'Categoría Impresora')
     production_ids = fields.Many2many('mrp.production')
 
     def confirm(self):
@@ -45,11 +46,15 @@ class AddGroupProductionWzd(models.TransientModel):
         production_ids = self.production_ids
         # sheet_type_ref = group.register_ids[0].production_id.sheet_type
         sheet_type_ref = self.sheet_type_ref
+        printer_id_ref = self.printer_id_ref
 
         for mrp in production_ids:
             if mrp.sheet_type != sheet_type_ref:
                 raise UserError(
                     _('No puedes agrupar distintos tipos de hojas'))
+            if mrp.sheet_id.printer_id.id != printer_id_ref.id:
+                raise UserError(
+                    _('No puedes producciones con distinta categoría de impresora'))
 
         for prod in self.production_ids:
             wo = prod.workorder_ids.filtered(lambda x: x.active_move_line_ids)

@@ -13,6 +13,7 @@ class RegisterWorkorderWizard(models.TransientModel):
         res = super().default_get(default_fields)
         res['qty'] = 0
         res['consume_ids'] = []
+        res['printer_id'] = wo.sheet_id.printer_id.id
         for move in wo.active_move_line_ids:
             vals = {
                 'product_id': move.product_id.id,
@@ -37,6 +38,7 @@ class RegisterWorkorderWizard(models.TransientModel):
     #     ('off', 'Off'),
     #     ], 'Tipo de dosaje')
     # desviation = fields.Float('Desviastion (%)')
+    printer_id = fields.Many2one('printer.machine', 'Categoría Impresora')
     printer_instance_id = fields.Many2one('printer.machine.instance', 'Impresora')
 
     def confirm(self):
@@ -54,8 +56,9 @@ class RegisterWorkorderWizard(models.TransientModel):
         self.env['machine.time'].create(vals)
 
         # Escribo las horas máquina
-        mh = self.printer_instance_id.machine_hours
-        self.printer_instance_id.machine_hours = mh + self.machine_hours
+        self.printer_instance_id.update_hours(self.machine_hours)
+        # mh = self.printer_instance_id.machine_hours
+        # self.printer_instance_id.machine_hours = mh + self.machine_hours
 
         wo.production_id.write({
             'printer_instance_id': self.printer_instance_id.id

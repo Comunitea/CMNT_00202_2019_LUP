@@ -4,6 +4,7 @@ from . import sale_order
 from . import payment_term
 from . import stock
 from . import applicable_legislation
+from . import printer_maintance
 from . import part_features
 from . import oppi_type
 from . import sheet_perfil

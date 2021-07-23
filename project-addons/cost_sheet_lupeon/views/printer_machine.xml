@@ -80,12 +80,38 @@
         <field name="arch" type="xml">
             <form>
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="view_maintances" type="object" class="oe_stat_button" icon="fa-list">
+                        <field name="maintances_count"  string="Mantenimientos" widget="statinfo"/>
+                </button>
+                    </div>
                     <group>
-                        <field name="name"/>
-                        <field name="categ_id"/>
-                        <field name="machine_hours" widget="float_time"/>
-                        
+                        <group>
+                            <field name="name"/>
+                            <field name="categ_id"/>
+                            <field name="machine_hours" widget="float_time"/>
+                        </group>
+                        <group>
+                            <field name="maintance_date"/>
+                            <field name="machine_hours_count" widget="float_time"/>
+                            
+                        </group>
                     </group>
+
+                    <notebook>
+                        <page string="Reglas Mantenimiento">
+                            <group string="Reglas Mantenimiento">
+                                <field name="rule_ids" nolabel="1" mode="tree">
+                                    <tree editable="bottom">
+                                        <field name="rule_type"/>
+                                        <field name="code"/>
+                                        <field name="value"/>
+                                        <field name="user_id"/>
+                                    </tree>
+                                </field>                        
+                            </group>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>

@@ -19,7 +19,8 @@
                             <field name="dosaje_sup" attrs="{'invisible': [('sheet_type', '!=', 'sls')], 'required': [('sheet_type', '=', 'sls')]}"/>
                             <field name="dosaje_type" attrs="{'invisible': [('sheet_type', '!=', 'sls')], 'required': [('sheet_type', '=', 'sls')]}"/>
                             <field name="desviation" attrs="{'invisible': [('sheet_type', '!=', 'sls')], 'required': [('sheet_type', '=', 'sls')]}"/>
-                            <field name="printer_instance_id" required="1"/>
+                            <field name="printer_id" readonly="1"/>
+                            <field name="printer_instance_id" domain="[('categ_id', '=', printer_id)]" required="1"/>
                         </group>
                         <group string="Cantidades hechas" attrs="{'invisible': [('qty_done_ids', '=', [])]}">
                             <field name="qty_done_ids" nolabel="1" mode="tree">
