@@ -184,7 +184,9 @@ class RegistergroupWizard(models.TransientModel):
                 vals = {
                     'qty': line.qty_done,
                     'machine_hours': h,
-                    'consume_ids': consume_ids
+                    'consume_ids': consume_ids,
+                    'printer_id': self.printer_id,
+                    'printer_instance_id': self.printer_instance_id,
                 }
                 reg = self.env['register.workorder.wizard'].with_context(
                     active_id=wo.id).new(vals)
