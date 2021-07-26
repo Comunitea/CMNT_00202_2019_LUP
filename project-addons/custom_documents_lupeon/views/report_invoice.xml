@@ -173,7 +173,7 @@
         <!-- Hs code -->
         <xpath expr="//table[@class='table table-sm o_main_table']/tbody/t[@t-foreach='o.invoice_line_ids']/tr/t[1]/td[1]" position="replace">
              <td>
-                <span t-field="line.name"/><span t-if="line.product_id.hs_code_id" style="font-size:8px;" t-esc="' - ' + line.product_id.hs_code_id.local_code"/>
+                <span t-field="line.name"/><span t-if="line.product_id.get_hs_code_recursively()" style="font-size:8px;" t-esc="' - ' + line.product_id.get_hs_code_recursively().local_code"/>
             </td>
         </xpath>
 

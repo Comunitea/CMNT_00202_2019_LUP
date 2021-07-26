@@ -106,7 +106,7 @@
 
         <xpath expr="//table[@class='table table-sm']/tbody/tr/td[1]" position="replace">
             <td>
-                <span t-field="order_line.name"/><span t-if="order_line.product_id.hs_code_id" style="font-size:8px;" t-esc="' - ' + order_line.product_id.hs_code_id.local_code"/>
+                <span t-field="order_line.name"/><span t-if="order_line.product_id.get_hs_code_recursively()" style="font-size:8px;" t-esc="' - ' + order_line.product_id.get_hs_code_recursively().local_code"/>
             </td>
       	</xpath>
 

@@ -70,4 +70,36 @@
             </xpath>
         </field>
     </record>
+
+
+    <record id="action_stock_move_line_reserved" model="ir.actions.act_window">
+        <field name="name">Productos resevados</field>
+        <field name="res_model">stock.move.line</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,kanban,pivot</field>
+        <field name="view_id" ref="quant_picking_rel.view_move_line_quant_link"/>
+        <field name="context">{'search_default_todo': 1, 'search_default_groupby_product_id': 1}</field>
+        <field name="domain">[
+            ('state', 'in', ['assigned', 'partially_available']),
+            ('sale_id', '!=', False),
+            ('sale_id.state', 'in', ['draft', 'sent']),
+        ]</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_empty_folder">
+            There's no reserves yet
+          </p>
+        </field>
+    </record>
+
+    
+  
+
+
+     <menuitem id="menu_action_product_reserved"
+            name="Productos reservados"
+            action="action_stock_move_line_reserved"
+            parent="stock.menu_stock_warehouse_mgmt"
+            sequence="50"/>
+
 </odoo>

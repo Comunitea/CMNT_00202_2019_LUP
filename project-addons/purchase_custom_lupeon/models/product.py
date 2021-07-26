@@ -13,7 +13,8 @@ class ProductProduct(models.Model):
     last_month_ago = fields.Float() 
     main_supplier_id = fields.Many2one('res.partner', 'Main Supplier',
                                        compute="_compute_supplier_info",
-                                       store=True)
+                                       search="_search_main_supplier",
+                                       store=False)
     supplier_min_qty = fields.Float('Supplier min qty',
                                     compute="_compute_supplier_info")
     supplier_price = fields.Float('Supplier Price',
@@ -30,17 +31,21 @@ class ProductProduct(models.Model):
                                 compute="_compute_supplier_info",
                                 readonly=True)
     
-    
+    @api.multi
+    def _search_main_supplier(self, operator, value):
+        return [("seller_ids.name", operator, value)]
+
     @api.depends('seller_ids', 'seller_ids.name', 'seller_ids.price')
     def _compute_supplier_info(self):
        
         for product in self:
-            if product.seller_ids:
-                product.nbr_suppliers = len(product.seller_ids)
-                product.supplier_min_qty = product.seller_ids[0].min_qty
-                product.supplier_price = product.seller_ids[0].price
-                product.supplier_delay = product.seller_ids[0].delay
-                product.main_supplier_id = product.seller_ids[0].name
+            sellers = product.seller_ids
+            if sellers:
+                product.nbr_suppliers = len(sellers)
+                product.supplier_min_qty = sellers[0].min_qty
+                product.supplier_price = sellers[0].price
+                product.supplier_delay = sellers[0].delay
+                product.main_supplier_id = sellers[0].name
             else:
                 product.nbr_suppliers = 0
                 product.supplier_min_qty = 0
@@ -132,3 +137,22 @@ class ProductProduct(models.Model):
                 "context": {'search_default_in_1_stock': 1},
             }
         return value
+
+    def create_order_point(self):
+        for prod in self:
+            op_ex = self.env['stock.warehouse.orderpoint'].search([('product_id', '=', prod.id), ('company_id', '=', 2)])
+            if not op_ex:
+                vals = {
+                'product_id': prod.id,
+                #'computed': True,
+                'product_min_qty':0,
+                'product_max_qty':0,
+                'company_id': 2
+                }
+                if prod.variant_seller_ids:
+                    days = max(prod.variant_seller_ids.mapped('delay'))
+                    if days:
+                        vals['lead_days'] = days
+                op = self.env['stock.warehouse.orderpoint'].create(vals)
+                #op.compute_orderpoint_quantities()
+

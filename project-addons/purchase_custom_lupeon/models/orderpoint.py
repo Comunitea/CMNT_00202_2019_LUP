@@ -5,6 +5,7 @@ from odoo.exceptions import UserError
 
 from datetime import timedelta
 from dateutil.relativedelta import *
+import math
 
 
 class StockWarehouseOrderpoint(models.Model):
@@ -28,8 +29,8 @@ class StockWarehouseOrderpoint(models.Model):
             max_qty = min([min_qty * 2, value * 30 ])
             orderpoint.write(
                 {
-                    "product_min_qty": min_qty,
-                    "product_max_qty": max_qty,
+                    "product_min_qty": math.ceil(min_qty),
+                    "product_max_qty": math.ceil(max_qty),
                 }
             )
                         

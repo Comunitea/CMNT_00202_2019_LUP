@@ -310,7 +310,8 @@ class SaleOrder(models.Model):
                             continue
                         if group_key not in invoices:
                             inv_data = order._prepare_invoice()
-                            invoice = inv_obj.create(inv_data)
+                            invoice = inv_obj.with_context(tracking_disable=True).create(inv_data)
+                            #invoice = inv_obj.create(inv_data)
                             references[invoice] = order
                             invoices[group_key] = invoice
                             invoices_origin[group_key] = [invoice.origin]

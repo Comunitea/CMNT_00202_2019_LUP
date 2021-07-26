@@ -25,7 +25,7 @@
     </record>
 
     <record id="action_product_production_custom_all" model="ir.actions.act_window">
-        <field name="name">Product Production Info</field>
+        <field name="name">Necesidades de fabricación</field>
         <field name="res_model">product.product</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
@@ -37,9 +37,9 @@
 
 
      <menuitem id="menu_action_production_custom_all"
-            name="Info fabricación productos"
+            name="Necesidades de fabricación"
             action="action_product_production_custom_all"
-            parent="mrp.menu_mrp_bom"
+            parent="purchase.menu_purchase_control"
             sequence="150"/>
 
     

@@ -53,16 +53,17 @@ class ProductProductionWizard(models.TransientModel):
                     update_wiz.change_prod_qty()
                     result_ids.append(line.production_id.id)
             else:
-                new_prod =  Production.create({
-                    'product_id': line.product_id.id,
-                    'product_uom_id': line.product_id.uom_id.id,
-                    'bom_id': line.product_id.variant_bom_ids[0].id,
-                    'product_qty': line.product_qty
-                })
-                new_prod.onchange_product_id()
-                new_prod.product_qty = line.product_qty
-                new_prod.action_assign()
-                result_ids.append(new_prod.id)
+                if line.product_id.variant_bom_ids:
+                    new_prod =  Production.create({
+                        'product_id': line.product_id.id,
+                        'product_uom_id': line.product_id.uom_id.id,
+                        'bom_id': line.product_id.variant_bom_ids[0].id,
+                        'product_qty': line.product_qty
+                    })
+                    new_prod.onchange_product_id()
+                    new_prod.product_qty = line.product_qty
+                    new_prod.action_assign()
+                    result_ids.append(new_prod.id)
 
         return {
             'view_type': 'form',
