@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <odoo>
-    <record id="view_picking_communication_form" model="ir.ui.view">
-        <field name="name">picking_communication_form</field>
-        <field name="model">stock.picking</field>
-        <field name="inherit_id" ref="stock.view_picking_form"/>
+    <record id="view_invoice_supplier_communication_form" model="ir.ui.view">
+        <field name="name">invoice_supplier_communication_form</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_supplier_form"/>
         <field name="arch" type="xml">
             <header position="after">
                 <div
@@ -16,12 +16,12 @@
                         &amp;nbsp;
                         <span class="oe_inline" >
                             <field name="sale_message_count" invisible="True" />
-                            Consulte mensajes en el apartado de comunicaciones
+                            Consulte mensajes de compras en el apartado de comunicaciones
                         </span>
                     </p>
                 </div>
             </header>
-            <xpath expr="//page[@name='extra']" position="after">
+            <xpath expr="//page[@name='other_info']" position="after">
                 <page string="Communication " attrs="{'invisible': [('sale_message_count', '=', 0)]}">
                     <field name="sale_message_ids">
                         <tree string="Messages">
@@ -29,7 +29,7 @@
                                 <create string="Add a Message"/>
                             </control>
                             <field name="content" />
-                            <field name="sale_id"/>
+                            <field name="purchase_id"/>
                             <field name="datas"/>
                             <field name="date"/>
                         </tree>
@@ -42,7 +42,7 @@
 
                                     <field name="datas"/>
                                     <field name="date"/>
-                                    <field name="sale_id" />
+                                    <field name="purchase_id" />
                                 </group>
                             </group>
                         </form>
@@ -52,10 +52,10 @@
         </field>
     </record>
 
-    <record id="view_picking_communication_tree" model="ir.ui.view">
-        <field name="name">picking_communication_tree</field>
-        <field name="model">stock.picking</field>
-        <field name="inherit_id" ref="stock.vpicktree"/>
+    <record id="view_invoice_supplier_communication_tree" model="ir.ui.view">
+        <field name="name">invoice_supplier_communication_tree</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_supplier_tree"/>
         <field name="arch" type="xml">
             <field name="state" position="before">
                 <field name="sale_message_count" />

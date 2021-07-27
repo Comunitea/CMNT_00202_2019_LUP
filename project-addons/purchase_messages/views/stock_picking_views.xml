@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="view_picking_purchase_communication_form" model="ir.ui.view">
+        <field name="name">picking_purchase_communication_form</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="sale_messages.view_picking_communication_form"/>
+        <field name="arch" type="xml">
+            
+            <xpath expr="//field[@name='sale_message_ids']/tree/field[@name='sale_id']" position="after">
+                
+                <field name="purchase_id"/>
+            </xpath>
+            <xpath expr="//field[@name='sale_message_ids']/form//field[@name='sale_id']" position="after">
+                <field name="purchase_id"/>
+            </xpath>
+                        
+        </field>
+    </record>
+
+    <record id="view_picking_communication_tree" model="ir.ui.view">
+        <field name="name">picking_communication_tree</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.vpicktree"/>
+        <field name="arch" type="xml">
+            <field name="state" position="before">
+                <field name="sale_message_count" />
+            </field>
+        </field>
+    </record>
+
+</odoo>
