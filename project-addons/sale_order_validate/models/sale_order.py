@@ -68,14 +68,14 @@ class SaleOrder(models.Model):
     
     def return_checks(self, msg):
         if msg:
-            if self.state in ['sale', 'done']:
+            #if self.state in ['sale', 'done']:
                 raise ValidationError(msg)
                 
-            else:
-                return {'warning': {
-                            'title': 'Aviso!',
-                            'message': msg}
-                }
+            #else:
+            #    return {'warning': {
+            #                'title': 'Aviso!',
+            #                'message': msg}
+            #    }
 
     @api.onchange('partner_shipping_id')
     def check_country_restrictions(self):
