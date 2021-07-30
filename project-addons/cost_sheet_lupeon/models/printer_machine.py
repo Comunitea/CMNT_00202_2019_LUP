@@ -84,8 +84,6 @@ class PrinterMachineInstance(models.Model):
     name = fields.Char('Name')
     categ_id = fields.Many2one('printer.machine', 'Categoría Impresora')
     machine_hours = fields.Float('Horas máquina totales')
-    machine_hours_count = fields.Float('Horas máquina desde mantenimiento')
-    maintance_date = fields.Date('Último mantenimiento')
     rule_ids = fields.One2many(
         'printer.maintance.rule', 'printer_instance_id',
         'Reglas mantenimiento')
@@ -100,7 +98,6 @@ class PrinterMachineInstance(models.Model):
         mh = self.machine_hours
         self.write({
             'machine_hours':  mh + hours,
-            'machine_hours_count': mh + hours
         })
 
     @api.model
@@ -147,7 +144,9 @@ class PrinterMaintanceRule(models.Model):
     rule_type = fields.Selection(
         [('hours', 'Por horas de uso'), ('date', 'Por fecha')], 
         'Tipo regla')
-    value = fields.Float('Valor')
+    value = fields.Float('Intervalo mantenimientos')
+    value_hours = fields.Float('Horas mantenimiento')
+    value_date = fields.Date('Fecha mantenimiento')
     code = fields.Char('Codigo mantenimiento')
     user_id = fields.Many2one('res.users', 'Asignar a')
 
@@ -168,13 +167,12 @@ class PrinterMaintanceRule(models.Model):
             return False
 
         if self.rule_type == 'hours':
-            if printer.machine_hours >= self.value:
+            if printer.machine_hours >= self.value_hours:
                 res = True
         else:
-            if printer.maintance_date:
+            if self.value_date:
                 today = fields.Date.today()
-                mdate = printer.maintance_date + \
-                    relativedelta(days=int(self.value))
+                mdate = self.value_date
                 if today >= mdate:
                     res = True
             else:

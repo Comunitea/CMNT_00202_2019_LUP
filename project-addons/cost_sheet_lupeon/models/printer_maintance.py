@@ -2,6 +2,8 @@
 # License AGPL-3 - See http://www.gnu.org/licenses/agpl-3.0.html
 
 from odoo import models, fields, api, _
+from dateutil.relativedelta import relativedelta
+
 
 
 class PrinterMaintance(models.Model):
@@ -24,8 +26,13 @@ class PrinterMaintance(models.Model):
 
     def action_done(self):
         self.ensure_one()
-        self.printer_instance_id.write({
-            'machine_hours_count': 0,
-            'maintance_date': fields.Date.today()
-        })
+        if self.rule_id.rule_type == 'hours':
+            new_hours = self.rule_id.value_hours + \
+                self.printer_instance_id.machine_hours
+            self.rule_id.value_hours = new_hours
+        else:
+            today = fields.Date.today()
+            new_date = today + \
+                relativedelta(days=int(self.rule_id.value))
+            self.rule_id.value_date = new_date
         self.state = 'done'
