@@ -24,9 +24,20 @@
                         <field name="create_date"/>
                         <field name="total_time" widget="float_time"/>
                         <field name="final_lot"/>
+                        <field name="sheet_type" readonly="1"/>
+                    </group>
+                    <group>
+                        <field name="density" attrs="{'invisible': [('sheet_type', '!=', 'sls')]}"/>
+                        <field name="bucket_height_sls" attrs="{'invisible': [('sheet_type', '!=', 'sls')]}"/>
+                        <field name="dosaje_inf" attrs="{'invisible': [('sheet_type', '!=', 'sls')]}"/>
+                        <field name="dosaje_sup" attrs="{'invisible': [('sheet_type', '!=', 'sls')]}"/>
+                        <field name="dosaje_type" attrs="{'invisible': [('sheet_type', '!=', 'sls')]}"/>
+                        <field name="desviation" attrs="{'invisible': [('sheet_type', '!=', 'sls')]}"/>
+                        <field name="printer_id" readonly="1"/>
+                        <field name="printer_instance_id" domain="[('categ_id', '=', printer_id)]" required="1"/>
                     </group>
                     <group string="Órdenes de trabajo agrupadas">
-                        <field name="register_ids" nolabel="1">
+                        <field name="register_ids" nolabel="1" mode="tree">
                             <tree editable="bottom" create="0" delete="1">
                                     <field name="production_id"/>
                                     <field name="workorder_id"/>
@@ -46,7 +57,7 @@
                     <notebook>
                         <page string="Materials to consume">
                             <group string="Materials to consume">
-                                <field name="material_ids" nolabel="1">
+                                <field name="material_ids" nolabel="1" mode="tree">
                                     <tree editable="bottom">
                                         <field name="product_id"/>
                                         <field name="qty"/>
@@ -58,7 +69,7 @@
                         </page>
                         <page string="Notas">
                             <group string="Notas">
-                                <field name="note" nolabel="1">
+                                <field name="note" nolabel="1" mode="tree">
                                 </field>
                             </group>
                         </page>

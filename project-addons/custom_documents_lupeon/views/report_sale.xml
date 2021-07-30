@@ -238,11 +238,16 @@
 
         <!-- Cambiar etiqueta descuento -->
         <xpath expr="//table/thead/tr/th[@t-if='display_discount']" position="replace">
-            <th name="th_discount" t-if="display_discount" class="text-right" groups="sale.group_discount_per_so_line">
+            <th name="th_discount" t-if="display_discount" class="text-center" groups="sale.group_discount_per_so_line">
                 <span>DISC.(%)</span>
                 <!-- TODO: remove in master -->
                 <t t-set="colspan" t-value="colspan+1"/>
             </th>
+        </xpath>
+        <xpath expr="//table/tbody//td[@t-if='display_discount']" position="replace">
+            <td t-if="display_discount" class="text-center" groups="sale.group_discount_per_so_line">
+                <span t-field="line.discount"/> %
+            </td>
         </xpath>
 
         <!-- Quitar columna impuestos -->

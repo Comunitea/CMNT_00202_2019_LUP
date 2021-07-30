@@ -29,6 +29,18 @@
                         <field name="default_sls2" attrs="{'invisible': [('type', '!=', 'sls2')]}"/>
                         <field name="default_dmls" attrs="{'invisible': [('type', '!=', 'dmls')]}"/>
                     </group>
+                    <notebook>
+                        <page string="Perfiles">
+                            <field name="perfil_ids" nolabel="1" mode="tree"/>
+                        </page>
+                        <page string="Impresoras">
+                            <field name="printer_ids" nolabel="1" mode="tree">
+                                <tree editable="bottom">
+                                    <field name="name"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>
@@ -52,14 +64,79 @@
         </field>
     </record>
 
-    <record id="action_printer_machines" model="ir.actions.act_window">
-        <field name="name">Printers</field>
+    <record id="action_printer_machines_categ" model="ir.actions.act_window">
+        <field name="name">Categoría impresoras</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">printer.machine</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
     </record>
 
-    <menuitem id="menu_action_printer_machines" action="action_printer_machines" name="Printers" parent="menu_cost_cfg" sequence="10"/>
+    <menuitem id="menu_action_printer_machines_categ" action="action_printer_machines_categ" name="Categoría impresoras" parent="menu_cost_cfg" sequence="10"/>
+
+    <record id="printer_machine_instance_view_form" model="ir.ui.view">
+        <field name="name">printer.machine.instance_view</field>
+        <field name="model">printer.machine.instance</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="view_maintances" type="object" class="oe_stat_button" icon="fa-list">
+                        <field name="maintances_count"  string="Mantenimientos" widget="statinfo"/>
+                </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="categ_id"/>
+                            <field name="machine_hours" widget="float_time"/>
+                        </group>
+                        <group>
+                            <field name="maintance_date"/>
+                            <field name="machine_hours_count" widget="float_time"/>
+                            
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Reglas Mantenimiento">
+                            <group string="Reglas Mantenimiento">
+                                <field name="rule_ids" nolabel="1" mode="tree">
+                                    <tree editable="bottom">
+                                        <field name="rule_type"/>
+                                        <field name="code"/>
+                                        <field name="value"/>
+                                        <field name="user_id"/>
+                                    </tree>
+                                </field>                        
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="printer_machine_instance_view_tree" model="ir.ui.view">
+        <field name="name">printer.machine.instance.view</field>
+        <field name="model">printer.machine.instance</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="categ_id"/>
+                <field name="machine_hours" widget="float_time"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_printer_machines_instance" model="ir.actions.act_window">
+        <field name="name">Impresoras</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">printer.machine.instance</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_action_printer_machines_instance" action="action_printer_machines_instance" name="Impresoras" parent="menu_cost_cfg" sequence="11"/>
 
 </odoo>

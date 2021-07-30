@@ -18,7 +18,7 @@
                 </page>
                 <page string="Texto pedido venta lupéon">
                     <group>
-                        <field name="lupeon_text" nolabel="1"/>
+                        <field name="lupeon_text" nolabel="1" mode="tree"/>
                     </group>
                 </page>
             </notebook>

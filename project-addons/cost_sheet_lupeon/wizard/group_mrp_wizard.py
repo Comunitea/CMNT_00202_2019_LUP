@@ -13,13 +13,19 @@ class GroupMrpWizard(models.TransientModel):
         production_ids =  self.env['mrp.production'].browse(
             self._context.get('active_ids', []))
         sheet_type_ref = production_ids[0].sheet_type
+        printer_id_ref = production_ids[0].sheet_id.printer_id
         for mrp in production_ids:
             if mrp.sheet_type != sheet_type_ref:
                 raise UserError(
                     _('No puedes agrupar distintos tipos de hojas'))
+            if mrp.sheet_id.printer_id.id != printer_id_ref.id:
+                raise UserError(
+                    _('No puedes agrupar producciones con distinta categoría de impresora'))
 
         group = self.env['group.production'].create({
-            'name': self.name
+            'name': self.name,
+            'sheet_type': sheet_type_ref,
+            'printer_id': printer_id_ref.id
         })
 
         for prod in production_ids:

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- No quiero la vista de tablet, ya que al acabar nos devuelve a la nada -->
+    <record id="mrp_workorder.mrp_workorder_view_form_inherit_workorder" model="ir.ui.view">
+        <field name="name">mrp.workorder.view.form.inherit.workorder</field>
+        <field name="model">mrp.workorder</field>
+        <field name="inherit_id" ref="mrp.mrp_production_workorder_form_view_inherit"/>
+        <field name="arch" type="xml">
+            <button name="action_cancel" position="replace">
+                <button name="%(action_question_cancel_wizard)d" attrs="{'invisible': ['|', ('state', 'not in', ('assigned', 'confirmed', 'partially_available', 'draft', 'waiting')), ('is_locked', '=', False)]}" string="Cancel" groups="base.group_user"/>
+            </button>    
+        </field>
+            
+    </record>
+
+
+</odoo>

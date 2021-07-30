@@ -2,6 +2,8 @@
 # License AGPL-3 - See http://www.gnu.org/licenses/agpl-3.0.html
 
 from odoo import models, fields, api, _
+from dateutil.relativedelta import relativedelta
+
 
 PRINT_TYPES = [
     ('design', 'Design'),
@@ -12,6 +14,7 @@ PRINT_TYPES = [
     ('sls2', 'SLS'),
     ('dmls', 'DMLS'),
 ]
+
 
 class PrinterMachine(models.Model):
 
@@ -35,6 +38,10 @@ class PrinterMachine(models.Model):
     default_poly = fields.Boolean('Por defecto en poly')
     default_sla = fields.Boolean('Por defecto en sla')
     default_dmls = fields.Boolean('Por defecto en dmls')
+
+    perfil_ids = fields.One2many('sheet.perfil', 'printer_id', 'Perfiles')
+    printer_ids = fields.One2many(
+        'printer.machine.instance', 'categ_id', 'Impresoras')
 
     _sql_constraints = [(
         'default_fdm_unique',
@@ -67,3 +74,124 @@ class PrinterMachine(models.Model):
         'Ya existe otra impresora por defecto para DMLS'
         )
     ]
+
+
+class PrinterMachineInstance(models.Model):
+
+    _name = 'printer.machine.instance'
+    _description = "Categoría Impresora"
+
+    name = fields.Char('Name')
+    categ_id = fields.Many2one('printer.machine', 'Categoría Impresora')
+    machine_hours = fields.Float('Horas máquina totales')
+    machine_hours_count = fields.Float('Horas máquina desde mantenimiento')
+    maintance_date = fields.Date('Último mantenimiento')
+    rule_ids = fields.One2many(
+        'printer.maintance.rule', 'printer_instance_id',
+        'Reglas mantenimiento')
+    maintance_ids = fields.One2many(
+        'printer.maintance', 'printer_instance_id',
+        'Mantenimientos')
+    maintances_count = fields.Integer('# Maintances',
+                                      compute='_get_maintances_count')
+
+    def update_hours(self, hours):
+        self.ensure_one()
+        mh = self.machine_hours
+        self.write({
+            'machine_hours':  mh + hours,
+            'machine_hours_count': mh + hours
+        })
+
+    @api.model
+    def check_maintance_rules(self):
+        domain = [('rule_ids', '!=', False)]
+        printers = self.env['printer.machine.instance'].search(domain)
+        for p in printers:
+            for rule in p.rule_ids:
+                if rule.check():
+                    rule.run_maintance()
+
+    @api.multi
+    def _get_maintances_count(self):
+        for p in self:
+            p.maintances_count = len(p.maintance_ids)
+
+    @api.multi
+    def view_maintances(self):
+        self.ensure_one()
+        maintances = self.maintance_ids
+        action = self.env.ref(
+            'cost_sheet_lupeon.action_printer_maintances').read()[0]
+        action['context'] = {'search_default_my_maintances': 0}
+        if len(maintances) > 1:
+            action['domain'] = [('id', 'in', maintances.ids)]
+        elif len(maintances) == 1:
+            form_view_name = 'printer.maintance.view'
+            action['views'] = [
+                (self.env.ref(form_view_name).id, 'form')]
+            action['res_id'] = maintances.ids[0]
+        else:
+            action = {'type': 'ir.actions.act_window_close'}
+        return action
+
+
+class PrinterMaintanceRule(models.Model):
+
+    _name = 'printer.maintance.rule'
+    _description = "Regla mantenimiento"
+    _rec_name = 'code'
+
+    printer_instance_id = fields.Many2one(
+        'printer.machine.instance', 'Impresora', required=True)
+    rule_type = fields.Selection(
+        [('hours', 'Por horas de uso'), ('date', 'Por fecha')], 
+        'Tipo regla')
+    value = fields.Float('Valor')
+    code = fields.Char('Codigo mantenimiento')
+    user_id = fields.Many2one('res.users', 'Asignar a')
+
+    def check(self):
+        self.ensure_one()
+        print('check')
+        res = False
+        printer = self.printer_instance_id
+
+        # Compruebo que esta regla no esté pendiente
+        domain = [
+            ('rule_id', '=', self.id),
+            ('state', '!=', 'done'),
+            ('printer_instance_id', '=', printer.id),
+        ]
+        pending_maintances = self.env['printer.maintance'].search(domain)
+        if pending_maintances:
+            return False
+
+        if self.rule_type == 'hours':
+            if printer.machine_hours >= self.value:
+                res = True
+        else:
+            if printer.maintance_date:
+                today = fields.Date.today()
+                mdate = printer.maintance_date + \
+                    relativedelta(days=int(self.value))
+                if today >= mdate:
+                    res = True
+            else:
+                res = True
+
+        return res
+
+    def run_maintance(self):
+        self.ensure_one()
+        print('run')
+        printer = self.printer_instance_id
+        vals = {
+            'name': 'Mantenimiento %s para %s' % (self.code or '', printer.name),
+            'user_id': self.user_id.id,
+            'printer_instance_id': printer.id,
+            'rule_type': self.rule_type,
+            'code': self.code,
+            'rule_id': self.id
+        }
+        self.env['printer.maintance'].create(vals)

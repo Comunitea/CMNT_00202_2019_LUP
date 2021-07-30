@@ -3,10 +3,10 @@
 from odoo import models, fields, api, _
 
 
-
 class StockMove(models.Model):
     _inherit = 'stock.move'
 
+    pline_description = fields.Char('Description')
 
     def _prepare_procurement_values(self):
         """

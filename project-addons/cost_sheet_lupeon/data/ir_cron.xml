@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo noupdate="0">
+
+    <record id="printer_maintance_cron" forcecreate="True"  model="ir.cron">
+        <field name="name">Reglas mantenimiento impreosoras</field>
+        <field eval="True" name="active" />
+        <field name="user_id" ref="base.user_root" />
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field eval="False" name="doall" />
+        <field name="state">code</field>
+        <field name="model_id" ref="model_printer_machine_instance"/>
+        <field name="code">model.check_maintance_rules()</field>
+    </record>
+</odoo>

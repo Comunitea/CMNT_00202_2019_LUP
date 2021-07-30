@@ -48,9 +48,12 @@ class GroupCostSheet(models.Model):
     def name_get(self):
         res = []
         for sheet in self:
+            ref_name = sheet.sale_line_id.name
+            if sheet.sale_line_id.ref:
+                ref_name = sheet.sale_line_id.ref
             res.append((sheet.id, ("[%s] %s") %
                        (sheet.sale_line_id.order_id.name,
-                        sheet.sale_line_id.name)))
+                        ref_name)))
         return res
 
     def update_sale_line_price(self):
@@ -183,8 +186,14 @@ class AssemblyCostLine(models.Model):
 
     name = fields.Char('Descripción', required=True)
     type = fields.Many2one('oppi.type', 'Tipo', required=True)
-    time = fields.Float('Tiempo')
+    t1p = fields.Float('T1P')
+    time = fields.Float('Tiempo', compute="_get_time")
     total = fields.Float('PVP €', compute="_get_total")
+
+    def _get_time(self):
+        for line in self:
+            if line.group_id and line.group_id.sale_line_id:
+                line.time = line.group_id.sale_line_id.product_uom_qty * line.t1p
 
     def _get_total(self):
         for line in self:

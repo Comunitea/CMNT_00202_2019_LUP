@@ -49,7 +49,7 @@
                         <field name="th_machine_hours">
                     </group> -->
                     <group  string="Tiempo máqina">
-                        <field name="machine_time_ids" readonly="1" nolabel="1">
+                        <field name="machine_time_ids" readonly="1" nolabel="1" mode="tree">
                             <tree>
                                 <field name="create_date"/>
                                 <field name="time" widget="float_time"/>

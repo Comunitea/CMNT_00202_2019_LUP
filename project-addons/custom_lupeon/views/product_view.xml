@@ -37,4 +37,18 @@
     </record>
 
 
+    <record id="product_normal_form_view_add_auto_ean" model="ir.ui.view">
+        <field name="name">product.product.form.add.auto.ean</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view" />
+        <field name="arch" type="xml">
+
+
+            <field name="default_code" position="after">
+                <button name="generate_auto_ean" string="Auto EAN" class="oe_inline oe_link" type="object"/>
+             </field>
+        </field>
+    </record>
+
+
 </odoo>

@@ -23,7 +23,7 @@
                     </div>
                 </div>
 
-                 <notebook position="inside">
+            <notebook position="inside">
                 <page string="Material Info" attrs="{'invisible': [('is_material', '=', False)]}">
                     <group>
                         <field name="material_type"/>
@@ -70,6 +70,9 @@
                         <field name="init_cost"/>
                         <field name="term_cost"/>
                     </group>
+                </page>
+                <page string="Perfiles">
+                    <field name="perfil_ids" nolabel="1" mode="tree"/>
                 </page>
             </notebook>
             </field>
