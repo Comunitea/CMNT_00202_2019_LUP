@@ -403,7 +403,7 @@
                              <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="2" col="6" string="Parámetros impresión">
                                 <field name="printer_id" options="{'no_create_edit': True, 'no_quick_create': True}"/>
-                                <field name="perfil_id" required="1" domain="[('printer_id', '=', printer_id)]" options="{'no_create': True, 'no_create_edit':True}" />
+                                <field name="perfil_id" attrs="{'required': [('sheet_type', '=', 'fdm')]}" domain="[('printer_id', '=', printer_id)]" options="{'no_create': True, 'no_create_edit':True}" />
                                 <field name="tray_units"/>
                                 <field name="print_increment" attrs="{'invisible': [('sheet_type', 'in', ['poly'])], 'readonly': [('can_edit', '!=', True)]}"/>
                                 <field name="tray_hours_sls"/>
@@ -497,7 +497,7 @@
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="2" col="6" string="Parámetros impresión">
                                 <field name="printer_id" options="{'no_create_edit': True, 'no_quick_create': True}"/>
-                                <field name="perfil_id" required="1" domain="[('printer_id', '=', printer_id)]" options="{'no_create': True, 'no_create_edit':True}" />
+                                <field name="perfil_id" attrs="{'required': [('sheet_type', '=', 'fdm')]}" domain="[('printer_id', '=', printer_id)]" options="{'no_create': True, 'no_create_edit':True}" />
                                 <field name="tray_units"/>
                                 <field name="finish_pol"/>
                                 <field name="tray_hours"/>
@@ -583,7 +583,7 @@
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="2" col="6" string="Parámetros impresión">
                                 <field name="printer_id" options="{'no_create_edit': True, 'no_quick_create': True}"/>
-                                <field name="perfil_id" required="1" domain="[('printer_id', '=', printer_id)]" options="{'no_create': True, 'no_create_edit':True}" />
+                                <field name="perfil_id" attrs="{'required': [('sheet_type', '=', 'fdm')]}" domain="[('printer_id', '=', printer_id)]" options="{'no_create': True, 'no_create_edit':True}" />
                                 <field name="tray_units"/>
                                 <field name="tray_hours"/>
                                 <field name="euro_machine" groups="cost_sheet_lupeon.group_cs_advanced"/>
@@ -668,7 +668,7 @@
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="2" col="6" string="Parámetros impresión">
                                 <field name="printer_id" options="{'no_create_edit': True, 'no_quick_create': True}"/>
-                                <field name="perfil_id" required="1" domain="[('printer_id', '=', printer_id)]" options="{'no_create': True, 'no_create_edit':True}" />
+                                <field name="perfil_id" attrs="{'required': [('sheet_type', '=', 'fdm')]}" domain="[('printer_id', '=', printer_id)]" options="{'no_create': True, 'no_create_edit':True}" />
                                 <field name="tray_units"/>
                                 <field name="tray_hours"/>
                                 <field name="euro_machine" groups="cost_sheet_lupeon.group_cs_advanced"/>
@@ -754,7 +754,7 @@
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="2" col="6" string="Parámetros impresión">
                                 <field name="printer_id" options="{'no_create_edit': True, 'no_quick_create': True}"/>
-                                <field name="perfil_id" required="1" domain="[('printer_id', '=', printer_id)]" options="{'no_create': True, 'no_create_edit':True}" />
+                                <field name="perfil_id" attrs="{'required': [('sheet_type', '=', 'fdm')]}" domain="[('printer_id', '=', printer_id)]" options="{'no_create': True, 'no_create_edit':True}" />
                                 <field name="tray_units"/>
                                 <field name="tray_hours"/>
                                 <field name="euro_machine" groups="cost_sheet_lupeon.group_cs_advanced"/>
@@ -947,7 +947,6 @@
                             <div style="border-bottom: 1px solid black;"></div>
                             <group cospan="2" col="6" string="Parámetros impresión">
                                 <field name="printer_id" options="{'no_create_edit': True, 'no_quick_create': True}"/>
-                                <field name="perfil_id" required="1" domain="[('printer_id', '=', printer_id)]" options="{'no_create': True, 'no_create_edit':True}" />
                                 <field name="perfil_id" attrs="{'required': [('sheet_type', '=', 'fdm')]}" domain="[('printer_id', '=', printer_id)]" options="{'no_create': True, 'no_create_edit':True}" />
                                 <field name="available_material_ids" invisible="1" widget="many2many_tags"/>
                                 <field name="tray_units"/>
@@ -983,7 +982,7 @@
                              <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="2" col="6" string="Parámetros impresión">
                                 <field name="printer_id" options="{'no_create_edit': True, 'no_quick_create': True}"/>
-                                <field name="perfil_id" required="1" domain="[('printer_id', '=', printer_id)]" options="{'no_create': True, 'no_create_edit':True}" />
+                                <field name="perfil_id" attrs="{'required': [('sheet_type', '=', 'fdm')]}" domain="[('printer_id', '=', printer_id)]" options="{'no_create': True, 'no_create_edit':True}" />
                                 <field name="tray_units"/>
                                 <field name="print_increment" attrs="{'invisible': [('sheet_type', 'in', ['poly'])], 'readonly': [('can_edit', '!=', True)]}"/>
                                 <field name="tray_hours_sls"/>
@@ -1010,7 +1009,7 @@
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="2" col="6" string="Parámetros impresión">
                                 <field name="printer_id" options="{'no_create_edit': True, 'no_quick_create': True}"/>
-                                <field name="perfil_id" required="1" domain="[('printer_id', '=', printer_id)]" options="{'no_create': True, 'no_create_edit':True}" />
+                                <field name="perfil_id" attrs="{'required': [('sheet_type', '=', 'fdm')]}" domain="[('printer_id', '=', printer_id)]" options="{'no_create': True, 'no_create_edit':True}" />
                                 <field name="tray_units"/>
                                 <field name="finish_pol"/>
                                 <field name="tray_hours"/>
@@ -1034,7 +1033,7 @@
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="2" col="6" string="Parámetros impresión">
                                 <field name="printer_id" options="{'no_create_edit': True, 'no_quick_create': True}"/>
-                                <field name="perfil_id" required="1" domain="[('printer_id', '=', printer_id)]" options="{'no_create': True, 'no_create_edit':True}" />
+                                <field name="perfil_id" attrs="{'required': [('sheet_type', '=', 'fdm')]}" domain="[('printer_id', '=', printer_id)]" options="{'no_create': True, 'no_create_edit':True}" />
                                 <field name="tray_units"/>
                                 <field name="tray_hours"/>
                             </group>
@@ -1058,7 +1057,7 @@
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="2" col="6" string="Parámetros impresión">
                                 <field name="printer_id" options="{'no_create_edit': True, 'no_quick_create': True}"/>
-                                <field name="perfil_id" required="1" domain="[('printer_id', '=', printer_id)]" options="{'no_create': True, 'no_create_edit':True}" />
+                                <field name="perfil_id" attrs="{'required': [('sheet_type', '=', 'fdm')]}" domain="[('printer_id', '=', printer_id)]" options="{'no_create': True, 'no_create_edit':True}" />
                                 <field name="tray_units"/>
                                 <field name="tray_hours"/>
                             </group>
@@ -1084,7 +1083,7 @@
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="2" col="6" string="Parámetros impresión">
                                 <field name="printer_id" options="{'no_create_edit': True, 'no_quick_create': True}"/>
-                                <field name="perfil_id" required="1" domain="[('printer_id', '=', printer_id)]" options="{'no_create': True, 'no_create_edit':True}" />
+                                <field name="perfil_id" attrs="{'required': [('sheet_type', '=', 'fdm')]}" domain="[('printer_id', '=', printer_id)]" options="{'no_create': True, 'no_create_edit':True}" />
                                 <field name="tray_units"/>
                                 <field name="tray_hours"/>
                             </group>

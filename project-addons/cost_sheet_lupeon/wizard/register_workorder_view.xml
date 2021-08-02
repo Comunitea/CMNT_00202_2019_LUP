@@ -15,7 +15,7 @@
                         </group>
                         <group>
                             <field name="printer_id" readonly="1"/>
-                            <field name="printer_instance_id" domain="[('categ_id', '=', printer_id)]" required="1"/>
+                            <field name="printer_instance_id" domain="[('categ_id', '=', printer_id)]"  attrs="{'required': [('consume_ids', '!=', [])], 'invisible': [('consume_ids', '=', [])]}"/>
                         </group>
                         <group string="Consumos" attrs="{'invisible': [('consume_ids', '=', [])]}">
                             <field name="consume_ids" nolabel="1" mode="tree">
