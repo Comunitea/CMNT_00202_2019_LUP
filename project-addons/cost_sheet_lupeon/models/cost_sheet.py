@@ -708,6 +708,7 @@ class CostSheet(models.Model):
         or a production for each sheet.
         """
         self.ensure_one()
+        exist_product = False
         if self.production_id:
             exist_product = self.production_id.product_id
             self.production_id.action_cancel()
