@@ -181,6 +181,8 @@ class RegistergroupWizard(models.TransientModel):
                 h_qty = h_ud * line.qty_done
                 percent = h_qty / total_machine_hours
                 h = self.machine_hours * percent
+                if not h:
+                    raise UserError('El producto %s de las cantidades hechas nos da horas 0: %s, %s, %s' % (line.product_id.name, h_ud, h_qty, percent))
                 vals = {
                     'qty': line.qty_done,
                     'machine_hours': h,
