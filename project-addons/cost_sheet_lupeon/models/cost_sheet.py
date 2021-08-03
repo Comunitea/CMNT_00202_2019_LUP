@@ -237,7 +237,10 @@ class CostSheet(models.Model):
     @api.depends('rpf', 'group_id.sale_line_id.product_uom_qty')
     def _get_cus_units(self):
         for sh in self:
-            sh.cus_units = sh.sale_line_id.product_uom_qty * sh.rpf
+            qty = 1
+            if sh.sale_line_id.product_uom_qty:
+                qty = sh.sale_line_id.product_uom_qty
+            sh.cus_units = qty * sh.rpf
 
     @api.depends('oppi_line_ids')
     def _get_oppi_total(self):
