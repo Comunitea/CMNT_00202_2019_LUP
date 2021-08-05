@@ -250,7 +250,8 @@ class CostSheet(models.Model):
     @api.depends('meet_line_ids')
     def _get_totals_meet(self):
         for sh in self:
-            sh.meet_hours_total = sum([x.hours for x in sh.meet_line_ids])
+            sh.meet_hours_total = sum(
+                [x.hours * x.num_people for x in sh.meet_line_ids])
             sh.meet_total = sum([x.pvp for x in sh.meet_line_ids])
 
     @api.depends('purchase_line_ids')
