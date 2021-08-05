@@ -18,7 +18,7 @@ class GroupMrpWizard(models.TransientModel):
             if mrp.sheet_type != sheet_type_ref:
                 raise UserError(
                     _('No puedes agrupar distintos tipos de hojas'))
-            if mrp.sheet_id.printer_id.id != printer_id_ref.id:
+            if printer_id_ref and mrp.sheet_id.printer_id.id != printer_id_ref.id:
                 raise UserError(
                     _('No puedes agrupar producciones con distinta categoría de impresora'))
 
