@@ -145,8 +145,8 @@ class PrinterMaintanceRule(models.Model):
         [('hours', 'Por horas de uso'), ('date', 'Por fecha')], 
         'Tipo regla')
     value = fields.Float('Intervalo mantenimientos')
-    value_hours = fields.Float('Horas mantenimiento')
-    value_date = fields.Date('Fecha mantenimiento')
+    value_hours = fields.Float('Horas próximo mantenimiento')
+    value_date = fields.Date('Fecha próximo mantenimiento')
     code = fields.Char('Codigo mantenimiento')
     user_id = fields.Many2one('res.users', 'Asignar a')
 
