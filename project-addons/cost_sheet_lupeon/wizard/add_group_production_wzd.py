@@ -32,7 +32,9 @@ class AddGroupProductionWzd(models.TransientModel):
         if not group.register_ids:
             return res
         sheet_type_ref = group.register_ids[0].production_id.sheet_type
+        printer_id_ref = group.register_ids[0].production_id.sheet_type
         res['sheet_type_ref'] = sheet_type_ref
+        res['printer_id_ref'] = printer_id_ref
         return res
 
     sheet_type_ref = fields.Selection(SHEET_TYPES, 'Tipo de hoja')
@@ -49,10 +51,10 @@ class AddGroupProductionWzd(models.TransientModel):
         printer_id_ref = self.printer_id_ref
 
         for mrp in production_ids:
-            if mrp.sheet_type != sheet_type_ref:
+            if sheet_type_ref and mrp.sheet_type != sheet_type_ref:
                 raise UserError(
                     _('No puedes agrupar distintos tipos de hojas'))
-            if mrp.sheet_id.printer_id.id != printer_id_ref.id:
+            if printer_id_ref and mrp.sheet_id.printer_id.id != printer_id_ref.id:
                 raise UserError(
                     _('No puedes producciones con distinta categoría de impresora'))
 
