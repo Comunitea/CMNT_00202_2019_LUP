@@ -32,7 +32,7 @@ class AddGroupProductionWzd(models.TransientModel):
         if not group.register_ids:
             return res
         sheet_type_ref = group.register_ids[0].production_id.sheet_type
-        printer_id_ref = group.register_ids[0].production_id.sheet_type
+        printer_id_ref = group.register_ids[0].production_id.sheet_id.printer_id
         res['sheet_type_ref'] = sheet_type_ref
         res['printer_id_ref'] = printer_id_ref
         return res
