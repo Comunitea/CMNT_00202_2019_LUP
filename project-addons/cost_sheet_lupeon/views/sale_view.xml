@@ -95,7 +95,7 @@
                 <button name="duplicate_line"
                         type="object"
                         icon="fa-copy"
-                        states="draft"
+                        states="draft,sent"
                 />
             </xpath>
         </field>
