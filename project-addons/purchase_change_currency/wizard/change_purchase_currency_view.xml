@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+<record id="change_purchase_currency_form" model="ir.ui.view">
+    <field name="name">change.purchase.currency.form</field>
+    <field name="model">change.purchase.currency</field>
+    <field name="arch" type="xml">
+        <form string="Change Currency">
+            <header>
+
+            </header>
+            <sheet>
+
+                <group >
+                    <field name="currency_id" />
+                    <field name="rate" />
+                </group>
+            </sheet>
+            <footer>
+                <button name="change_currency" type="object" string="Change Currency" class="oe_highlight"/>
+                <button string="Cancel" special="cancel" class="oe_link"/>
+            </footer>
+        </form>
+    </field>
+</record>
+
+</odoo>

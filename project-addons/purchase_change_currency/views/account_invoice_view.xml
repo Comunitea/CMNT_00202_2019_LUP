@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="account_invoice_change_currency_action" model="ir.actions.act_window">
+        <field name="name">Change Currency</field>
+        <field name="res_model">change.invoice.currency</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record model="ir.ui.view" id="account_invoice_change_currency">
+        <field name="name">account.invoice.change.currency</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_form"/>
+        <field name="arch" type="xml">
+            <field name="currency_id" position="after">
+                <button name="%(account_invoice_change_currency_action)d" type="action"  string="Change Currency" attrs="{'invisible': [('state', 'not in', ['draft'])]}" />
+            </field>
+            <!--field name="currency_id" position="attributes">
+                <attribute name="readonly" >True</attribute>
+            </field-->
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="account_invoice_supplier_change_currency">
+        <field name="name">account.invoice.supplier.change.currency</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_supplier_form"/>
+        <field name="arch" type="xml">
+            <field name="currency_id" position="after">
+                <button name="%(account_invoice_change_currency_action)d" type="action"  string="Change Currency" attrs="{'invisible': [('state', 'not in', ['draft'])]}" />
+            </field>
+            <!--field name="currency_id" position="attributes">
+                <attribute name="readonly" >True</attribute>
+            </field-->
+        </field>
+    </record>
+
+
+
+</odoo>

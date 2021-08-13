@@ -8,4 +8,5 @@ class ProductTemplate(models.Model):
 
     transport_restrictions = fields.Boolean("Restricciones de transporte", default=False)
     forbidden_country_ids = fields.Many2many('res.country', string="Paises no permitidos")
+    forbidden_country_group_ids = fields.Many2many('res.country.group', string="Grupos de paises no permitidos")
     

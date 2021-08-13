@@ -11,6 +11,10 @@
                 <div class="o_row" name="label_fc_ids">
                     <field name="forbidden_country_ids" widget="many2many_tags"/>                    
                 </div>
+                <label for="forbidden_country_group_ids" />
+                <div class="o_row" name="label_fc_ids">
+                    <field name="forbidden_country_group_ids" widget="many2many_tags"/>                    
+                </div>
             </xpath>
             
         </field>

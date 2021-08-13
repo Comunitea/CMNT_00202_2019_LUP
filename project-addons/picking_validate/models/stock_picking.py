@@ -30,8 +30,9 @@ class StockPicking(models.Model):
         if self.company_id.cost_sheet_sale:
             forbidden_products_ids = self.env['product.product']
             country_id = self.partner_id.country_id
-            for line in self.move_lines.filtered(lambda x:  x.product_id.forbidden_country_ids):
-                if country_id in line.product_id.forbidden_country_ids:
+            for line in self.move_lines.filtered(lambda x:  x.product_id.forbidden_country_ids or x.product_id.forbidden_country_group_ids):
+                country_ids = line.product_id.forbidden_country_ids | line.product_id.forbidden_country_group_ids.mapped('country_ids')
+                if country_id in country_ids:
                     forbidden_products_ids |= line.product_id
 
             if forbidden_products_ids:
