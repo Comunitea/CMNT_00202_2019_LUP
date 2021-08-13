@@ -18,7 +18,7 @@
                     <field name="purchase_count"  widget="statinfo" string="Compras"/>
                 </button>
                 <button class="oe_stat_button" type="object"
-                     name="view_tasks" icon="fa-tasks" attrs="{'invisible': [('company_id', '!=', 1)]}">
+                     name="view_tasks" icon="fa-tasks" attrs="{'invisible': ['|', ('count_task', '=', 0), ('company_id', '!=', 1)]}">
                     <field string="Tasks" name="count_task" widget="statinfo"/>
                 </button>
                 <button name="view_productions" type="object" class="oe_stat_button" icon="fa-paste" attrs="{'invisible': [('company_id', '!=', 1)]}">
@@ -91,6 +91,13 @@
                 <field name="project_id"/>
             </field >
 
+            <xpath expr="//field[@name='order_line']/tree/field[@name='price_subtotal']" position="after">
+                <button name="duplicate_line"
+                        type="object"
+                        icon="fa-copy"
+                        states="draft,sent"
+                />
+            </xpath>
         </field>
     </record>
 

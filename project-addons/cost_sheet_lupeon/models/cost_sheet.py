@@ -74,11 +74,13 @@ class CostSheet(models.Model):
 
 
     # DATOS PIEZA
-    cus_units = fields.Integer('Uds. Cliente')
+    rpf = fields.Integer('RPF', default=1.0)
+    cus_units = fields.Integer('Uds. a Fabricar', compute='_get_cus_units')
     cc_ud = fields.Float('cc ud')
     euros_cc = fields.Float('€/cc', compute='get_euros_cc_fdm')
 
-    printer_id = fields.Many2one('printer.machine', 'Impresora')
+    printer_id = fields.Many2one('printer.machine', 'Categoría Impresora')
+    printer_instance_id = fields.Many2one('printer.machine.instance', 'Impresora')
 
     # [ALL] COSTE MANO DE OBRA
     calc_material_id = fields.Many2one('product.product', 'Material FDM principal')
@@ -122,6 +124,7 @@ class CostSheet(models.Model):
     tray_hours = fields.Float('h Maq. Bandeja')
     euro_machine = fields.Float('€/h maq',  compute='get_euro_machine')
     perfil = fields.Char('Perfil')
+    perfil_id = fields.Many2one('sheet.perfil', 'Perfil', required=False)
 
     # FDM COSTE MATERIAL
     material_cost_ids = fields.One2many(
@@ -147,7 +150,7 @@ class CostSheet(models.Model):
     # ------------------------------------------------------------------------
 
     # SLS DATOS PIEZA
-    cus_units = fields.Integer('Uds. Cliente')
+    # cus_units = fields.Integer('Uds. Cliente')
 
     cm2_sls = fields.Float('cm^2 ud')
     x_mm_sls = fields.Float('X (mm)')
@@ -209,6 +212,21 @@ class CostSheet(models.Model):
 
     can_edit = fields.Boolean(compute='_compute_can_edit')
 
+    available_material_ids = fields.Many2many(
+        string="Perfiles disponibles",
+        comodel_name="product.product",
+        compute="_compute_available_materials",
+    )
+
+    @api.depends("perfil_id")
+    def _compute_available_materials(self):
+        for sh in self:
+            aval = []
+            if sh.perfil_id:
+                aval = sh.perfil_id.material_ids.\
+                    mapped('product_variant_ids')
+            sh.available_material_ids = aval
+
     def _compute_can_edit(self):
         for sh in self:
             sh.can_edit = sh.env.user.has_group(
@@ -216,6 +234,13 @@ class CostSheet(models.Model):
                     sh.env.user.has_group(
                         'cost_sheet_lupeon.group_cs_manager')
 
+    @api.depends('rpf', 'group_id.sale_line_id.product_uom_qty')
+    def _get_cus_units(self):
+        for sh in self:
+            qty = 1
+            if sh.sale_line_id.product_uom_qty:
+                qty = sh.sale_line_id.product_uom_qty
+            sh.cus_units = qty * sh.rpf
 
     @api.depends('oppi_line_ids')
     def _get_oppi_total(self):
@@ -225,7 +250,8 @@ class CostSheet(models.Model):
     @api.depends('meet_line_ids')
     def _get_totals_meet(self):
         for sh in self:
-            sh.meet_hours_total = sum([x.hours for x in sh.meet_line_ids])
+            sh.meet_hours_total = sum(
+                [x.hours * x.num_people for x in sh.meet_line_ids])
             sh.meet_total = sum([x.pvp for x in sh.meet_line_ids])
 
     @api.depends('purchase_line_ids')
@@ -249,12 +275,26 @@ class CostSheet(models.Model):
                 ciclo = sh.cus_units / sh.tray_units
                 sh.heat_treatment_cost = ciclo * mat.term_cost
 
+    def do_checks(self):
+        for sh in self:
+            if sh.unplanned_cost < 0:
+                raise UserError('El coste imprevisto no puede ser negativo')
+
+            if sh.material_cost_ids and sh.sheet_type == 'fdm' and not sh.material_cost_ids[0].tray_meters:
+                raise UserError('Es necesario indicar un valor de metros bandeja en los costes de material')
+
+    def duplicate_sheet(self):
+        self.ensure_one()
+        new_line = self.copy()
+        new_line.group_id = self.group_id.id
+
     @api.model
     def create(self, vals):
         res = super().create(vals)
         res.group_id.update_sale_line_price()
         res.update_workforce_cost()
         res.update_tech_hours()
+        res.do_checks()
         return res
 
     def write(self, vals):
@@ -262,6 +302,7 @@ class CostSheet(models.Model):
         self.mapped('group_id').update_sale_line_price()
         self.update_workforce_cost()
         self.update_tech_hours()
+        self.do_checks()
         return res
 
     def update_tech_hours(self):
@@ -289,6 +330,13 @@ class CostSheet(models.Model):
         if self.sheet_type in ['sls', 'poly', 'sla', 'sls2', 'dmls']:
             hours = (5/60) + (maq_hours * self.printer_id.machine_hour)
         tech_line.hours = hours
+
+    @api.onchange('perfil_id')
+    def change_perfil_id(self):
+        if self.perfil_id:
+            self.infill = self.perfil_id.infill
+            self.loops = self.perfil_id.loops
+            self.layer_height = self.perfil_id.layer_height
 
     @api.onchange('price_unit', 'cus_units')
     def change_inspection_type(self):
@@ -472,6 +520,7 @@ class CostSheet(models.Model):
                 }
                 cost_lines.append((0, 0, vals))
             self.material_cost_ids = cost_lines
+        self.perfil_id = False
         return res
 
     @api.depends('price_total', 'cc_ud')
@@ -506,9 +555,11 @@ class CostSheet(models.Model):
             if sh.sheet_type == 'sls':
                 tray_hours = sh.tray_hours_sls
             if sh.cus_units:
-                machine_hours = (tray_hours / sh.tray_units) * sh.cus_units
+                machine_hours = 0
+                if sh.tray_units:
+                    machine_hours = (tray_hours / sh.tray_units) * sh.cus_units
                 sh.machine_hours = machine_hours
-                euro_machine_ud = machine_hours * sh.euro_machine / sh.cus_units
+                euro_machine_ud = machine_hours * sh.euro_machine / (sh.cus_units)
                 sh.euro_machine_ud = euro_machine_ud
                 sh.euro_machine_total = euro_machine_ud * sh.cus_units
 
@@ -644,12 +695,12 @@ class CostSheet(models.Model):
         return
 
     @api.multi
-    def create_sale_productions(self):
+    def create_sale_productions(self, exist_product=False):
         design_sheets = self.filtered(lambda s: s.sheet_type == 'design')
         production_sheets = self - design_sheets
 
         if production_sheets:
-            production_sheets.create_productions()
+            production_sheets.create_productions(exist_product)
         return
 
     def manually_create_task_or_production(self):
@@ -658,7 +709,9 @@ class CostSheet(models.Model):
         or a production for each sheet.
         """
         self.ensure_one()
+        exist_product = False
         if self.production_id:
+            exist_product = self.production_id.product_id
             self.production_id.action_cancel()
             self.production_id.unlink()
 
@@ -668,7 +721,7 @@ class CostSheet(models.Model):
             # self.mapped('sale_id.project_id').unlink()
 
         self.create_tasks()
-        self.create_sale_productions()
+        self.create_sale_productions(exist_product)
 
     @api.multi
     def manually_add_consumes(self):
@@ -778,6 +831,7 @@ class CostSheet(models.Model):
                 'product_qty': line.get_bom_qty(),  # TODO review,
                 'product_uom_id': line.material_id.uom_id.id,
                 'operation_id': operation,
+                'pline_description': '',
             }
             res.append((0,0, vals))
 
@@ -789,8 +843,9 @@ class CostSheet(models.Model):
                 'product_qty': line.qty,
                 'product_uom_id': line.product_id.uom_id.id,
                 'operation_id': operation,
+                'pline_description': line.name,
             }
-            res.append((0,0, vals))
+            res.append((0, 0, vals))
         return res
 
     def get_routing_on_fly(self):
@@ -871,10 +926,18 @@ class CostSheet(models.Model):
             wo.write(vals)
         self.write({'production_id': prod.id})
 
-    def create_productions(self):
+    def create_productions(self, exist_product):
+        """
+        Para el caso de que una fabricación manual sea ejecutada hay que
+        respetar el producto que tenía la original, ya que este es el que está
+        como componente de la fabricación principal
+        """
         mrp_types = ['fdm', 'sls', 'poly', 'sla', 'sls2', 'dmls']
         for sheet in self.filtered(lambda sh: sh.sheet_type in mrp_types):
-            product = sheet.create_product_on_fly()
+            if exist_product:
+                product = exist_product
+            else:
+                product = sheet.create_product_on_fly()
             bom = sheet.create_bom_on_fly(product)
             vals = {
                 'sheet_id': sheet.id,
@@ -972,18 +1035,6 @@ class MaterialCostLine(models.Model):
     dmls_cc_total = fields.Float('gr Total', compute='_compute_cost')
 
     can_edit = fields.Boolean(related='sheet_id.can_edit')
-
-    # @api.onchange('material_id')
-    # def onchange_material_id(self):
-    #     if self.material_id and self.sheet_id and \
-    #             self.sheet_id.printer_id and self.sheet_id == 'fdm':
-    #         if self.material_id.diameter != self.sheet_id.printer_id.diameter:
-    #             self.material_id = False
-    #             return {
-    #                 'warning': {
-    #                     'title': _('Error'),
-    #                     'message': 'El diametro no coincide conla impresora'},
-    #             }
 
     def get_sls_gr_tray(self):
         self.ensure_one()
@@ -1223,14 +1274,22 @@ class PurchaseCostLine(models.Model):
 
     product_id = fields.Many2one('product.product', 'Producto')
     name = fields.Char('Ref. / Descripción')
-    qty = fields.Float('Unidades', required=True)
+    rfc = fields.Float('RFC', required=True)
+    qty = fields.Float('Unidades', required=True, compute="_get_qty")
     partner_id = fields.Many2one(
         'res.partner', 'Proveedor', domain=[('supplier', '=', True)])
     cost_ud = fields.Float('Coste Ud.')
     ports = fields.Float('Portes')
-    margin = fields.Float('Margin (%)', default=30.0)
+    margin = fields.Float('Margen (%)', default=30.0)
     pvp_ud = fields.Float('PVP Ud', compute="_get_pvp")
     pvp_total = fields.Float('PVP TOTAL', compute="_get_pvp")
+
+    @api.depends('rfc', 'sheet_id.rpf', 'sheet_id.group_id.sale_line_id.product_uom_qty')
+    def _get_qty(self):
+        for ocl in self:
+            ocl.qty = ocl.rfc * ocl.sheet_id.rpf * ocl.sheet_id.group_id.sale_line_id.product_uom_qty
+            if ocl.sheet_id.sheet_type == 'purchase':
+                ocl.qty = ocl.rfc * ocl.sheet_id.group_id.sale_line_id.product_uom_qty
 
     @api.depends('qty', 'cost_ud', 'ports', 'margin')
     def _get_pvp(self):
@@ -1244,17 +1303,32 @@ class PurchaseCostLine(models.Model):
             ocl.pvp_ud = pvp_ud
             ocl.pvp_total = pvp
 
+    @api.onchange('margin')
+    def onchange_margin(self):
+        if self.product_id:
+            self.cost_ud = self.product_id.standard_price
+
     @api.onchange('product_id')
     def onchange_product_id(self):
         if self.product_id:
             self.cost_ud = self.product_id.standard_price
+    
+    @api.onchange('margin')
+    def onchange_unplanned_cost(self):
+        if self.margin < 15:
+            self.margin = 15
+            return {
+                    'warning': {
+                        'title': _('Error'),
+                        'message': 'El margen no puede ser menor de 15%'}
+                }
 
-    @api.model
-    def create(self, vals):
-        if not vals.get('qty'):
-            raise UserError(
-                _('Debes especificar la cantidad de otros consumos')) 
-        return super().create(vals)
+    # @api.model
+    # def create(self, vals):
+    #     if not vals.get('qty'):
+    #         raise UserError(
+    #             _('Debes especificar la cantidad de otros consumos')) 
+    #     return super().create(vals)
 
 
 class OppiCostLine(models.Model):
@@ -1267,12 +1341,20 @@ class OppiCostLine(models.Model):
 
     name = fields.Char('Descripción', required=True)
     type = fields.Many2one('oppi.type', 'Tipo', required=True)
-    time = fields.Float('Tiempo')
+    t1f = fields.Float('T1F')
+    time = fields.Float('Tiempo', compute="_get_time")
     time_real = fields.Float('Tiempo real', related='task_id.effective_hours')
     employee_id = fields.Many2one('hr.employee', 'Asignado a')
     task_id = fields.Many2one('project.task', 'Task', readonly=True,  
                               copy=False)
     e_partner_id = fields.Many2one('res.partner', 'Externalización')
+
+    @api.depends('t1f', 'sheet_id.rpf', 'sheet_id.group_id.sale_line_id.product_uom_qty', 'e_partner_id')
+    def _get_time(self):
+        for ocl in self:
+            ocl.time = ocl.t1f * ocl.sheet_id.rpf * ocl.sheet_id.group_id.sale_line_id.product_uom_qty
+            if ocl.e_partner_id:
+                ocl.time = ocl.t1f * ocl.sheet_id.rpf
 
     def create_oppi_tasks(self, project):
         for line in self:

@@ -180,3 +180,22 @@ class StockPicking(models.Model):
             action['views'] = form_view
         action['res_id'] = self.id
         return action
+
+
+
+class StockMoveLine(models.Model):
+
+    _inherit = "stock.move.line"
+
+    @api.multi
+    def name_get(self):
+        """
+        Para que se vea la descripción en la ventana de código de barras.
+        Se usa display_name en la funcion get_barcode_view_state
+        """
+        result = []
+        for ml in self:
+            p_name = ml.product_id.display_name
+            description = ml.move_id.name
+            result.append((ml.id, '%s  (%s)' % (p_name, description)))
+        return result

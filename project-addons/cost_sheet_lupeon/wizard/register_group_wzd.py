@@ -3,6 +3,18 @@ from odoo import api, fields, models, _
 from odoo.exceptions import UserError
 from datetime import datetime, timedelta
 
+SHEET_TYPES = [
+    ('design', 'Design'),
+    ('fdm', 'FDM'),
+    ('sls', 'SLS P396'),  # Renombrado
+    ('poly', 'Poly'),
+    ('sla', 'SLA'),
+    ('sls2', 'SLS'),  # Copia de sla, nuevo SLS
+    ('dmls', 'DMLS'),
+    ('unplanned', 'Imprevistos'),
+    ('meets', 'Reuniones'),
+    ('purchase', 'Compras'),
+]
 
 class RegistergroupWizard(models.TransientModel):
     _name = 'register.group.wizard'
@@ -13,9 +25,10 @@ class RegistergroupWizard(models.TransientModel):
         gp = self.env['group.production'].browse(
             self._context.get('active_id'))
         res = super().default_get(default_fields)
-
         res['consume_ids'] = []
         res['qty_done_ids'] = []
+        res['sheet_type'] = gp.sheet_type
+        res['printer_id'] = gp.printer_id.id
 
         # Load qty
         # for wo in gp.workorder_ids:
@@ -45,12 +58,26 @@ class RegistergroupWizard(models.TransientModel):
         return res
 
     machine_hours = fields.Float('Horas máquina')
+    sheet_type = fields.Selection(SHEET_TYPES, 'Tipo de hoja')
     user_hours = fields.Float('Horas técnico')
     final_lot = fields.Char('Lote final')
     qty_done_ids = fields.One2many(
         'group.done.line', 'wzd_id', 'Cantidades Producidas')
     consume_ids = fields.One2many(
         'group.consume.line', 'wzd_id', 'Consumos')
+
+    density = fields.Float('Densidad (%)')
+    bucket_height_sls = fields.Float('Altura cubeta (cm)')
+    dosaje_inf = fields.Float('Dosaje rango inferior (%) ')
+    dosaje_sup = fields.Float('Dosaje rango superior (%) ')
+    dosaje_type = fields.Selection([
+        ('sequencial', 'Sequencial'),
+        ('permanent', 'Permanenete'),
+        ('off', 'Off'),
+        ], 'Tipo de dosaje')
+    desviation = fields.Float('Desviación (%)')
+    printer_id = fields.Many2one('printer.machine', 'Categoría Impresora')
+    printer_instance_id = fields.Many2one('printer.machine.instance', 'Impresora')
 
     def confirm(self):
         gp = self.env['group.production'].browse(
@@ -64,6 +91,18 @@ class RegistergroupWizard(models.TransientModel):
 
         if not self.final_lot:
             raise UserError('Es necesario indicar el lote final')
+
+        if gp.sheet_type == 'sls':
+            if not self.density:
+                raise UserError('Es necesario indicar el campo Densidad')
+            if not self.bucket_height_sls:
+                raise UserError('Es necesario indicar el campo Altura cubeta')
+            if not self.dosaje_inf:
+                raise UserError('Es necesario indicar el campo Dosaje rango inferior')
+            if not self.dosaje_sup:
+                raise UserError('Es necesario indicar el campo Dosaje rango superior')
+            if not self.desviation:
+                raise UserError('Es necesario indicar el campos Desviación')
 
         for consume in self.consume_ids:
             if not consume.lot_id:
@@ -142,10 +181,14 @@ class RegistergroupWizard(models.TransientModel):
                 h_qty = h_ud * line.qty_done
                 percent = h_qty / total_machine_hours
                 h = self.machine_hours * percent
+                if not h:
+                    raise UserError('La orden de trabajo %s de las cantidades hechas nos da horas maquina 0. Horas máquina de la orden de trabajo: %s, h_qty: %s, percent: %s' % (line.workorder_id.name, wo.th_machine_hours, h_qty, percent))
                 vals = {
                     'qty': line.qty_done,
                     'machine_hours': h,
-                    'consume_ids': consume_ids
+                    'consume_ids': consume_ids,
+                    'printer_id': self.printer_id,
+                    'printer_instance_id': self.printer_instance_id,
                 }
                 reg = self.env['register.workorder.wizard'].with_context(
                     active_id=wo.id).new(vals)
@@ -160,6 +203,20 @@ class RegistergroupWizard(models.TransientModel):
         if self.final_lot:
             gp.final_lot = self.final_lot
 
+        gp.write({
+            'density': self.density,
+            'bucket_height_sls': self.bucket_height_sls,
+            'dosaje_inf': self.dosaje_inf,
+            'dosaje_sup': self.dosaje_sup,
+            'dosaje_type': self.dosaje_type,
+            'desviation': self.desviation,
+            'printer_instance_id': self.printer_instance_id.id
+        })
+
+        # Escribo las horas máquina
+        self.printer_instance_id.update_hours(self.machine_hours)
+        # mh = self.printer_instance_id.machine_hours
+        # self.printer_instance_id.machine_hours = mh + self.machine_hours
         # Actualizo consumos
         for consume in self.consume_ids:
             consume.group_line_id.write({

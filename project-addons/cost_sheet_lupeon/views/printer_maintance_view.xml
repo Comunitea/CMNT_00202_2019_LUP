@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<odoo>
+
+   
+    <record id="printer_maintance_view_form" model="ir.ui.view">
+        <field name="name">printer.maintance.view</field>
+        <field name="model">printer.maintance</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_done" class="oe_highlight" states="pending" type="object" string="Finalizar"/>
+                     <field name="state" widget="statusbar" statusbar_visible="pending,done"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="rule_id" invisible="1"/>
+                        <field name="create_date" string="Fecha creación"/>
+                        <field name="printer_instance_id"/>
+                        <field name="rule_type"/>
+                        <field name="user_id"/>
+                        <field name="hours" widget="float_time"/>
+                    </group>
+                    <group string="Notas">
+                        <field name="note" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="printer_maintance_view_tree" model="ir.ui.view">
+        <field name="name">printer.maintance.view</field>
+        <field name="model">printer.maintance</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                 <field name="code"/>
+                 <field name="rule_id" invisible="1"/>
+                <field name="create_date" string="Fecha creación"/>
+                <field name="printer_instance_id"/>
+                <field name="rule_type"/>
+                <field name="user_id"/>
+                <field name="hours" widget="float_time"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- printer.maintance search view -->
+    <record id="printer_maintance_view_search" model="ir.ui.view">
+        <field name="name">printer.maintance.view.search</field>
+        <field name="model">printer.maintance</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="printer_instance_id"/>
+                <field name="code"/>
+                <field name="user_id"/>
+                <field name="name"/>
+                <separator/>
+                    <filter string="Mis mantenimientos" domain="[('user_id','=',uid)]" name="my_maintances"/>
+                <separator/>
+                    <filter string="Por horas uso" domain="[('rule_type','=', 'hours')]" name="by_hours"/>
+                    <filter string="Por fecha" domain="[('rule_type','=', 'date')]" name="by_date"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_user"  string="Usuario asignado"  domain="[]" context="{'group_by':'user_id'}"/>
+                    <filter name="group_printer" string="Impresora" domain="[]" context="{'group_by':'printer_instance_id'}"/>
+                    <filter name="group_code" string="Código" domain="[]" context="{'group_by':'code'}"/>
+                </group>
+                
+            </search>
+        </field>
+    </record>
+
+    <record id="action_printer_maintances" model="ir.actions.act_window">
+        <field name="name">Mantenimiento impresoras</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">printer.maintance</field>
+        <field name="view_type">form</field>
+        <field name="context">{'search_default_my_maintances': 1}</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_maintance" name="Mantenimiento" sequence="31" groups="group_maintance"/>
+
+    <menuitem id="menu_printer_maintances" action="action_printer_maintances"  name="Impresoras" parent="menu_maintance" sequence="0" groups="group_maintance"/>
+
+    <menuitem id="menu_action_printer_maintances" action="action_printer_maintances"  name="Mantenimiento impresoras" parent="menu_printer_maintances" sequence="0" groups="group_maintance"/>
+
+</odoo>

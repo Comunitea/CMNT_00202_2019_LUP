@@ -247,12 +247,24 @@ class SaleOrder(models.Model):
         self._create_purchases(p_lines)
 
     @api.multi
+    def check_payment_mode_validate(self):
+        self.ensure_one()
+        if self.payment_term_id and self.env.user.has_group(
+                'cost_sheet_lupeon.group_order_payment_validate'):
+            if self.payment_term_id.check_order_validate:
+                raise UserError(_('El plazo de pago requiere permisos de \
+                                   administración para validar'))
+
+
+    @api.multi
     def action_confirm(self):
         """
         Check if order requires client_order_ref.
         Creation of product sheet ids
         """
         for order in self:
+            # Compruebo si puedo validar con el método de pago
+            order.check_payment_mode_validate()
             # Creo las tareas y producciones asociadas a cada hoja de costes
             sheet_lines = order.get_sheet_lines()
             sheet_lines.create_sale_productions()
@@ -346,6 +358,8 @@ class SaleOrderLine(models.Model):
             'type': 'product',
             'lst_price': self.price_total,
             'group_sheet_id': self.group_sheet_id.id,
+            'sale_line_id': self.id,
+            'crp': True,
             'route_ids': [(6, 0, self.env.ref('mrp.route_warehouse0_manufacture').ids)],
         }
         product = self.env['product.product'].create(vals)
@@ -379,7 +393,7 @@ class SaleOrderLine(models.Model):
             vals = {
                 'sale_line_id': line.id,
                 # 'name': line.order_id.name + ' - ' + line.name,
-                'admin_fact': line.order_id.partner_id._get_admin_fact()
+                'admin_fact': line.order_id.admin_fact
             }
             line.group_sheet_id = self.env['group.cost.sheet'].create(vals)
         return
@@ -415,3 +429,15 @@ class SaleOrderLine(models.Model):
             domain = [('bom_id', 'in', self.group_sheet_id.bom_id.ids)]
             production = self.env['mrp.production'].search(domain)
         return production
+
+    def duplicate_line(self):
+        self.ensure_one()
+        new_line = self.with_context(from_copy=True).copy({'order_id': self.order_id.id})
+        c = self.company_id
+        new_line.group_sheet_id.write({
+            'sale_line_id': new_line.id,
+            'ing_hours': c.ing_hours,
+            'tech_hours': c.tech_hours,
+            'help_hours': c.help_hours,
+            'km_cost': c.km_cost,
+        })

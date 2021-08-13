@@ -23,6 +23,14 @@ class SaleAdvancePaymentInv(models.TransientModel):
                 raise UserError(_(\
                     'Can not create invoice if client order ref is PENDIENTE'))
         res = super().create_invoices()
+
+        projects = sale_orders.filtered(lambda s: s.invoice_status == 'invoiced').mapped('project_id')
+        if projects:
+            projects.active = False
+            # projects.mapped('task_ids').write({'active': True})
+            domain = [
+                ('project_id', 'in', projects.ids),
+                ('active', '=', False)]
+            tasks = self.env['project.task'].search(domain)
+            tasks.write({'active': True})
         return res
-
-

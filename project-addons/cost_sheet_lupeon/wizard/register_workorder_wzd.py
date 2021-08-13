@@ -13,6 +13,7 @@ class RegisterWorkorderWizard(models.TransientModel):
         res = super().default_get(default_fields)
         res['qty'] = 0
         res['consume_ids'] = []
+        res['printer_id'] = wo.sheet_id.printer_id.id
         for move in wo.active_move_line_ids:
             vals = {
                 'product_id': move.product_id.id,
@@ -27,6 +28,9 @@ class RegisterWorkorderWizard(models.TransientModel):
     machine_hours = fields.Float('Horas máquina')
     consume_ids = fields.One2many('consume.line', 'wzd_id', 'Consumos')
 
+    printer_id = fields.Many2one('printer.machine', 'Categoría Impresora')
+    printer_instance_id = fields.Many2one('printer.machine.instance', 'Impresora')
+
     def confirm(self):
         wo = self.env['mrp.workorder'].browse(self._context.get('active_id'))
         wo.button_pending()
@@ -40,6 +44,16 @@ class RegisterWorkorderWizard(models.TransientModel):
             'time': self.machine_hours
         }
         self.env['machine.time'].create(vals)
+
+        # Escribo las horas máquina
+        if self.printer_instance_id:
+            self.printer_instance_id.update_hours(self.machine_hours)
+            # mh = self.printer_instance_id.machine_hours
+            # self.printer_instance_id.machine_hours = mh + self.machine_hours
+
+            wo.production_id.write({
+                'printer_instance_id': self.printer_instance_id.id
+            })
 
         # Write consumes on workorrder
         for line in self.consume_ids:
@@ -63,5 +77,3 @@ class ConsumeLine(models.TransientModel):
     product_id = fields.Many2one('product.product', 'Producto')
     lot_id = fields.Many2one('stock.production.lot', 'Lote')
     qty_done = fields.Float('Cantidad consumida')
-    
-    

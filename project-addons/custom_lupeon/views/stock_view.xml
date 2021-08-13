@@ -1,7 +1,18 @@
 <?xml version="1.0"?>
 <odoo>
+    <record id="view_move_form_custom_question_cancel" model="ir.ui.view" >
+        <field name="name">view_move_form_custom</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <button name="action_cancel" position="replace">
+                <button name="action_cancel" invisible="1" string="Cancel" groups="base.group_user" type="object"/>
+                <button name="%(action_question_cancel_wizard)d" type="action" attrs="{'invisible': ['|', ('state', 'not in', ('assigned', 'confirmed', 'partially_available', 'draft', 'waiting')), ('is_locked', '=', False)]}" string="Cancelar" groups="base.group_user"/>
+            </button>    
+        </field>
+    </record>
 
-     <record id="view_move_tree_custom" model="ir.ui.view" >
+    <record id="view_move_tree_custom" model="ir.ui.view" >
         <field name="name">view_move_tree_custom</field>
         <field name="model">stock.move</field>
         <field name="inherit_id" ref="stock.view_move_tree"/>
@@ -257,7 +268,7 @@
         <field name="model">stock.picking</field>
         <field name="priority">200</field>
         <field name="arch" type="xml">
-            <tree string="Albaranes" editable="top" create="false" delete="false">
+            <tree string="Albaranes" editable="top" create="1" delete="false">
                 <field name="name" readonly="True"/>
                 <field name="date_done" string="Confirmation Date" readonly="True"/>
                 <field name="partner_id" readonly="True"/>

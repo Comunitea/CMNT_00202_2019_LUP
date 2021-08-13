@@ -6,12 +6,26 @@ from odoo.exceptions import UserError
 from datetime import timedelta
 
 
+SHEET_TYPES = [
+    ('design', 'Design'),
+    ('fdm', 'FDM'),
+    ('sls', 'SLS P396'),  # Renombrado
+    ('poly', 'Poly'),
+    ('sla', 'SLA'),
+    ('sls2', 'SLS'),  # Copia de sla, nuevo SLS
+    ('dmls', 'DMLS'),
+    ('unplanned', 'Imprevistos'),
+    ('meets', 'Reuniones'),
+    ('purchase', 'Compras'),
+]
+
 class GroupProduction(models.Model):
 
     _name = "group.production"
     _description = "Group Production"
 
     name = fields.Char('Name')
+    sheet_type = fields.Selection(SHEET_TYPES, 'Tipo de hoja')
     note = fields.Text('Notas')
 
     workorder_ids = fields.One2many(
@@ -39,6 +53,19 @@ class GroupProduction(models.Model):
     total_done = fields.Float('Total realizado', compute="_get_total_done")
 
     final_lot = fields.Char('Lote final')
+
+    density = fields.Float('Density (%)')
+    bucket_height_sls = fields.Float('Altura cubeta (cm)')
+    dosaje_inf = fields.Float('Dosaje rango inferior (%) ')
+    dosaje_sup = fields.Float('Dosaje rango superior (%) ')
+    dosaje_type = fields.Selection([
+        ('sequencial', 'Sequencial'),
+        ('permanent', 'Permanenete'),
+        ('off', 'Off'),
+        ], 'Tipo de dosaje')
+    desviation = fields.Float('Desviastion (%)')
+    printer_id = fields.Many2one('printer.machine', 'Categoría Impresora')
+    printer_instance_id = fields.Many2one('printer.machine.instance', 'Impresora')
 
     def _get_total_done(self):
         for gr in self:

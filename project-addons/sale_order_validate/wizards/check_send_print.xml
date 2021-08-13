@@ -8,7 +8,7 @@
         <field name="arch" type="xml">
             <form string="Revisar presupuesto">
                 
-                <field name="exception_msg" colspan="2" nolabel="1"/>
+                <field name="exception_msg" colspan="2" nolabel="1" mode="tree"/>
                 <footer>
                     <button string="Continue"
                             class="oe_highlight"

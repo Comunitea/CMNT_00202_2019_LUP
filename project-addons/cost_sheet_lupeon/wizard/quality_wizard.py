@@ -55,3 +55,4 @@ class QualityWizard(models.TransientModel):
                 _gather(mrp.product_id, mrp.location_dest_id)
             if quants:
                 quants.sudo().write({'blocked': False})
+                mrp.message_post(body=_('Stock desbloqueado'))
