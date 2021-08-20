@@ -14,7 +14,15 @@ odoo.define('custom_stock_barcode.picking_client_action', function (require) {
             var res = this._super();
             res.push(
                 ['location_parent', 'location_id.location_id.display_name'],
+                ['location_parent_format', 'location_id.location_id.loc_format'],
+                ['location_parent_posx', 'location_id.location_id.posx'],
+                ['location_parent_posy', 'location_id.location_id.posy'],
+                ['location_parent_posz', 'location_id.location_id.posz'],
                 ['location_dest_parent', 'location_dest_id.location_id.display_name'],
+                ['location_dest_parent_format', 'location_id.location_id.loc_format'],
+                ['location_dest_parent_posx', 'location_id.location_id.posx'],
+                ['location_dest_parent_posy', 'location_id.location_id.posy'],
+                ['location_dest_parent_posz', 'location_id.location_id.posz'],
                 ['location_posx', 'location_id.posx'],
                 ['location_posy', 'location_id.posy'],
                 ['location_posz', 'location_id.posz'],

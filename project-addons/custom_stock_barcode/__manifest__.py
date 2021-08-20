@@ -8,7 +8,7 @@
     "maintainer": "Comunitea",
     "website": "www.comunitea.com",
     "license": "AGPL-3",
-    "depends": ["stock_barcode"],
+    "depends": ["stock_barcode", "custom_warehouse"],
     "data": [
         'views/assets.xml',
     ],
