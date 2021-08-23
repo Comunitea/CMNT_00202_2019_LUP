@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record forcecreate="True" id="ir_cron_check_users_activity" model="ir.cron">
+        <field name="name">Notify hours not reported</field>
+        <field eval="False" name="active"/>
+        <field name="user_id" ref="base.user_root"/>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field eval="False" name="doall"/>
+        <field ref="hr.model_hr_employee" name="model_id"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_check_users_activity()</field>
+    </record>
+</odoo>

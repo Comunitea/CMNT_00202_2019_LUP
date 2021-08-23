@@ -1,0 +1,39 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* hr_activity_check
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-23 10:13+0000\n"
+"PO-Revision-Date: 2021-08-23 10:13+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: hr_activity_check
+#: model:ir.model,name:hr_activity_check.model_hr_employee
+msgid "Employee"
+msgstr "Empleado"
+
+#. module: hr_activity_check
+#: model:ir.model.fields,field_description:hr_activity_check.field_hr_employee__min_report_hours
+msgid "Hours to report"
+msgstr "Horas a reportar"
+
+#. module: hr_activity_check
+#: model:ir.actions.server,name:hr_activity_check.ir_cron_check_users_activity_ir_actions_server
+#: model:ir.cron,cron_name:hr_activity_check.ir_cron_check_users_activity
+#: model:ir.cron,name:hr_activity_check.ir_cron_check_users_activity
+msgid "Notify hours not reported"
+msgstr "Aviso de horas reportadas."
+
+#. module: hr_activity_check
+#: code:addons/hr_activity_check/models/hr_employee.py:48
+#, python-format
+msgid "The day {} you submitted {} hour/s of a total amount of {} hour/s."
+msgstr "El día {} reportaste {} hora/s de un total de {} hora/s."
