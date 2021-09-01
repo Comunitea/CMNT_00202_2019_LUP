@@ -383,6 +383,17 @@ class SaleOrderLine(models.Model):
             res.create_product_cost_sheet()
         return res
 
+    def write(self, vals):
+        """
+        Recálculo horas técnico al modificar la cantidad
+        """
+        res = super().write(vals)
+        if vals.get('product_uom_qty'):
+            sheets = self.mapped('group_sheet_id.sheet_ids')
+            for sh in sheets:
+                sh.update_tech_hours()
+        return res
+
     def unlink(self):
         self.mapped('group_sheet_id').unlink()
         res = super().unlink()

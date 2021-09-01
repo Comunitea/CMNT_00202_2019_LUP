@@ -306,6 +306,7 @@ class CostSheet(models.Model):
         return res
 
     def update_tech_hours(self):
+        # import ipdb; ipdb.set_trace()
         self.ensure_one()
         tech_line = self.workforce_cost_ids.filtered(
                 lambda x: x.name == 'Horas Técnico'
