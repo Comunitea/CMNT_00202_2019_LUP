@@ -1304,10 +1304,10 @@ class PurchaseCostLine(models.Model):
             ocl.pvp_ud = pvp_ud
             ocl.pvp_total = pvp
 
-    @api.onchange('margin')
-    def onchange_margin(self):
-        if self.product_id:
-            self.cost_ud = self.product_id.standard_price
+    # @api.onchange('margin')
+    # def onchange_margin(self):
+    #     if self.product_id:
+    #         self.cost_ud = self.product_id.standard_price
 
     @api.onchange('product_id')
     def onchange_product_id(self):
