@@ -146,6 +146,22 @@
         </field>
     </record>
 
+    <!-- mrp.production inherit tree view -->
+    <record id="mrp_tree_custom_lup" model="ir.ui.view">
+        <field name="name">mrp_tree_custom_lup</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_tree_view"/>
+        <field name="arch" type="xml">
+            <field name="date_planned_start" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="date_planned_start" position="after">
+                <field name="date_planned_finished" string="Fecha prevista fin"/>
+            </field>
+            
+        </field>
+    </record>
+
 
 </odoo>
 
