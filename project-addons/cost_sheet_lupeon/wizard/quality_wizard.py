@@ -18,7 +18,7 @@ class QualityWizard(models.TransientModel):
         return res
 
     mode = fields.Selection(
-        [('ok_tech', 'OK Tech'), ('ok_quality', 'OK Quality')], 'Mode',
+        [('ok_tech', 'OK Calidad'), ('ok_quality', 'OK Calidad 2')], 'Mode',
         readonly=True)
     qty = fields.Integer('No OK Qty')
 

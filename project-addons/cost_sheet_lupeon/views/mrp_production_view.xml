@@ -56,8 +56,8 @@
             </field>
 
              <field name="company_id" position="after">
-                <field name="ok_tech" attrs="{'invisible': [('company_id', '!=', 1)]}"/>
-                <field name="no_ok_tech" attrs="{'invisible': [('company_id', '!=', 1)]}"/>
+                <field name="ok_tech" string="OK Calidad" attrs="{'invisible': [('company_id', '!=', 1)]}"/>
+                <field name="no_ok_tech" string="Cant. No OK" attrs="{'invisible': [('company_id', '!=', 1)]}"/>
                 <!-- <field name="ok_quality" attrs="{'invisible': [('company_id', '!=', 1)]}"/>
                 <field name="no_ok_quality" attrs="{'invisible': [('company_id', '!=', 1)]}"/> -->
                 <field name="origin_production_id"  attrs="{'invisible': [('company_id', '!=', 1)]}"/>
@@ -121,7 +121,7 @@
             </field>
 
             <field name="state" position="after">
-                <field name="ok_tech"/>
+                <field name="ok_tech" string="OK Calidad"/>
                 <!-- <field name="no_ok_tech"/> -->
                 <!-- <field name="ok_quality"/> -->
                 <!-- <field name="no_ok_quality"/> -->
