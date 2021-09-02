@@ -34,11 +34,11 @@ class MrpProduction(models.Model):
                               store=True)
     line_ref = fields.Char('Referencia')
     line_name = fields.Char('Descripción')
-    ok_tech = fields.Boolean('OK tech', copy=False, readonly=True)
-    no_ok_tech = fields.Integer('Qty no ok tech', copy=False, readonly=True)
-    ok_quality = fields.Boolean('OK quality', copy=False, readonly=True)
+    ok_tech = fields.Boolean('OK Calidad', copy=False, readonly=True)
+    no_ok_tech = fields.Integer('Cant. NO OK', copy=False, readonly=True)
+    ok_quality = fields.Boolean('OK quality 2', copy=False, readonly=True)
     no_ok_quality = fields.Integer(
-        'Qty no ok quality', copy=False, readonly=True)
+        'Qty no ok quality 2', copy=False, readonly=True)
     repeated_production_ids = fields.One2many(
         'mrp.production', 'origin_production_id', 'Repeated production')
     origin_production_id = fields.Many2one(
@@ -109,16 +109,17 @@ class MrpProduction(models.Model):
 
         mrp.button_plan()
 
-        vals = {
-            'product_id': self.product_id.id,
-            'product_uom_qty': qty,
-            'product_uom_id': self.product_uom_id.id,
-            'production_id': self.id,
-            'origin': self.name + ' (%s)' % mode
-        }
-        scrap = self.env['stock.scrap'].with_context(
-            no_blocked=True, ok_check=True).create(vals)
-        scrap.action_validate()
+        # CREAR SCRAP (No necesario al mover este momento antes de done)
+        # vals = {
+        #     'product_id': self.product_id.id,
+        #     'product_uom_qty': qty,
+        #     'product_uom_id': self.product_uom_id.id,
+        #     'production_id': self.id,
+        #     'origin': self.name + ' (%s)' % mode
+        # }
+        # scrap = self.env['stock.scrap'].with_context(
+        #     no_blocked=True, ok_check=True).create(vals)
+        # scrap.action_validate()
 
     @api.multi
     @api.depends('workorder_ids.state', 'move_finished_ids', 'is_locked')
@@ -128,16 +129,25 @@ class MrpProduction(models.Model):
             # Solo en compañía lupeon, davitic deberia tener este check a True
             # y lupeon a false
             if not production.company_id.cost_sheet_sale:
+                # production.qty_produced = production.qty_produced - \
+                #     production.no_ok_tech - production.no_ok_quality
                 production.qty_produced = production.qty_produced - \
-                    production.no_ok_tech - production.no_ok_quality
+                    production.no_ok_tech
+
+            # Si no tiene grupo de finalizar produción (viejo ok quality)
+            # tampoco tiene el auto_ok_qualyty, que ahora es permitir finalizar
+            #  No mostrar botón de finalizar  
+            if not self.user_has_groups('cost_sheet_lupeon.ok_quality'):
+                if production.sheet_id and not production.sheet_id.auto_ok_quality:
+                    production.check_to_done = False
         return res
 
-    def block_stock(self):
-        self.ensure_one()
-        quants = self.env['stock.quant']._gather(
-            self.product_id, self.location_dest_id)
-        if quants:
-            quants.sudo().write({'blocked': True})
+    # def block_stock(self):
+    #     self.ensure_one()
+    #     quants = self.env['stock.quant']._gather(
+    #         self.product_id, self.location_dest_id)
+    #     if quants:
+    #         quants.sudo().write({'blocked': True})
 
     @api.multi
     def button_mark_done(self):
@@ -145,5 +155,16 @@ class MrpProduction(models.Model):
         # Solo en compañía lupeon, davitic deberia tener este check a True
         # y lupeon a false
         if not self.company_id.cost_sheet_sale:
-            self.block_stock()
+            # self.block_stock()
+            # CREAR SCRAP (No necesario al mover este momento antes de done)
+            vals = {
+                'product_id': self.product_id.id,
+                'product_uom_qty': self.no_ok_tech,
+                'product_uom_id': self.product_uom_id.id,
+                'production_id': self.id,
+                'origin': self.name + ' (%s)' % 'OK calidad'
+            }
+            scrap = self.env['stock.scrap'].with_context(
+                no_blocked=True, ok_check=True).create(vals)
+            scrap.action_validate()
         return res

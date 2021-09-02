@@ -10,11 +10,11 @@ class StockQuant(models.Model):
     
     blocked = fields.Boolean('Blocked')
 
-    def _gather(self, product_id, location_id, lot_id=None, package_id=None, owner_id=None, strict=False):
-        res = super()._gather(
-            product_id, location_id, lot_id=lot_id, package_id=package_id,
-            owner_id=owner_id, strict=strict)
-        if self._context.get('no_blocked'):
-            return res
-        else:
-            return res.filtered(lambda q: not q.blocked)
+    # def _gather(self, product_id, location_id, lot_id=None, package_id=None, owner_id=None, strict=False):
+    #     res = super()._gather(
+    #         product_id, location_id, lot_id=lot_id, package_id=package_id,
+    #         owner_id=owner_id, strict=strict)
+    #     if self._context.get('no_blocked'):
+    #         return res
+    #     else:
+    #         return res.filtered(lambda q: not q.blocked)

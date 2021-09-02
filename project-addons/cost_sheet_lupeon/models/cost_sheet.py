@@ -70,7 +70,7 @@ class CostSheet(models.Model):
     price_unit = fields.Float('PVP unidad', compute='_get_cost_prices')
     price_total = fields.Float('PVP TOTAL', compute='_get_cost_prices')
     sheet_imprevist = fields.Boolean('Hoja imprevista', readonly=True)
-    auto_ok_quality = fields.Boolean('OK calidad auto', default=True)
+    auto_ok_quality = fields.Boolean('Permitir Finalizar', default=True)
 
 
     # DATOS PIEZA
