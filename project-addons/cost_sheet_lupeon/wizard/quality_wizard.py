@@ -10,7 +10,8 @@ class QualityWizard(models.TransientModel):
     @api.model
     def default_get(self, default_fields):
         """ 
-        Get default ok tech ok quality
+        Get default ok tech ok quality.
+        Por defecto sebería se siempre solo ok_tech, ya que no habrá ok_calidad
         """
         res = super().default_get(default_fields)
         res['mode'] = self._context.get('mode')
