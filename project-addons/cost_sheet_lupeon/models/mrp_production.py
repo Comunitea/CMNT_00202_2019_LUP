@@ -157,14 +157,15 @@ class MrpProduction(models.Model):
         if not self.company_id.cost_sheet_sale:
             # self.block_stock()
             # CREAR SCRAP (No necesario al mover este momento antes de done)
-            vals = {
-                'product_id': self.product_id.id,
-                'product_uom_qty': self.no_ok_tech,
-                'product_uom_id': self.product_uom_id.id,
-                'production_id': self.id,
-                'origin': self.name + ' (%s)' % 'OK calidad'
-            }
-            scrap = self.env['stock.scrap'].with_context(
-                no_blocked=True, ok_check=True).create(vals)
-            scrap.action_validate()
+            if self.no_ok_tech:
+                vals = {
+                    'product_id': self.product_id.id,
+                    'product_uom_qty': self.no_ok_tech,
+                    'product_uom_id': self.product_uom_id.id,
+                    'production_id': self.id,
+                    'origin': self.name + ' (%s)' % 'OK calidad'
+                }
+                scrap = self.env['stock.scrap'].with_context(
+                    no_blocked=True, ok_check=True).create(vals)
+                scrap.action_validate()
         return res
