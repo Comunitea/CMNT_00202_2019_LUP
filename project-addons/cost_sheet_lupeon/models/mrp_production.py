@@ -161,7 +161,7 @@ class MrpProduction(models.Model):
                 vals = {
                     'product_id': self.product_id.id,
                     'product_uom_qty': self.no_ok_tech,
-                    'qty_done': self.no_ok_tech,
+                    'scrap_qty': self.no_ok_tech,
                     'product_uom_id': self.product_uom_id.id,
                     'production_id': self.id,
                     'origin': self.name + ' (%s)' % 'OK calidad'
