@@ -47,6 +47,18 @@ class MrpProduction(models.Model):
     qty_printed = fields.Float('Cant. impresa planificada',
                                compute='get_printed_qty')
     
+    all_wo_done = fields.Boolean('All done', compute='_get_all_wo_done')
+
+    @api.multi
+    @api.depends('workorder_ids.state')
+    def _get_all_wo_done(self):
+        for production in self:
+            wo_done = True
+            if any([x.state not in ('done', 'cancel') for x in production.workorder_ids]):
+                wo_done = False
+            production.all_wo_done = wo_done
+        return True
+
     # density = fields.Float('Density (%)')
     # bucket_height_sls = fields.Float('Altura cubeta (cm)')
     # dosaje_inf = fields.Float('Dosaje rango inferior (%) ')
@@ -108,18 +120,6 @@ class MrpProduction(models.Model):
         wiz.change_prod_qty()
 
         mrp.button_plan()
-
-        # CREAR SCRAP (No necesario al mover este momento antes de done)
-        # vals = {
-        #     'product_id': self.product_id.id,
-        #     'product_uom_qty': qty,
-        #     'product_uom_id': self.product_uom_id.id,
-        #     'production_id': self.id,
-        #     'origin': self.name + ' (%s)' % mode
-        # }
-        # scrap = self.env['stock.scrap'].with_context(
-        #     no_blocked=True, ok_check=True).create(vals)
-        # scrap.action_validate()
 
     @api.multi
     @api.depends('workorder_ids.state', 'move_finished_ids', 'is_locked')
