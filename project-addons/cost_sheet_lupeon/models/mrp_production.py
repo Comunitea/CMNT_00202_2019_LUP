@@ -136,10 +136,11 @@ class MrpProduction(models.Model):
 
             # Si no tiene grupo de finalizar produción (viejo ok quality)
             # tampoco tiene el auto_ok_qualyty, que ahora es permitir finalizar
-            #  No mostrar botón de finalizar  
-            if not self.user_has_groups('cost_sheet_lupeon.ok_quality'):
-                if production.sheet_id and not production.sheet_id.auto_ok_quality:
-                    production.check_to_done = False
+            #  No mostrar botón de finalizar 
+            if not self.user_has_groups('cost_sheet_lupeon.group_ok_quality') \
+                    and not production.sheet_id or (production.sheet_id
+                    and not production.sheet_id.auto_ok_quality):
+                production.check_to_done = False        
         return res
 
     # def block_stock(self):
