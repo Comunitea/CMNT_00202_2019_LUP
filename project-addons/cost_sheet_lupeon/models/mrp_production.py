@@ -48,6 +48,7 @@ class MrpProduction(models.Model):
                                compute='get_printed_qty')
     
     all_wo_done = fields.Boolean('All done', compute='_get_all_wo_done')
+    check_to_done2 = fields.Boolean('All done', compute='_get_produced_qty')
 
     @api.multi
     @api.depends('workorder_ids.state')
@@ -137,10 +138,11 @@ class MrpProduction(models.Model):
             # Si no tiene grupo de finalizar produción (viejo ok quality)
             # tampoco tiene el auto_ok_qualyty, que ahora es permitir finalizar
             #  No mostrar botón de finalizar
+            production.check_to_done2 = True
             if not self.user_has_groups('cost_sheet_lupeon.group_ok_quality') \
                     and (not production.sheet_id or (production.sheet_id
                     and not production.sheet_id.auto_ok_quality)):
-                production.check_to_done = False
+                production.check_to_done2 = False
         return res
 
     # def block_stock(self):
