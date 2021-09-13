@@ -1025,32 +1025,32 @@ msgstr ""
 #. module: cost_sheet_lupeon
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.mrp_production_form_cost_sheet
 msgid "OK QUALITY"
-msgstr "OK CALIDAD"
+msgstr "OK CALIDAD 2"
 
 #. module: cost_sheet_lupeon
 #: selection:quality.wizard,mode:0
 msgid "OK Quality"
-msgstr "OK CALIDAD"
+msgstr "OK CALIDAD 2"
 
 #. module: cost_sheet_lupeon
 #: model_terms:ir.ui.view,arch_db:cost_sheet_lupeon.mrp_production_form_cost_sheet
 msgid "OK TECH"
-msgstr "OK TÉCNICO"
+msgstr "OK CALIDAD"
 
 #. module: cost_sheet_lupeon
 #: selection:quality.wizard,mode:0
 msgid "OK Tech"
-msgstr "OK TÉCNICO"
+msgstr "OK CALIDAD"
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_mrp_production__ok_quality
 msgid "OK quality"
-msgstr "OK CALIDAD"
+msgstr "OK CALIDAD 2"
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_mrp_production__ok_tech
 msgid "OK tech"
-msgstr "OK TÉCNICO"
+msgstr "OK CALIDAD"
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_cost_sheet__oppi_line_ids
@@ -1315,12 +1315,12 @@ msgstr ""
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_mrp_production__no_ok_quality
 msgid "Qty no ok quality"
-msgstr "Cant. NO OK CALIDAD"
+msgstr "Cant. NO OK CALIDAD 2"
 
 #. module: cost_sheet_lupeon
 #: model:ir.model.fields,field_description:cost_sheet_lupeon.field_mrp_production__no_ok_tech
 msgid "Qty no ok tech"
-msgstr "Cant. NO OK TÉCNICO"
+msgstr "Cant. NO OK CALIDAD"
 
 #. module: cost_sheet_lupeon
 #: model:ir.actions.act_window,name:cost_sheet_lupeon.action_quality_wizard

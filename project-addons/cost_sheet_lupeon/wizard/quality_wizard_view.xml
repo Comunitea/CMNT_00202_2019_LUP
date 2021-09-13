@@ -9,7 +9,7 @@
                         Wizard Quality
                     </p>
                     <group>
-                        <field name="mode"/>
+                        <!-- <field name="mode"/> -->
                         <field name="qty"/>
                     </group>
                     <footer>

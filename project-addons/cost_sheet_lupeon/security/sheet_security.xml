@@ -35,14 +35,16 @@
         <field name="name">Semi-responsable Fabricación</field>
         <field name="category_id" ref="base.module_category_hidden"/>
     </record>
+    <!-- Ahora ok calidad -->
     <record id="group_ok_quality" model="res.groups">
-        <field name="name">Ok Calidad</field>
+        <field name="name">OK Finalizar Producciones</field>
         <field name="category_id" ref="base.module_category_hidden"/>
     </record>
     <record id="group_ok_tech" model="res.groups">
-        <field name="name">Ok Técnico</field>
+        <field name="name">Ok Calidad</field>
         <field name="category_id" ref="base.module_category_hidden"/>
     </record>
+    <!-- Ahora finalizar -->
 
     <record id="module_category_office" model="ir.module.category" >
         <field name="name">Oficina técnica</field>
