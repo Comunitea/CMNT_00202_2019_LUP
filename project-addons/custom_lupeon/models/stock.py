@@ -79,11 +79,47 @@ class StockPicking(models.Model):
     ship_cost = fields.Monetary(string='Ship Cost', default=0.0)
     ship_price = fields.Monetary('Envio cobrado', related='sale_id.ship_price')
     delivered = fields.Boolean('Delivered', compute="_compute_delivered", store=True, readonly=False)
-    delivery_blocked = fields.Boolean('Delivery blocked', related='sale_id.delivery_blocked')
+    delivery_blocked = fields.Boolean('Delivery blocked', compute="_compute_delivery_blocked", store=True, readonly=True)
+    force_delivery_blocked = fields.Boolean('Block delivery', default=False)
     partner_phone = fields.Char('Phone', related='partner_id.phone')
     partner_mobile = fields.Char('Mobile', related='partner_id.mobile')
     partner_email = fields.Char('Email', related='partner_id.email')
+    available_deliveries_ids = fields.Many2many('delivery.carrier', compute="_compute_available_deliveries", store=True)
 
+    
+    @api.depends('sale_id.delivery_blocked', 'force_delivery_blocked')
+    def _compute_delivery_blocked(self):
+        for pick in self:
+            if pick.sale_id.delivery_blocked:
+                pick.delivery_blocked = True
+            else:
+                if pick.force_delivery_blocked:
+                    pick.delivery_blocked = True
+                else:
+                    pick.delivery_blocked = False
+
+    @api.depends('partner_id')
+    def _compute_available_deliveries(self):
+        for picking in self:
+            domain = [('ps_sync', '=', False)]
+            if picking.partner_id:
+                country_id = picking.partner_id.country_id.id
+                state_id = picking.partner_id.state_id.id
+                
+                if state_id:
+                    domain += [
+                        '|',
+                        ('state_ids', '=', False),
+                        ('state_ids', '=', state_id)]
+                   
+                if country_id:
+                    domain += [
+                        '|',
+                        ('country_ids', '=', False),
+                        ('country_ids', '=', country_id)]
+
+            carrier_ids = self.env['delivery.carrier'].search(domain).ids
+            picking.available_deliveries_ids = carrier_ids
 
     @api.multi
     def do_print_picking(self):
