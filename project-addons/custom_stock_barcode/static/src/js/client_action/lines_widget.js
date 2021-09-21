@@ -30,9 +30,6 @@ odoo.define('custom_stock_barcode.LinesWidget', function (require) {
                // parent
                locationParent: this.page.location_parent,
                locationParentFormat: this.page.location_parent_format,
-               locationParentPosx: this.page.location_parent_posx,
-               locationParentPosy: this.page.location_parent_posy,
-               locationParentPosz: this.page.location_parent_posz,
                // gparent
                locationGParent: this.page.location_gparent,
                locationGParentPosx: this.page.location_gparent_posx,
@@ -41,9 +38,6 @@ odoo.define('custom_stock_barcode.LinesWidget', function (require) {
                // parent dest
                locationDestParent: this.page.location_dest_parent,
                locationDestParentFormat: this.page.location_dest_parent_format,
-               locationDestParentPosx: this.page.location_dest_parent_posx,
-               locationDestParentPosy: this.page.location_dest_parent_posy,
-               locationDestParentPosz: this.page.location_dest_parent_posz,
                // gparent dest
                locationDestGParent: this.page.location_dest_gparent,
                locationDestGParentPosx: this.page.location_dest_gparent_posx,
