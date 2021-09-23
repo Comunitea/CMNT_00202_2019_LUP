@@ -42,7 +42,7 @@ class PurchaseOrder(models.Model):
 class PurchaseOrderLine(models.Model):
     _inherit = "purchase.order.line"
 
-
+    check = fields.Boolean('Check')
     product_categ_id = fields.Many2one(
         "product.category", "Category", related="product_id.categ_id"
     )
