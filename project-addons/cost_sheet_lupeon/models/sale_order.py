@@ -219,6 +219,17 @@ class SaleOrder(models.Model):
             supplier_purchase[partner.id] = po
 
         for line in lines:
+            # Enlazar la linea de compra con el movimiento de produccion
+            # para que al validar el albarán asociado a la compra se haga la
+            # reserva del movimiento de produccion
+            move_dest_ids = False
+            if line.product_id.spec_stock:
+                prod = line.sheet_id.production_id
+                rel_move = prod.move_raw_ids.filtered(lambda x: x.product_id == line.product_id)
+                if rel_move:
+                    if rel_move.procure_method != 'make_to_order':
+                        rel_move.procure_method = 'make_to_order'
+                    move_dest_ids = [(6, 0, rel_move.ids)]
             po = supplier_purchase[line.partner_id.id]
             taxes = line.product_id.supplier_taxes_id
             # fpos = po.fiscal_position_id
@@ -235,6 +246,7 @@ class SaleOrder(models.Model):
                 'date_planned': fields.Datetime.now(),
                 # 'taxes_id': [(6, 0, taxes_id.ids)],
                 'taxes_id': [(6, 0, taxes.ids)],
+                'move_dest_ids': move_dest_ids,
                 'order_id': po.id,
             }
             self.env['purchase.order.line'].create(vals)

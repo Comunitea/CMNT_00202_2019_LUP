@@ -49,7 +49,7 @@ class QualityWizard(models.TransientModel):
             mrp.no_ok_quality = self.qty
 
         if self.qty > 0:
-            mrp.create_partial_mrp(self.qty, self.mode)
+            mrp.create_partial_mrp(self.qty)
 
         # if self.mode == 'ok_quality' or auto_mode_done:
         #     quants = self.env['stock.quant'].with_context(no_blocked=True).\

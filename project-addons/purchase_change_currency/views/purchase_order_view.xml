@@ -14,8 +14,7 @@
         <field name="inherit_id" ref="purchase.purchase_order_form"/>
         <field name="arch" type="xml">
             <field name="currency_id" position="after">
-                <button name="%(purchase_change_currency_action)d" type="action"  string="Change Currency" attrs="{'invisible': [('state', 'not in', ['draft'])]}" />
-            </field>
+                <button name="%(purchase_change_currency_action)d" type="action"  string="Change Currency" attrs="{'invisible': ['|', ('state', 'not in', ['draft', 'sent', 'purchase']), ('invoice_status', '=', 'invoiced')]}" />            </field>
             
         </field>
     </record>

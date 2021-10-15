@@ -23,6 +23,8 @@ class ResPartner(models.Model):
                             return "NOT VIES"
                         else:
                             return fiscal_position_id.id
+                    else:
+                        return fiscal_position_id.id
                 return fp_prev and fp_prev.id or False
 
     @api.onchange("country_id", "vat")

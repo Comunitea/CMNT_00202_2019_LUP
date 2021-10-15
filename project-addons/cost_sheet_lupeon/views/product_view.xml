@@ -16,6 +16,8 @@
                         <label for="custom_mrp_ok"/>
                         <field name="is_material"/>
                         <label for="is_material"/>
+                        <field name="spec_stock"/>
+                        <label for="spec_stock"/>
                     </div>
                     <div attrs="{'invisible':[('cost_sheet_sale', '=', True)]}">
                         <label for="group_sheet_id"/>

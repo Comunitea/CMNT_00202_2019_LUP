@@ -326,17 +326,13 @@ class SaleOrderLine(models.Model):
         Actualizar solo en compañía dativic
         """
         price = super()._get_display_price(product)
-        admin_fact = 0
-        if self.order_id.partner_invoice_id.admin_fact:
-            admin_fact = self.order_id.partner_invoice_id.admin_fact
-        else:
-            admin_fact = self.order_id.partner_id._get_admin_fact()
+        admin_fact = self.order_id.admin_fact
+        
 
         if  admin_fact and self.order_id.company_id.id != 1:
             price_precision = self.env['decimal.precision'].precision_get(
             'Product Price')
-            price = float_round(price * (1 + self.order_id.partner_id.\
-                _get_admin_fact()/100), price_precision)
+            price = float_round(price * (1 + admin_fact/100), price_precision)
         return price
     
     @api.depends('product_id', 'customer_lead', 'product_uom_qty',

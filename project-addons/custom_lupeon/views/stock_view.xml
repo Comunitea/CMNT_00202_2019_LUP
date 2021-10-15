@@ -1,5 +1,21 @@
 <?xml version="1.0"?>
 <odoo>
+
+    <record id="view_available_carriers" model="ir.ui.view" >
+        <field name="name">view_available_carriers</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="delivery.view_picking_withcarrier_out_form"/>
+        <field name="arch" type="xml">
+            <field name="carrier_id" position="before">
+                <field name="available_deliveries_ids" invisible="1"/>
+            </field>
+            <field name="carrier_id" position="attributes">
+                <attribute name="domain">[('id', 'in', available_deliveries_ids)]</attribute>
+                <attribute name="required">1</attribute>
+            </field>    
+        </field>
+    </record>
+
     <record id="view_move_form_custom_question_cancel" model="ir.ui.view" >
         <field name="name">view_move_form_custom</field>
         <field name="model">stock.picking</field>
@@ -75,7 +91,8 @@
         <field name="arch" type="xml">
             <field name="backorder_id" position="after">
                 <!--field name="sale_id"/-->
-                <field name="delivery_blocked"/>
+                <field name="delivery_blocked" readonly="1"/>
+                
             </field>
         </field>
     </record>
@@ -155,6 +172,7 @@
         <field name="inherit_id" ref="stock.view_picking_form"/>
         <field name="arch" type="xml">
             <field name="origin" position="after">
+                <field name="force_delivery_blocked"/>
                 <field name="delivered" attrs="{'invisible':[('picking_type_code', '!=', 'outgoing')]}"/>
             </field>
         </field>

@@ -306,7 +306,6 @@ class CostSheet(models.Model):
         return res
 
     def update_tech_hours(self):
-        # import ipdb; ipdb.set_trace()
         self.ensure_one()
         tech_line = self.workforce_cost_ids.filtered(
                 lambda x: x.name == 'Horas Técnico'
@@ -1274,6 +1273,8 @@ class PurchaseCostLine(models.Model):
         'cost.sheet', 'Hoja de coste', ondelete="cascade")
 
     product_id = fields.Many2one('product.product', 'Producto')
+    spec_stock = fields.Boolean(
+        'Specific stock', related="product_id.spec_stock")
     name = fields.Char('Ref. / Descripción')
     rfc = fields.Float('RFC', required=True)
     qty = fields.Float('Unidades', required=True, compute="_get_qty")

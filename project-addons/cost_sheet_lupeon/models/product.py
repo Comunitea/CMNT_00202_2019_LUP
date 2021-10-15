@@ -19,6 +19,7 @@ class ProductTemplate(models.Model):
     cost_sheet_sale = fields.Boolean(related='company_id.cost_sheet_sale')
     is_material = fields.Boolean('Es un material')
     custom_mrp_ok = fields.Boolean('Fabricación lupeon')
+    spec_stock = fields.Boolean('Stock específico')
     # material = fields.Boolean('Material')
     material_type = fields.Selection(MATERIAL_TYPES, 'Tipo material')
 

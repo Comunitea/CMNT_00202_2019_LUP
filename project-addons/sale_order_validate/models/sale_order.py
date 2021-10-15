@@ -195,3 +195,7 @@ class SaleOrderLine(models.Model):
         carrier_id = self.order_id.carrier_id
         if self.product_id.transport_restrictions and carrier_id and not carrier_id.allow_transport_restrictions:
             raise ValidationError('El artículo {} tiene restricciones para el transportista en {}'.format(self.product_id.display_name, carrier_id.display_name))
+
+        msg = self.order_id._check_country_restrictions()
+        if msg:
+            raise ValidationError(msg)

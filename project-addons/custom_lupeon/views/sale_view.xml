@@ -10,7 +10,7 @@
                 <button name="create_procurements"
                         type="object"
                         icon="fa-truck"
-                        states="draft"
+                        states="draft,sent"
                 />
                 <!--field name="reserved"/-->
                 <field name="qty_reserved"/>

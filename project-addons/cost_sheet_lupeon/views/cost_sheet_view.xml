@@ -365,7 +365,8 @@
                                         <field name="name"/>
                                         <field name="rfc"/>
                                         <field name="qty"/>
-                                        <field name="partner_id" options="{'no_create_edit': True, 'no_quick_create': True}"/>
+                                        <field name="spec_stock" invisible="1"/>
+                                        <field name="partner_id" attrs="{'required': [('spec_stock', '=', True)]}" options="{'no_create_edit': True, 'no_quick_create': True}"/>
                                         <field name="cost_ud"/>
                                         <field name="ports"/>
                                         <field name="margin"/>
@@ -464,7 +465,8 @@
                                         <field name="name"/>
                                         <field name="rfc"/>
                                         <field name="qty"/>
-                                        <field name="partner_id" options="{'no_create_edit': True, 'no_quick_create': True}"/>
+                                        <field name="spec_stock" invisible="1"/>
+                                        <field name="partner_id" attrs="{'required': [('spec_stock', '=', True)]}" options="{'no_create_edit': True, 'no_quick_create': True}"/>
                                         <field name="cost_ud"/>
                                         <field name="ports"/>
                                         <field name="margin"/>
@@ -551,7 +553,8 @@
                                         <field name="name"/>
                                         <field name="rfc"/>
                                         <field name="qty"/>
-                                        <field name="partner_id" options="{'no_create_edit': True, 'no_quick_create': True}"/>
+                                        <field name="spec_stock" invisible="1"/>
+                                        <field name="partner_id" attrs="{'required': [('spec_stock', '=', True)]}" options="{'no_create_edit': True, 'no_quick_create': True}"/>
                                         <field name="cost_ud"/>
                                         <field name="ports"/>
                                         <field name="margin"/>
@@ -636,7 +639,8 @@
                                         <field name="name"/>
                                         <field name="rfc"/>
                                         <field name="qty"/>
-                                        <field name="partner_id" options="{'no_create_edit': True, 'no_quick_create': True}"/>
+                                        <field name="spec_stock" invisible="1"/>
+                                        <field name="partner_id" attrs="{'required': [('spec_stock', '=', True)]}" options="{'no_create_edit': True, 'no_quick_create': True}"/>
                                         <field name="cost_ud"/>
                                         <field name="ports"/>
                                         <field name="margin"/>
@@ -721,7 +725,8 @@
                                         <field name="name"/>
                                         <field name="rfc"/>
                                         <field name="qty"/>
-                                        <field name="partner_id" options="{'no_create_edit': True, 'no_quick_create': True}"/>
+                                        <field name="spec_stock" invisible="1"/>
+                                        <field name="partner_id" attrs="{'required': [('spec_stock', '=', True)]}" options="{'no_create_edit': True, 'no_quick_create': True}"/>
                                         <field name="cost_ud"/>
                                         <field name="ports"/>
                                         <field name="margin"/>
@@ -810,7 +815,8 @@
                                         <field name="name"/>
                                         <field name="rfc"/>
                                         <field name="qty"/>
-                                        <field name="partner_id" options="{'no_create_edit': True, 'no_quick_create': True}"/>
+                                        <field name="spec_stock" invisible="1"/>
+                                        <field name="partner_id" attrs="{'required': [('spec_stock', '=', True)]}" options="{'no_create_edit': True, 'no_quick_create': True}"/>
                                         <field name="cost_ud"/>
                                         <field name="ports"/>
                                         <field name="margin"/>
@@ -866,7 +872,8 @@
                                         <field name="name"/>
                                         <field name="rfc" string="RPC"/>
                                         <field name="qty"/>
-                                        <field name="partner_id" options="{'no_create_edit': True, 'no_quick_create': True}"/>
+                                        <field name="spec_stock" invisible="1"/>
+                                        <field name="partner_id" attrs="{'required': [('spec_stock', '=', True)]}" options="{'no_create_edit': True, 'no_quick_create': True}"/>
                                         <field name="cost_ud"/>
                                         <field name="ports"/>
                                         <field name="margin"/>
@@ -1199,8 +1206,8 @@
             <tree editable="bottom">
                 <field name="can_edit" invisible="1"/>
                 <field name="name"/>
-                <field name="material_id" attrs="{'column_invisible': [('parent.sheet_type', '=', 'fdm')]}" domain="[('id', 'in', parent.available_material_ids)]"/>
-                    <field name="material_id2" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}" domain="[('id', 'in', parent.available_material_ids)]"/>
+                <field name="material_id" attrs="{'column_invisible': [('parent.sheet_type', '=', 'fdm')]}" domain="[('id', 'in', parent.available_material_ids)]" options="{'no_create_edit': True, 'no_quick_create': True}"/>
+                    <field name="material_id2" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}" domain="[('id', 'in', parent.available_material_ids)]" options="{'no_create_edit': True, 'no_quick_create': True}"/>
                 <!-- FDM FIELDS -->
                 <field name="diameter" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
                 <!-- <field name="color" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/> -->

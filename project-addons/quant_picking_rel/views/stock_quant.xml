@@ -13,7 +13,7 @@
       <record id="product_normal_form_view_reservations" model="ir.ui.view">
         <field name="name">product.product.form.reservations</field>
         <field name="model">product.product</field>
-        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="inherit_id" ref="stock.product_form_view_procurement_button"/>
         <field name="arch" type="xml">
             <xpath expr="//button[@name='action_open_quants']" position="before">
                 <button class="oe_stat_button"

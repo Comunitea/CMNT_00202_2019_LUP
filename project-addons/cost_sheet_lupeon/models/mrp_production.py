@@ -2,6 +2,8 @@
 # License AGPL-3 - See http://www.gnu.org/licenses/agpl-3.0.html
 
 from odoo import models, fields, api, _
+from odoo.tools import float_compare, float_round
+
 
 
 SHEET_TYPES = [
@@ -46,6 +48,9 @@ class MrpProduction(models.Model):
 
     qty_printed = fields.Float('Cant. impresa planificada',
                                compute='get_printed_qty')
+    effective_qty_produced = fields.Float('Cantidad efectiva producida',
+                               compute='_get_produced_qty')
+    version = fields.Integer('Versión', readonly=True)
     
     all_wo_done = fields.Boolean('All done', compute='_get_all_wo_done')
     check_to_done2 = fields.Boolean('All done', compute='_get_produced_qty')
@@ -75,10 +80,15 @@ class MrpProduction(models.Model):
     def _get_raw_move_data(self, bom_line, line_data):
         """
         Propagar la descripción de las líneas de compra
+        Si el producto es de tipo corte laser, mecanizar...
+        hacerlo make_to_order
+        En el momento de crear la compra ya se anota el movimiento enlazado
         """
         res = super()._get_raw_move_data(bom_line, line_data)
         if bom_line.pline_description:
             res.update(pline_description=bom_line.pline_description)
+        if bom_line.product_id.spec_stock:
+            res['procure_method'] = 'make_to_order'
         return res
 
 
@@ -99,17 +109,26 @@ class MrpProduction(models.Model):
                         [x.qty_done for x in lines if x.group_mrp_id.state in ['planned', 'progress', 'done']])
 
     #  TODO FECHA
-    def create_partial_mrp(self, qty, mode):
+    def create_partial_mrp(self, qty):
         """
-        When OK tech or OK quality, replan a production
+        When OK tech or OK quality, replan a production.
+        Propago los movimientos de destino para que la fabricación custom
+        repetida actualice las reservas del albarán enlazado a la producción
+        original
         """
         self.ensure_one()
         version = len(self.repeated_production_ids) + 1
+        # Haciendo repetidas acaba dando error por el nombre asi que lo dejo
+        # de momento con el formato R1 - R1 -R1
+        # version = self.version + 1
+        # original_name = self.name.split(' - ')[0]
+        original_name = self.name
         mrp = self.copy({
-            'name': self.name + ' - R%s' % version,
+            'name': original_name + ' - R%s' % version,
             # 'product_uom_qty': qty,
             'sheet_id': self.sheet_id.id,
             'origin_production_id': self.id,
+            'version': version
         })
 
         # Por algun motivo no se duplica con lo que yo le digo
@@ -122,6 +141,48 @@ class MrpProduction(models.Model):
 
         mrp.button_plan()
 
+        # Popago los movimientos de destino
+        if self.mapped('move_finished_ids.move_dest_ids'):
+            mrp.move_finished_ids.move_dest_ids = \
+                [(6, 0, [x.id for x in self.move_finished_ids.move_dest_ids])]
+
+        if mrp.product_id.custom_mrp_ok:
+            mrp.create_partial_child_mrp(qty)
+    
+    def create_partial_child_mrp(self, no_ok_qty):
+        self.ensure_one()
+        # Calculo cantidades proporcionales
+        product_qtys = {}
+        p_qty = self.bom_id.product_qty
+        for l in self.bom_id.bom_line_ids:
+            new_qty = (no_ok_qty * l.product_qty) / p_qty
+            product_qtys[l.product_id] = new_qty
+        
+        # Buscar producciones hijas
+        # Mas seguro el método de abajo, aunque con el origin_production_id
+        # a false, debería mejorar
+        # domain = [
+        #     ('sale_id', '=', self.sale_id.id),
+        #     ('id', '!=', self.id),
+        #     ('product_id.custom_mrp_ok', '=', False),
+        #     ('origin_production_id', '=', False),
+            
+        # ]
+        # productions = self.env['mrp.production'].search(domain)
+
+        productions =  self.env['mrp.production']
+        if self.sale_line_id and self.sale_line_id.group_sheet_id:
+            productions = \
+                self.sale_line_id.group_sheet_id.sheet_ids.mapped(
+                    'production_id')
+
+        # Crear las repedidas de las hijas con la parte proporcional
+        for prod in productions:
+            if product_qtys.get(prod.product_id, False):
+                new_qty = product_qtys[prod.product_id]
+                prod.create_partial_mrp(new_qty)
+
+
     @api.multi
     @api.depends('workorder_ids.state', 'move_finished_ids', 'is_locked')
     def _get_produced_qty(self):
@@ -129,10 +190,9 @@ class MrpProduction(models.Model):
         for production in self:
             # Solo en compañía lupeon, davitic deberia tener este check a True
             # y lupeon a false
-            if not production.company_id.cost_sheet_sale:
-                # production.qty_produced = production.qty_produced - \
-                #     production.no_ok_tech - production.no_ok_quality
-                production.qty_produced = production.qty_produced - \
+            production.effective_qty_produced = production.qty_produced
+            if not production.company_id.cost_sheet_sale and production.state != 'done':
+                production.effective_qty_produced = production.qty_produced - \
                     production.no_ok_tech
 
             # Si no tiene grupo de finalizar produción (viejo ok quality)
@@ -154,22 +214,39 @@ class MrpProduction(models.Model):
 
     @api.multi
     def button_mark_done(self):
+        self.ensure_one()
+
+        # Modifico lo que voy a producir quitando la cantidad no ok
+        if not self.company_id.cost_sheet_sale:
+            quantity = self.effective_qty_produced  # La cantidad menos la no OK.
+            for move in self.move_finished_ids:
+                if move.product_id.tracking == 'none' and move.state not in ('done', 'cancel'):
+                    rounding = move.product_uom.rounding
+                    if move.product_id.id == self.product_id.id:
+                        move.quantity_done = float_round(quantity, precision_rounding=rounding)
+                    elif move.unit_factor:
+                        # byproducts handling
+                        move.quantity_done = float_round(quantity * move.unit_factor, precision_rounding=rounding)
+
         res = super().button_mark_done()
+
+        # No hago SCRAP porque el movimiento puede estar enlazado a
+        # la reserva del albarán de venta.
         # Solo en compañía lupeon, davitic deberia tener este check a True
         # y lupeon a false
-        if not self.company_id.cost_sheet_sale:
-            # self.block_stock()
-            # CREAR SCRAP (No necesario al mover este momento antes de done)
-            if self.no_ok_tech:
-                vals = {
-                    'product_id': self.product_id.id,
-                    'product_uom_qty': self.no_ok_tech,
-                    'scrap_qty': self.no_ok_tech,
-                    'product_uom_id': self.product_uom_id.id,
-                    'production_id': self.id,
-                    'origin': self.name + ' (%s)' % 'OK calidad'
-                }
-                scrap = self.env['stock.scrap'].with_context(
-                    no_blocked=True, ok_check=True).create(vals)
-                scrap.action_validate()
+        # if not self.company_id.cost_sheet_sale:
+        #     # self.block_stock()
+        #     # CREAR SCRAP (No necesario al mover este momento antes de done)
+        #     if self.no_ok_tech:
+        #         vals = {
+        #             'product_id': self.product_id.id,
+        #             'product_uom_qty': self.no_ok_tech,
+        #             'scrap_qty': self.no_ok_tech,
+        #             'product_uom_id': self.product_uom_id.id,
+        #             'production_id': self.id,
+        #             'origin': self.name + ' (%s)' % 'OK calidad'
+        #         }
+        #         scrap = self.env['stock.scrap'].with_context(
+        #             no_blocked=True, ok_check=True).create(vals)
+        #         scrap.action_validate()
         return res

@@ -19,12 +19,13 @@ class PurchaseOrder(models.Model):
         for order_id in order_ids:
             currency_id = order_id.currency_id
             worksheet = workbook.add_sheet(order_id.name)
-            worksheet.col(0).width = 4500
-            worksheet.col(1).width = 7000
-            worksheet.col(2).width = 5500
+            worksheet.col(0).width = 7000
+            worksheet.col(1).width = 4500
+            worksheet.col(2).width = 12000
             worksheet.col(3).width = 4500
-            worksheet.col(4).width = 4500
-            worksheet.col(5).width = 4500
+            worksheet.col(4).width = 2000
+            worksheet.col(5).width = 3000
+            worksheet.col(6).width = 4500
             worksheet.row(2).height = 400
 
             bold = xlwt.easyxf("font: bold 1;")
@@ -66,35 +67,36 @@ class PurchaseOrder(models.Model):
             if order_id.partner_ref:
                 worksheet.write(5, 5, order_id.partner_ref)
             row += 3
-            worksheet.write(row, 0, 'Code', bold)
-            worksheet.write(row, 1, 'Product', bold)
-            worksheet.write(row, 2, 'Description', bold)
-            worksheet.write(row, 3, 'Date Req.', bold)
-            worksheet.write(row, 4, 'Qty', bold)
-            worksheet.write(row, 5, 'Rec. Qty', bold)
-            worksheet.write(row, 6, 'Unit Price', bold)
-            worksheet.write(row, 7, 'Taxes', bold)
-            worksheet.write(row, 8, 'Net Price', bold)
+            worksheet.write(row, 0, 'Product', bold)
+            worksheet.write(row, 1, 'Code', bold)
+            worksheet.write(row, 2, 'Supp. Code and Name', bold)
+            worksheet.write(row, 3, 'EAN.', bold)
+            worksheet.write(row, 4, 'Uds.', bold)
+            #worksheet.write(row, 5, 'Rec. Qty', bold)
+            worksheet.write(row, 5, 'Unit Price', bold)
+            #worksheet.write(row, 7, 'Taxes', bold)
+            worksheet.write(row, 6, 'Total', bold)
             for line in order_id.order_line:
                 row += 1
-                worksheet.write(row, 0, line.product_id.default_code)
-                worksheet.write(row, 1, line.product_id.name)
+                worksheet.write(row, 0, line.product_id.name)
+                worksheet.write(row, 1, line.product_id.default_code)
                 worksheet.write(row, 2, line.name)
-                worksheet.write(row, 3, line.date_planned.strftime(DEFAULT_SERVER_DATETIME_FORMAT))
+                #worksheet.write(row, 3, line.date_planned.strftime(DEFAULT_SERVER_DATETIME_FORMAT))
+                worksheet.write(row, 3, line.product_id.barcode or "")
                 worksheet.write(row, 4, line.product_qty)
-                worksheet.write(row, 5, line.qty_received)
-                worksheet.write(row, 6, line.price_unit)
-                worksheet.write(row, 7, ', '.join(map(lambda x: x.name, line.taxes_id)))
-                worksheet.write(row, 8, formatLang(self.env, line.price_subtotal, currency_obj=currency_id), align_right)
-            row += 2
-            worksheet.write(row, 7, 'Total Without Taxes', bold)
-            worksheet.write(row, 8, formatLang(self.env, order_id.amount_untaxed, currency_obj=currency_id), align_right)
+                #worksheet.write(row, 5, line.qty_received)
+                worksheet.write(row, 5, formatLang(self.env, line.price_unit, currency_obj=currency_id), align_right)
+                #worksheet.write(row, 7, ', '.join(map(lambda x: x.name, line.taxes_id)))
+                worksheet.write(row, 6, formatLang(self.env, line.price_subtotal, currency_obj=currency_id), align_right)
+            row += 3
+            worksheet.write(row, 5, 'Total Without Taxes', bold)
+            worksheet.write(row, 6, formatLang(self.env, order_id.amount_untaxed, currency_obj=currency_id), align_right)
             row += 1
-            worksheet.write(row, 7, 'Taxes', bold)
-            worksheet.write(row, 8, formatLang(self.env, order_id.amount_tax, currency_obj=currency_id), align_right)
+            worksheet.write(row, 5, 'Taxes', bold)
+            worksheet.write(row, 6, formatLang(self.env, order_id.amount_tax, currency_obj=currency_id), align_right)
             row += 1
-            worksheet.write(row, 7, 'Total', bold)
-            worksheet.write(row, 8, formatLang(self.env, order_id.amount_total, currency_obj=currency_id), align_right)
+            worksheet.write(row, 5, 'Total', bold)
+            worksheet.write(row, 6, formatLang(self.env, order_id.amount_total, currency_obj=currency_id), align_right)
 
             row += 2
             worksheet.write(row, 0, order_id.notes)
