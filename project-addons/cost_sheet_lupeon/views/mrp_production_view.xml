@@ -69,9 +69,6 @@
 
             <notebook position="inside">
                 <page string="Repeated Producions">
-                    <group attrs="{'invisible': [('company_id', '!=', 1)]}">
-                        <field name="version"/>
-                    </group>
                     <group string="Repeated productions"  attrs="{'invisible': [('company_id', '!=', 1)]}">
                         <field name="repeated_production_ids" nolabel="1" mode="tree">
                             <tree>

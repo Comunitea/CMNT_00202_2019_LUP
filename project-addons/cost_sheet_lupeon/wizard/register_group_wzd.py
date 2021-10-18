@@ -151,6 +151,8 @@ class RegistergroupWizard(models.TransientModel):
                 percent = h_qty / total_user_hours
                 h = self.user_hours * percent
                 t = wo.time_ids.filtered(lambda x: not x.date_end)
+                if t:
+                    t = t[-1]
                 next_date = t.date_start + timedelta(hours=h)
                 # wo.time_ids[0].duration = self.total_time * 60 * percent
                 wo.time_ids[0].date_end = next_date

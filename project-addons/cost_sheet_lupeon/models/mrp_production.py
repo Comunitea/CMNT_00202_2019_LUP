@@ -50,7 +50,6 @@ class MrpProduction(models.Model):
                                compute='get_printed_qty')
     effective_qty_produced = fields.Float('Cantidad efectiva producida',
                                compute='_get_produced_qty')
-    version = fields.Integer('Versión', readonly=True)
     
     all_wo_done = fields.Boolean('All done', compute='_get_all_wo_done')
     check_to_done2 = fields.Boolean('All done', compute='_get_produced_qty')
@@ -107,6 +106,14 @@ class MrpProduction(models.Model):
                 if lines:
                     prod.qty_printed = sum(
                         [x.qty_done for x in lines if x.group_mrp_id.state in ['planned', 'progress', 'done']])
+    
+
+    def _get_version_number(self):
+        self.ensure_one()
+        res = 1
+        if self.repeated_production_ids:
+            res += self.repeated_production_ids[0]._get_version_number()
+        return res
 
     #  TODO FECHA
     def create_partial_mrp(self, qty):
@@ -117,18 +124,15 @@ class MrpProduction(models.Model):
         original
         """
         self.ensure_one()
-        version = len(self.repeated_production_ids) + 1
-        # Haciendo repetidas acaba dando error por el nombre asi que lo dejo
-        # de momento con el formato R1 - R1 -R1
-        # version = self.version + 1
-        # original_name = self.name.split(' - ')[0]
-        original_name = self.name
+        # version = len(self.repeated_production_ids) + 1
+        version = self._get_version_number()
+        original_name = self.name.split(' - ')[0]
+        # original_name = self.name
         mrp = self.copy({
             'name': original_name + ' - R%s' % version,
             # 'product_uom_qty': qty,
             'sheet_id': self.sheet_id.id,
             'origin_production_id': self.id,
-            'version': version
         })
 
         # Por algun motivo no se duplica con lo que yo le digo
