@@ -154,6 +154,11 @@ class StockRule(models.Model):
     @api.multi
     def _run_buy(self, product_id, product_qty, product_uom, location_id, 
                  name, origin, values):
+        """
+        Dado que se puede setear movimiento como make_to_order, a veces
+        al hacer el action_confirm dispara la compra, duplicandose esta
+        ya que la creo desde la venta. Entoncers si es stock specífico
+        """
         if product_id.spec_stock:
             return
         return super().run_buy(
