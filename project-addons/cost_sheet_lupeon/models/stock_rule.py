@@ -150,3 +150,12 @@ class StockRule(models.Model):
                 'order_id': po.id,
             }
             self.env['purchase.order.line'].create(vals)
+    
+    @api.multi
+    def _run_buy(self, product_id, product_qty, product_uom, location_id, 
+                 name, origin, values):
+        if product_id.spec_stock:
+            return
+        return super().run_buy(
+            product_id, product_qty, product_uom, location_id, name, origin,
+            values)

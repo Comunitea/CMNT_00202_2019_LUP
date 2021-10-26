@@ -15,6 +15,7 @@
         'hr',
         'purchase',
         'mrp_workorder',
+        'purchase_stock',
     ],
     'contributors': [
         "Comunitea ",
