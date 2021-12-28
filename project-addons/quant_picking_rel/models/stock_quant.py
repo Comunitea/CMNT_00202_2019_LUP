@@ -21,18 +21,22 @@ class StockMoveLine (models.Model):
             sml.move_id._action_assign()
 
     sale_id = fields.Many2one(related="picking_id.sale_id")
+    partner_id = fields.Many2one(related="sale_id.partner_id", readonly=True, store=True)
+    date_order = fields.Datetime(related="sale_id.date_order", readonly=True, store=True)
+    state_order = fields.Selection(related="sale_id.state", readonly=True, store=True, string="Estado pedido")
+    mail_supplier = fields.Char(related='product_id.variant_seller_ids.name.email', readonly=True, store=True, string = "Correo prov.")
 
-    
+
     @api.multi
     def action_open_picking_id(self):
-        
+
         action = self.env.ref('stock.action_picking_tree_all').read()[0]
         action['view_mode'] = 'form'
         del action['views']
         del action['view_id']
         action['res_id'] = self.picking_id.id
         return action
-    
+
     @api.multi
     def action_open_sale_id(self):
         if self.sale_id:
@@ -44,11 +48,11 @@ class StockMoveLine (models.Model):
             return action
 
             action = self.env.ref('account.action_move_journal_line').read()[0]
-       
+
         return action
 
-    
-        
+
+
 
 class StockQuant(models.Model):
     _inherit = "stock.quant"

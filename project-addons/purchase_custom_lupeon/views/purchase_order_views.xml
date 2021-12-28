@@ -25,7 +25,13 @@
         <field name="inherit_id" ref="purchase.purchase_order_tree"/>
         <field name="type">tree</field>
         <field name="arch" type="xml">
+
+            <tree position="attributes">
+                <attribute name="decoration-danger">urgent == True</attribute>
+
+            </tree>
             <field name="state" position="before">
+                <field name="urgent"/>
                 <field name="received"/>
             </field>
         </field>
@@ -89,7 +95,7 @@
         <field name="context">{'search_default_in_1_stock':1}</field>
     </record>
 
-    
+
     <menuitem id="purchase_report_root" name="Reporting" parent="purchase.menu_purchase_root" sequence="99"
         groups="purchase.group_purchase_manager" />
 

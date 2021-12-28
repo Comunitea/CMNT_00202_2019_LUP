@@ -66,4 +66,4 @@ access_product_group_res_partner_mrp_manager,res_partner group_mrp_manager,base.
 access_product_pricelist_item_mrp_manager,product.pricelist.item mrp_manager,product.model_product_pricelist_item,cost_sheet_lupeon.group_mrp_semimanager,1,1,1,1
 access_mrp_unbuild_manager,mrp.unbuild manager,mrp.model_mrp_unbuild,cost_sheet_lupeon.group_mrp_semimanager,1,1,1,1
 access_mrp_document_mrp_manager,mrp.document group_user,mrp.model_mrp_document,cost_sheet_lupeon.group_mrp_semimanager,1,1,1,1
-
+access_employee_cost_line,access_employee_cost_line,model_employee_cost_line,base.group_user,1,1,1,1

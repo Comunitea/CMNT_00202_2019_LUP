@@ -1,37 +1,200 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<templates id="template" xml:space="preserve">
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates id="template" inherit_id="stock_barcode.template" xml:space="preserve">
 
-    <t t-name="stock_barcode_summary_template">
-        <div class="o_barcode_page_summary" t-if="mode !== 'no_multi_locations'">
-            <div class="o_barcode_product_line d-flex justify-content-between align-items-center">
-                <span t-if="model == 'stock.picking'" class="o_barcode_locations">
-                    <div class="d-inline-block font-weight-bold text-right">
-                        <span t-if="mode !== 'receipt'" class="o_barcode_location_label">From: </span>
-                        <span t-if="locationParentFormat == '4' and mode !== 'receipt' and locationGParent" class="o_barcode_summary_location_src">
-                            <t t-esc="locationGParent"/> / 
+    <t t-extend="stock_barcode_summary_template">
+        <t
+            t-jquery="div.o_barcode_product_line span.o_barcode_locations:first"
+            t-operation="replace"
+        >
+            <span t-if="model == 'stock.picking'" class="o_barcode_locations">
+                <div class="d-inline-block font-weight-bold text-right">
+                    <span
+                        t-if="mode !== 'receipt'"
+                        class="o_barcode_location_label"
+                    >From: </span>
+                    <span
+                        t-if="locationParentFormat == '4' and mode !== 'receipt' and locationGParent"
+                        class="o_barcode_summary_location_src"
+                    >
+                        <t t-esc="locationGParent" /> /
+                    </span>
+                    <span
+                        t-if="mode !== 'receipt' and locationParent"
+                        class="o_barcode_summary_location_src"
+                    >
+                        <t t-esc="locationParent" /> /
+                    </span>
+                    <span
+                        t-if="mode !== 'receipt'"
+                        class="o_barcode_summary_location_src"
+                        t-esc="locationName"
+                    />
+                    <span
+                        t-if="mode !== 'delivery'"
+                        class="o_barcode_location_label"
+                    >To: </span>
+                    <span
+                        t-if="locationDestParentFormat == '4' and mode !== 'receipt' and locationDestGParent"
+                        class="o_barcode_summary_location_dest"
+                    >
+                        <t t-esc="locationDestGParent" /> /
+                    </span>
+                    <span
+                        t-if="mode !== 'delivery' and locationDestParent"
+                        class="o_barcode_summary_location_dest"
+                    >
+                        <t t-esc="locationDestParent" /> /
+                    </span>
+                    <span
+                        t-if="mode !== 'delivery'"
+                        class="o_barcode_summary_location_dest"
+                        t-esc="locationDestName"
+                    />
+                </div>
+            </span>
+        </t>
+    </t>
+
+    <t t-extend="stock_barcode_settings_widget">
+        <t t-jquery="button.o_validate" t-operation="attributes">
+            <attribute
+                name="t-if"
+            >widget.model !== 'mrp.production' or (widget.model == 'mrp.production' and widget.is_locked == true and (widget.availability == 'partially_available' or widget.availability == 'assigned') and (widget.state == 'confirmed' or widget.state == 'progress') and widget.routing_id == false and widget.check_to_done == false)</attribute>
+        </t>
+        <t t-jquery="div.o_barcode_settings button:first" t-operation="after">
+            <button
+                t-if="widget.model == 'stock.picking' &amp;&amp; widget.mode !== 'done' &amp;&amp; widget.mode !== 'cancel'"
+                class="btn-lg btn btn-dark text-uppercase o_reset_moves"
+            >Reset moves</button>
+            <!-- mrp.production buttons -->
+            <button
+                t-if="widget.model == 'mrp.production' &amp;&amp; widget.ok_tech == true"
+                class="btn-lg btn btn-dark text-uppercase o_mark_as_done_page"
+            >Mark as done</button>
+            <button
+                t-if="widget.model == 'mrp.production' &amp;&amp; widget.ok_tech == false &amp;&amp; widget.state == 'progress' &amp;&amp; widget.all_wo_done == true &amp;&amp; (widget.company_id &amp;&amp; widget.company_id.id == 1)"
+                class="btn-lg btn btn-dark text-uppercase o_ok_quality_page"
+            >Ok quality</button>
+            <button
+                t-if="widget.model == 'mrp.production' &amp;&amp; widget.allow_scrap"
+                class="btn-lg btn btn-dark text-uppercase production_scrap"
+            >Scrap</button>
+            <button
+                t-if="widget.model == 'mrp.production' &amp;&amp; widget.mode !== 'done' &amp;&amp; widget.mode !== 'cancel'"
+                class="btn-lg btn btn-dark text-uppercase print_production"
+            >Print production</button>
+            <button
+                t-if="widget.model == 'mrp.production' &amp;&amp; widget.mode !== 'done' &amp;&amp; widget.mode !== 'cancel'"
+                class="btn-lg btn btn-dark text-uppercase print_flabel"
+            >Print finished product label</button>
+            <button
+                t-if="widget.model == 'mrp.production' &amp;&amp; widget.mode !== 'done' &amp;&amp; widget.mode !== 'cancel'"
+                class="btn-lg btn btn-dark text-uppercase create_incident"
+            >Create incident</button>
+        </t>
+    </t>
+
+    <t t-extend="stock_barcode_lines_widget">
+        <t t-jquery="div.o_barcode_message span:last" t-operation="after">
+            <span
+                class="o_hidden o_scan_message o_scan_message_production_already_done"
+            ><span
+                    class="fa fa-exclamation-triangle"
+                /> This production is already done</span>
+            <span
+                class="o_hidden o_scan_message o_scan_message_production_already_cancelled"
+            ><span
+                    class="fa fa-exclamation-triangle"
+                /> This production is already cancelled</span>
+        </t>
+        <t t-jquery="div.o_barcode_control:last button:last" t-operation="after">
+            <button
+                t-if="widget.model == 'mrp.production' &amp;&amp; widget.is_locked == true &amp;&amp; (widget.availability != 'assigned' and widget.availability != 'none')"
+                class="btn btn-secondary text-uppercase o_button_assign"
+            ><i class="fa fa-check mr-1" />Assign</button>
+            <button
+                t-if="widget.model == 'mrp.production' &amp;&amp; widget.ok_tech == true"
+                class="btn btn-secondary text-uppercase o_mark_as_done_page"
+            ><i class="fa fa-check mr-1" />Mark as done</button>
+            <button
+                t-if="widget.model == 'mrp.production' &amp;&amp; widget.ok_tech == false &amp;&amp; widget.state == 'progress' &amp;&amp; widget.all_wo_done == true &amp;&amp; (widget.company_id &amp;&amp; widget.company_id.id == 1)"
+                class="btn btn-secondary text-uppercase o_ok_quality_page"
+            ><i class="fa fa-check mr-1" />Ok quality</button>
+        </t>
+        <t t-jquery=".o_add_line" t-operation="attributes">
+            <attribute name="t-if">widget.model !== 'mrp.production'</attribute>
+        </t>
+        <t t-jquery=".o_validate_page" t-operation="attributes">
+            <attribute
+                name="t-if"
+            >widget.model !== 'mrp.production' or (widget.model == 'mrp.production' and widget.is_locked == true and (widget.availability == 'partially_available' or widget.availability == 'assigned') and (widget.state == 'confirmed' or widget.state == 'progress') and widget.routing_id == false and widget.check_to_done == false)</attribute>
+        </t>
+    </t>
+
+    <t t-extend="stock_barcode_lines_template">
+        <t t-jquery="div.list-group-item:first" t-operation="before">
+            <div
+                class="o_barcode_line list-group-item d-flex flex-row flex-nowrap"
+                t-if="model == 'mrp.production'"
+                t-att-data-id="line.virtual_id || line.id"
+                t-att-data-barcode="line.product_barcode"
+            >
+                <div class="o_barcode_line_details flex-grow-1 flex-column flex-nowrap">
+                    <div class="o_barcode_line_title pb-1"><i
+                            class="fa fa-fw fa-tags"
+                        /> <span class="product-label"><t
+                                t-esc="line.display_name"
+                            /></span></div>
+                    <div>
+                        <i class="fa fa-fw fa-cube" />
+                        <span
+                            t-attf-class="o_barcode_scanner_qty text-monospace badge #{' '}"
+                        >
+                            <span
+                                class="qty-done d-inline-block text-left"
+                                t-esc="line.qty_done"
+                            />
+                            <span
+                                t-if="line.product_uom_qty"
+                                t-esc="'/ ' + line.product_uom_qty"
+                            />
                         </span>
-                        <span t-if="mode !== 'receipt' and locationParent" class="o_barcode_summary_location_src">
-                            <t t-esc="locationParent"/> / 
-                        </span>
-                        <span t-if="mode !== 'receipt'" class="o_barcode_summary_location_src" t-esc="locationName"/>
-                        <span t-if="mode !== 'delivery'" class="o_barcode_location_label">To: </span>
-                        <span t-if="locationDestParentFormat == '4' and mode !== 'receipt' and locationDestGParent" class="o_barcode_summary_location_dest">
-                            <t t-esc="locationDestGParent"/> / 
-                        </span>
-                        <span t-if="mode !== 'delivery' and locationDestParent" class="o_barcode_summary_location_dest">
-                            <t t-esc="locationDestParent"/> / 
-                        </span>
-                        <span t-if="mode !== 'delivery'" class="o_barcode_summary_location_dest" t-esc="locationDestName"/>
+                        <span t-if="groups.group_uom" t-esc="line.product_uom_id[1]" />
                     </div>
-                </span>
-                <span t-if="model == 'stock.inventory'" class="o_barcode_locations">
-                    <span class="o_barcode_summary_location_src"><t t-esc="locationParent"/>/<t t-esc="locationName"/></span>
-                </span>
-                <t t-if="nbPages">
-                    <span class="o_barcode_move_number font-weight-bold"><t t-esc="pageIndex"></t>/<t t-esc="nbPages"></t></span>
-                </t>
+                    <div t-if="line.package_id || line.result_package_id">
+                        <i class="fa fa-fw fa-truck" /> <t
+                            t-if="line.package_id"
+                            t-esc="line.package_id[1]"
+                        /> <span class="fa fa-long-arrow-right" /> <t
+                            t-if="line.result_package_id"
+                            t-esc="line.result_package_id[1]"
+                        />
+                    </div>
+                    <div t-if="line.owner_id">
+                        <i class="fa fa-fw fa-user-o" /> <t t-esc="line.owner_id[1]" />
+                    </div>
+                    <div t-if="line.product_id.tracking !== 'none'">
+                        <i class="fa fa-barcode" />
+                        <span class="o_line_lot_name"><t
+                                t-if="line.lot_name"
+                                t-esc="line.lot_name"
+                            /></span>
+                        <span class="o_line_lot_id"><t
+                                t-if="! line.lot_name &amp;&amp; line.lot_id &amp;&amp; line.lot_id[1]"
+                                t-esc="line.lot_id[1]"
+                            /></span>
+                    </div>
+                </div>
+                <div
+                    t-if="state != 'done' and state != 'cancel'"
+                    class="o_barcode_line_actions d-flex align-items-center pl-4"
+                >
+                    <a class="o_edit text-muted" href="#" title="Edit"><i
+                            class="fa fa-pencil"
+                        /></a>
+                </div>
             </div>
-        </div>
+        </t>
     </t>
 
 </templates>

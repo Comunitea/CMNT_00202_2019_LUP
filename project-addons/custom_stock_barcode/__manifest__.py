@@ -8,12 +8,24 @@
     "maintainer": "Comunitea",
     "website": "www.comunitea.com",
     "license": "AGPL-3",
-    "depends": ["stock_barcode", "custom_warehouse"],
+    "depends": [
+        "stock",
+        "stock_barcode",
+        "custom_warehouse",
+        "mrp",
+        "custom_documents_lupeon",
+        "incident_manager",
+    ],
     "data": [
-        'views/assets.xml',
+        "data/data.xml",
+        "views/stock_picking_views.xml",
+        "views/mrp_production_views.xml",
+        "views/assets.xml",
+        "wizard/mrp_production_move_wzd.xml",
     ],
-    'qweb': [
+    "qweb": [
         "static/src/xml/qweb_templates.xml",
+        "static/src/xml/stock_barcode.xml",
     ],
-    'installable': True,
+    "installable": True,
 }

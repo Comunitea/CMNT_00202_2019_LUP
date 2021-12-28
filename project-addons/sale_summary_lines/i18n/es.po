@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-12 15:58+0000\n"
-"PO-Revision-Date: 2021-04-12 15:58+0000\n"
+"POT-Creation-Date: 2021-11-11 16:18+0000\n"
+"PO-Revision-Date: 2021-11-11 16:18+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -24,6 +24,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__company_id
 msgid "Company"
 msgstr "Compañía"
+
+#. module: sale_summary_lines
+#: model_terms:ir.ui.view,arch_db:sale_summary_lines.view_order_tree_pots
+msgid "Confirmation Date"
+msgstr "Fecha confirmación"
 
 #. module: sale_summary_lines
 #: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__create_uid
@@ -66,13 +71,13 @@ msgid "Display Name"
 msgstr "Nombre mostrado"
 
 #. module: sale_summary_lines
-#: code:addons/sale_summary_lines/models/sale_order.py:266
+#: code:addons/sale_summary_lines/models/sale_order.py:286
 #, python-format
 msgid "El importe total de las lineas resumen no coincide con el importe del pedido"
 msgstr ""
 
 #. module: sale_summary_lines
-#: code:addons/sale_summary_lines/models/sale_order.py:268
+#: code:addons/sale_summary_lines/models/sale_order.py:288
 #, python-format
 msgid "El importe total del pedido supera al importe establecido en el bote"
 msgstr ""
@@ -123,9 +128,29 @@ msgid "Last Updated on"
 msgstr "Última actualización el"
 
 #. module: sale_summary_lines
+#: model_terms:ir.actions.act_window,help:sale_summary_lines.action_pots
+msgid "No Open Pots right now"
+msgstr "No hay botes abiertos en este momento"
+
+#. module: sale_summary_lines
 #: selection:sale.summary.line,invoice_status:0
 msgid "Nothing to Invoice"
 msgstr "Nada que facturar"
+
+#. module: sale_summary_lines
+#: model:ir.ui.menu,name:sale_summary_lines.menu_pots
+msgid "Open  Pots"
+msgstr "Botes abiertos"
+
+#. module: sale_summary_lines
+#: model:ir.actions.act_window,name:sale_summary_lines.action_pots
+msgid "Open Pots"
+msgstr "Botes abiertos"
+
+#. module: sale_summary_lines
+#: model_terms:ir.ui.view,arch_db:sale_summary_lines.view_order_tree_pots
+msgid "Order Number"
+msgstr "Número de pedido"
 
 #. module: sale_summary_lines
 #: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__order_id
@@ -150,7 +175,12 @@ msgstr "Cantidad Pedida"
 #. module: sale_summary_lines
 #: model:ir.model.fields,field_description:sale_summary_lines.field_sale_order__amount_pot_available_total
 msgid "Pot Available"
-msgstr "Boste disponible"
+msgstr "Bote disponible (IVA incl.)"
+
+#. module: sale_summary_lines
+#: model_terms:ir.ui.view,arch_db:sale_summary_lines.view_order_tree_pots
+msgid "Pot Available Untaxed"
+msgstr "Bote disponible (sin iva)"
 
 #. module: sale_summary_lines
 #: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__price_reduce
@@ -178,6 +208,11 @@ msgid "Sales Order Line"
 msgstr "Línea de pedido de venta"
 
 #. module: sale_summary_lines
+#: model_terms:ir.ui.view,arch_db:sale_summary_lines.view_order_tree_pots
+msgid "Sales Orders"
+msgstr "Pedidos de ventas"
+
+#. module: sale_summary_lines
 #: model:ir.model,name:sale_summary_lines.model_sale_summary_line
 msgid "Sales Summary Line"
 msgstr "Conceptos resumen"
@@ -185,7 +220,7 @@ msgstr "Conceptos resumen"
 #. module: sale_summary_lines
 #: model:ir.model.fields,field_description:sale_summary_lines.field_account_invoice_line__summary_line_ids
 msgid "Sales Summary Lines"
-msgstr "Conceptos resumen o Bote"
+msgstr "Concepto resumen"
 
 #. module: sale_summary_lines
 #: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__sequence
@@ -228,10 +263,10 @@ msgid "Taxes"
 msgstr "Impuestos"
 
 #. module: sale_summary_lines
-#: code:addons/sale_summary_lines/models/sale_order.py:383
+#: code:addons/sale_summary_lines/models/sale_order.py:404
 #, python-format
 msgid "There is no invoiceable line. If a product has a Delivered quantities invoicing policy, please make sure that a quantity has been delivered."
-msgstr "No hay línea facturable. Si un producto tiene una política de facturación de cantidades entregadas, por favor, asegúrese de que la cantidad haya sido entregada."
+msgstr ""
 
 #. module: sale_summary_lines
 #: selection:sale.summary.line,invoice_status:0
@@ -249,9 +284,24 @@ msgid "Total"
 msgstr ""
 
 #. module: sale_summary_lines
+#: model:ir.model.fields,field_description:sale_summary_lines.field_sale_order__discount_amount_total
+msgid "Total Discount"
+msgstr "Descuento"
+
+#. module: sale_summary_lines
 #: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__price_tax
 msgid "Total Tax"
 msgstr "Total de impuestos"
+
+#. module: sale_summary_lines
+#: model_terms:ir.ui.view,arch_db:sale_summary_lines.view_order_tree_pots
+msgid "Total Tax Included"
+msgstr "Total impuestos incluidos"
+
+#. module: sale_summary_lines
+#: model_terms:ir.ui.view,arch_db:sale_summary_lines.view_order_tree_pots
+msgid "Total Untaxed"
+msgstr "Total sin impuestos"
 
 #. module: sale_summary_lines
 #: model:ir.model.fields,field_description:sale_summary_lines.field_sale_summary_line__price_unit
@@ -261,7 +311,7 @@ msgstr "Precio"
 #. module: sale_summary_lines
 #: model:ir.model.fields,field_description:sale_summary_lines.field_sale_order__amount_pot_available_untaxed
 msgid "Untaxed Pot Available"
-msgstr "Base bote disponible"
+msgstr "Bote disponible (IVA no incl.)"
 
 #. module: sale_summary_lines
 #: selection:sale.summary.line,invoice_status:0
@@ -281,4 +331,5 @@ msgstr "Usar conceptos resumen"
 #. module: sale_summary_lines
 #: model:ir.model.fields,help:sale_summary_lines.field_sale_summary_line__order_partner_id
 msgid "You can find a customer by its Name, TIN, Email or Internal Reference."
-msgstr "Puede encontrar un proveedor por su nombre, NIF, correo electrónico o referencia interna."
+msgstr ""
+

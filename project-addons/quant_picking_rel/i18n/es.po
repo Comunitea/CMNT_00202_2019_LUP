@@ -1,0 +1,108 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* quant_picking_rel
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-11-11 17:18+0000\n"
+"PO-Revision-Date: 2021-11-11 17:18+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: quant_picking_rel
+#: model_terms:ir.ui.view,arch_db:quant_picking_rel.product_normal_form_view_reservations
+msgid "<span class=\"o_stat_text\">Movs</span>"
+msgstr ""
+
+#. module: quant_picking_rel
+#: model_terms:ir.ui.view,arch_db:quant_picking_rel.product_normal_form_view_reservations
+msgid "<span class=\"o_stat_text\">Reservas</span>"
+msgstr ""
+
+#. module: quant_picking_rel
+#: model:ir.model.fields,field_description:quant_picking_rel.field_product_product__quantity_reserved_link
+msgid "Cantidad reservada (Movimientos)"
+msgstr ""
+
+#. module: quant_picking_rel
+#: model:ir.model.fields,field_description:quant_picking_rel.field_product_product__quantity_reserved
+msgid "Cantidad reservada (Quants)"
+msgstr ""
+
+#. module: quant_picking_rel
+#: model:ir.model.fields,field_description:quant_picking_rel.field_stock_move_line__partner_id
+msgid "Customer"
+msgstr "Cliente"
+
+#. module: quant_picking_rel
+#: model_terms:ir.ui.view,arch_db:quant_picking_rel.stock_move_line_view_search_quant_link
+msgid "Location"
+msgstr "Ubicación"
+
+#. module: quant_picking_rel
+#: model_terms:ir.ui.view,arch_db:quant_picking_rel.view_move_line_quant_link
+msgid "Move Lines"
+msgstr "Movimientos"
+
+#. module: quant_picking_rel
+#: model:ir.model.fields,field_description:quant_picking_rel.field_stock_move_line__date_order
+msgid "Order Date"
+msgstr "Fecha de pedido"
+
+#. module: quant_picking_rel
+#: model:ir.model,name:quant_picking_rel.model_product_product
+msgid "Product"
+msgstr "Producto"
+
+#. module: quant_picking_rel
+#: model:ir.model,name:quant_picking_rel.model_stock_move_line
+msgid "Product Moves (Stock Move Line)"
+msgstr "Movimientos de Producto (Stock Move Line)"
+
+#. module: quant_picking_rel
+#: model:ir.ui.menu,name:quant_picking_rel.menu_action_product_reserved
+#: model:ir.ui.menu,name:quant_picking_rel.menu_action_sale_product_reserved
+msgid "Productos reservados"
+msgstr ""
+
+#. module: quant_picking_rel
+#: model:ir.actions.act_window,name:quant_picking_rel.action_stock_move_line_reserved
+msgid "Productos resevados"
+msgstr ""
+
+#. module: quant_picking_rel
+#: model_terms:ir.ui.view,arch_db:quant_picking_rel.view_move_line_quant_link
+msgid "Quantity Done"
+msgstr "Cantidad hecha"
+
+#. module: quant_picking_rel
+#: model:ir.model,name:quant_picking_rel.model_stock_quant
+msgid "Quants"
+msgstr ""
+
+#. module: quant_picking_rel
+#: model_terms:ir.ui.view,arch_db:quant_picking_rel.view_stock_quant_tree_link
+msgid "Reservations"
+msgstr "Reservas"
+
+#. module: quant_picking_rel
+#: model:ir.model.fields,field_description:quant_picking_rel.field_stock_move_line__sale_id
+msgid "Sales Order"
+msgstr "Pedido de venta"
+
+#. module: quant_picking_rel
+#: model_terms:ir.actions.act_window,help:quant_picking_rel.action_stock_move_line_reserved
+msgid "There's no reserves yet"
+msgstr "No hay reservas aún"
+
+#. module: quant_picking_rel
+#: model:ir.model.fields,help:quant_picking_rel.field_stock_move_line__partner_id
+msgid "You can find a customer by its Name, TIN, Email or Internal Reference."
+msgstr ""
+

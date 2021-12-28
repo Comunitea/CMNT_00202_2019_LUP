@@ -12,28 +12,29 @@
                 <field name="use_pot" />
             </field>
             <xpath expr="//field[@name='amount_total']" position="after">
-                
+
                 <field name="amount_pot_available_untaxed" widget='monetary' options="{'currency_field': 'currency_id'}" attrs="{'invisible':[('use_pot' ,'=', False)]}"/>
                 <field name="amount_pot_available_total" widget='monetary'  options="{'currency_field': 'currency_id'}" attrs="{'invisible':[('use_pot' ,'=', False)]}"/>
+                <field name="discount_amount_total" widget='monetary'  options="{'currency_field': 'currency_id'}" />
             </xpath>
-            
+
             <xpath expr="//page[@name='order_lines']" position="after">
-                
+
                 <page string="Summary Order Lines" name="summary_order_lines" attrs="{'invisible':[('use_summary_lines' ,'=', False), ('use_pot' ,'=', False)]}">
                     <field name="summary_line_ids" mode="tree" attrs="{'readonly': [('state', 'in', ('done','cancel'))]}">
-                        
+
                         <tree string="Summary Order Lines" editable="bottom" decoration-info="(invoice_status == 'to invoice')">
-                        
+
 
                             <field name="sequence" widget="handle"/>
-                            
+
                             <field name="name" widget="section_and_note_text"/>
                             <field name="product_uom_qty" string="Ordered Qty" context="{'partner_id': parent.partner_id,'quantity': product_uom_qty,'pricelist': parent.pricelist_id,'company_id': parent.company_id}"/>
                             <field name="qty_delivered" attrs="{'column_invisible': [('parent.state', 'not in', ['sale', 'done'])]}"/>
                             <field name="qty_invoiced" attrs="{'column_invisible': [('parent.state', 'not in', ['sale', 'done'])]}"/>
                             <field name="qty_to_invoice" invisible="1"/>
-                        
-                        
+
+
                             <field name="price_unit" attrs="{'readonly': [('qty_invoiced', '&gt;', 0)]}"/>
                             <field name="tax_id" widget="many2many_tags" options="{'no_create': True}" domain="[('type_tax_use','=','sale'),('company_id','=',parent.company_id)]" attrs="{'readonly': [('qty_invoiced', '&gt;', 0)]}"/>
                             <field name="discount" groups="sale.group_discount_per_so_line"/>
@@ -41,11 +42,11 @@
                             <field name="price_total" widget="monetary" groups="account.group_show_line_subtotals_tax_included"/>
                             <field name="state" invisible="1"/>
                             <field name="invoice_status" invisible="1"/>
-                        
+
                             <field name="currency_id" invisible="1"/>
                             <field name="price_tax" invisible="1"/>
                         </tree>
-                        
+
                     </field>
                     <group class="oe_subtotal_footer oe_right" colspan="2" name="summary_sale_total">
                         <field name="summary_amount_untaxed" widget="monetary" options="{'currency_field': 'currency_id'}"/>
@@ -55,12 +56,59 @@
                         </div>
                         <field name="summary_amount_total" nolabel="1" mode="tree" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                     </group>
-                   
+
                 </page>
-                
+
             </xpath>
         </field>
-        
+
     </record>
+
+
+    <record id="view_order_tree_pots" model="ir.ui.view">
+        <field name="name">sale.order.pots.tree</field>
+        <field name="model">sale.order</field>
+        <field name="priority">2</field>
+        <field name="arch" type="xml">
+            <tree string="Sales Orders" decoration-bf="message_needaction==True" decoration-muted="state=='cancel'">
+                <field name="message_needaction" invisible="1"/>
+                <field name="name" string="Order Number"/>
+                <field name="confirmation_date" string="Confirmation Date"/>
+                <field name="partner_id"/>
+                <field name="user_id"/>
+                <field name="amount_pot_available_untaxed" sum="Pot Available Untaxed" widget="monetary"/>
+                <field name="amount_untaxed" sum="Total Untaxed" widget="monetary"/>
+                <field name="amount_total" sum="Total Tax Included" widget="monetary"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="invoice_status" />
+                <field name="state" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+
+
+    <record id="action_pots" model="ir.actions.act_window">
+        <field name="name">Open Pots</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,kanban,form,activity</field>
+        <field name="view_id" ref="view_order_tree_pots"/>
+        <field name="search_view_id" ref="sale.sale_order_view_search_inherit_sale"/>
+        <field name="context">{}</field>
+        <field name="domain">[('amount_pot_available_untaxed', '>', 0), ('use_pot', '=', True)]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No Open Pots right now
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_pots"
+            name="Open  Pots"
+            action="action_pots"
+            parent="sale.sale_order_menu"
+            sequence="3" groups="sales_team.group_sale_salesman"/>
 
 </odoo>

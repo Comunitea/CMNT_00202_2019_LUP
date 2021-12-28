@@ -20,8 +20,8 @@ class SaleOrder(models.Model):
                 raise ValidationError(msg)
         for order in self:
             if not order.prestashop_state:
-                if (not order.partner_shipping_id.country_id or 
-                    (not order.partner_shipping_id.state_id and order.partner_shipping_id.country_id.state_ids) or 
+                if (not order.partner_shipping_id.country_id or
+                    (not order.partner_shipping_id.state_id and order.partner_shipping_id.country_id.state_ids) or
                     not (order.partner_shipping_id.mobile or order.partner_shipping_id.phone) or
                     not order.partner_shipping_id.zip):
                     raise UserError(_('No están informados todos los campos necesarios de la dirección de entrega. Por favor revise: País, provincia, código postal y teléfono'))
@@ -34,9 +34,33 @@ class SaleOrder(models.Model):
                                 'continue_method': 'action_confirm',
                             }).action_show()
 
-        
         res = super().action_confirm()
-        return res    
+        self.unlink_activities()
+        return res
+
+    @api.multi
+    def action_cancel(self):
+        for order in self:
+            if not self.env.context.get('bypass_checks', False):
+                    res = order.check_products_pending()
+
+                    if res['alert']:
+                        return self.env['check.send.print.wiz'].create({
+                                'exception_msg': res['message'],
+                                'order_id': order.id,
+                                'continue_method': 'action_cancel',
+                            }).action_show()
+        res = super().action_cancel()
+        self.unlink_activities()
+        return res
+
+    def unlink_activities(self):
+        activity_type_ids = self.env['mail.activity.type'].search(['|', ('name', '=', 'Seg. oferta (R14.1)'),
+                                                            ('name', '=', 'Seg. oferta (S.1)')])
+        activities = self.env['mail.activity'].search([('activity_type_id', 'in', activity_type_ids.ids),
+                                            ('res_model', '=', 'sale.order'),
+                                            ('res_id', 'in', self.ids)])
+        activities.unlink()
 
 
     def get_delivery_price(self):
@@ -49,7 +73,7 @@ class SaleOrder(models.Model):
                     msg = '{}\n{}'.format(msg, line.product_id.display_name)
                 raise ValidationError (msg)
         super().get_delivery_price()
-    
+
 
     def _check_country_restrictions(self):
         msg = False
@@ -66,12 +90,12 @@ class SaleOrder(models.Model):
                 for p_id in forbidden_products_ids:
                     msg = '{}\n{}'.format(msg, p_id.display_name)
         return msg
-    
+
     def return_checks(self, msg):
         if msg:
             #if self.state in ['sale', 'done']:
                 raise ValidationError(msg)
-                
+
             #else:
             #    return {'warning': {
             #                'title': 'Aviso!',
@@ -99,7 +123,7 @@ class SaleOrder(models.Model):
                 for p_id in forbidden_products_ids:
                     msg = '{}\n{}'.format(msg, p_id.display_name)
         return msg
-    
+
     @api.onchange('carrier_id')
     def check_transport_restrictions(self):
         self.ensure_one()
@@ -136,6 +160,28 @@ class SaleOrder(models.Model):
                         }).action_show()
 
         return super().action_quotation_send()
+
+
+    @api.multi
+    def check_products_pending(self):
+        res = {'message': '',
+                'alert': False,
+                'continue':True
+        }
+        for order in self:
+            products = order.mapped('order_line').mapped('product_id')
+            moves = self.env['stock.move'].search([('product_id','in', products.ids),
+                                                    ('picking_id.picking_type_id.code', '=', 'incoming'),
+                                                    ('state', 'not in', ('cancel', 'done')),
+                                                    ('purchase_line_id', '!=', False)])
+            if moves:
+                res['message'] += "Los siguiente pdocuctos están incorporados en pedidos de compra aun no recibidos.\n"
+                for mv in moves:
+                    res['message'] += "{0} en el pedido: {1}\n".format(mv.product_id.name, mv.purchase_line_id.order_id.name)
+                res["message"] += "Si cancela esta venta revise si la compra es todavía necesaria"
+                res['alert'] = True
+        return res
+
 
     @api.multi
     def check_quotation_conditions(self):
@@ -178,9 +224,9 @@ class SaleOrder(models.Model):
                 res['message'] += "El cliente no tiene NIF asignado. Consultar con ADMINISTRACIÓN antes de continuar.\n"
                 res['alert'] = True
 
-            
+
             return res
-                
+
 
 
 class SaleOrderLine(models.Model):

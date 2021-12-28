@@ -10,11 +10,19 @@ odoo.define("custom_stock_barcode.ClientAction", function (require) {
     ClientAction.include({
         init: function (parent, action) {
             this._super.apply(this, arguments);
+            this.actionParams = {
+                pickingId: action.params.picking_id,
+                inventoryId: action.params.inventory_id,
+                productionId: action.params.production_id,
+                model: action.params.model,
+            };
             this.line_check = null;
             this.productsByDefaultCodes = [];
             this.productsByProviderCodes = [];
         },
         willStart: function () {
+            /* There is no recordId because there is no productionId. */
+            /* So if the model is mrp.production we need to set it.  */
             var self = this;
             self._getProductDefaultCodes();
             self._getProductProviderCodes();

@@ -24,6 +24,9 @@ class MrpProduction(models.Model):
     _inherit = "mrp.production"
 
     sheet_id = fields.Many2one("cost.sheet", "Cost Sheet", readonly=True)
+    material_id = fields.Many2one(
+        'product.product', 'Material', compute="_get_material_id",
+        store=True)
     sheet_type = fields.Selection(
         SHEET_TYPES, string="Sheet type", related="sheet_id.sheet_type", store=True
     )
@@ -68,6 +71,19 @@ class MrpProduction(models.Model):
                 wo_done = False
             production.all_wo_done = wo_done
         return True
+
+    @api.multi
+    @api.depends(
+        "sheet_id.material_cost_ids.material_id",
+        "sheet_id.material_cost_ids.material_id2")
+    def _get_material_id(self):
+        for production in self:
+            if production.sheet_id and production.sheet_id.material_cost_ids:
+                cl = production.sheet_id.material_cost_ids[0]
+                material = cl.material_id
+                if not material:
+                    material = cl.material_id2
+                production.material_id = material
 
     # density = fields.Float('Density (%)')
     # bucket_height_sls = fields.Float('Altura cubeta (cm)')

@@ -10,7 +10,7 @@
         <field name="name">cost.sheet.view</field>
         <field name="model">cost.sheet</field>
         <field name="arch" type="xml">
-            <tree create="false">
+            <tree create="1">
                 <field name="name"/>
                 <field name="sheet_type"/>
                 <field name="sale_line_id"/>
@@ -29,6 +29,7 @@
                 <field name="sale_line_id"/>
                 <field name="sale_id"/>
                 <field name="group_id"/>
+                
                 
                 <group expand="0" string="Group By">
                     <filter name="group_line"  string="Sale Line"  domain="[]" context="{'group_by':'sale_line_id'}"/>
@@ -56,7 +57,7 @@
         <field name="name">group.cost.sheet.view</field>
         <field name="model">group.cost.sheet</field>
         <field name="arch" type="xml">
-            <tree create="false">
+            <tree create="1">
                 <field name="display_name"/>
                 <field name="sale_line_id"/>
                 <field name="sale_id"/>
@@ -69,23 +70,37 @@
         <field name="name">group.cost.sheet.view</field>
         <field name="model">group.cost.sheet</field>
         <field name="arch" type="xml">
-            <form create="false">
+            <form create="1">
+                <header>
+                    <button name="create_productions_from_group" string="Create productions From Group" type="object" attrs="{'invisible': [('group_create_productions', '!=', True)]}"/>
+                </header>
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="view_productions" type="object" class="oe_stat_button" icon="fa-paste">
+                            <field name="production_count"  widget="statinfo"/>
+                        </button>
+                    </div>
+
                     <div class="oe_title">
                         <h1>
                             <field name="display_name"/>
                         </h1>
+                        <h1>
+                            <label for="custom_name" attrs="{'invisible': [('group_create_productions', '!=', True)]}"/>
+                            <field name="custom_name" attrs="{'invisible': [('group_create_productions', '!=', True)], 'required': [('group_create_productions', '=', True)]}"/>
+                        </h1>
                         <h2>
-                            <field name="sale_line_id"/>
+                            <field name="sale_line_id" readonly="True" force_save="1" attrs="{'invisible': [('sale_line_id', '=', False)]}"/>
                         </h2>
                         <h2>
                             <field name="product_id" options="{'no_create_edit': True, 'no_quick_create': True}"/>
                         </h2>
                         <h3>
-                            <field name="sale_id"/>
+                            <field name="sale_id" attrs="{'invisible': [('group_create_productions', '==', True)]}"/>
                         </h3>
                     </div>
                     <group groups="cost_sheet_lupeon.group_cs_manager">
+                        <field name="group_create_productions"/>
                         <field name="admin_fact"/>
                         <field name="ing_hours"/>
                         <field name="tech_hours"/>
@@ -138,6 +153,8 @@
                 <field name="sale_line_id"/>
                 <field name="product_id"/>
                 <field name="product_id"/>
+                <separator/>
+                <filter string="Create productions" domain="[('group_create_productions','=',True)]" name="filter_group_create_productions"/>
                 
                 <group expand="0" string="Group By">
                     <filter string="Sale Line" name="group_line" domain="[]" context="{'group_by':'sale_line_id'}"/>
@@ -148,7 +165,7 @@
     </record>
 
     <record id="action_product_cost_sheets" model="ir.actions.act_window">
-        <field name="name">Hojas de coste</field>
+        <field name="name">Grupos de coste</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">group.cost.sheet</field>
         <field name="view_type">form</field>
@@ -211,7 +228,7 @@
         <field name="name">cost.sheet.view</field>
         <field name="model">cost.sheet</field>
         <field name="arch" type="xml">
-            <form create="false">
+            <form create="1">
                 <header>
                     <button name="manually_create_task_or_production" string="Generate production manually" type="object" attrs="{'invisible': ['|', '|', ('sheet_type', 'in', ['design', 'purchase']), ('sale_state', 'in', ['draft']), ('production_state', 'in', ['progress', 'done'])]}"/>
                     <button name="manually_create_task_or_production" string="Generate tasks manually" type="object" attrs="{'invisible': ['|', '|', ('sheet_type', 'not in', ['design', 'purchase']), ('sale_state', 'in', ['draft']), ('production_state', 'in', ['progress', 'done'])]}"/>
@@ -315,6 +332,8 @@
                                 <field name="layer_height" readonly="1" force_save="1"/>
                                 <field name="tray_hours"/>
                                 <field name="euro_machine" groups="cost_sheet_lupeon.group_cs_advanced"/>
+                                <field name="printer_euro_hour" readonly="1" groups="cost_sheet_lupeon.group_hidden_cost"/>
+                                <field name="printer_cost_euro_hour" readonly="1" groups="cost_sheet_lupeon.group_hidden_cost"/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
 
@@ -409,6 +428,8 @@
                                 <field name="print_increment" attrs="{'invisible': [('sheet_type', 'in', ['poly'])], 'readonly': [('can_edit', '!=', True)]}"/>
                                 <field name="tray_hours_sls"/>
                                 <field name="euro_machine"  groups="cost_sheet_lupeon.group_cs_advanced"/>
+                                <field name="printer_euro_hour" readonly="1" groups="cost_sheet_lupeon.group_hidden_cost"/>
+                                <field name="printer_cost_euro_hour" readonly="1" groups="cost_sheet_lupeon.group_hidden_cost"/>
                             </group>
                              <div style="border-bottom: 1px solid black;"></div>
                              <group colspan="2" col="6" string="Configuración oferta">
@@ -504,6 +525,8 @@
                                 <field name="finish_pol"/>
                                 <field name="tray_hours"/>
                                 <field name="euro_machine" groups="cost_sheet_lupeon.group_cs_advanced"/>
+                                <field name="printer_euro_hour" readonly="1" groups="cost_sheet_lupeon.group_hidden_cost"/>
+                                <field name="printer_cost_euro_hour" readonly="1" groups="cost_sheet_lupeon.group_hidden_cost"/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="4" string="Material Cost">
@@ -590,6 +613,8 @@
                                 <field name="tray_units"/>
                                 <field name="tray_hours"/>
                                 <field name="euro_machine" groups="cost_sheet_lupeon.group_cs_advanced"/>
+                                <field name="printer_euro_hour" readonly="1" groups="cost_sheet_lupeon.group_hidden_cost"/>
+                                <field name="printer_cost_euro_hour" readonly="1" groups="cost_sheet_lupeon.group_hidden_cost"/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
                              <group colspan="4" string="Material Cost">
@@ -676,6 +701,8 @@
                                 <field name="tray_units"/>
                                 <field name="tray_hours"/>
                                 <field name="euro_machine" groups="cost_sheet_lupeon.group_cs_advanced"/>
+                                <field name="printer_euro_hour" readonly="1" groups="cost_sheet_lupeon.group_hidden_cost"/>
+                                <field name="printer_cost_euro_hour" readonly="1" groups="cost_sheet_lupeon.group_hidden_cost"/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
                              <group colspan="4" string="Material Cost">
@@ -763,6 +790,8 @@
                                 <field name="tray_units"/>
                                 <field name="tray_hours"/>
                                 <field name="euro_machine" groups="cost_sheet_lupeon.group_cs_advanced"/>
+                                <field name="printer_euro_hour" readonly="1" groups="cost_sheet_lupeon.group_hidden_cost"/>
+                                <field name="printer_cost_euro_hour" readonly="1" groups="cost_sheet_lupeon.group_hidden_cost"/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="4" string="Material Cost">
@@ -901,7 +930,7 @@
         <field name="name">cost.sheet.view</field>
         <field name="model">cost.sheet</field>
         <field name="arch" type="xml">
-            <form create="false">
+            <form create="1">
                 <sheet>
                     <div class="oe_title">
                         <h1>
@@ -961,6 +990,8 @@
                                 <field name="loops"/>
                                 <field name="infill"/>
                                 <field name="tray_hours"/>
+                                <field name="printer_euro_hour" readonly="1" groups="cost_sheet_lupeon.group_hidden_cost"/>
+                                <field name="printer_cost_euro_hour" readonly="1" groups="cost_sheet_lupeon.group_hidden_cost"/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
 
@@ -993,6 +1024,8 @@
                                 <field name="tray_units"/>
                                 <field name="print_increment" attrs="{'invisible': [('sheet_type', 'in', ['poly'])], 'readonly': [('can_edit', '!=', True)]}"/>
                                 <field name="tray_hours_sls"/>
+                                <field name="printer_euro_hour" readonly="1" groups="cost_sheet_lupeon.group_hidden_cost"/>
+                                <field name="printer_cost_euro_hour" readonly="1" groups="cost_sheet_lupeon.group_hidden_cost"/>
                             </group>
                              <div style="border-bottom: 1px solid black;"></div>
                          
@@ -1020,6 +1053,8 @@
                                 <field name="tray_units"/>
                                 <field name="finish_pol"/>
                                 <field name="tray_hours"/>
+                                <field name="printer_euro_hour" readonly="1" groups="cost_sheet_lupeon.group_hidden_cost"/>
+                                <field name="printer_cost_euro_hour" readonly="1" groups="cost_sheet_lupeon.group_hidden_cost"/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="4" string="Material Cost">
@@ -1043,6 +1078,8 @@
                                 <field name="perfil_id" attrs="{'required': [('sheet_type', '=', 'fdm')]}" domain="[('printer_id', '=', printer_id)]" options="{'no_create': True, 'no_create_edit':True}" />
                                 <field name="tray_units"/>
                                 <field name="tray_hours"/>
+                                <field name="printer_euro_hour" readonly="1" groups="cost_sheet_lupeon.group_hidden_cost"/>
+                                <field name="printer_cost_euro_hour" readonly="1" groups="cost_sheet_lupeon.group_hidden_cost"/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
                              <group colspan="4" string="Material Cost">
@@ -1067,6 +1104,8 @@
                                 <field name="perfil_id" attrs="{'required': [('sheet_type', '=', 'fdm')]}" domain="[('printer_id', '=', printer_id)]" options="{'no_create': True, 'no_create_edit':True}" />
                                 <field name="tray_units"/>
                                 <field name="tray_hours"/>
+                                <field name="printer_euro_hour" readonly="1" groups="cost_sheet_lupeon.group_hidden_cost"/>
+                                <field name="printer_cost_euro_hour" readonly="1" groups="cost_sheet_lupeon.group_hidden_cost"/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
                              <group colspan="4" string="Material Cost">
@@ -1093,6 +1132,8 @@
                                 <field name="perfil_id" attrs="{'required': [('sheet_type', '=', 'fdm')]}" domain="[('printer_id', '=', printer_id)]" options="{'no_create': True, 'no_create_edit':True}" />
                                 <field name="tray_units"/>
                                 <field name="tray_hours"/>
+                                <field name="printer_euro_hour" readonly="1" groups="cost_sheet_lupeon.group_hidden_cost"/>
+                                <field name="printer_cost_euro_hour" readonly="1" groups="cost_sheet_lupeon.group_hidden_cost"/>
                             </group>
                             <div style="border-bottom: 1px solid black;"></div>
                             <group colspan="4" string="Material Cost">
@@ -1193,6 +1234,8 @@
                 <!--DMLS fields -->
                 <field name="dmls_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'dmls')]}"/>
 
+                <field name="euro_kg_sale" groups="cost_sheet_lupeon.group_hidden_cost"/>
+                <field name="euro_kg_cost"  groups="cost_sheet_lupeon.group_hidden_cost"/>
                 <field name="euro_material"  groups="cost_sheet_lupeon.group_cs_advanced"/>
                 <field name="total" attrs="{'column_invisible': [('parent.sheet_type', '=', 'fdm')]}"  groups="cost_sheet_lupeon.group_cs_advanced"/>
             </tree>
@@ -1207,7 +1250,7 @@
                 <field name="can_edit" invisible="1"/>
                 <field name="name"/>
                 <field name="material_id" attrs="{'column_invisible': [('parent.sheet_type', '=', 'fdm')]}" domain="[('id', 'in', parent.available_material_ids)]" options="{'no_create_edit': True, 'no_quick_create': True}"/>
-                    <field name="material_id2" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}" domain="[('id', 'in', parent.available_material_ids)]" options="{'no_create_edit': True, 'no_quick_create': True}"/>
+                <field name="material_id2" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}" domain="[('id', 'in', parent.available_material_ids)]" options="{'no_create_edit': True, 'no_quick_create': True}"/>
                 <!-- FDM FIELDS -->
                 <field name="diameter" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/>
                 <!-- <field name="color" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'fdm')]}"/> -->
@@ -1238,6 +1281,8 @@
                 <!--DMLS fields -->
                 <field name="dmls_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'dmls')]}"/>
 
+                <field name="euro_kg_sale" groups="cost_sheet_lupeon.group_hidden_cost"/>
+                <field name="euro_kg_cost"  groups="cost_sheet_lupeon.group_hidden_cost"/>
                 <field name="euro_material"  groups="cost_sheet_lupeon.group_cs_advanced"/>
                 <field name="total" attrs="{'column_invisible': [('parent.sheet_type', '=', 'fdm')]}"  groups="cost_sheet_lupeon.group_cs_advanced"/>
             </tree>
@@ -1285,6 +1330,8 @@
                     <!--DMLS fields -->
                     <field name="dmls_cc_total" attrs="{'column_invisible': [('parent.sheet_type', '!=', 'dmls')]}"/>
 
+                    <field name="euro_kg_sale"  groups="cost_sheet_lupeon.group_hidden_cost"/>
+                    <field name="euro_kg_cost"  groups="cost_sheet_lupeon.group_hidden_cost"/>
                     <field name="euro_material"  groups="cost_sheet_lupeon.group_cs_advanced"/>
                     <field name="total" attrs="{'column_invisible': [('parent.sheet_type', '=', 'fdm')]}"  groups="cost_sheet_lupeon.group_cs_advanced"/>
                 </group>

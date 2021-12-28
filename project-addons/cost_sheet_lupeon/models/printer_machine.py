@@ -19,7 +19,7 @@ PRINT_TYPES = [
 class PrinterMachine(models.Model):
 
     _name = 'printer.machine'
-    _description = "Impresora"
+    _description = "Cateagoría Impresora"
 
     name = fields.Char('Name')
     type = fields.Selection(PRINT_TYPES, 'Print Type', required=True)
@@ -27,7 +27,8 @@ class PrinterMachine(models.Model):
 
     diameter = fields.Float('Diameter')
     machine_hour = fields.Float('H hombre / H maquina', digits=(16, 9))
-    euro_hour = fields.Float('Euro hour')
+    euro_hour = fields.Float('Euro hour sale')
+    cost_euro_hour = fields.Float('Euro hour cost')
     discount = fields.Float('Max disacount')
     discount2 = fields.Float('Discount 2º unit')
     max_disc_qty = fields.Float('Max discount quantity')
@@ -79,11 +80,12 @@ class PrinterMachine(models.Model):
 class PrinterMachineInstance(models.Model):
 
     _name = 'printer.machine.instance'
-    _description = "Categoría Impresora"
+    _description = "Impresora"
 
     name = fields.Char('Name')
     categ_id = fields.Many2one('printer.machine', 'Categoría Impresora')
     machine_hours = fields.Float('Horas máquina totales')
+    available_hours = fields.Float('Available hours')
     rule_ids = fields.One2many(
         'printer.maintance.rule', 'printer_instance_id',
         'Reglas mantenimiento')

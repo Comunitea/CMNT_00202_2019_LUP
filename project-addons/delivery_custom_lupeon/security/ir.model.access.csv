@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_carrier_account_stock_user,carrier.account.stock_user,base_delivery_carrier_label.model_carrier_account,stock.group_stock_user,1,1,1,1

@@ -13,7 +13,8 @@
     "depends": [
         "stock",
         "purchase",
-        'purchase_stock'
+        'purchase_stock',
+        'quant_picking_rel'
     ],
     "data": [
         #"views/res_partner_views.xml",

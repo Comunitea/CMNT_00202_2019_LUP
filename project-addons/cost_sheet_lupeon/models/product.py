@@ -25,7 +25,8 @@ class ProductTemplate(models.Model):
 
     # FDM
     gr_cc = fields.Float('Gr/cc')
-    euro_kg = fields.Float('€/kg')
+    euro_kg = fields.Float('€/kg Venta')
+    euro_kg_cost = fields.Float('€/kg Coste')
     factor_hour = fields.Float('Factor hora')
     diameter = fields.Float('Diametro')
 
@@ -34,7 +35,7 @@ class ProductTemplate(models.Model):
     dens_bulk = fields.Float('Densidad en bulk gr/cc')
     vel_cc = fields.Float('Velocidad cc/h full dense')
     vel_z = fields.Float('Velocidad en Z (cm/h) no exposur')
-    euro_kg_bucket = fields.Float('€/kg cubeta')
+    euro_kg_bucket = fields.Float('€/kg Venta')
     euro_hour_maq = fields.Float('€/H Maquina')
 
     # POLY

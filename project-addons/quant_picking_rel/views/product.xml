@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="product_normal_form_view_reservations" model="ir.ui.view">
+        <field name="name">product.product.form.reservations</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="stock.product_form_view_procurement_button"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_open_quants']" position="before">
+                <button class="oe_stat_button"
+                        icon="fa-braille"
+                        type="object"
+                        name="action_view_stock_moves_reservations">
+                    <div class="o_field_widget o_stat_info danger">
+                        <span class="o_stat_value">
+                            <field name="quantity_reserved" widget="statinfo" nolabel="1" mode="tree" class="mr4"/>
+                            <span class="o_stat_text">Reservas</span>
+                        </span>
+                        <span class="o_stat_value">
+                            <field name="quantity_reserved_confirmed" widget="statinfo" nolabel="1" mode="tree" class="mr4"/>
+                            <span class="o_stat_text">Confirmadas</span>
+                        </span>
+                        <span class="o_stat_value">
+                            <field name="quantity_reserved_link" widget="statinfo" nolabel="1" mode="tree" class="mr4"/>
+                            <span class="o_stat_text">Movs</span>
+                        </span>
+                    </div>
+                </button>
+            </xpath>
+
+            <button name="action_view_stock_move_lines" position="after">
+                <button string="Movimientos stock"
+                            type="object"
+                            name= "action_view_stock_moves_prod"
+                            attrs="{'invisible':[('type', 'not in', ['product', 'consu'])]}"
+                            class="oe_stat_button" icon="fa-arrows-h"
+                            groups="stock.group_stock_user"/>
+            </button>
+
+
+        </field>
+    </record>
+
+
+    <record id="view_product_stock_confirmed_link" model="ir.ui.view">
+        <field name="name">product.stock.confirmed.tree</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="stock.view_stock_product_tree"/>
+        <field name="arch" type="xml">
+            <field name="virtual_available" position="after">
+                <field name="qty_available_confirmed"/>
+            </field>
+        </field>
+    </record>
+</odoo>

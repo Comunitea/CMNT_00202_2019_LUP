@@ -18,7 +18,7 @@ class SaleOrder(models.Model):
     def action_confirm(self):
         for order in self:
             if order.fiscal_position_id and not order.bypass_vies_fpos_check():
-                res_vies = order.partner_id.chekc_fpos_vies_vat()
+                res_vies = order.partner_id.check_fpos_vies_vat()
                 if res_vies == "NOT VIES":
                     raise ValidationError(
                         _("The partner %s has not passed VIES validation.")

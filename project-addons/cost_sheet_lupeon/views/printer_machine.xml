@@ -17,6 +17,7 @@
                         <field name="diameter"/>
                         <field name="machine_hour"/>
                         <field name="euro_hour"/>
+                        <field name="cost_euro_hour"/>
                         <field name="discount"/>
                         <field name="discount2"/>
                         <field name="max_disc_qty"/>
@@ -90,6 +91,7 @@
                             <field name="name"/>
                             <field name="categ_id"/>
                             <field name="machine_hours" widget="float_time"/>
+                            <field name="available_hours" widget="float_time"/>
                         </group>
                     </group>
 
@@ -122,6 +124,7 @@
                 <field name="name"/>
                 <field name="categ_id"/>
                 <field name="machine_hours" widget="float_time"/>
+                <field name="available_hours" widget="float_time"/>
             </tree>
         </field>
     </record>

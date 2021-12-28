@@ -161,6 +161,6 @@ class StockRule(models.Model):
         """
         if product_id.spec_stock:
             return
-        return super().run_buy(
+        return super()._run_buy(
             product_id, product_qty, product_uom, location_id, name, origin,
             values)

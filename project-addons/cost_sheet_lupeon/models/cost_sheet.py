@@ -82,6 +82,9 @@ class CostSheet(models.Model):
     printer_id = fields.Many2one('printer.machine', 'Categoría Impresora')
     printer_instance_id = fields.Many2one('printer.machine.instance', 'Impresora')
 
+    printer_euro_hour = fields.Float('Euro hour sale', copy=False)
+    printer_cost_euro_hour = fields.Float('Euro hour cost', copy=False)
+
     # [ALL] COSTE MANO DE OBRA
     calc_material_id = fields.Many2one('product.product', 'Material FDM principal')
     workforce_cost_ids = fields.One2many(
@@ -242,7 +245,7 @@ class CostSheet(models.Model):
                 qty = sh.sale_line_id.product_uom_qty
             sh.cus_units = qty * sh.rpf
 
-    @api.depends('oppi_line_ids')
+    # @api.depends('oppi_line_ids.time')
     def _get_oppi_total(self):
         for sh in self:
             sh.total_oppi = sum([x.time for x in sh.oppi_line_ids])
@@ -285,11 +288,19 @@ class CostSheet(models.Model):
 
     def duplicate_sheet(self):
         self.ensure_one()
-        new_line = self.copy()
-        new_line.group_id = self.group_id.id
+        new_line = self.copy({'group_id': self.group_id.id})
+        # new_line.group_id = self.group_id.id
 
     @api.model
     def create(self, vals):
+        # Propagar costes horas de la impresora a la hoja de costas
+        if vals.get('printer_id'):
+            printer = self.env['printer.machine'].browse(vals['printer_id'])
+            vals.update({
+                'printer_euro_hour': printer.euro_hour,
+                'printer_cost_euro_hour': printer.cost_euro_hour
+
+            })
         res = super().create(vals)
         res.group_id.update_sale_line_price()
         res.update_workforce_cost()
@@ -298,6 +309,13 @@ class CostSheet(models.Model):
         return res
 
     def write(self, vals):
+        # Propagar costes horas de la impresora a la hoja de costas
+        if vals.get('printer_id'):
+            printer = self.env['printer.machine'].browse(vals['printer_id'])
+            vals.update({
+                'printer_euro_hour': printer.euro_hour,
+                'printer_cost_euro_hour': printer.cost_euro_hour
+            })
         res = super().write(vals)
         self.mapped('group_id').update_sale_line_price()
         self.update_workforce_cost()
@@ -493,7 +511,6 @@ class CostSheet(models.Model):
                 pvp = sh.meet_total
             elif sh.sheet_type == 'purchase':
                 pvp = sh.purchase_total
-
             sh.update({
                 'cost_ud': cost,
                 'disc_qty_computed': disc_qty,
@@ -536,9 +553,11 @@ class CostSheet(models.Model):
                 if sh.material_cost_ids and sh.printer_id and \
                         sh.material_cost_ids[0].material_id:
                     mat = sh.material_cost_ids[0].material_id
-                    sh.euro_machine = sh.printer_id.euro_hour * mat.factor_hour
+                    # sh.euro_machine = sh.printer_id.euro_hour * mat.factor_hour
+                    sh.euro_machine = sh.printer_euro_hour * mat.factor_hour
             elif sh.sheet_type in ['sls', 'poly', 'sla', 'sls2', 'dmls']:
-                sh.euro_machine = sh.printer_id and sh.printer_id.euro_hour
+                # sh.euro_machine = sh.printer_id and sh.printer_id.euro_hour
+                sh.euro_machine = sh.printer_euro_hour
 
     @api.depends('material_cost_ids')
     def _get_totals_material_cost(self):
@@ -955,7 +974,18 @@ class CostSheet(models.Model):
                 # 'line_name': sheet.sale_line_id.name,
             }
             prod = self.env['mrp.production'].create(vals)
+            # El onchange puede cambiar la lista de materiales si se generó
+            # manualmente, porque le estoy pasando el existing product, y hace
+            # para el producto creado para la fabricación original.
+            # Si es el caso lo detecto y le pongo la lista de materiales que
+            # yo me creé
+            my_new_bom = bom
+
             prod.onchange_product_id()
+
+            if prod.bom_id != my_new_bom:
+                prod.bom_id = my_new_bom.id
+            
             prod.action_assign()
             prod.button_plan()
             sheet.update_workorders(prod)
@@ -1000,6 +1030,8 @@ class MaterialCostLine(models.Model):
     material_id = fields.Many2one('product.product', 'Material')
     material_id2 = fields.Many2one('product.product', 'Material')
 
+    euro_kg_sale = fields.Float('€/kg Venta', copy=False)
+    euro_kg_cost = fields.Float('€/kg Coste', copy=False)
     euro_material = fields.Float('Euros Mat ud', compute='_compute_cost')
     total = fields.Float('Total', compute='_compute_cost')
 
@@ -1068,6 +1100,9 @@ class MaterialCostLine(models.Model):
             if not mcl.material_id or not mcl.sheet_id:
                 continue
             mat = mcl.material_id
+            # Este valor se propaga desde el material, si no hay en la propia
+            # línea, como en el caso de las copias se coje el nuevo
+            euro_kg_sale = mcl.euro_kg_sale or mat.euro_kg
             sh = mcl.sheet_id
             if sh.sheet_type == 'fdm':
                 gr_cc_tray = (mat.gr_cc * math.pi * ((mcl.diameter / 2.0) ** 2)) * mcl.tray_meters
@@ -1075,7 +1110,7 @@ class MaterialCostLine(models.Model):
                 if sh.cus_units:
                     gr_cc_total = (gr_cc_tray / sh.tray_units) * sh.cus_units
                     mcl.gr_cc_total = round(gr_cc_total)
-                    euro_material = (mat.euro_kg * (gr_cc_total / 1000.0)) / sh.cus_units
+                    euro_material = (euro_kg_sale * (gr_cc_total / 1000.0)) / sh.cus_units
                     mcl.euro_material = euro_material
             elif sh.sheet_type == 'sls':  # SLS P396
                 sls_gr_tray = mcl.get_sls_gr_tray()
@@ -1083,14 +1118,14 @@ class MaterialCostLine(models.Model):
                 if sh.tray_units:
                     sls_gr_total = (sls_gr_tray * sh.cus_units) / sh.tray_units
                     mcl.sls_gr_total = round(sls_gr_total)
-                    euro_material = (sls_gr_tray * (mat.euro_kg_bucket / 1000.0)) / sh.tray_units
+                    euro_material = (sls_gr_tray * (euro_kg_sale / 1000.0)) / sh.tray_units
                     mcl.euro_material = euro_material
                     mcl.total = sh.cus_units * euro_material
             elif sh.sheet_type == 'poly':
                 dis = mcl.desviation / 100
                 if sh.tray_units:
                     mcl.pol_gr_total = ((1 + dis) * mcl.pol_gr_tray * sh.cus_units) / sh.tray_units
-                    euro_material = (mcl.pol_gr_total * mat.euro_kg) / sh.cus_units
+                    euro_material = (mcl.pol_gr_total * euro_kg_sale) / sh.cus_units
                     mcl.euro_material = euro_material
                     mcl.total = sh.cus_units * euro_material
             elif sh.sheet_type == 'sla':  # SLA
@@ -1104,7 +1139,7 @@ class MaterialCostLine(models.Model):
                 dis = mcl.desviation / 100
                 if sh.tray_units:
                     mcl.sls2_cc_total = ((1 + dis) * mcl.sls2_cc_tray * sh.cus_units) / sh.tray_units
-                    euro_material = (mcl.sls2_cc_total * mat.euro_kg * mat.gr_cc) / sh.cus_units
+                    euro_material = (mcl.sls2_cc_total * euro_kg_sale * mat.gr_cc) / sh.cus_units
                     mcl.euro_material = euro_material
                     mcl.total = sh.cus_units * euro_material
 
@@ -1117,7 +1152,7 @@ class MaterialCostLine(models.Model):
                     dmls_cc_total = ((1 + dis) * dmls_cc_tray * sh.cus_units) / sh.tray_units
                     mcl.dmls_cc_total = round(dmls_cc_total)
                     if sh.cus_units:
-                        mcl.euro_material = ( mcl.dmls_cc_total * mat.euro_kg) / (sh.cus_units * 1000)
+                        mcl.euro_material = ( mcl.dmls_cc_total * euro_kg_sale) / (sh.cus_units * 1000)
                         mcl.total = sh.cus_units * mcl.euro_material
 
     def get_bom_qty(self):
@@ -1147,6 +1182,15 @@ class MaterialCostLine(models.Model):
             if self.material_id2 and \
                     self.material_id2.id != self.material_id.id:
                 mat.material_id = mat.material_id2.id
+            
+            # Actualizo los valores para que si se dulica o se
+            # crea uno nuevo coja el valor actualizado.
+            # Los valores de euro_kg van con copy = False para ser actualizados 
+            material = mat.material_id
+            if mat.euro_kg_sale != material.euro_kg:
+                mat.euro_kg_sale = material.euro_kg
+            if mat.euro_kg_cost != material.euro_kg_cost:
+                mat.euro_kg_cost = material.euro_kg_cost
 
     @api.model
     def create(self, vals):
@@ -1351,7 +1395,7 @@ class OppiCostLine(models.Model):
                               copy=False)
     e_partner_id = fields.Many2one('res.partner', 'Externalización')
 
-    @api.depends('t1f', 'sheet_id.rpf', 'sheet_id.group_id.sale_line_id.product_uom_qty', 'e_partner_id')
+    # @api.depends('t1f', 'sheet_id.rpf', 'sheet_id.group_id.sale_line_id.product_uom_qty', 'e_partner_id')
     def _get_time(self):
         for ocl in self:
             ocl.time = ocl.t1f * ocl.sheet_id.rpf * ocl.sheet_id.group_id.sale_line_id.product_uom_qty

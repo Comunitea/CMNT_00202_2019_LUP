@@ -10,30 +10,6 @@
             </xpath>
         </field>
     </record>
-      <record id="product_normal_form_view_reservations" model="ir.ui.view">
-        <field name="name">product.product.form.reservations</field>
-        <field name="model">product.product</field>
-        <field name="inherit_id" ref="stock.product_form_view_procurement_button"/>
-        <field name="arch" type="xml">
-            <xpath expr="//button[@name='action_open_quants']" position="before">
-                <button class="oe_stat_button"
-                        icon="fa-braille"
-                        type="object"
-                        name="action_view_stock_moves_reservations">
-                    <div class="o_field_widget o_stat_info danger">
-                        <span class="o_stat_value">
-                            <field name="quantity_reserved" widget="statinfo" nolabel="1" mode="tree" class="mr4"/>
-                            <span class="o_stat_text">Reservas</span>
-                        </span>
-                        <span class="o_stat_value">
-                            <field name="quantity_reserved_link" widget="statinfo" nolabel="1" mode="tree" class="mr4"/>
-                            <span class="o_stat_text">Movs</span>
-                        </span>
-                    </div>
-                </button>
-            </xpath>
-        </field>
-    </record>
 
 
      <record id="view_move_line_quant_link" model="ir.ui.view">
@@ -44,7 +20,11 @@
                   decoration-danger="state == 'partially_available'"
                   string="Move Lines" create="0" default_order="date">
                 <field name="date"/>
+                <field name="date_order"/>
+                <field name="product_id"/>
                 <field name="move_id"/>
+                <field name="partner_id"/>
+                <field name="mail_supplier"/>
                 <field name="picking_id"/>
                 <button name="action_open_picking_id" type="object" icon ="fa-binoculars" attrs="{'invisible': [('picking_id', '=', False)]}"/>
                 <field name="sale_id"/>
@@ -52,7 +32,8 @@
                 <field name="lot_id"/>
                 <field name="product_uom_qty"/>
                 <field name="qty_done" string="Quantity Done"/>
-                <field name="product_uom_id" options="{'no_open': True, 'no_create': True}" string="Unit of Measure" groups="uom.group_uom"/>
+                <!--field name="product_uom_id" options="{'no_open': True, 'no_create': True}" string="Unit of Measure" groups="uom.group_uom"/-->
+                <field name="state_order"/>
                 <field name="state"/>
                 <button name="unlink_stock_move" type="object" icon ="fa-trash"/>
                 <button name="check_move_availability" type="object" icon ="fa-braille" attrs="{'invisible': [('state', '=', 'assigned')]}"/>
@@ -65,15 +46,34 @@
         <field name="model">stock.move.line</field>
         <field name="inherit_id" ref="stock.stock_move_line_view_search"/>
         <field name="arch" type="xml">
+            <xpath expr="//filter[@name='done']" position="after">
+                <filter string="Cancel" name="cancel" domain="[('state','=','cancel')]"/>
+            </xpath>
+            <xpath expr="//field[@name='location_dest_id']" position="after">
+                <separator/>
+                <field name="partner_id"/>
+                <field name="mail_supplier"/>
+            </xpath>
             <xpath expr="//filter[@name='groupby_product_id']" position="after">
                 <filter string="Location" name="groupby_location_id" domain="[]" context="{'group_by': 'location_id'}"/>
             </xpath>
         </field>
     </record>
 
+    <!--record id="stock_move_line_view_tree_user" model="ir.ui.view">
+        <field name="name">stock.move.line.tree.user</field>
+        <field name="model">stock.move.line</field>
+        <field name="inherit_id" ref="stock.view_move_line_tree"/>
+        <field name="arch" type="xml">
+            <field name="state" position="before">
+                <field name="write_uid"/>
+            </field>
+        </field>
+    </record-->
+
 
     <record id="action_stock_move_line_reserved" model="ir.actions.act_window">
-        <field name="name">Productos resevados</field>
+        <field name="name">Productos reservados</field>
         <field name="res_model">stock.move.line</field>
         <field name="type">ir.actions.act_window</field>
         <field name="view_type">form</field>
@@ -92,14 +92,20 @@
         </field>
     </record>
 
-    
-  
 
 
-     <menuitem id="menu_action_product_reserved"
+
+
+    <menuitem id="menu_action_product_reserved"
             name="Productos reservados"
             action="action_stock_move_line_reserved"
             parent="stock.menu_stock_warehouse_mgmt"
             sequence="50"/>
+
+    <menuitem id="menu_action_sale_product_reserved"
+            name="Productos reservados"
+            action="action_stock_move_line_reserved"
+            parent="sale.sale_order_menu"
+            sequence="3"/>
 
 </odoo>

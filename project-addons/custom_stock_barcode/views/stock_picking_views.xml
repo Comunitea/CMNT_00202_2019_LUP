@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record
+        id="stock_picking_view_form_inherit_custom_stock_barcode"
+        model="ir.ui.view"
+    >
+        <field name="name">stock.picking.form.inherit.custom.stock.barcode</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//button[last()]" position="after">
+                <button
+                    name="button_reset_moves"
+                    barcode_trigger="reset_moves"
+                    type="object"
+                    string="Reset moves"
+                    invisible="1"
+                />
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

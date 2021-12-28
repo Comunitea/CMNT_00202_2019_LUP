@@ -33,7 +33,7 @@ class SaleOrder(models.Model):
         ('sale', 'Sales Order'),
         ('done', 'Locked'),
         ('cancel', 'Cancelled'),
-        ], string='Status', readonly=True, copy=False, 
+        ], string='Status', readonly=True, copy=False,
         index=True, track_visibility='onchange', track_sequence=3,
         default='draft')
 
@@ -41,6 +41,8 @@ class SaleOrder(models.Model):
         'purchase.order', 'dest_sale_id', 'Purchases')
     name2 = fields.Char('Descripción pedido')
     cost_sheet_sale = fields.Boolean(related='company_id.cost_sheet_sale')
+
+    employee_cost_ids = fields.One2many('employee.cost.line', 'order_id')
 
     @api.multi
     def action_design(self):
@@ -225,6 +227,14 @@ class SaleOrder(models.Model):
             move_dest_ids = False
             if line.product_id.spec_stock:
                 prod = line.sheet_id.production_id
+                # Si es fabricación custom puede no haber producion asociada directamente
+                # la busco por la lista de materiales
+                if not prod:
+                    bom = line.sheet_id.group_id.mapped('bom_id')
+                    if bom:
+                         domain = [('bom_id', 'in', bom.ids)]
+                         prod = self.env['mrp.production'].search(domain)
+
                 rel_move = prod.move_raw_ids.filtered(lambda x: x.product_id == line.product_id)
                 if rel_move:
                     if rel_move.procure_method != 'make_to_order':
@@ -286,9 +296,17 @@ class SaleOrder(models.Model):
             group_costs.create_group_bom_on_fly()
 
             # Creo las compras en borrador, agrupadas por proveedor
-            order.create_sale_purchase()
+            # order.create_sale_purchase()
 
         res = super().action_confirm()
+
+        # Creo las compras en borrador, agrupadas por proveedor
+        # Necesito tener la fabricación custom creada
+        # Para el stock específico, sino no soy capaz de asociar el movimiento de la
+        # compra con el consumo
+        for order in self:
+             order.create_sale_purchase()
+
 
         # Escribir información en las producciones generadas bajo pedido
         # main_productions = self.get_main_productions()
@@ -302,6 +320,17 @@ class SaleOrder(models.Model):
                 })
                 if main_production.routing_id:
                     main_production.button_plan()
+        
+        # Get current employte cost and save them.
+        employees = self.env['hr.employee'].search([])
+        for order in self:
+            for emp in employees:
+                vals = {
+                    'order_id': self.id,
+                    'employee_id': emp.id,
+                    'cost': emp.cost_tech_hour,
+                }
+                self.env['employee.cost.line'].create(vals)
         return res
 
     def action_cancel(self):
@@ -320,6 +349,20 @@ class SaleOrder(models.Model):
 
 
         return res
+
+    def copy_revision_with_context(self):
+        new = super().copy_revision_with_context()
+        c = self.company_id
+        for line in new.order_line:
+            line.group_sheet_id.write({
+                'sale_line_id': line.id,
+                'ing_hours': c.ing_hours,
+                'tech_hours': c.tech_hours,
+                'help_hours': c.help_hours,
+                'km_cost': c.km_cost,
+            })
+
+        return new
 
     def duplicate_with_costs(self):
         new = self.with_context(from_copy=True).copy()
@@ -379,7 +422,7 @@ class SaleOrderLine(models.Model):
 
         if not self.group_sheet_id.bom_id:
             raise UserError(
-                _('No existe lista de materiales asociada al grupo')) 
+                _('No existe lista de materiales asociada al grupo'))
 
         if self.group_sheet_id and self.group_sheet_id.bom_id:
             new_bom = self.group_sheet_id.bom_id.copy()
@@ -464,3 +507,25 @@ class SaleOrderLine(models.Model):
             'help_hours': c.help_hours,
             'km_cost': c.km_cost,
         })
+        # Necesito que el precio esté bien actualizado en el grupo
+        # Sino al duplicar la linea de propagar el precio no coje el correcto
+        # Esto es por culpa de los api.depends sobre funciones que no son
+        # store
+
+        # new_line.group_sheet_id._get_line_pvp()
+        # new_line.group_sheet_id.update_sale_line_price()
+
+        # Lo de arriba es inseguro porque no siempre el grupo tiene el campo
+        # precio exactamente igual, Mejor es comprobar que si el line_pvp del
+        # grupo original y del nuevo son el mismo propagar el precio.
+        new_line.price_unit = self.price_unit
+
+
+
+class EmployeeCostLine(models.Model):
+
+    _name = "employee.cost.line"
+
+    order_id = fields.Many2one('sale.order', 'Order')
+    employee_id = fields.Many2one('hr.employee', 'Employee')
+    cost = fields.Float('Cost')

@@ -33,6 +33,7 @@
                     <group attrs="{'invisible': [('material_type', '!=', 'fdm')]}">
                         <field name="gr_cc"/>
                         <field name="euro_kg"/>
+                        <field name="euro_kg_cost"/>
                         <field name="factor_hour"/>
                         <field name="diameter"/>
                     </group>
@@ -42,11 +43,14 @@
                         <field name="dens_bulk"/>
                         <field name="vel_cc"/>
                         <field name="vel_z"/>
-                        <field name="euro_kg_bucket"/>
+                        <!-- <field name="euro_kg_bucket"/> -->
+                        <field name="euro_kg"/>
+                        <field name="euro_kg_cost"/>
                         <field name="euro_hour_maq"/>
                     </group>
                     <group attrs="{'invisible': [('material_type', '!=', 'poly')]}">
                         <field name="euro_kg" string="€/gr"/>
+                        <field name="euro_kg_cost" string="€/gr"/>
                     </group>
 
                     <!-- SLA -->
@@ -61,6 +65,7 @@
                     <group attrs="{'invisible': [('material_type', 'not in', ['sls2'])]}">
                         <field name="gr_cc"/>
                         <field name="euro_kg" string="€/gr"/>
+                        <field name="euro_kg_cost" string="€/gr"/>
                         <field name="printer_id" domain="[('type', 'in', ['sls2'])]"/>
                         <!-- <field name="washing_time"/>
                         <field name="cured_time"/> -->
@@ -69,6 +74,7 @@
                     <group attrs="{'invisible': [('material_type', '!=', 'dmls')]}">
                         <field name="dens_cc"/>
                         <field name="euro_kg"/>
+                        <field name="euro_kg_cost"/>
                         <field name="init_cost"/>
                         <field name="term_cost"/>
                     </group>

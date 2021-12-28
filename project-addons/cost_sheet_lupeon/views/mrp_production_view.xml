@@ -49,6 +49,7 @@
 
             <field name="product_id" position="after">
                 <field name="sheet_id" context="{'form_view_ref': 'cost_sheet_lupeon.simple_cost_sheet_view_form'}"   attrs="{'invisible': [('company_id', '!=', 1)]}"/>
+                <field name="material_id"  attrs="{'invisible': [('company_id', '!=', 1)]}"/>
                 <field name="sheet_type"  attrs="{'invisible': [('company_id', '!=', 1)]}"/>
                 <field name="sale_id"  attrs="{'invisible': [('company_id', '!=', 1)]}"/>
                 <field name="sale_line_id"  attrs="{'invisible': [('company_id', '!=', 1)]}"/>
@@ -103,6 +104,7 @@
             <field name="product_id" position="after">
                 <field name="company_id" invisible="1"/>
                 <field name="sheet_id"/>
+                <field name="material_id"/>
                 <field name="sheet_type"/>
                 <field name="sale_id"/>
                 <!-- <field name="sale_line_id"/> -->
@@ -146,6 +148,7 @@
                 <field name="line_ref"/>
                 <field name="line_name"/>
                 <field name="sheet_id"/>
+                <field name="material_id"/>
                 <field name="sale_id"/>
                 <field name="sale_line_id"/>
             </field>
@@ -154,6 +157,7 @@
                 <filter name="sale" string="Sale order" context="{'group_by' :'sale_id'}"/>
                 <filter name="sale_line" string="Sale order line" context="{'group_by' :'sale_line_id'}"/>
                 <filter name="sheet_type" string="Tipo de hoja" context="{'group_by' :'sheet_type'}"/>
+                <filter name="material" string="Material" context="{'group_by' :'material_id'}"/>
             </filter>
         </field>
     </record>

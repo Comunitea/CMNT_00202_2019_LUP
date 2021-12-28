@@ -12,7 +12,7 @@
             <field name="carrier_id" position="attributes">
                 <attribute name="domain">[('id', 'in', available_deliveries_ids)]</attribute>
                 <attribute name="required">1</attribute>
-            </field>    
+            </field>
         </field>
     </record>
 
@@ -24,7 +24,7 @@
             <button name="action_cancel" position="replace">
                 <button name="action_cancel" invisible="1" string="Cancel" groups="base.group_user" type="object"/>
                 <button name="%(action_question_cancel_wizard)d" type="action" attrs="{'invisible': ['|', ('state', 'not in', ('assigned', 'confirmed', 'partially_available', 'draft', 'waiting')), ('is_locked', '=', False)]}" string="Cancelar" groups="base.group_user"/>
-            </button>    
+            </button>
         </field>
     </record>
 
@@ -38,6 +38,9 @@
             </field>
             <field name="state" position="after">
                 <field name="line_state"/>
+            </field>
+            <field name="state" position="before">
+                <field name="write_uid"/>
             </field>
         </field>
     </record>
@@ -54,7 +57,7 @@
 
     <!-- Modificaciones para permisos -->
 
-    
+
 
 
 
@@ -65,6 +68,7 @@
         <field name="inherit_id" ref="stock.view_move_search"/>
         <field name="arch" type="xml">
             <filter name="done" position="after">
+                <filter string="Cancel" name="cancel" domain="[('state','in',['cancel'])]"/>
                 <filter string="Proforma reserved" name="proform_reserve" domain="[('line_state','in',['draft', 'sent']), (('state','not in',['cancel']))]"/>
             </filter>
         </field>
@@ -92,7 +96,7 @@
             <field name="backorder_id" position="after">
                 <!--field name="sale_id"/-->
                 <field name="delivery_blocked" readonly="1"/>
-                
+
             </field>
         </field>
     </record>
@@ -221,7 +225,7 @@
                 <field name="carrier_tracking_url" widget="url" readonly="1"/>
                 <field name="origin" readonly="1"/>
                 <field name="state" readonly="1"/>
-                <field name="delivered"/> 
+                <field name="delivered"/>
                 <field string="Incidents" name="incident_reports_count" widget="statinfo" readonly="1"/>
                 <button name="action_incident_reports_view" type="object"  icon="fa-bug" attrs="{'invisible': [('incident_reports_count', '=', 0)]}"/>
                 <button name="create_incident_report" type="object"  icon="fa-file-text" string="Create Incident"/>
@@ -260,7 +264,7 @@
         <field name="model">stock.picking</field>
         <field name="inherit_id" ref="stock.view_picking_form"/>
         <field name="arch" type="xml">
-            
+
            <div name="button_box" position="inside">
                 <button type="object"
                     name="action_barcode_delivery"
@@ -311,18 +315,18 @@
                 <field name="carrier_id"/>
             </field>
             <filter name="activities_my" position="before">
-                
+
                 <filter string="Whithout shipping cost" name="no_shipping_cost" domain="[('ship_cost', '=', 0), ('state', '=', 'done')]"/>
                 <separator/>
                 <filter string="With Carrier" name="carrier" domain="[('carrier_id', '!=', False)]"/>
                 <separator/>
-                
+
             </filter>
 
             <filter name="picking_type" position="after">
                 <filter name="carrier" string="Carrier" domain="[]" context="{'group_by':'carrier_id'}"/>
             </filter>
-            
+
         </field>
     </record>
 

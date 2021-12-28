@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+    <t t-extend="main_menu">
+        <t t-jquery="div.o_stock_barcode_main_menu div.row" t-operation="append">
+            <div class="col">
+                <button
+                    class="button_productions btn btn-block btn-primary mb-4 mb-sm-0"
+                >Productions</button>
+            </div>
+        </t>
+    </t>
+
+</templates>

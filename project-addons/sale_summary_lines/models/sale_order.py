@@ -60,7 +60,7 @@ class SaleSummaryLine(models.Model):
 
     @api.depends('invoice_lines.invoice_id.state', 'invoice_lines.quantity')
     def _get_summary_invoice_qty(self):
-        
+
         for line in self:
             qty_invoiced = 0.0
             for invoice_line in line.invoice_lines:
@@ -73,7 +73,7 @@ class SaleSummaryLine(models.Model):
 
     @api.depends('qty_invoiced', 'qty_delivered', 'product_uom_qty', 'order_id.state')
     def _get_summary_to_invoice_qty(self):
-        
+
         for line in self:
             if line.order_id.state in ['sale', 'done']:
                 line.qty_to_invoice = line.qty_delivered - line.qty_invoiced
@@ -82,7 +82,7 @@ class SaleSummaryLine(models.Model):
 
     @api.onchange('product_uom_qty')
     def product_uom_change(self):
-        
+
         self.qty_delivered = self.product_uom_qty
 
 
@@ -101,7 +101,7 @@ class SaleSummaryLine(models.Model):
 
     @api.depends('state', 'product_uom_qty', 'qty_to_invoice', 'qty_invoiced')
     def _compute_invoice_status(self):
-       
+
         precision = self.env['decimal.precision'].precision_get('Product Unit of Measure')
         for line in self:
             if line.state not in ('sale', 'done'):
@@ -138,11 +138,11 @@ class SaleSummaryLine(models.Model):
         """
         self.ensure_one()
         res = {}
-        
+
         journal = self.env['account.journal'].search([], limit=1)[0]
         account = journal.default_debit_account_id
 
-        
+
         fpos = self.order_id.fiscal_position_id or self.order_id.partner_id.property_account_position_id
         if fpos and account:
             account = fpos.map_account(account)
@@ -199,32 +199,66 @@ class SaleOrder(models.Model):
 
     use_summary_lines = fields.Boolean('Use Summary Lines', default=False)
     use_pot = fields.Boolean('Use Pot', default=False)
-    summary_line_ids = fields.One2many('sale.summary.line', 'order_id', 
-                                        string='Summary Lines', 
-                                        states={'cancel': [('readonly', True)], 'done': [('readonly', True)]}, 
-                                        copy=True, 
+    summary_line_ids = fields.One2many('sale.summary.line', 'order_id',
+                                        string='Summary Lines',
+                                        states={'cancel': [('readonly', True)], 'done': [('readonly', True)]},
+                                        copy=True,
                                         auto_join=True)
 
-    summary_amount_untaxed = fields.Monetary(string='Summary Untaxed Amount', 
+    summary_amount_untaxed = fields.Monetary(string='Summary Untaxed Amount',
                                             store=True,
-                                            readonly=True, 
+                                            readonly=True,
                                             compute='_summary_amount_all')
-    summary_amount_tax = fields.Monetary(string='Summary Taxes', 
-                                        store=True, 
-                                        readonly=True, 
+    summary_amount_tax = fields.Monetary(string='Summary Taxes',
+                                        store=True,
+                                        readonly=True,
                                         compute='_summary_amount_all')
-    summary_amount_total = fields.Monetary(string='Summary Total', 
-                                        store=True, 
-                                        readonly=True, 
+    summary_amount_total = fields.Monetary(string='Summary Total',
+                                        store=True,
+                                        readonly=True,
                                         compute='_summary_amount_all')
-    amount_pot_available_untaxed = fields.Monetary(string='Untaxed Pot Available', 
-                                        store=True, 
-                                        readonly=True, 
+    amount_pot_available_untaxed = fields.Monetary(string='Untaxed Pot Available',
+                                        store=True,
+                                        readonly=True,
                                         compute='_summary_amount_pot')
-    amount_pot_available_total = fields.Monetary(string='Pot Available', 
-                                        store=True, 
-                                        readonly=True, 
+    amount_pot_available_total = fields.Monetary(string='Pot Available',
+                                        store=True,
+                                        readonly=True,
                                         compute='_summary_amount_pot')
+    discount_amount_total = fields.Monetary(string='Total Discount',
+                                        store=True,
+                                        readonly=True,
+                                        compute='_discount_amount_all')
+
+
+    @api.onchange('partner_id', 'partner_invoice_id', 'partner_shipping_id')
+    def onchange_check_commercial(self):
+        if (self.partner_id and self.partner_id.user_id  and self.partner_id.user_id.id != self.env.user.id) or \
+            (self.partner_invoice_id and self.partner_invoice_id.user_id and self.partner_invoice_id.user_id.id != self.env.user.id) or \
+            ( self.partner_shipping_id  and self.partner_shipping_id.user_id  and self.partner_shipping_id.user_id.id != self.env.user.id):
+            return {
+                'warning': {
+                    'title': _('Comercial asignado:'),
+                    'message': _(
+                        "El cliente seleccionado tiene otro comercial asignado. "
+                        "Revisar antes de continuar.")
+                }
+            }
+
+    @api.depends('order_line.price_total')
+    def _discount_amount_all(self):
+        for order in self:
+            total_discount = 0
+            for line in order.order_line.filtered(lambda l: l.discount>0 or l.price_subtotal <0 ):
+                if line.price_subtotal < 0:
+                    total_discount += -line.price_subtotal
+                elif line.discount >0 :
+                    if line.discount != 100:
+                        total_discount += (line.price_subtotal/(1 -(line.discount/100))) - line.price_subtotal
+                    else:
+                        total_discount += line.price_unit * line.product_qty
+            order.discount_amount_total = total_discount
+
 
 
     @api.depends('summary_line_ids.price_total')
@@ -400,7 +434,7 @@ class SaleOrder(models.Model):
         for order in self.filtered(lambda o: o.use_summary_lines or o.use_pot):
             if order.use_summary_lines or order.use_pot:
                 #line_invoice_status_all = [(d['order_id'][0], d['invoice_status']) for d in self.env['sale.order.line'].read_group([('order_id', 'in', self.ids), ('product_id', '!=', deposit_product_id.id)], ['order_id', 'invoice_status'], ['order_id', 'invoice_status'], lazy=False)]
-                
+
                 invoice_ids = order.summary_line_ids.mapped('invoice_lines').mapped('invoice_id').filtered(lambda r: r.type in ['out_invoice', 'out_refund'])
                 line_invoice_status = [d[1] for d in line_invoice_status_all if d[0] == order.id]
 
@@ -410,7 +444,7 @@ class SaleOrder(models.Model):
                     invoice_status = 'to invoice'
                 elif line_invoice_status and all(invoice_status == 'invoiced' for invoice_status in line_invoice_status):
                     invoice_status = 'invoiced'
-                
+
                 else:
                     invoice_status = 'no'
 
@@ -420,9 +454,9 @@ class SaleOrder(models.Model):
                     'invoice_status': invoice_status
                 })
 
-                
+
 class SaleOrderLine(models.Model):
-    _inherit = "sale.order.line"            
+    _inherit = "sale.order.line"
 
     @api.depends('state', 'product_uom_qty', 'qty_delivered', 'qty_to_invoice', 'qty_invoiced',
                 'order_id.use_summary_lines', 'order_id.summary_line_ids')
@@ -438,5 +472,5 @@ class SaleOrderLine(models.Model):
             else:
                 line.invoice_status ='no'
 
-            
+
 

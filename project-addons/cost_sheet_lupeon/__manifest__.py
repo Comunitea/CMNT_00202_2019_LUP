@@ -9,6 +9,7 @@
     'license': 'AGPL-3',
     'depends': [
         'sale',
+        'sale_order_revision',
         'stock_picking_report_valued',
         'project',
         'mrp',
@@ -16,6 +17,7 @@
         'purchase',
         'mrp_workorder',
         'purchase_stock',
+        'hr',
     ],
     'contributors': [
         "Comunitea ",
@@ -53,6 +55,7 @@
         'views/res_company_view.xml',
         'views/stock_scrap_view.xml',
         'views/stock_view.xml',
+        'views/hr_employee.xml',
         'views/res_config_settings_views.xml',
     ],
     "installable": True,

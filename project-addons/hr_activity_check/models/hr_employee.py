@@ -59,6 +59,6 @@ class HrEmployee(models.Model):
                             yesterday, yesterday_amount, user.min_report_hours
                         )
                     ),
-                    message_type="notification",
+                    message_type="email",
                     subtype="mail.mt_comment",
                 )

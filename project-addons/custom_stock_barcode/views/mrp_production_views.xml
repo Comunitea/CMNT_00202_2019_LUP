@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="mrp_production_action_kanban" model="ir.actions.act_window">
+        <field name="name">Manufacturing Orders</field>
+        <field name="res_model">mrp.production</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="view_id" ref="mrp.mrp_production_kanban_view" />
+        <field name="context">{
+            'form_view_initial_mode': 'edit',
+            'force_detailed_view': True,
+            'search_default_todo': True,
+        }</field>
+    </record>
+
+    <record id="mrp_production_kanban_view_inherit_custom_barcode" model="ir.ui.view">
+        <field name="name">mrp.production.kanban.view.inherit.custom.barcode</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_kanban_view" />
+        <field name="arch" type="xml">
+
+            <!-- Use the form view -->
+            <xpath expr="//div[hasclass('o_kanban_record_headings')]" position="after">
+                <button
+                    style="padding: 0px 10px;"
+                    class="btn btn-link d-none d-sm-block fa fa-desktop"
+                    name="open_production"
+                    type="object"
+                />
+            </xpath>
+
+            <!-- Use mobile view-->
+            <xpath
+                expr="//strong[hasclass('o_kanban_record_title')]"
+                position="replace"
+            >
+                <button
+                    style="padding: 0px 0px;"
+                    class="btn btn-link o_kanban_record_title"
+                    name="open_production_client_action"
+                    type="object"
+                >
+                  <span><t t-esc="record.name.value" /></span>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="mrp_production_form_view_custom_barcode" model="ir.ui.view">
+        <field name="name">mrp.production.form.view.custom.barcode</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//button[last()]" position="after">
+                <button
+                    name="'%(mrp.action_report_finished_product)d']"
+                    barcode_trigger="print_flabel"
+                    type="object"
+                    string="Print product label"
+                    invisible="1"
+                />
+            </xpath>
+            <xpath expr="//button[@name='open_produce_product']" position="attributes">
+                <attribute name="barcode_trigger">validate</attribute>
+            </xpath>
+            <xpath expr="//button[@name='print_label']" position="attributes">
+                <attribute name="barcode_trigger">print_production</attribute>
+            </xpath>
+            <xpath
+                expr="//button[@name='create_incident_report']"
+                position="attributes"
+            >
+                <attribute name="barcode_trigger">create_incident</attribute>
+            </xpath>
+            <xpath expr="//button[@name='button_scrap']" position="attributes">
+                <attribute name="barcode_trigger">scrap</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="mrp_production_form_cost_sheet_custom_inherit" model="ir.ui.view">
+        <field name="name">mrp.production.form.cost.sheet.custom.inherit</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="custom_lupeon.mrp_production_form_cost_sheet" />
+        <field name="arch" type="xml">
+            <xpath expr="//button" position="attributes">
+                <attribute name="barcode_trigger">cancel</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="mrp_production_barcode" model="ir.ui.view">
+        <field name="name">mrp_production_barcode_form_view</field>
+        <field name="model">mrp.production</field>
+        <field name="priority">1000</field>
+        <field name="arch" type="xml">
+            <form string="Production Details">
+                <group>
+                    <field
+                        name="date_planned_start"
+                        attrs="{'invisible': [('date_planned_start', '=', False)]}"
+                    />
+                    <field
+                        name="date_planned_finished"
+                        attrs="{'invisible': [('date_planned_finished', '=', False)]}"
+                    />
+                    <field
+                        name="origin"
+                        attrs="{'invisible': [('origin', '=', False)]}"
+                    />
+                    <field
+                        name="state"
+                        attrs="{'invisible': [('state', '=', False)]}"
+                    />
+                    <field
+                        name="priority"
+                        attrs="{'invisible': [('priority', '=', False)]}"
+                    />
+                    <field
+                        name="user_id"
+                        attrs="{'invisible': [('user_id', '=', False)]}"
+                    />
+                    <field
+                        name="move_raw_ids"
+                        attrs="{'invisible': [('move_raw_ids', '=', False)]}"
+                    >
+                        <tree>
+                            <field name="product_id" />
+                            <field name="product_uom_qty" />
+                            <field name="state" />
+                        </tree>
+                    </field>
+                </group>
+            </form>
+        </field>
+    </record>
+
+</odoo>

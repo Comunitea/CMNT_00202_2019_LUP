@@ -7,7 +7,7 @@
         <field name="model">check.send.print.wiz</field>
         <field name="arch" type="xml">
             <form string="Revisar presupuesto">
-                
+
                 <field name="exception_msg" colspan="2" nolabel="1" mode="tree"/>
                 <footer>
                     <button string="Continue"
@@ -15,7 +15,7 @@
                             name="button_continue"
                             type="object"
                             />
-                    <button string="Cancel"
+                    <button string="Close"
                             class="oe_link"
                             special="cancel"
                             />

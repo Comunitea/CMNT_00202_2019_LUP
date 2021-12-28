@@ -8,7 +8,7 @@
            <field name="type">tree</field>
            <field name="arch" type="xml">
                <tree string="Purchase prducts" create="false" >
-                  
+
                    <field name="default_code" readonly="True"/>
                    <field name="name" readonly="True"  />
                    <field name="attribute_value_ids" widget="many2many_tags" groups="product.group_product_variant"/>
@@ -19,6 +19,7 @@
                    <field name="virtual_available" string="Previsto"/>
                    <field name="stock_coverage" />
                    <field name="qty_available" string="A Mano"/>
+                   <field name="qty_available_confirmed" string="Confirmado"/>
                    <field name="reordering_min_qty" />
                    <field name="reordering_max_qty" />
                    <field name="company_id" groups="base.group_multi_company" invisible="1"/>
@@ -47,7 +48,7 @@
         </field>
     </record>
 
- 
+
     <record id="product_main_seller_search" model="ir.ui.view">
         <field name="name">product.main.seller.search</field>
         <field name="model">product.product</field>
@@ -56,7 +57,7 @@
             <field name="name" position="after">
                 <field name="main_supplier_id"/>
             </field>
-            
+
         </field>
     </record>
 
@@ -70,8 +71,8 @@
         <field name="context"></field>
     </record>
 
-    
-  
+
+
 
 
      <menuitem id="menu_action_purchase_custom_all"

@@ -23,7 +23,17 @@ class PurchaseOrder(models.Model):
                                 default='not_received',
                                 compute="_compute_received",
                                 store=True)
+    urgent = fields.Boolean('Urgente', compute="_compute_urgents" )
 
+    def _compute_urgents(self):
+        for purchase in self.filtered(lambda p: p.state in ['draft', 'sent', 'to_approve']):
+            products = purchase.mapped('order_line').mapped('product_id')
+            conf_p = products.filtered(lambda p: p.qty_available_confirmed < 0)
+            if conf_p:
+                purchase.urgent = True
+            else:
+                purchase.urgent = False
+        self.filtered(lambda p: p.state not in ['draft', 'sent', 'to_approve']).write({'urgent': False})
 
     @api.depends('picking_ids.state')
     def _compute_received(self):

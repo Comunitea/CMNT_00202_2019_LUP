@@ -8,10 +8,12 @@
     "author": "Comunitea",
     "category": "Inventory",
     "depends": [
+        "sale",
         "sale_stock",
     ],
     "data": [
         "views/stock_quant.xml",
+        "views/product.xml",
     ],
     "installable": True,
     "license": "AGPL-3",

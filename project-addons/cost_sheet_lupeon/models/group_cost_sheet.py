@@ -21,10 +21,9 @@ class GroupCostSheet(models.Model):
     product_id = fields.Many2one(
         'product.product', 'Producto',
         related='sale_line_id.product_id')
-    admin_fact = fields.Float(
-        'Factor administrativo (%)',
-        default=lambda self: self.env.user.company_id.admin_fact)
-
+    admin_fact = fields.Float('Factor administrativo (%)')
+    group_create_productions = fields.Boolean('Create productions')
+    custom_name = fields.Char('Name')
     ing_hours = fields.Integer(
         'Horas ingenieria',
         default=lambda self: self.env.user.company_id.ing_hours)
@@ -44,17 +43,54 @@ class GroupCostSheet(models.Model):
     bom_id = fields.Many2one('mrp.bom', 'LdM', readonly=True,  copy=False)
     assembly_ids = fields.One2many(
         'assembly.cost.line', 'group_id', string='Assambley', copy=True)
-
+    production_count = fields.Integer('Productions',
+                                compute='_count_productions')
+    
     def name_get(self):
         res = []
         for sheet in self:
-            ref_name = sheet.sale_line_id.name
-            if sheet.sale_line_id.ref:
-                ref_name = sheet.sale_line_id.ref
-            res.append((sheet.id, ("[%s] %s") %
-                       (sheet.sale_line_id.order_id.name,
-                        ref_name)))
+            if sheet.group_create_productions:
+                ref_name = sheet.custom_name
+                res.append((sheet.id, ("%s") % ref_name))
+            else:
+                ref_name = sheet.sale_line_id.name
+                if sheet.sale_line_id.ref:
+                    ref_name = sheet.sale_line_id.ref
+                res.append((sheet.id, ("[%s] %s") %
+                        (sheet.sale_line_id.order_id.name,
+                            ref_name)))
         return res
+    
+    def create_productions_from_group(self):
+        self.ensure_one()
+        design_sheets = self.sheet_ids.filtered(lambda s: s.sheet_type == 'design')
+        production_sheets = self.sheet_ids - design_sheets
+        for sheet in production_sheets:
+            sheet.manually_create_task_or_production()
+    
+    @api.multi
+    def _count_productions(self):
+        for gr in self:
+            productions = gr.sheet_ids.mapped('production_id')
+            gr.production_count = len(productions)
+    
+    @api.multi
+    def view_productions(self):
+        self.ensure_one()
+        # Buscar producciones imprevistas
+        productions = self.sheet_ids.mapped('production_id')
+
+        if productions:
+            action = self.env.ref(
+                'mrp.mrp_production_action').read()[0]
+
+            action['domain'] = [('id', 'in', productions.ids)]
+
+        else:
+            action = {'type': 'ir.actions.act_window_close'}
+
+        action['context'] = "{}"
+        return action
 
     def update_sale_line_price(self):
         for group in self:

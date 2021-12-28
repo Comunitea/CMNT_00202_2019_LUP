@@ -9,7 +9,7 @@ class ResPartner(models.Model):
     _inherit = "res.partner"
 
     @api.model
-    def chekc_fpos_vies_vat(self):
+    def check_fpos_vies_vat(self):
         for partner in self:
             fp_prev = partner.property_account_position_id
             if partner.country_id:
@@ -29,7 +29,7 @@ class ResPartner(models.Model):
 
     @api.onchange("country_id", "vat")
     def on_change_check_vies(self):
-        fp_id = self.chekc_fpos_vies_vat()
+        fp_id = self.check_fpos_vies_vat()
         res = {}
         if fp_id == "NOT VIES":
             res["warning"] = {

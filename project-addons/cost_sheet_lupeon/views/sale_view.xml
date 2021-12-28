@@ -57,7 +57,7 @@
                     <button name="action_confirm"
                         string="Confirm" type="object"
                         attrs="{'invisible': ['|', ('company_id', '=', 1), ('state', 'not in', ['draft'])]}"/>
-                    
+
                     <!-- Este es el confirm de lupeon SOLO EN ESTADO DISEÑO -->
                     <button name="action_confirm" id="action_confirm"
                         string="Confirm" class="btn-primary" type="object"
@@ -72,16 +72,19 @@
                     <button name="action_draft" states="cancel" type="object" string="Set to Quotation"/>
                     <button name="action_done" type="object" string="Lock" states="sale"
                         help="If the sale is locked, you can not modify it anymore. However, you will still be able to invoice or deliver."/>
-                    
+
                     <!-- Nuevo botón solo visible en lupeón -->
                     <button name="duplicate_with_costs" type="object" string="Duplicate costs" attrs="{'invisible': [('company_id', '!=', 1)]}"/>
                     <button name="action_unlock" type="object" string="Unlock" states="done" groups="sales_team.group_sale_manager"/>
                     <!-- Estado design solo en lupeon -->
                     <field name="state" widget="statusbar" statusbar_visible="draft,sent,sale" attrs="{'invisible': [('company_id', '=', 1)]}"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,sent,'design',sale"  attrs="{'invisible': [('company_id', '!=', 1)]}"/>
+
+                    <!-- Añadido para revisiones de pedidos -->
+                    <button name="create_revision" states="cancel" string="New Revision of Quotation" type="object"/>
                 </header>
             </header>
-            
+
             <field name="payment_term_id" position="after">
                 <field name="cost_sheet_sale" invisible="1"/>
                 <field name="name2" attrs="{'invisible': [('cost_sheet_sale','=',True)], 'required': [('cost_sheet_sale','!=',True)] }"/>
@@ -98,6 +101,19 @@
                         states="draft,sent"
                 />
             </xpath>
+
+            <notebook position="inside">
+                <page string="Employee Costs" groups="cost_sheet_lupeon.group_hidden_cost">
+                    <group string="Employee COsts">
+                        <field name="employee_cost_ids" nolabel="1">
+                            <tree>
+                                <field name="employee_id"/>
+                                <field name="cost"/>
+                            </tree>
+                        </field>
+                    </group>
+                </page>
+            </notebook>
         </field>
     </record>
 
@@ -118,7 +134,7 @@
                 </div>
             </xpath>
 
-            
+
 
             <xpath expr="//field[@name='order_line']/tree//field[@name='product_id']" position="after">
                 <field name="cost_sheet_sale" invisible="1"/>
@@ -146,7 +162,7 @@
             <field name="amount_total" position="before">
                 <field name="amount_untaxed" sum="Total Untaxed" widget="monetary"/>
             </field>
-            
+
         </field>
     </record>
 
@@ -174,7 +190,7 @@
         <field name="arch" type="xml">
            <field name="name" position="after">
                 <field name="name2"/>
-            </field>     
+            </field>
         </field>
     </record>
 
