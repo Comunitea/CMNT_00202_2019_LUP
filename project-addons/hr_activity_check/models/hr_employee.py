@@ -53,6 +53,8 @@ class HrEmployee(models.Model):
             yesterday_amount = sum(report.unit_amount for report in reports)
 
             if yesterday_amount < user.min_report_hours:
+                if user.user_id and user.user_id.partner_id and (user.user_id.partner_id not in user.message_follower_ids.mapped('partner_id')):
+                    user.message_subscribe(partner_ids=user.user_id.partner_id.ids)
                 user.message_post(
                     body=_(
                         "The day {} you submitted {} hour/s of a total amount of {} hour/s.".format(
