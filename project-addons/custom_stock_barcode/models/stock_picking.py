@@ -70,6 +70,29 @@ class StockPicking(models.Model):
                             move_line_id["location_dest_id"]["location_id"][
                                 "location_id"
                             ] = mov_loc_id_gparent_dest.read(["display_name"])[0]
+                    
+                    if pick['picking_type_code'] == 'incoming':
+                        location_id = move_line_id["location_dest_id"]["id"]
+                    else:
+                        location_id = move_line_id["location_id"]["id"]
+                    
+                    putaway_strat = (self.env["stock.fixed.putaway.strat"].search([
+                        ("fixed_location_id", "=", location_id),
+                        ("product_id", "=", move_line_id["product_id"]["id"]),
+                    ], limit=1).read(["max_qty"]))
+
+                    if putaway_strat and putaway_strat[0] and putaway_strat[0]['max_qty']:
+                        move_line_id['max_qty'] = putaway_strat[0]['max_qty']
+                    
+                    stock_quant = (self.env["stock.quant"].search([
+                        ("location_id", "=", location_id),
+                        ("product_id", "=", move_line_id["product_id"]["id"]),
+                    ], limit=1).read(["quantity"]))
+                    
+                    if stock_quant and stock_quant[0] and stock_quant[0]['quantity']:
+                        move_line_id['on_hand'] = stock_quant[0]['quantity']
+                    
+                    move_line_id['picking_type_code'] = pick['picking_type_code']
 
             # Adding parent location_id/location_dest_id in pickings
             if pick["location_id"] and pick["location_id"]["id"]:
@@ -133,3 +156,31 @@ class StockPicking(models.Model):
         except Exception as error:
             return error
         return _("The transfer has been reset.")
+    
+    def button_find_product_line(self):
+        self.ensure_one()
+        view = self.env.ref('custom_stock_barcode.view_find_product_line_form')
+        return {
+            'name': _('Find product line'),
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'find.product.line',
+            'view_id': view.id,
+            'views': [(view.id, 'form')],
+            'type': 'ir.actions.act_window',
+            'target': 'new',
+        }
+    
+    def button_add_product_line(self):
+        self.ensure_one()
+        view = self.env.ref('custom_stock_barcode.view_add_product_line_form')
+        return {
+            'name': _('Add product line'),
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'add.product.line',
+            'view_id': view.id,
+            'views': [(view.id, 'form')],
+            'type': 'ir.actions.act_window',
+            'target': 'new',
+        }

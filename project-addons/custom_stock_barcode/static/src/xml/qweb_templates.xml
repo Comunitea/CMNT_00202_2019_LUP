@@ -197,4 +197,53 @@
         </t>
     </t>
 
+    <t t-extend="stock_barcode_header_widget">
+        <t t-jquery="a.nav-link.o_show_information" t-operation="after">
+            <a tabindex="" class="nav-link o_find_product mr-4"><i class="fa fa-search"/></a>
+        </t>
+    </t>
+
+    <t t-extend="stock_barcode_lines_template">
+        <t t-jquery="div.o_barcode_line_actions" t-operation="after">
+            <div t-if="state != 'done' and state != 'cancel' and line.picking_type_code !== 'incoming'" class="o_barcode_line_actions d-flex align-items-center pl-4">
+                <a class="o_edit_split" href="#" title="Split"><i class="fa fa-cog"/></a>
+            </div>
+            <div t-if="state != 'done' and state != 'cancel' and line.picking_type_code == 'incoming' and line.max_qty and line.product_uom_qty + line.on_hand > line.max_qty" class="o_barcode_line_actions d-flex align-items-center pl-4">
+                <a class="o_edit_incoming_split text-danger" href="#" title="Split"><i class="fa fa-cog"/></a>
+            </div>
+        </t>
+    </t>
+
+    <t t-name="custom_stock_barcode.split_lines_popover">
+        <div class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Split lines</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&amp;times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="number" class="form-control" name="product_uom_qty" value="1"/>
+                    <input type="hidden" name="move_line_id" t-att-value="move_line_id"/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary o_custom_stock_barcode_split_button">Split</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <t t-extend="stock_barcode_lines_template">
+        <t t-jquery="span[t-esc='line.product_uom_id[1]']" t-operation="after">
+            <span t-if="line.picking_type_code == 'incoming' and line.on_hand"> <strong>On hand:</strong> <span t-esc="line.on_hand"/></span>
+            <span t-if="line.picking_type_code == 'incoming' and line.max_qty"> <strong>Max. capacity:</strong> <span t-esc="line.max_qty"/></span>
+            <span t-if="line.picking_type_code == 'incoming' and line.max_qty and line.product_uom_qty + line.on_hand > line.max_qty"> <strong class="text-danger">Location max. capacity is exceeded</strong></span>
+            <span class="o_hidden_in_line o_scan_message_not_enough_items text-danger"><span class="fa fa-exclamation-triangle"/> There are no quantities on a different location. An automatic line has been created for the remaining quantities.</span>
+        </t>
+    </t>
+
 </templates>

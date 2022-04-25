@@ -8,6 +8,14 @@
         <xpath expr="." position="inside">
             <script
                 type="text/javascript"
+                src="/custom_stock_barcode/static/src/js/product_line_split_modal.js"
+            />
+            <script
+                type="text/javascript"
+                src="/custom_stock_barcode/static/src/js/product_incoming_line_split_modal.js"
+            />
+            <script
+                type="text/javascript"
                 src="/custom_stock_barcode/static/src/js/stock_barcode.js"
             />
             <script
@@ -17,6 +25,10 @@
             <script
                 type="text/javascript"
                 src="/custom_stock_barcode/static/src/js/client_action/settings_widget.js"
+            />
+            <script
+                type="text/javascript"
+                src="/custom_stock_barcode/static/src/js/client_action/header_widget.js"
             />
             <script
                 type="text/javascript"
@@ -33,6 +45,11 @@
             <script
                 type="text/javascript"
                 src="/custom_stock_barcode/static/src/js/mrp_production.js"
+            />
+            <link
+                rel="stylesheet"
+                type="text/scss"
+                href="/custom_stock_barcode/static/src/scss/product_line_split_modal.scss"
             />
         </xpath>
     </template>

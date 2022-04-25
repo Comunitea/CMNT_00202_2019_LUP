@@ -3,7 +3,9 @@ odoo.define("custom_stock_barcode.LinesWidget", function (require) {
 
     var core = require("web.core");
     var QWeb = core.qweb;
-    var ClientAction = require("stock_barcode.LinesWidget");
+    var ClientAction = require('stock_barcode.LinesWidget');
+    var ProductLineSplitModal = require('custom_stock_barcode.ProductLineSplitModal');
+    var ProductIncomingLineSplitModal = require('custom_stock_barcode.ProductIncomingLineSplitModal');
 
     ClientAction.include({
         events: _.extend({}, ClientAction.prototype.events, {
@@ -14,6 +16,8 @@ odoo.define("custom_stock_barcode.LinesWidget", function (require) {
 
         init: function (parent, action) {
             this._super.apply(this, arguments);
+            this.ProductLineSplitModal = false;
+            this.ProducIncomingLineSplitModal = false;
             this.ok_tech = parent.currentState.ok_tech || false;
             this.availability = parent.currentState.availability || false;
             this.is_locked = parent.currentState.is_locked || false;
@@ -22,6 +26,9 @@ odoo.define("custom_stock_barcode.LinesWidget", function (require) {
             this.check_to_done = parent.currentState.check_to_done || false;
             this.company_id = parent.currentState.company_id || false;
             this.all_wo_done = parent.currentState.all_wo_done || false;
+        },
+        start: function() {
+            return this._super.apply(this, arguments);
         },
         _renderLines: function () {
             if (this.mode === "done") {
@@ -69,6 +76,22 @@ odoo.define("custom_stock_barcode.LinesWidget", function (require) {
                     })
                 );
                 $header.append($pageSummary);
+                var $body = this.$el.filter('.o_barcode_lines');
+                var $lines = $($body).find('.o_barcode_line');
+                $lines.on('click', '.o_edit_split', this._onClickEditSplitLine.bind(this));
+                $lines.on('click', '.o_edit_incoming_split', this._onClickEditSplitIncomingLine.bind(this));
+            } else {
+                return this._super();
+            }
+        },
+        
+        addProduct: function (lineDescription, model, doNotClearLineHighlight) {
+            if (this.model === "stock.picking") {
+                this._super.apply(this, arguments);
+                var $body = this.$el.filter('.o_barcode_lines');
+                var $lines = $($body).find('.o_barcode_line');
+                $lines.on('click', '.o_edit_split', this._onClickEditSplitLine.bind(this));
+                $lines.on('click', '.o_edit_incoming_split', this._onClickEditSplitIncomingLine.bind(this));
             } else {
                 return this._super();
             }
@@ -108,6 +131,25 @@ odoo.define("custom_stock_barcode.LinesWidget", function (require) {
             }
         },
 
+        /**
+         * Handles the click on the `edit button` on a line.
+         *
+         * @private
+         * @param {jQuery.Event} ev
+         */
+        _onClickEditSplitLine: function (ev) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            var id = $(ev.target).parents('.o_barcode_line').data('id');
+            this.ProductLineSplitModal = new ProductLineSplitModal(this).create(ev, id);
+        },
+
+        _onClickEditSplitIncomingLine: function (ev) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            var id = $(ev.target).parents('.o_barcode_line').data('id');
+            this.ProducIncomingLineSplitModal = new ProductIncomingLineSplitModal(this).create(ev, id);
+        },
         _onClickMarkAsDone: function (ev) {
             ev.stopPropagation();
             this.trigger_up("mark_as_done");

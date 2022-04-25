@@ -1,12 +1,15 @@
 odoo.define("custom_stock_barcode.picking_client_action", function (require) {
     "use strict";
 
+    var core = require('web.core');
+    var _t = core._t;
     var PickingClientAction = require("stock_barcode.picking_client_action");
 
     PickingClientAction.include({
         custom_events: _.extend(
             {
-                "reset_moves": "_onResetMoves",
+                reset_moves: "_onResetMoves",
+                find_product: "_onFindProduct",
             },
             PickingClientAction.prototype.custom_events
         ),
@@ -68,6 +71,64 @@ odoo.define("custom_stock_barcode.picking_client_action", function (require) {
             });
         },
 
+        /**
+         * Finds product on current stock.picking pages.
+         *
+         * @private
+         */
+         _findProduct: async function () {
+            var self = this;
+            this.mutex.exec(function () {
+                return self._save().then(function () {
+                    return self
+                        ._rpc({
+                            model: 'stock.picking',
+                            method: "button_find_product_line",
+                            args: [[self.actionParams.pickingId]],
+                            context: self.context,
+                        })
+                        .then(function (res) {
+                            var exitCallback = function () {
+                                core.bus.on('barcode_scanned', self, self._onBarcodeScannedHandler);
+                            };
+                            var options = {
+                                on_close: exitCallback,
+                            };
+                            core.bus.off('barcode_scanned', self, self._onBarcodeScannedHandler);
+                            return self.do_action(res, options).then(function() {
+                                setTimeout(function () {
+                                    var button = $(document).find(".find_line");
+                                    $(button).on('click', function () {
+                                        var product_id = $(button).closest('div.modal-content').find('a[name="product_id"]').attr('href').replace('#id=', '').replace('&model=product.product', '');
+                                        if (product_id && product_id != ''){
+                                            var new_index = false;
+                                            product_id = parseInt(product_id);
+                                            if(self.pages) {
+                                                _.each(self.pages, function (v, k){
+                                                    _.each(v.lines, function (line_v, line_k){
+                                                        if (line_v.product_id.id == product_id) {
+                                                            new_index = k
+                                                            return false;
+                                                        }
+                                                    });
+                                                });
+                        
+                                                if (new_index) {
+                                                    self.currentPageIndex = new_index;
+                                                    self._reloadLineWidget(self.currentPageIndex);
+                                                    self._endBarcodeFlow();
+                                                }
+                                            }       
+                                        }
+                                        $(button).closest('div.modal-content').find('button.close').trigger("click");
+                                    });
+                                }, 100);
+                            });
+                        });
+                });
+            });
+        },
+
         // --------------------------------------------------------------------------
         // Handlers
         // --------------------------------------------------------------------------
@@ -82,6 +143,10 @@ odoo.define("custom_stock_barcode.picking_client_action", function (require) {
         _onResetMoves: function (ev) {
             ev.stopPropagation();
             this._resetMoves();
+        },
+        _onFindProduct: function (ev) {
+            ev.stopPropagation();
+            this._findProduct();
         },
     });
 });

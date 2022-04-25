@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_picking_withcarrier_out_form" model="ir.ui.view">
+        <field name="name">delivery.stock.picking_info.form.view</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="delivery.view_picking_withcarrier_out_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='shipping_weight']" position="after">
+                <field name="delivery_type" invisible="1"/>
+                <field name="picking_with_return"/>
+                <field name="seur_insurance_type" attrs="{'invisible': [('delivery_type', '!=', 'seur')]}"/>
+                <field name="gls_asm_insurance_type" attrs="{'invisible': [('delivery_type', '!=', 'gls')]}"/>
+                <field name="gls_asm_insurance_description" attrs="{'invisible': [('delivery_type', '!=', 'gls')]}"/>
+                <field name="picking_insurance_value"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo><data>
+    <record id="view_add_product_line_form" model="ir.ui.view">
+        <field name="name">add.product.line.form</field>
+        <field name="model">add.product.line</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <p>The product is not on this location, would you like to add it?</p>
+                </group>
+                <footer>
+                        <button string="Add" class="btn-primary add_line"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+</data></odoo>

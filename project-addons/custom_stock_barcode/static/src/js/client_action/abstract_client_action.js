@@ -38,14 +38,60 @@ odoo.define("custom_stock_barcode.ClientAction", function (require) {
                         barcode: barcode,
                     });
                     if (!self.line_check || !self.line_check.id) {
-                        var r = confirm(
-                            _t(
-                                "The scanned product is not in the picking, would you like to add it?"
-                            )
-                        );
-                        if (r == false) {
-                            errorMessage = _t("Product addition cancelled");
-                        }
+                        errorMessage = _t("Product not found, opening wizard");
+                        return self
+                            ._rpc({
+                                model: 'stock.picking',
+                                method: "button_add_product_line",
+                                args: [[self.actionParams.pickingId]],
+                                context: self.context,
+                            })
+                            .then(function (res) {
+                                var exitCallback = function () {
+                                    core.bus.on('barcode_scanned', self, self._onBarcodeScannedHandler);
+                                };
+                                var options = {
+                                    on_close: exitCallback,
+                                };
+                                core.bus.off('barcode_scanned', self, self._onBarcodeScannedHandler);
+                                return self.do_action(res, options).then(function() {
+                                    setTimeout(function () {
+                                        var button = $(document).find(".add_line");
+                                        $(button).on('click', function () {
+                                            var res = self._incrementLines({'product': product_check, 'barcode': barcode});
+                                            if (res.isNewLine) {
+                                                if (self.actionParams.model === 'stock.inventory') {
+                                                    // FIXME sle: add owner_id, prod_lot_id, owner_id, product_uom_id
+                                                    return self._rpc({
+                                                        model: 'product.product',
+                                                        method: 'get_theoretical_quantity',
+                                                        args: [
+                                                            res.lineDescription.product_id.id,
+                                                            res.lineDescription.location_id.id,
+                                                        ],
+                                                    }).then(function (theoretical_qty) {
+                                                        res.lineDescription.theoretical_qty = theoretical_qty;
+                                                        linesActions.push([self.linesWidget.addProduct, [res.lineDescription, self.actionParams.model]]);
+                                                        self.scannedLines.push(res.id || res.virtualId);
+                                                        return $.when({linesActions: linesActions});
+                                                    });
+                                                } else {
+                                                    linesActions.push([self.linesWidget.addProduct, [res.lineDescription, self.actionParams.model]]);
+                                                }
+                                            } else {
+                                                if (product.tracking === 'none') {
+                                                    linesActions.push([self.linesWidget.incrementProduct, [res.id || res.virtualId, product.qty || 1, self.actionParams.model]]);
+                                                } else {
+                                                    linesActions.push([self.linesWidget.incrementProduct, [res.id || res.virtualId, 0, self.actionParams.model]]);
+                                                }
+                                            }
+                                            self.scannedLines.push(res.id || res.virtualId);
+                                            $(button).closest('div.modal-content').find('button.close').trigger("click");
+                                            self.trigger_up("reload");
+                                        });
+                                    }, 100);
+                                });
+                            });
                     }
                 }
             });
@@ -110,5 +156,6 @@ odoo.define("custom_stock_barcode.ClientAction", function (require) {
                 cache.productsByProviderCodes = res;
             });
         },
+
     });
 });

@@ -12,6 +12,7 @@
         "stock",
         "stock_barcode",
         "custom_warehouse",
+        "stock_putaway_product_form",
         "mrp",
         "custom_documents_lupeon",
         "incident_manager",
@@ -19,6 +20,9 @@
     "data": [
         "data/data.xml",
         "views/stock_picking_views.xml",
+        "views/product_template.xml",
+        "wizard/find_product_line.xml",
+        "wizard/add_new_product_line.xml",
         "views/mrp_production_views.xml",
         "views/assets.xml",
         "wizard/mrp_production_move_wzd.xml",
